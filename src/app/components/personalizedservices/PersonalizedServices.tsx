@@ -25,7 +25,7 @@ const servicesListData = [
 
 export default function PersonalizedServices() {
   return (
-    <section className="relative bg-[#FEF8E2] py-20 px-8 overflow-hidden">
+    <section className="relative bg-[#FEF8E2] py-[30px] md:py-[60px] px-4 md:px-8 overflow-hidden">
         <div className="absolute inset-0 z-0">
             {/* <div className="absolute top-0 right-0 h-full w-3/4 ">
                 <Image 
@@ -62,11 +62,11 @@ export default function PersonalizedServices() {
 
         </div>
 
-        <div className="relative z-10 container mx-auto">
+        <div className="relative z-10 container mx-auto max-w-7xl">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
                 <div className="flex flex-col gap-8">
                     <div className="relative self-start">
-                        <h2 className="text-5xl font-['Inria_Serif'] text-[#F6971E]">
+                        <h2 className="text-[36px] font-bold font-['Inria_Serif'] text-[#4A2B23] leading-tight">
                             Personalized Services
                         </h2>
                     </div>

@@ -54,7 +54,8 @@ export function proxy(request: NextRequest) {
     // '/login',
     // '/otp',
     // '/register',
-    // '/thank-you'
+    // '/thank-you',
+    '/pooja'
   ];
 
   // Remove trailing slash for comparison (except for home /)
@@ -62,7 +63,7 @@ export function proxy(request: NextRequest) {
     ? pathname.slice(0, -1)
     : pathname;
 
-  if (!allowedPaths.includes(normalizedPath)) {
+  if (!allowedPaths.includes(normalizedPath) && !normalizedPath.startsWith('/astrologers/') && !normalizedPath.startsWith('/pooja/')) {
     // If path is not allowed, redirect to homepage
     return NextResponse.redirect(new URL('/', request.url));
   }

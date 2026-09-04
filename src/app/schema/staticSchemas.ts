@@ -112,9 +112,9 @@ export const validateSchema = (schema: any): boolean => {
     return false;
   }
   
-  // Check for prototype pollution attempts
+  // Check for prototype pollution attempts directly on the object
   const dangerousKeys = ['__proto__', 'constructor', 'prototype'];
-  if (dangerousKeys.some(key => key in schema)) {
+  if (dangerousKeys.some(key => Object.prototype.hasOwnProperty.call(schema, key))) {
     return false;
   }
   

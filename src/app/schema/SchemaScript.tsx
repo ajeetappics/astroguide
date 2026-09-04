@@ -16,9 +16,9 @@ const isValidSchemaObject = (obj: any): boolean => {
     return false;
   }
 
-  // Check for dangerous keys
+  // Check for dangerous keys directly on the object (not in prototype chain)
   const dangerousKeys = ['__proto__', 'constructor', 'prototype'];
-  if (dangerousKeys.some(key => key in obj)) {
+  if (dangerousKeys.some(key => Object.prototype.hasOwnProperty.call(obj, key))) {
     return false;
   }
 

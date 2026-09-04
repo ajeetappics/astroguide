@@ -1,6 +1,12 @@
 import React from 'react'
 import MainBanner from './components/mainbanner/MainBanner'
 import ServicesSection from './components/servicesSection/ServicesSection'
+import BlogSection from './components/BlogSection/BlogSection'
+import BrowseCategory from './components/BrowseCategory/BrowseCategory'
+import AstrologerSection from './components/AstrologerSection/AstrologerSection'
+import CelebritySpotlight from './components/CelebritySpotlight/CelebritySpotlight'
+import PoojaSection from './components/PoojaSection/PoojaSection'
+import DailyHoroscope from './components/DailyHoroscope/DailyHoroscope'
 import HowItWorks from './components/worksection/HowItWorks'
 import Testimonials from './components/clientreview/Testimonials'
 import CtaSection from './components/CtaSection/CtaSection'
@@ -12,9 +18,15 @@ function page() {
     <div>
       <MainBanner />
       <ServicesSection />
+      <AstrologerSection />
+      <CelebritySpotlight />
+      <BrowseCategory />
+      <PoojaSection />
+      <DailyHoroscope />
       <HowItWorks />
       <PersonalizedServices />
-      {/* <Testimonials /> */}
+      <Testimonials />
+      <BlogSection />
       <CtaSection />
       <TrustSection />
     </div>

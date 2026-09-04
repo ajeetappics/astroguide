@@ -9,6 +9,7 @@ import { PopupProvider } from "./components/popup/PopupContext";
 import Popup from "./components/popup/Popup";
 import SchemaScript from "./schema/SchemaScript";
 import { organizationSchema, websiteSchema, serviceSchema } from "./schema/staticSchemas";
+import SmoothScroll from "./components/layout/SmoothScroll";
 
 const helvetica = {
   variable: "--font-helvetica",
@@ -116,29 +117,31 @@ export default function RootLayout({
       >
         <SchemaScript schema={[organizationSchema, websiteSchema, serviceSchema]} />
         <StoreProvider>
-          <PopupProvider>
-            <Header />
-            {children}
-            <Toaster
-              position="top-right"
-              toastOptions={{
-                success: {
-                  style: {
-                    background: "green",
-                    color: "white",
+          <SmoothScroll>
+            <PopupProvider>
+              <Header />
+              {children}
+              <Toaster
+                position="top-right"
+                toastOptions={{
+                  success: {
+                    style: {
+                      background: "green",
+                      color: "white",
+                    },
                   },
-                },
-                error: {
-                  style: {
-                    background: "red",
-                    color: "white",
+                  error: {
+                    style: {
+                      background: "red",
+                      color: "white",
+                    },
                   },
-                },
-              }}
-            />
-            <Footer />
-            <Popup />
-          </PopupProvider>
+                }}
+              />
+              <Footer />
+              <Popup />
+            </PopupProvider>
+          </SmoothScroll>
         </StoreProvider >
       </body>
     </html>

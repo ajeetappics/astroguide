@@ -24,7 +24,7 @@ export default function CtaSection() {
 
   return (
     <section className="relative bg-[#F6971E]">
-        <div className="container mx-auto pt-24 pb-20 px-8 flex flex-col items-center text-center">
+        <div className="container mx-auto max-w-7xl pt-24 pb-20 px-8 flex flex-col items-center text-center">
             
             <div className="bg-white/10 text-[#ffffff] text-sm py-2 px-6 rounded-full mb-8 backdrop-blur-sm font-['Inria_Serif'] shadow-[0px_0px_1px_inset_rgb(204,219,235),1px_0px_0.5px_0px_inset_rgba(255,255,255,0.5)]">
                 Your cosmic Journey Awaits
