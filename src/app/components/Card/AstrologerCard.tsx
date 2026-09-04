@@ -86,7 +86,11 @@ export default function AstrologerCard({ astro }: AstrologerCardProps) {
             {astro.experience}
           </span>
           <div className="flex flex-col items-end">
-            <span className="text-xl font-bold text-[#72271E] leading-none">{astro.price}<span className="text-sm font-bold text-[#72271E]">/min</span></span>
+            <span className="text-xl font-bold text-[#72271E] leading-none flex items-center">
+              <span className="font-sans mr-0.5">₹</span>
+              {astro.price.replace('₹', '')}
+              <span className="text-sm font-bold text-[#72271E] ml-0.5">/min</span>
+            </span>
           </div>
         </div>
 

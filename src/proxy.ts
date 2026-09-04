@@ -55,7 +55,8 @@ export function proxy(request: NextRequest) {
     // '/otp',
     // '/register',
     // '/thank-you',
-    '/pooja'
+    '/pooja',
+    '/astrologers'
   ];
 
   // Remove trailing slash for comparison (except for home /)

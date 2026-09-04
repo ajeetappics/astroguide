@@ -99,8 +99,10 @@ export default function AstrologerDetails() {
 
                 {/* Price and Connect Button (Right Side) */}
                 <div className="w-full md:w-auto flex flex-col md:items-end gap-3 mt-6 md:mt-0">
-                  <div className="text-center md:text-right font-bold text-[#4A2B23] text-2xl md:text-3xl">
-                    {astro.price}<span className="text-sm md:text-base font-medium text-gray-500">/min</span>
+                  <div className="text-center md:text-right font-bold text-[#4A2B23] text-2xl md:text-3xl flex items-center justify-center md:justify-end">
+                    <span className="font-sans mr-0.5">₹</span>
+                    {astro.price.replace('₹', '')}
+                    <span className="text-sm md:text-base font-medium text-gray-500 ml-1">/min</span>
                   </div>
                   <button className="w-full md:w-48 bg-gradient-to-r from-[#F6971E] to-[#FFA733] text-white font-bold py-3.5 rounded-2xl shadow-[0_8px_20px_rgba(246,151,30,0.25)] flex items-center justify-center gap-2 hover:shadow-[0_12px_25px_rgba(246,151,30,0.4)] hover:-translate-y-1 transition-all">
                     <BsLightningChargeFill /> Connect Now
@@ -207,8 +209,10 @@ export default function AstrologerDetails() {
 
               <div className="text-center mb-8">
                 <span className="text-[#F6971E] font-bold text-xs uppercase tracking-widest block mb-2">Consultation Fee</span>
-                <div className="text-4xl font-bold text-[#4A2B23]">
-                  {astro.price}<span className="text-lg font-medium text-gray-400">/min</span>
+                <div className="text-4xl font-bold text-[#4A2B23] flex items-center justify-center">
+                  <span className="font-sans mr-0.5">₹</span>
+                  {astro.price.replace('₹', '')}
+                  <span className="text-lg font-medium text-gray-400 ml-1">/min</span>
                 </div>
               </div>
 
