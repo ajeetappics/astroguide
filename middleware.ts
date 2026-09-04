@@ -1,8 +1,6 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { proxy } from "./src/proxy"; // <-- IMPORTANT
-// Export runtime to ensure Edge middleware (generates NFT file)
-export const runtime = "edge";
 
 export function middleware(request: NextRequest) {
     return proxy(request);
