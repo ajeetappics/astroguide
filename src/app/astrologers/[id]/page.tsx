@@ -73,9 +73,6 @@ export default function AstrologerDetails() {
                     <h1 className="text-3xl md:text-4xl font-bold text-[#4A2B23] font-['Inria_Serif']">
                       {astro.name}
                     </h1>
-                    <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-green-50 text-green-700 rounded-full text-xs font-bold border border-green-100 mx-auto md:mx-0">
-                      <BsPatchCheckFill className="text-green-500 text-sm" /> Verified
-                    </div>
                   </div>
 
                   <p className="text-gray-500 font-medium mb-4">{astro.skills.join(' • ')}</p>
@@ -129,10 +126,7 @@ export default function AstrologerDetails() {
         </div>
 
         {/* Main Content Layout */}
-        <div className="flex flex-col lg:flex-row gap-8 lg:gap-10">
-
-          {/* Left Column (Content) */}
-          <div className="flex-1 space-y-10">
+        <div className="w-full space-y-10">
 
             {/* About Section */}
             <section className="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-gray-100">
@@ -200,48 +194,6 @@ export default function AstrologerDetails() {
                 View all reviews
               </button>
             </section>
-
-          </div>
-
-          {/* Right Sidebar (Sticky) - Hidden on Mobile */}
-          <div className="hidden md:block w-full lg:w-[380px] flex-shrink-0">
-            <div className="bg-white rounded-[32px] p-8 shadow-[0_20px_50px_rgba(0,0,0,0.08)] border border-[#F6971E]/20 sticky top-32">
-
-              <div className="text-center mb-8">
-                <span className="text-[#F6971E] font-bold text-xs uppercase tracking-widest block mb-2">Consultation Fee</span>
-                <div className="text-4xl font-bold text-[#4A2B23] flex items-center justify-center">
-                  <span className="font-sans mr-0.5">₹</span>
-                  {astro.price.replace('₹', '')}
-                  <span className="text-lg font-medium text-gray-400 ml-1">/min</span>
-                </div>
-              </div>
-
-              <button className="w-full bg-gradient-to-r from-[#F6971E] to-[#FFA733] text-white font-bold text-lg py-4 rounded-2xl shadow-[0_8px_20px_rgba(246,151,30,0.3)] hover:shadow-[0_12px_25px_rgba(246,151,30,0.4)] hover:-translate-y-1 transition-all flex justify-center items-center gap-3 mb-8">
-                <BsLightningChargeFill className="text-xl" /> Connect Now
-              </button>
-
-              <div className="space-y-4 pt-6 border-t border-gray-100">
-                <div className="flex items-start gap-4">
-                  <div className="w-10 h-10 rounded-full bg-green-50 flex items-center justify-center flex-shrink-0">
-                    <BsPatchCheckFill className="text-green-500 text-xl" />
-                  </div>
-                  <div>
-                    <h4 className="font-bold text-[#4A2B23]">Verified Expert</h4>
-                    <p className="text-sm text-gray-500">100% genuine astrologer</p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-4">
-                  <div className="w-10 h-10 rounded-full bg-orange-50 flex items-center justify-center flex-shrink-0">
-                    <BsCheckCircleFill className="text-[#F6971E] text-xl" />
-                  </div>
-                  <div>
-                    <h4 className="font-bold text-[#4A2B23]">Quick Connect</h4>
-                    <p className="text-sm text-gray-500">Avg answer time ~ 12s</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
 
         </div>
 
