@@ -1,0 +1,47 @@
+{
+  "name": "new-astro-vani",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --turbopack",
+    "build": "next build --turbopack",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.1",
+    "@headlessui/react": "^2.2.9",
+    "@mui/icons-material": "^7.3.2",
+    "@mui/material": "^7.3.2",
+    "@mui/x-date-pickers": "^8.11.3",
+    "@reduxjs/toolkit": "^2.9.0",
+    "@types/dompurify": "^3.0.5",
+    "axios": "^1.12.2",
+    "country-state-city": "^3.2.1",
+    "dayjs": "^1.11.18",
+    "dompurify": "^3.3.0",
+    "embla-carousel-react": "^8.6.0",
+    "next": "16.0.10",
+    "react": "^19.2.1",
+    "react-datepicker": "^8.7.0",
+    "react-dom": "^19.2.1",
+    "react-dropzone": "^14.3.8",
+    "react-hook-form": "^7.63.0",
+    "react-hot-toast": "^2.6.0",
+    "react-icons": "^5.5.0",
+    "react-otp-input": "^3.1.1",
+    "react-phone-input-2": "^2.15.1",
+    "react-redux": "^9.2.0",
+    "react-select": "^5.10.2",
+    "redux-persist": "^6.0.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "tailwindcss": "^4",
+    "typescript": "^5"
+  }
+}

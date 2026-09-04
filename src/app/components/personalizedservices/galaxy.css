@@ -1,0 +1,127 @@
+body {
+    margin: 0;
+    background: #fff9e9;
+    overflow-x: hidden;
+    position: relative;
+}
+
+/* ------------ Background Space Scene ------------ */
+.solar-bg {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    z-index: 0;
+}
+
+/* ------------ Earth (Center Planet) ------------ */
+.earth {
+    filter: drop-shadow(0 0 60px rgba(0, 100, 255, .4));
+    z-index: 5;
+    opacity: .95;
+    background-image: url("../../../assets/images/earth.svg");
+    background-size: cover;
+    border-radius: 50%;
+    width: 900px;
+    height: 900px;
+    position: absolute;
+    top: 50%;
+    right: 15%;
+    transform: translate(50%, -50%);
+}
+
+/* ------------ Orbits ------------ */
+.orbit {
+    position: absolute;
+    top: 50%;
+    right: 20%;
+    border-radius: 50%;
+    transform: translate(50%, -50%) rotate(0deg);
+    transform-origin: center center;
+    animation: rotateOrbit 60s linear infinite;
+    z-index: 2;
+}
+
+/* Orbit rings for decorative look */
+.orbit::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border: 1px solid rgba(0, 0, 0, 0.07);
+    border-radius: 50%;
+}
+
+/* Different orbit sizes */
+.orbit-1 {
+    width: 800px;
+    height: 800px;
+    animation-duration: 40s;
+}
+
+.orbit-2 {
+    width: 950px;
+    height: 950px;
+    animation-duration: 60s;
+}
+
+.orbit-3 {
+    width: 1100px;
+    height: 1100px;
+    animation-duration: 90s;
+}
+
+.orbit-4 {
+    width: 1300px;
+    height: 1300px;
+    animation-duration: 100s;
+}
+/* ------------ Planets ------------ */
+.planet {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+}
+
+/* Moon */
+.planet.moon {
+    width: 250px;
+    height: 250px;
+    background-image: url("../../../assets/images/moon.svg");
+    background-size: cover;
+    opacity: 0.8;
+}
+
+/* Green planet */
+.planet.green {
+    width: 50px;
+    height: 50px;
+    background-color: #146b3a;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
+}
+
+/* Red planet (optional extra) */
+.planet.red {
+    width: 50px;
+    height: 50px;
+    background-color: #a31212;
+    box-shadow: 0 0 25px rgba(255, 100, 100, 0.3);
+}
+
+/* Yellow planet (optional extra) */
+.planet.yellow {
+    width: 50px;
+    height: 50px;
+    background-color: #fcb657;
+    box-shadow: 0 0 25px rgba(255, 200, 100, 0.3);
+}
+/* ------------ Animations ------------ */
+@keyframes rotateOrbit {
+    from {
+        transform: translate(50%, -50%) rotate(0deg);
+    }
+
+    to {
+        transform: translate(50%, -50%) rotate(360deg);
+    }
+}

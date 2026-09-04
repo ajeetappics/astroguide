@@ -1,0 +1,15 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.astrovani.balaji.app",
+      "sha256_cert_fingerprints": [
+        "0D:B7:3E:22:50:EF:12:3C:90:75:E1:80:43:87:68:C2:20:18:65:32:69:7A:35:6E:B3:36:EC:0E:DA:9B:2D:75",
+        "05:D6:A0:03:53:65:33:2B:4C:DE:A6:AA:BE:D3:AF:2C:1E:95:7B:1B:59:B0:12:45:ED:8E:A0:68:5D:75:23:C2",
+        "53:E2:EE:E1:2A:EB:15:0E:0D:57:0D:F8:08:39:FD:AC:D4:A4:D5:26:9E:13:B9:AD:7C:6D:27:CD:A1:3A:F0:74",
+        "18:8A:FA:32:DF:0A:27:6E:2E:78:80:A1:FE:FC:59:ED:D3:7F:0B:10:B1:43:4C:23:DC:AC:14:FD:40:21:33:7D"
+      ]
+    }
+  }
+]

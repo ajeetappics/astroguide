@@ -1,0 +1,17 @@
+export { default as mainLogo } from "./logo.svg";
+export { default as userImage } from "./user-image.webp";
+export { default as lineStyle } from "./Line.svg";
+export { default as backgroundImg } from "./background-img.svg";
+export { default as welcomeImage } from "./ImageWithFallback.png";
+export { default as thankyoImage } from "./ImageWithFallback2.png";
+export { default as astrovaniLogo } from "./astrovani-logo.svg";
+export { default as fullLogo } from "./main-logo.svg";
+export { default as SecurePayments } from "./SecurePayments.png";
+export { default as VerifiedAstrologers } from "./VerifiedAstrologers.png";
+export { default as PrivateAndConfidential } from "./PrivateConfidential.png";
+export { default as astro_1 } from "./astro_1.jpg";
+export { default as astro_2 } from "./astro_2.jpg";
+export { default as astro_3 } from "./astro_3.jpg";
+export { default as popupImage } from "./popup-image.jpg";
+export { default as apple_store } from "./apple_store.svg";
+export { default as google_store } from "./google_store.svg";
