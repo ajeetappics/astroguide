@@ -113,6 +113,9 @@ export default function Footer() {
           <div className="md:col-span-1">
             <h2 className="mb-6 text-md font-bold font-['Inria_Serif'] text-[#72271E] uppercase tracking-wider">Services</h2>
             <ul className="space-y-4 font-helvetica text-[#5C5C5C]">
+              <li><Link href="/astrologers" className="hover:underline text-left block">Astrologers</Link></li>
+              <li><Link href="/pooja" className="hover:underline text-left block">Pooja</Link></li>
+              <li><Link href="/blog" className="hover:underline text-left block">Blog</Link></li>
               <li><button onClick={openPopup} className="hover:underline text-left cursor-pointer">Daily Horoscope</button></li>
               <li><button onClick={openPopup} className="hover:underline text-left cursor-pointer">Kundli Reading</button></li>
               <li><button onClick={openPopup} className="hover:underline text-left cursor-pointer">Tarot Cards</button></li>
@@ -148,7 +151,10 @@ export default function Footer() {
           <p className="mb-4 md:mb-0">
             © 2026 @Balaji Astro Guide. All rights reserved. Embrace your cosmic destiny.
           </p>
-          <div className="flex space-x-6">
+          <div className="flex flex-wrap justify-center md:justify-end gap-x-6 gap-y-2">
+            <Link href="/astrologers" className="hover:underline">Astrologers</Link>
+            <Link href="/pooja" className="hover:underline">Pooja</Link>
+            <Link href="/blog" className="hover:underline">Blog</Link>
             <Link href="/privacy-policy" target="_blank" className="hover:underline">Privacy Policy</Link>
             <Link href="/terms-of-service" target="_blank" className="hover:underline">Terms of Service</Link>
             <Link href="/refund-policy" target="_blank" className="hover:underline">Refund Policy</Link>

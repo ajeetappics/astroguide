@@ -54,63 +54,65 @@ export default function BrowseCategory() {
 
   return (
     <section className="bg-[#fdf7e1] py-[30px] md:py-[60px] relative overflow-hidden">
-      <style>{`
-        @keyframes scroll-reverse {
-          0% { transform: translateX(0); }
-          100% { transform: translateX(-50%); }
+      <style jsx>{`
+        .consultation-scroll::-webkit-scrollbar {
+          height: 4px;
         }
-        .animate-scroll-reverse {
-          animation: scroll-reverse 60s linear infinite;
-          width: max-content;
+        .consultation-scroll::-webkit-scrollbar-track {
+          background: #f1f1f1;
+          border-radius: 9999px;
         }
-        .animate-scroll-reverse:hover {
-          animation-play-state: paused;
+        .consultation-scroll::-webkit-scrollbar-thumb {
+          background: #F6971E;
+          border-radius: 9999px;
+        }
+        @media (min-width: 1024px) {
+          .consultation-scroll {
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+          }
+          .consultation-scroll::-webkit-scrollbar {
+            display: none;
+          }
         }
       `}</style>
 
-      <div className="relative z-10 w-full max-w-[100vw]">
+      <div className="relative z-10 w-full">
 
         {/* Header Area */}
-        <div className="container mx-auto px-4 md:px-8 mb-8 text-center md:text-left">
-          <h2 className="text-[36px] font-bold font-['Inria_Serif'] text-[#4A2B23] leading-tight">
+        <div className="container mx-auto px-4 md:px-8 mb-5 md:mb-8 text-center md:text-left">
+          <h2 className="text-[26px] sm:text-[30px] md:text-[34px] lg:text-[36px] font-bold font-['Inria_Serif'] text-[#4A2B23] leading-tight">
             Trending Consultations
           </h2>
         </div>
 
-        {/* Infinite Marquee Container */}
-        <div
-          className="overflow-hidden py-4"
-          style={{
-            WebkitMaskImage: 'linear-gradient(to right, transparent, black 10%, black 90%, transparent)',
-            maskImage: 'linear-gradient(to right, transparent, black 10%, black 90%, transparent)'
-          }}
-        >
-          <div className="flex animate-scroll-reverse">
-            {[...categoryData, ...categoryData, ...categoryData, ...categoryData].map((category, index) => {
-
-              return (
-                <div key={index} className="flex-none px-4 md:px-6 w-32 md:w-40">
-                  <div
-                    onClick={openPopup}
-                    className="cursor-pointer group flex flex-col items-center justify-center gap-3 transition-all duration-300 hover:-translate-y-1"
-                  >
-                    <div className="w-20 h-20 md:w-24 md:h-24 rounded-full flex items-center justify-center bg-white shadow-[0_4px_15px_rgba(0,0,0,0.06)] border border-[#F6971E]/20 group-hover:border-[#F6971E] transition-all duration-300 group-hover:shadow-[0_8px_25px_rgba(246,151,30,0.15)]">
-                      <Image
-                        src={category.icon}
-                        alt={category.title}
-                        width={40}
-                        height={40}
-                        className="object-contain opacity-80 group-hover:opacity-100 transition-opacity"
-                      />
-                    </div>
-
-                    <h3 className="text-sm md:text-base font-bold text-center text-[#72271E] group-hover:text-[#F6971E] transition-colors font-helvetica">
-                      {category.title}
-                    </h3>
+        {/* Consultations Row - Static on Web, Touch-Scroll with Visible Indicator on Mobile */}
+        <div className="container mx-auto px-4 md:px-8">
+          <div
+            className="consultation-scroll flex items-center justify-start lg:justify-between gap-4 sm:gap-6 md:gap-8 overflow-x-auto pb-4 pt-1"
+          >
+            {categoryData.map((category) => (
+              <div key={category.id} className="flex-none w-20 sm:w-24 md:w-28 lg:w-32">
+                <div
+                  onClick={openPopup}
+                  className="cursor-pointer group flex flex-col items-center justify-center gap-2 sm:gap-2.5 transition-all duration-300 hover:-translate-y-1"
+                >
+                  <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 rounded-full flex items-center justify-center bg-white shadow-[0_4px_15px_rgba(0,0,0,0.06)] border border-[#F6971E]/20 group-hover:border-[#F6971E] transition-all duration-300 group-hover:shadow-[0_8px_25px_rgba(246,151,30,0.15)]">
+                    <Image
+                      src={category.icon}
+                      alt={category.title}
+                      width={40}
+                      height={40}
+                      className="w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 object-contain opacity-80 group-hover:opacity-100 transition-opacity"
+                    />
                   </div>
+
+                  <h3 className="text-xs sm:text-sm md:text-base font-bold text-center text-[#72271E] group-hover:text-[#F6971E] transition-colors font-helvetica">
+                    {category.title}
+                  </h3>
                 </div>
-              );
-            })}
+              </div>
+            ))}
           </div>
         </div>
 

@@ -180,7 +180,7 @@ export default function AstrologersPage() {
 
         <div className="mb-8">
           <h2 className="text-3xl font-bold font-['Inria_Serif'] text-[#72271E] mb-2">
-            Trending Expert Astrologers Online
+            Trending Expert Astrologers
           </h2>
           <p className="text-gray-500 font-helvetica text-sm">
             Find the perfect spiritual guide for your journey

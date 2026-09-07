@@ -64,7 +64,7 @@ export function proxy(request: NextRequest) {
     ? pathname.slice(0, -1)
     : pathname;
 
-  if (!allowedPaths.includes(normalizedPath) && !normalizedPath.startsWith('/astrologers/') && !normalizedPath.startsWith('/pooja/')) {
+  if (!allowedPaths.includes(normalizedPath) && !normalizedPath.startsWith('/astrologers/') && !normalizedPath.startsWith('/pooja/') && !normalizedPath.startsWith('/blog/')) {
     // If path is not allowed, redirect to homepage
     return NextResponse.redirect(new URL('/', request.url));
   }

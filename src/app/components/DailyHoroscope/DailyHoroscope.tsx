@@ -100,15 +100,15 @@ export default function DailyHoroscope() {
       <div className="container mx-auto relative z-10 max-w-7xl">
 
         {/* Header & Tabs */}
-        <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end mb-8 gap-6">
+        <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end mb-6 md:mb-8 gap-4 md:gap-6">
           <div>
-            <span className="text-[#F6971E] font-bold font-helvetica tracking-wider uppercase text-sm mb-3 block">
+            <span className="text-[#F6971E] font-bold font-helvetica tracking-wider uppercase text-xs sm:text-sm mb-2 block">
               YOUR DAILY HOROSCOPE
             </span>
-            <h2 className="text-[36px] font-bold font-['Inria_Serif'] text-[#4A2B23] leading-tight">
+            <h2 className="text-[26px] sm:text-[30px] md:text-[34px] lg:text-[36px] font-bold font-['Inria_Serif'] text-[#4A2B23] leading-tight mb-2">
               Your daily <span className="text-[#F6971E]">horoscope</span> reading
             </h2>
-            <p className="text-[#6b6b6b] font-helvetica">
+            <p className="text-[#6b6b6b] font-helvetica text-sm sm:text-base">
               Pick your raashi to see today's pillars at a glance.
             </p>
           </div>

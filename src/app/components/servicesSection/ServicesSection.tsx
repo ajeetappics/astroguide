@@ -69,16 +69,32 @@ export default function ServicesSection() {
   return (
     <section className="bg-white py-[30px] md:py-[60px] overflow-hidden relative">
       <style>{`
-        @keyframes scroll {
-          0% { transform: translateX(0); }
-          100% { transform: translateX(-50%); }
+        /* Sleek custom scrollbar for mobile/responsive view to indicate horizontal scroll */
+        @media (max-width: 1023px) {
+          .services-scroll {
+            scrollbar-width: thin;
+            scrollbar-color: #F6971E rgba(246, 151, 30, 0.15);
+          }
+          .services-scroll::-webkit-scrollbar {
+            height: 4px;
+          }
+          .services-scroll::-webkit-scrollbar-track {
+            background: rgba(246, 151, 30, 0.1);
+            border-radius: 9999px;
+          }
+          .services-scroll::-webkit-scrollbar-thumb {
+            background: #F6971E;
+            border-radius: 9999px;
+          }
         }
-        .animate-scroll {
-          animation: scroll 60s linear infinite;
-          width: max-content;
-        }
-        .animate-scroll:hover {
-          animation-play-state: paused;
+        @media (min-width: 1024px) {
+          .services-scroll {
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+          }
+          .services-scroll::-webkit-scrollbar {
+            display: none;
+          }
         }
       `}</style>
 
@@ -86,27 +102,22 @@ export default function ServicesSection() {
       <div className="absolute top-[-20%] right-[-10%] w-[500px] h-[500px] bg-[#fdedcc] rounded-full blur-[120px] pointer-events-none opacity-80 z-0"></div>
       <div className="absolute bottom-[-20%] left-[-10%] w-[500px] h-[500px] bg-[#fdedcc] rounded-full blur-[120px] pointer-events-none opacity-80 z-0"></div>
 
-      <div className="relative z-10 w-full max-w-[100vw]">
+      <div className="relative z-10 w-full">
 
         {/* Header Section */}
-        <div className="container mx-auto px-4 md:px-8 mb-8 text-center md:text-left">
-          <h2 className="text-[36px] font-bold font-['Inria_Serif'] text-[#4A2B23] leading-tight">
+        <div className="container mx-auto px-4 md:px-8 mb-5 md:mb-8 text-center md:text-left">
+          <h2 className="text-[26px] sm:text-[30px] md:text-[34px] lg:text-[36px] font-bold font-['Inria_Serif'] text-[#4A2B23] leading-tight">
             Astrology Services
           </h2>
         </div>
 
-        {/* Infinite Marquee Container */}
-        <div
-          className="overflow-hidden py-4"
-          style={{
-            WebkitMaskImage: 'linear-gradient(to right, transparent, black 10%, black 90%, transparent)',
-            maskImage: 'linear-gradient(to right, transparent, black 10%, black 90%, transparent)'
-          }}
-        >
-          <div className="flex animate-scroll hover:[animation-play-state:paused]">
-            {/* We duplicate the array to make the scroll seamless */}
-            {[...servicesData, ...servicesData, ...servicesData, ...servicesData].map((service, index) => (
-              <div key={index} className="flex-none px-4 md:px-6 w-32 md:w-40">
+        {/* Services Row - Static on Web, Touch-Scroll with Visible Indicator on Mobile */}
+        <div className="container mx-auto px-4 md:px-8">
+          <div
+            className="services-scroll flex items-start justify-start lg:justify-between gap-3 sm:gap-4 md:gap-5 overflow-x-auto pb-4 pt-1"
+          >
+            {servicesData.map((service, index) => (
+              <div key={index} className="flex-none w-20 sm:w-24 md:w-28 lg:w-auto">
                 <ServiceCard
                   icon={service.icon}
                   title={service.title}

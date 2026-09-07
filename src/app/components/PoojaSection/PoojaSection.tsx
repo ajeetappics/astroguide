@@ -1,10 +1,8 @@
 'use client'
 
 import React from 'react';
-import Image from 'next/image';
 import Link from 'next/link';
 import { BsArrowRight } from 'react-icons/bs';
-import { BiMap } from 'react-icons/bi';
 import { usePopup } from '../popup/PopupContext';
 import PoojaCard from '../Card/PoojaCard';
 
@@ -52,6 +50,28 @@ export default function PoojaSection() {
 
   return (
     <section className="bg-white py-[30px] md:py-[60px] px-4 md:px-8 relative overflow-hidden">
+      <style jsx>{`
+        .pooja-scroll::-webkit-scrollbar {
+          height: 4px;
+        }
+        .pooja-scroll::-webkit-scrollbar-track {
+          background: #f1f1f1;
+          border-radius: 9999px;
+        }
+        .pooja-scroll::-webkit-scrollbar-thumb {
+          background: #F6971E;
+          border-radius: 9999px;
+        }
+        @media (min-width: 1024px) {
+          .pooja-scroll {
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+          }
+          .pooja-scroll::-webkit-scrollbar {
+            display: none;
+          }
+        }
+      `}</style>
 
       {/* Blurred Background Highlights */}
       <div className="absolute top-[-20%] right-[-10%] w-[500px] h-[500px] bg-[#fdedcc] rounded-full blur-[120px] pointer-events-none opacity-80 z-0"></div>
@@ -60,24 +80,26 @@ export default function PoojaSection() {
       <div className="container mx-auto relative z-10 max-w-7xl">
 
         {/* Header Area */}
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 gap-6">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-6 md:mb-10 gap-4 md:gap-6">
           <div className="max-w-3xl">
-            <h2 className="text-[36px] font-bold font-['Inria_Serif'] text-[#4A2B23] leading-tight mb-4">
-              Personalized Poojas,
+            <h2 className="text-[26px] sm:text-[30px] md:text-[34px] lg:text-[36px] font-bold font-['Inria_Serif'] text-[#4A2B23] leading-tight mb-2 md:mb-3">
+              Personalized Poojas
             </h2>
-            <p className="text-[#6b6b6b] font-helvetica text-base md:text-lg">
+            <p className="text-[#6b6b6b] font-helvetica text-sm sm:text-base md:text-lg">
               Experience Real Blessings with your Personal Sankalp
             </p>
           </div>
-          <Link href="/pooja" className="flex-shrink-0 flex items-center gap-2 bg-white border-2 border-[#F6971E] text-[#F6971E] font-bold font-helvetica py-2.5 px-6 rounded-full hover:bg-[#F6971E] hover:text-white transition-all shadow-sm">
-            View all poojas <BsArrowRight className="text-lg" />
+          <Link href="/pooja" className="flex-shrink-0 flex items-center gap-2 bg-white border-2 border-[#F6971E] text-[#F6971E] font-bold font-helvetica py-2 px-5 sm:py-2.5 sm:px-6 rounded-full hover:bg-[#F6971E] hover:text-white transition-all shadow-sm text-sm sm:text-base">
+            View all poojas <BsArrowRight className="text-base sm:text-lg" />
           </Link>
         </div>
 
-        {/* Pooja Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 lg:gap-8">
+        {/* Pooja Cards: Horizontal Touch-Scroll on Responsive, 4-Column Grid on Desktop */}
+        <div className="pooja-scroll flex lg:grid lg:grid-cols-4 gap-4 sm:gap-5 md:gap-6 overflow-x-auto lg:overflow-visible pb-4 lg:pb-0 snap-x snap-mandatory">
           {pujaData.map((pooja) => (
-            <PoojaCard key={pooja.id} pooja={pooja} />
+            <div key={pooja.id} className="w-[270px] sm:w-[300px] lg:w-auto flex-shrink-0 snap-start flex flex-col h-full">
+              <PoojaCard pooja={pooja} />
+            </div>
           ))}
         </div>
 

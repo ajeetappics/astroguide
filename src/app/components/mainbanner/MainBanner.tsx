@@ -2,11 +2,8 @@
 
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
-import { astrovaniLogo, astro_2, astro_3, popupImage } from "@/assets/images";
-import { usePopup } from "../popup/PopupContext";
 
 export default function MainBanner() {
-  const { openPopup } = usePopup();
 
   const images = [
     "https://storage.googleapis.com/astro-vani-storage/admin/1786718515037-Pooja_Home_page_savan_sepical.jpg",
@@ -38,48 +35,31 @@ export default function MainBanner() {
         <div className="absolute top-[40%] right-[45%] w-2 h-2 bg-[#F6971E]/80 rounded-full blur-[1px] animate-[ping_5s_ease-in-out_infinite]"></div>
         <div className="absolute top-[10%] right-[20%] w-2.5 h-2.5 bg-[#F6971E]/50 rounded-full blur-[1px] animate-[pulse_4s_ease-in-out_infinite]"></div>
 
-        {/* Rotating Rings (Increased Visibility) */}
-        <div className="absolute -top-[20%] -right-[10%] w-[80vw] max-w-[800px] aspect-square border-[2px] border-dashed border-[#F6971E]/30 rounded-full animate-[spin_100s_linear_infinite]"></div>
-        <div className="absolute top-[-5%] right-[-5%] w-[60vw] max-w-[600px] aspect-square border-[1.5px] border-solid border-[#F6971E]/20 rounded-full animate-[spin_80s_linear_infinite_reverse]"></div>
+        {/* Rotating Rings (Balanced crescent arcs on mobile matching sketch, top-right on desktop) */}
+        <div className="absolute top-[3%] -right-[48vw] w-[96vw] lg:-top-[20%] lg:-right-[10%] lg:w-[80vw] lg:max-w-[800px] aspect-square border-[2px] border-dashed border-[#F6971E]/30 rounded-full animate-[spin_100s_linear_infinite]"></div>
+        <div className="absolute top-[12%] -right-[42vw] w-[74vw] lg:top-[-5%] lg:right-[-5%] lg:w-[60vw] lg:max-w-[600px] aspect-square border-[1.5px] border-solid border-[#F6971E]/20 rounded-full animate-[spin_80s_linear_infinite_reverse]"></div>
       </div>
 
       <div className="container mx-auto max-w-7xl px-8">
         <div className="flex flex-col lg:flex-row items-center justify-between gap-12 lg:gap-8">
 
           {/* Left Content */}
-          <div className="relative z-10 flex flex-col items-center lg:items-start text-center lg:text-left w-full lg:w-1/2 space-y-5">
-            <Image
-              src={astrovaniLogo}
-              alt="Balaji Astro Guide"
-              width={240}
-              height={60}
-              className="mb-1 lg:mb-2"
-            />
-
+          <div className="relative z-10 flex flex-col items-center lg:items-start text-center lg:text-left w-full lg:w-1/2 space-y-4">
             <h1 className="text-[36px] md:text-[42px] lg:text-[48px] font-['Inria_Serif'] font-bold text-[#1a1a1a] leading-tight">
               Discover Your <br className="hidden lg:block" />
               <span className="text-[28px] md:text-[32px] lg:text-[36px] text-[#F6971E] font-italic">Cosmic Journey</span>
             </h1>
 
-            <p className="text-base md:text-lg text-gray-600 max-w-lg leading-relaxed font-helvetica">
-              Unlock the secrets of the stars with authentic astrology and spiritual guidance, tailored just for you.
-            </p>
-
-            <div className="flex flex-col sm:flex-row items-center gap-4 pt-2 w-full sm:w-auto">
-              <button
-                onClick={openPopup}
-                className="w-full sm:w-auto bg-[#F6971E] hover:bg-[#e08616] text-white font-helvetica font-semibold py-3 px-8 rounded-full transition-all transform hover:-translate-y-1 hover:shadow-lg shadow-md"
-              >
-                Chat with Astrologer
-              </button>
-
-              <button
-                onClick={openPopup}
-                className="w-full sm:w-auto bg-white border-2 border-gray-200 text-gray-700 hover:border-[#F6971E] hover:text-[#F6971E] font-helvetica font-semibold py-3 px-8 rounded-full transition-all shadow-sm"
-              >
-                Download App
-              </button>
-            </div>
+            <ul className="space-y-2 text-base md:text-lg text-gray-700 font-helvetica max-w-lg leading-relaxed text-left">
+              <li className="flex items-center gap-2">
+                <span className="text-[#F6971E] font-bold text-lg">•</span>
+                <span>Get First Free session Now!</span>
+              </li>
+              <li className="flex items-center gap-2">
+                <span className="text-[#F6971E] font-bold text-lg">•</span>
+                <span>Get Free detailed kundli</span>
+              </li>
+            </ul>
           </div>
 
           {/* Right Banner Image Slider (Normal) */}

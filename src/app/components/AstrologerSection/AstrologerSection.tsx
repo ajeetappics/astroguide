@@ -23,7 +23,7 @@ export const astrologerData: AstrologerData[] = [
     id: 2,
     name: "Viehana",
     isVerified: true,
-    isCelebrity: false,
+    isCelebrity: true,
     skills: ["Tarot", "Vedic", "Numerology"],
     languages: "English • Hindi",
     experience: "10 yrs exp",
@@ -72,10 +72,10 @@ export default function AstrologerSection() {
         {/* Header Area */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 gap-6">
           <div className="max-w-3xl">
-            <h2 className="text-[36px] font-bold font-['Inria_Serif'] text-[#4A2B23] leading-tight mb-4">
+            <h2 className="text-[26px] sm:text-[30px] md:text-[34px] lg:text-[36px] font-bold font-['Inria_Serif'] text-[#4A2B23] leading-tight mb-3 md:mb-4">
               Talk to India's <span className="text-[#F6971E]">Top Rated</span> Astrologers
             </h2>
-            <p className="text-[#6b6b6b] font-helvetica text-lg">
+            <p className="text-[#6b6b6b] font-helvetica text-sm sm:text-base md:text-lg leading-relaxed">
               Every astrologer below has cleared a 4-step verification — qualification, panel interview, live audits, and a 30-day probation.
             </p>
           </div>
@@ -85,7 +85,7 @@ export default function AstrologerSection() {
         </div>
 
         {/* Astrologers Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-4 md:gap-6">
           {astrologerData.map((astro) => (
             <AstrologerCard key={astro.id} astro={astro} />
           ))}

@@ -8,7 +8,7 @@ import PoojaCard from '../components/Card/PoojaCard';
 import { pujaData } from '../components/PoojaSection/PoojaSection';
 
 export default function PujasPage() {
-  const tabs = ["Upcoming Pooja's", "Generic Pooja's", "Dosh Nivaran Pooja's", "Grah Shanti Pooja's", "Deity Pooja's", "Lagna Pooja's", "Vrat Online Pooja's", "Festival Poojas"];
+  const tabs = ["Upcoming Pooja's", "Generic Pooja's", "Dosh Nivaran Pooja's", "Grah Shanti Pooja's", "Deity Pooja's", "Lagna Pooja's", "Vrat Pooja's", "Festival Poojas"];
   const [activeTab, setActiveTab] = useState("Upcoming Pooja's");
 
   // Duplicate data to make the grid look full (just for demo purposes)

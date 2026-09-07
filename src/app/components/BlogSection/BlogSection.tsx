@@ -34,6 +34,28 @@ const blogData = [
 export default function BlogSection() {
   return (
     <section className="bg-[#FEF8E2] py-[30px] md:py-[60px] px-4 md:px-8 relative overflow-hidden">
+      <style jsx>{`
+        .blog-scroll::-webkit-scrollbar {
+          height: 4px;
+        }
+        .blog-scroll::-webkit-scrollbar-track {
+          background: #f1f1f1;
+          border-radius: 9999px;
+        }
+        .blog-scroll::-webkit-scrollbar-thumb {
+          background: #F6971E;
+          border-radius: 9999px;
+        }
+        @media (min-width: 1024px) {
+          .blog-scroll {
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+          }
+          .blog-scroll::-webkit-scrollbar {
+            display: none;
+          }
+        }
+      `}</style>
 
       {/* Background ambient accents */}
       <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-white rounded-full blur-[120px] opacity-60 pointer-events-none"></div>
@@ -41,30 +63,30 @@ export default function BlogSection() {
       <div className="container mx-auto max-w-7xl relative z-10">
 
         {/* Header Area */}
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 gap-6">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-6 md:mb-10 gap-4 md:gap-6">
           <div className="max-w-2xl">
-            <span className="text-[#F6971E] font-bold font-helvetica tracking-wider uppercase text-sm mb-2 block">
+            <span className="text-[#F6971E] font-bold font-helvetica tracking-wider uppercase text-xs sm:text-sm mb-2 block">
               Astrovani Updates
             </span>
-            <h2 className="text-[36px] font-bold font-['Inria_Serif'] text-[#4A2B23] leading-tight mb-4">
+            <h2 className="text-[26px] sm:text-[30px] md:text-[34px] lg:text-[36px] font-bold font-['Inria_Serif'] text-[#4A2B23] leading-tight mb-2 md:mb-3">
               Latest From Blog
             </h2>
           </div>
-          <button className="flex items-center gap-2 bg-white border border-[#F6971E]/30 text-[#F6971E] font-bold font-helvetica py-3 px-8 rounded-full hover:bg-[#F6971E] hover:text-white transition-all shadow-sm">
-            View All Articles <BsArrowRight className="text-lg" />
+          <button className="flex items-center gap-2 bg-white border border-[#F6971E]/30 text-[#F6971E] font-bold font-helvetica py-2 px-5 sm:py-3 sm:px-8 rounded-full hover:bg-[#F6971E] hover:text-white transition-all shadow-sm text-sm sm:text-base">
+            View All Articles <BsArrowRight className="text-base sm:text-lg" />
           </button>
         </div>
 
-        {/* Blog Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {/* Blog Cards: Horizontal Touch-Scroll on Responsive, 3-Column Grid on Desktop */}
+        <div className="blog-scroll flex lg:grid lg:grid-cols-3 gap-5 sm:gap-6 lg:gap-8 overflow-x-auto lg:overflow-visible pb-4 lg:pb-0 snap-x snap-mandatory">
           {blogData.map((blog) => (
             <div
               key={blog.id}
-              className="group cursor-pointer bg-white rounded-[24px] overflow-hidden shadow-[0_10px_30px_rgba(0,0,0,0.03)] hover:shadow-[0_20px_40px_rgba(246,151,30,0.1)] transition-all duration-500 hover:-translate-y-2 border border-transparent hover:border-[#F6971E]/20 flex flex-col h-full relative"
+              className="w-[280px] sm:w-[320px] lg:w-auto flex-shrink-0 snap-start group cursor-pointer bg-white rounded-[24px] overflow-hidden shadow-[0_10px_30px_rgba(0,0,0,0.03)] hover:shadow-[0_20px_40px_rgba(246,151,30,0.1)] transition-all duration-500 hover:-translate-y-2 border border-transparent hover:border-[#F6971E]/20 flex flex-col h-full relative"
             >
 
               {/* Image Container with Custom Badge */}
-              <div className="relative h-[240px] w-full overflow-hidden">
+              <div className="relative h-[200px] sm:h-[240px] w-full overflow-hidden">
                 <Image
                   src={blog.imageUrl}
                   alt={blog.title}
@@ -74,31 +96,31 @@ export default function BlogSection() {
                 <div className="absolute inset-0 bg-gradient-to-t from-[#4A2B23]/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
 
                 {/* Unique Category Badge floating on image */}
-                <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-4 py-1.5 rounded-full text-[#F6971E] font-bold text-xs uppercase tracking-wider shadow-sm">
+                <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-3.5 py-1 rounded-full text-[#F6971E] font-bold text-xs uppercase tracking-wider shadow-sm">
                   {blog.category}
                 </div>
               </div>
 
               {/* Content Container */}
-              <div className="p-8 flex flex-col flex-grow relative">
+              <div className="p-5 sm:p-6 md:p-8 flex flex-col flex-grow relative">
 
                 {/* Floating Date (Unique Design Element) */}
-                <div className="absolute -top-6 right-8 bg-[#F6971E] text-white text-xs font-bold px-4 py-2 rounded-lg shadow-md transform group-hover:-translate-y-1 transition-transform">
+                <div className="absolute -top-5 sm:-top-6 right-6 sm:right-8 bg-[#F6971E] text-white text-xs font-bold px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-lg shadow-md transform group-hover:-translate-y-1 transition-transform">
                   {blog.date}
                 </div>
 
-                <h3 className="text-2xl font-bold font-['Inria_Serif'] text-[#4A2B23] mb-4 group-hover:text-[#F6971E] transition-colors line-clamp-2 mt-2">
+                <h3 className="text-xl sm:text-2xl font-bold font-['Inria_Serif'] text-[#4A2B23] mb-3 sm:mb-4 group-hover:text-[#F6971E] transition-colors line-clamp-2 mt-1 sm:mt-2">
                   {blog.title}
                 </h3>
 
-                <p className="text-[#6b6b6b] font-helvetica text-sm leading-relaxed mb-8 flex-grow line-clamp-3">
+                <p className="text-[#6b6b6b] font-helvetica text-xs sm:text-sm leading-relaxed mb-6 sm:mb-8 flex-grow line-clamp-3">
                   {blog.excerpt}
                 </p>
 
                 {/* Animated Read More Link */}
-                <div className="mt-auto flex items-center text-[#F6971E] font-bold text-sm uppercase tracking-wider group-hover:gap-3 gap-2 transition-all">
+                <div className="mt-auto flex items-center text-[#F6971E] font-bold text-xs sm:text-sm uppercase tracking-wider group-hover:gap-3 gap-2 transition-all">
                   Read Article
-                  <BsArrowRight className="text-xl opacity-0 -ml-4 group-hover:opacity-100 group-hover:ml-0 transition-all duration-300" />
+                  <BsArrowRight className="text-lg sm:text-xl opacity-0 -ml-4 group-hover:opacity-100 group-hover:ml-0 transition-all duration-300" />
                 </div>
               </div>
 

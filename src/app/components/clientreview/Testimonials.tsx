@@ -65,8 +65,8 @@ export default function Testimonials() {
       <div className="container mx-auto max-w-7xl relative z-10">
 
         {/* Header Section */}
-        <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
-          <h2 className="text-[36px] font-bold font-['Inria_Serif'] text-[#4A2B23] leading-tight">
+        <div className="flex justify-between items-center mb-6 gap-4">
+          <h2 className="text-[26px] sm:text-[30px] md:text-[34px] lg:text-[36px] font-bold font-['Inria_Serif'] text-[#4A2B23] leading-tight">
             User reviews
           </h2>
 
