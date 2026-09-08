@@ -79,7 +79,7 @@ export default function AstrologerSection() {
               Every astrologer below has cleared a 4-step verification — qualification, panel interview, live audits, and a 30-day probation.
             </p>
           </div>
-          <Link href="/astrologers" className="flex-shrink-0 flex items-center gap-2 bg-white border-2 border-[#F6971E] text-[#F6971E] font-bold font-helvetica py-3 px-8 rounded-full hover:bg-[#F6971E] hover:text-white transition-all shadow-sm">
+          <Link href="/astrologers" className="hidden md:flex flex-shrink-0 items-center gap-2 bg-white border-2 border-[#F6971E] text-[#F6971E] font-bold font-helvetica py-3 px-8 rounded-full hover:bg-[#F6971E] hover:text-white transition-all shadow-sm">
             View all astrologers <BsArrowRight className="text-xl" />
           </Link>
         </div>
@@ -89,6 +89,13 @@ export default function AstrologerSection() {
           {astrologerData.map((astro) => (
             <AstrologerCard key={astro.id} astro={astro} />
           ))}
+        </div>
+
+        {/* Responsive View All Astrologers Button (Visible on small screens below the cards) */}
+        <div className="flex md:hidden justify-center mt-6 sm:mt-8">
+          <Link href="/astrologers" className="flex items-center gap-2 bg-white border-2 border-[#F6971E] text-[#F6971E] font-bold font-helvetica py-3 px-8 rounded-full hover:bg-[#F6971E] hover:text-white transition-all shadow-sm">
+            View all astrologers <BsArrowRight className="text-xl" />
+          </Link>
         </div>
 
       </div>

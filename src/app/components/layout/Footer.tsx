@@ -65,33 +65,33 @@ export default function Footer() {
                 <FaYoutube />
               </Link>
             </div>
-            <div className="flex flex-col sm:flex-row gap-3 mt-6">
+            <div className="flex flex-wrap items-center justify-start gap-3 mt-6">
               <Link
                 href="https://play.google.com/store/apps/details?id=com.astrovani.balaji.app"
-                className="flex items-center justify-center transition-colors"
+                className="inline-flex items-center justify-start transition-all hover:scale-105 hover:opacity-90 active:scale-95"
                 target="_blank"
                 rel="noopener noreferrer"
               >
                 <Image
                   src={google_store}
                   alt="GET IT ON Google Play"
-                  width={120}
+                  width={125}
                   height={40}
-                  className="object-contain"
+                  className="w-[125px] sm:w-[130px] h-auto object-contain"
                 />
               </Link>
               <Link
                 href="https://apps.apple.com/in/app/balaji-astro-guide/id6753894953/"
-                className="flex items-center justify-center transition-colors"
+                className="inline-flex items-center justify-start transition-all hover:scale-105 hover:opacity-90 active:scale-95"
                 target="_blank"
                 rel="noopener noreferrer"
               >
                 <Image
                   src={apple_store}
                   alt="Download on the App Store"
-                  width={120}
+                  width={125}
                   height={40}
-                  className="object-contain"
+                  className="w-[125px] sm:w-[130px] h-auto object-contain"
                 />
               </Link>
             </div>

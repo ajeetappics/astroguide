@@ -66,6 +66,21 @@ body {
 .animate-reverse-spin {
   animation: reverse-spin 0.8s linear infinite;
 }
+
+.custom-x-scroll::-webkit-scrollbar {
+  height: 6px;
+}
+.custom-x-scroll::-webkit-scrollbar-track {
+  background: #fdf5ea;
+  border-radius: 10px;
+}
+.custom-x-scroll::-webkit-scrollbar-thumb {
+  background: #f6971e66;
+  border-radius: 10px;
+}
+.custom-x-scroll::-webkit-scrollbar-thumb:hover {
+  background: #f6971e;
+}
 /* 
 .header_shape::before{
   content: '';
