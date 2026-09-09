@@ -91,24 +91,24 @@ export default function DailyHoroscope() {
   const ActiveIcon = activeSign.icon;
 
   return (
-    <section className="bg-[#FFFDF9] pt-[30px] md:pt-[60px] px-4 md:px-8 relative overflow-hidden">
+    <section className="bg-[#FFFDF9] py-5 md:py-8 px-4 md:px-8 relative overflow-hidden">
 
       {/* Background Decor */}
       <div className="absolute -left-40 top-20 w-96 h-96 bg-[#F6971E]/5 rounded-full blur-[80px] pointer-events-none"></div>
       <div className="absolute -right-40 bottom-20 w-96 h-96 bg-[#4A2B23]/5 rounded-full blur-[80px] pointer-events-none"></div>
 
-      <div className="container mx-auto relative z-10 max-w-7xl">
+      <div className="container mx-auto relative z-10 max-w-6xl">
 
         {/* Header & Tabs */}
-        <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end mb-6 md:mb-8 gap-4 md:gap-6">
+        <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end mb-4 md:mb-6 gap-3 md:gap-4">
           <div>
-            <span className="text-[#F6971E] font-bold font-helvetica tracking-wider uppercase text-xs sm:text-sm mb-2 block">
+            <span className="text-[#F6971E] font-bold font-helvetica tracking-wider uppercase text-[10px] sm:text-xs mb-1 block">
               YOUR DAILY HOROSCOPE
             </span>
-            <h2 className="text-[26px] sm:text-[30px] md:text-[34px] lg:text-[36px] font-bold font-['Inria_Serif'] text-[#4A2B23] leading-tight mb-2">
+            <h2 className="text-lg sm:text-xl md:text-2xl font-bold font-['Inria_Serif'] text-[#4A2B23] leading-tight">
               Your daily <span className="text-[#F6971E]">horoscope</span> reading
             </h2>
-            <p className="text-[#6b6b6b] font-helvetica text-sm sm:text-base">
+            <p className="text-[#6b6b6b] font-helvetica text-xs sm:text-sm">
               Pick your raashi to see today's pillars at a glance.
             </p>
           </div>
@@ -119,7 +119,7 @@ export default function DailyHoroscope() {
           ref={scrollRef}
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
-          className="flex overflow-x-auto hide-scrollbar gap-4 pt-2 -mx-4 px-4 sm:mx-0 sm:px-0 scroll-smooth  pb-2"
+          className="flex overflow-x-auto hide-scrollbar gap-2.5 sm:gap-3 pt-1 -mx-4 px-4 sm:mx-0 sm:px-0 scroll-smooth pb-2"
         >
           {zodiacSigns.map((sign) => {
             const Icon = sign.icon;
@@ -128,19 +128,19 @@ export default function DailyHoroscope() {
               <button
                 key={sign.id}
                 onClick={() => setActiveSign(sign)}
-                className={`flex-shrink-0 flex flex-col items-center justify-center w-24 h-28 rounded-2xl border-2 transition-all duration-300 ${isActive
-                  ? 'bg-gradient-to-b from-[#FEF8E2] to-white border-[#F6971E] shadow-[0_8px_20px_rgba(246,151,30,0.15)] -translate-y-2'
-                  : 'bg-white border-transparent shadow-sm hover:border-[#F6971E]/30 hover:-translate-y-1'
+                className={`flex-shrink-0 flex flex-col items-center justify-center w-18 sm:w-20 md:w-22 h-22 sm:h-24 md:h-26 rounded-xl border transition-all duration-300 ${isActive
+                  ? 'bg-gradient-to-b from-[#FEF8E2] to-white border-[#F6971E] shadow-[0_6px_16px_rgba(246,151,30,0.15)] -translate-y-1'
+                  : 'bg-white border-gray-100 shadow-xs hover:border-[#F6971E]/30 hover:-translate-y-0.5'
                   }`}
               >
-                <div className={`w-12 h-12 rounded-full flex items-center justify-center mb-2 ${isActive ? 'bg-[#F6971E] text-white shadow-inner' : 'bg-gray-50 text-[#4A2B23]'
+                <div className={`w-8 h-8 sm:w-9 sm:h-9 rounded-full flex items-center justify-center mb-1 ${isActive ? 'bg-[#F6971E] text-white shadow-inner' : 'bg-gray-50 text-[#4A2B23]'
                   }`}>
-                  <Icon className="text-2xl" />
+                  <Icon className="text-lg sm:text-xl" />
                 </div>
-                <span className={`font-bold text-sm ${isActive ? 'text-[#4A2B23]' : 'text-gray-600'}`}>
+                <span className={`font-bold text-xs ${isActive ? 'text-[#4A2B23]' : 'text-gray-600'}`}>
                   {sign.name}
                 </span>
-                <span className="text-[10px] text-gray-400 uppercase tracking-wide">
+                <span className="text-[9px] text-gray-400 uppercase tracking-wide">
                   {sign.hindiName}
                 </span>
               </button>

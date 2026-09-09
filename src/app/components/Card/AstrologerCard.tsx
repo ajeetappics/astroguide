@@ -131,20 +131,20 @@ export default function AstrologerCard({ astro }: AstrologerCardProps) {
       {/* 🖥️ Desktop Web Card (Clean 4-column layout) */}
       <div 
         onClick={handleCardClick}
-        className="hidden lg:flex bg-white rounded-[24px] shadow-[0_4px_20px_rgba(0,0,0,0.06)] border border-[#F6971E]/20 hover:shadow-[0_8px_30px_rgba(246,151,30,0.15)] transition-all duration-300 flex-col relative overflow-hidden h-full cursor-pointer group"
+        className="hidden lg:flex bg-white rounded-2xl shadow-[0_4px_16px_rgba(0,0,0,0.05)] border border-[#F6971E]/20 hover:border-[#F6971E]/50 hover:shadow-[0_8px_24px_rgba(246,151,30,0.12)] transition-all duration-300 hover:-translate-y-1 flex-col relative overflow-hidden h-full cursor-pointer group"
       >
         {/* Top Image Section */}
-        <div className="block relative w-full aspect-square overflow-hidden bg-gray-100">
+        <div className="block relative w-full aspect-[4/3] overflow-hidden bg-gray-100">
           <Image 
             src={astro.imageUrl} 
             alt={astro.name} 
             fill 
-            className="object-cover transition-transform duration-500 group-hover:scale-110"
+            className="object-cover transition-transform duration-500 group-hover:scale-105"
           />
 
           {/* Trending Badge Overlay on Desktop Web */}
           {astro.isCelebrity && (
-            <div className="absolute bottom-0 inset-x-0 bg-gradient-to-r from-[#F6971E] to-[#FF7A00] text-white text-xs font-bold text-center py-1.5 z-10 flex items-center justify-center gap-1 shadow-md">
+            <div className="absolute bottom-0 inset-x-0 bg-gradient-to-r from-[#F6971E] to-[#FF7A00] text-white text-[11px] font-bold text-center py-1 z-10 flex items-center justify-center gap-1 shadow-xs">
               <span>Trending</span>
               <span>🔥</span>
             </div>
@@ -152,45 +152,45 @@ export default function AstrologerCard({ astro }: AstrologerCardProps) {
         </div>
 
         {/* Content Section */}
-        <div className="p-5 flex flex-col flex-grow">
+        <div className="p-3.5 flex flex-col flex-grow">
           {/* Name & Rating */}
-          <div className="flex justify-between items-center mb-2">
+          <div className="flex justify-between items-center mb-1.5">
             <div className="flex items-center gap-1.5 min-w-0">
-              <h3 className="text-xl font-bold text-[#72271E] font-['Inria_Serif'] line-clamp-1 group-hover:text-[#F6971E] transition-colors">
+              <h3 className="text-base font-bold text-[#72271E] font-['Inria_Serif'] line-clamp-1 group-hover:text-[#F6971E] transition-colors">
                 {astro.name}
               </h3>
               {astro.isVerified && (
-                <BsPatchCheckFill className="text-[#00C853] text-lg flex-shrink-0" />
+                <BsPatchCheckFill className="text-[#00C853] text-base flex-shrink-0" />
               )}
             </div>
-            <div className="flex items-center gap-1 text-sm font-bold text-[#4A2B23] flex-shrink-0">
-              <BsStarFill className="text-[#F6971E] text-xs" />
+            <div className="flex items-center gap-1 text-xs font-bold text-[#4A2B23] flex-shrink-0">
+              <BsStarFill className="text-[#F6971E] text-[11px]" />
               <span>{astro.rating}</span>
             </div>
           </div>
 
           {/* Info Text */}
-          <p className="text-sm text-gray-500 font-helvetica mb-1 line-clamp-1">
+          <p className="text-xs text-gray-500 font-helvetica mb-0.5 line-clamp-1">
             {astro.languages}
           </p>
-          <p className="text-sm text-gray-700 font-helvetica mb-4 line-clamp-1">
+          <p className="text-xs text-gray-600 font-helvetica mb-3 line-clamp-1">
             {astro.skills.join(", ")}
           </p>
 
           {/* Experience & Price (Both Del and Real Price) */}
-          <div className="flex justify-between items-end mb-6 mt-auto">
-            <span className="text-sm text-gray-500 font-helvetica">
+          <div className="flex justify-between items-end mb-3 mt-auto pt-2 border-t border-gray-100">
+            <span className="text-xs text-gray-500 font-helvetica">
               {astro.experience}
             </span>
             <div className="flex flex-col items-end gap-0.5">
-              <span className="text-xs text-gray-400 line-through flex items-center">
-                <BsCurrencyRupee className="text-xs -mr-0.5" />
+              <span className="text-[10px] text-gray-400 line-through flex items-center">
+                <BsCurrencyRupee className="text-[10px] -mr-0.5" />
                 {originalPrice}
               </span>
-              <span className="text-xl font-bold text-[#72271E] leading-none flex items-center">
-                <BsCurrencyRupee className="text-lg -mr-0.5" />
+              <span className="text-base font-bold text-[#72271E] leading-none flex items-center">
+                <BsCurrencyRupee className="text-sm -mr-0.5" />
                 {astro.price.replace('₹', '')}
-                <span className="text-sm font-bold text-[#72271E] ml-0.5">/min</span>
+                <span className="text-xs font-bold text-[#72271E] ml-0.5">/min</span>
               </span>
             </div>
           </div> 
@@ -198,7 +198,7 @@ export default function AstrologerCard({ astro }: AstrologerCardProps) {
           {/* Connect Button */}
           <button 
             onClick={handleConnectClick}
-            className="w-full bg-gradient-to-r from-[#F6971E] to-[#FFA733] text-white font-bold font-helvetica py-3 rounded-[14px] hover:shadow-[0_4px_15px_rgba(246,151,30,0.3)] transition-all flex items-center justify-center gap-2 relative z-20"
+            className="w-full bg-gradient-to-r from-[#F6971E] to-[#FFA733] text-white font-bold font-helvetica py-2 rounded-xl hover:shadow-[0_4px_15px_rgba(246,151,30,0.3)] transition-all flex items-center justify-center gap-1.5 text-xs relative z-20 cursor-pointer"
           >
             Connect Now
           </button>

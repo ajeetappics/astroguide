@@ -25,16 +25,8 @@ const servicesListData = [
 
 export default function PersonalizedServices() {
   return (
-    <section className="relative bg-[#FEF8E2] py-[30px] md:py-[60px] px-4 md:px-8 overflow-hidden">
+    <section className="relative bg-[#FEF8E2] py-6 md:py-10 px-4 md:px-8 overflow-hidden">
         <div className="absolute inset-0 z-0">
-            {/* <div className="absolute top-0 right-0 h-full w-3/4 ">
-                <Image 
-                    src={backgroundImg} 
-                    alt="Cosmic background" 
-                    layout="fill" 
-                    objectFit="cover"
-                />
-            </div> */}
               <div className="absolute inset-0 z-0">
                   <div className="solar-bg">
                       {/* Earth in the Center */}
@@ -62,20 +54,20 @@ export default function PersonalizedServices() {
 
         </div>
 
-        <div className="relative z-10 container mx-auto max-w-7xl">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-                <div className="flex flex-col gap-8">
+        <div className="relative z-10 container mx-auto max-w-6xl">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 items-center">
+                <div className="flex flex-col gap-3 sm:gap-4">
                     <div className="relative self-start">
-                        <h2 className="text-[36px] font-bold font-['Inria_Serif'] text-[#4A2B23] leading-tight">
+                        <h2 className="text-xl sm:text-2xl md:text-3xl font-bold font-['Inria_Serif'] text-[#4A2B23] leading-tight">
                             Personalized Services
                         </h2>
                     </div>
 
-                    <p className="text-lg font-helvetica text-[#000000AD] max-w-lg">
+                    <p className="text-xs sm:text-sm font-helvetica text-[#000000AD] max-w-lg">
                         Unlock deeper insights into your life with our premium astrological services, crafted by expert astrologers with decades of experience.
                     </p>
                     
-                    <div className="space-y-8 mt-4">
+                    <div className="space-y-3 sm:space-y-3.5 mt-2">
                         {servicesListData.map((service, index) => (
                             <ServiceDetailCard 
                                 key={index}

@@ -29,6 +29,12 @@ const spotlightData = [
     videoUrl: "https://www.w3schools.com/html/mov_bbb.mp4",
     title: "Karan Kundrra discusses planetary dosh remedies with Pandit Ji 🔱",
   },
+  {
+    id: 5,
+    thumbnail: "/images/hindu_pandit_1.jpg",
+    videoUrl: "https://www.w3schools.com/html/mov_bbb.mp4",
+    title: "Bharti Singh talks about daily horoscope & vastu guidance with Pandit Ji ✨",
+  },
 ];
 
 export default function CelebritySpotlight() {
@@ -48,7 +54,7 @@ export default function CelebritySpotlight() {
   }, [activeVideo]);
 
   return (
-    <section className="bg-[#FFFDF9] py-[25px] md:py-[50px] px-4 md:px-8 relative overflow-hidden">
+    <section className="bg-[#FFFDF9] py-5 md:py-8 px-4 md:px-8 relative overflow-hidden">
       <style jsx>{`
         .celebrity-rail::-webkit-scrollbar {
           height: 4px;
@@ -80,26 +86,26 @@ export default function CelebritySpotlight() {
       <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-[#F6971E]/5 rounded-full blur-[120px] pointer-events-none"></div>
       <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-[#F6971E]/5 rounded-full blur-[120px] pointer-events-none"></div>
 
-      <div className="container mx-auto max-w-7xl relative z-10">
+      <div className="container mx-auto max-w-6xl relative z-10">
 
-        {/* Header - Matches Screenshot */}
-        <div className="container mx-auto mb-5 md:mb-8 text-center md:text-left">
-          <h2 className="text-[26px] sm:text-[30px] md:text-[34px] lg:text-[36px] font-bold font-['Inria_Serif'] text-[#4A2B23] leading-tight">
-            <span>Celebrity  Spotlight</span>
+        {/* Header - Compact */}
+        <div className="mb-3 sm:mb-4 text-center md:text-left">
+          <h2 className="text-lg sm:text-xl md:text-2xl font-bold font-['Inria_Serif'] text-[#4A2B23] leading-tight">
+            <span>Celebrity Spotlight</span>
           </h2>
         </div>
 
-        {/* YouTube Rail: Horizontal Touch Scroll on Responsive, 4-Column Grid on Desktop */}
-        <div className="celebrity-rail flex lg:grid lg:grid-cols-4 gap-3.5 sm:gap-4 md:gap-5 overflow-x-auto lg:overflow-visible pb-3 lg:pb-0 snap-x snap-mandatory">
+        {/* YouTube Rail: Compact Touch Scroll on Responsive, 5-Column Grid on Desktop */}
+        <div className="celebrity-rail flex lg:grid lg:grid-cols-5 gap-2.5 sm:gap-3 md:gap-3.5 overflow-x-auto lg:overflow-visible pb-2 lg:pb-0 snap-x snap-mandatory">
           {spotlightData.map((item) => (
             <div
               key={item.id}
-              className="w-[200px] sm:w-[230px] lg:w-auto flex-shrink-0 snap-start group cursor-pointer bg-white rounded-2xl border border-gray-200/80 shadow-[0_2px_12px_rgba(0,0,0,0.04)] hover:border-[#F6971E]/40 hover:shadow-[0_8px_25px_rgba(246,151,30,0.12)] transition-all duration-300 hover:-translate-y-1 overflow-hidden flex flex-col"
+              className="w-[125px] sm:w-[145px] md:w-[160px] lg:w-full lg:max-w-[190px] mx-auto flex-shrink-0 snap-start group cursor-pointer bg-white rounded-xl border border-gray-200/80 shadow-[0_2px_8px_rgba(0,0,0,0.04)] hover:border-[#F6971E]/40 hover:shadow-[0_6px_20px_rgba(246,151,30,0.12)] transition-all duration-300 hover:-translate-y-0.5 overflow-hidden flex flex-col"
               onClick={() => setActiveVideo(item.videoUrl)}
             >
 
-              {/* Portrait Video Thumbnail Container */}
-              <div className="relative w-full aspect-[9/13] bg-gray-900 overflow-hidden">
+              {/* Portrait Video Thumbnail Container (Compact 3:4 aspect ratio) */}
+              <div className="relative w-full aspect-[3/4] bg-gray-900 overflow-hidden">
                 <Image
                   src={item.thumbnail}
                   alt={item.title}
@@ -108,17 +114,17 @@ export default function CelebritySpotlight() {
                 />
                 <div className="absolute inset-0 bg-black/15 group-hover:bg-black/25 transition-colors duration-300" />
 
-                {/* Center White Circle Play Button - Exact match with user's image */}
+                {/* Center White Circle Play Button - Scaled down & refined */}
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-white flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
-                    <BsPlayFill className="text-2xl text-black ml-0.5" />
+                  <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white flex items-center justify-center shadow-md group-hover:scale-110 transition-transform">
+                    <BsPlayFill className="text-base sm:text-lg text-black ml-0.5" />
                   </div>
                 </div>
               </div>
 
               {/* Title Description */}
-              <div className="p-3 bg-white flex-grow flex items-center">
-                <h3 className="text-xs sm:text-sm font-bold text-[#1f1f1f] font-helvetica line-clamp-2 leading-snug">
+              <div className="p-2 sm:p-2.5 bg-white flex-grow flex items-center">
+                <h3 className="text-[10px] sm:text-[11px] font-semibold text-[#1f1f1f] font-helvetica line-clamp-2 leading-snug">
                   {item.title}
                 </h3>
               </div>

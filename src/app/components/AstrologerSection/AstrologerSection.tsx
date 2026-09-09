@@ -62,39 +62,39 @@ export const astrologerData: AstrologerData[] = [
 
 export default function AstrologerSection() {
   return (
-    <section className="bg-white py-[30px] md:py-[60px] px-4 md:px-8 relative overflow-hidden">
+    <section className="bg-white py-6 md:py-10 px-4 md:px-8 relative overflow-hidden">
       
       {/* Background Accent */}
       <div className="absolute top-0 left-0 w-full h-[300px] bg-gradient-to-b from-[#FEF8E2]/50 to-transparent pointer-events-none"></div>
 
-      <div className="container mx-auto max-w-7xl relative z-10">
+      <div className="container mx-auto max-w-6xl relative z-10">
         
         {/* Header Area */}
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 gap-6">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-4 md:mb-6 gap-3 md:gap-4">
           <div className="max-w-3xl">
-            <h2 className="text-[26px] sm:text-[30px] md:text-[34px] lg:text-[36px] font-bold font-['Inria_Serif'] text-[#4A2B23] leading-tight mb-3 md:mb-4">
+            <h2 className="text-lg sm:text-xl md:text-2xl font-bold font-['Inria_Serif'] text-[#4A2B23] leading-tight mb-1">
               Talk to India's <span className="text-[#F6971E]">Top Rated</span> Astrologers
             </h2>
-            <p className="text-[#6b6b6b] font-helvetica text-sm sm:text-base md:text-lg leading-relaxed">
+            <p className="text-[#6b6b6b] font-helvetica text-xs sm:text-sm leading-relaxed">
               Every astrologer below has cleared a 4-step verification — qualification, panel interview, live audits, and a 30-day probation.
             </p>
           </div>
-          <Link href="/astrologers" className="hidden md:flex flex-shrink-0 items-center gap-2 bg-white border-2 border-[#F6971E] text-[#F6971E] font-bold font-helvetica py-3 px-8 rounded-full hover:bg-[#F6971E] hover:text-white transition-all shadow-sm">
-            View all astrologers <BsArrowRight className="text-xl" />
+          <Link href="/astrologers" className="hidden md:flex flex-shrink-0 items-center gap-1.5 bg-white border border-[#F6971E] text-[#F6971E] font-bold font-helvetica py-1.5 px-3.5 rounded-full hover:bg-[#F6971E] hover:text-white transition-all shadow-xs text-xs">
+            View all astrologers <BsArrowRight className="text-xs" />
           </Link>
         </div>
 
         {/* Astrologers Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-4 md:gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-3.5 md:gap-4">
           {astrologerData.map((astro) => (
             <AstrologerCard key={astro.id} astro={astro} />
           ))}
         </div>
 
         {/* Responsive View All Astrologers Button (Visible on small screens below the cards) */}
-        <div className="flex md:hidden justify-center mt-6 sm:mt-8">
-          <Link href="/astrologers" className="flex items-center gap-2 bg-white border-2 border-[#F6971E] text-[#F6971E] font-bold font-helvetica py-3 px-8 rounded-full hover:bg-[#F6971E] hover:text-white transition-all shadow-sm">
-            View all astrologers <BsArrowRight className="text-xl" />
+        <div className="flex md:hidden justify-center mt-5 sm:mt-6">
+          <Link href="/astrologers" className="flex items-center gap-1.5 bg-white border border-[#F6971E] text-[#F6971E] font-bold font-helvetica py-2 px-5 rounded-full hover:bg-[#F6971E] hover:text-white transition-all shadow-xs text-xs">
+            View all astrologers <BsArrowRight className="text-xs" />
           </Link>
         </div>
 

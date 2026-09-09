@@ -67,7 +67,7 @@ const servicesData = [
 
 export default function ServicesSection() {
   return (
-    <section className="bg-white py-[30px] md:py-[60px] overflow-hidden relative">
+    <section className="bg-white py-5 md:py-8 overflow-hidden relative">
       <style>{`
         /* Sleek custom scrollbar for mobile/responsive view to indicate horizontal scroll */
         @media (max-width: 1023px) {
@@ -105,14 +105,14 @@ export default function ServicesSection() {
       <div className="relative z-10 w-full">
 
         {/* Header Section */}
-        <div className="container mx-auto px-4 md:px-8 mb-5 md:mb-8 text-center md:text-left">
-          <h2 className="text-[26px] sm:text-[30px] md:text-[34px] lg:text-[36px] font-bold font-['Inria_Serif'] text-[#4A2B23] leading-tight">
+        <div className="container mx-auto max-w-6xl mb-3.5 md:mb-5 text-center md:text-left">
+          <h2 className="text-lg sm:text-xl md:text-2xl font-bold font-['Inria_Serif'] text-[#4A2B23] leading-tight">
             Astrology Services
           </h2>
         </div>
 
         {/* Services Row - Static on Web, Touch-Scroll with Visible Indicator on Mobile */}
-        <div className="container mx-auto px-4 md:px-8">
+        <div className="container mx-auto max-w-6xl">
           <div
             className="services-scroll flex items-start justify-start lg:justify-between gap-3 sm:gap-4 md:gap-5 overflow-x-auto pb-4 pt-1"
           >

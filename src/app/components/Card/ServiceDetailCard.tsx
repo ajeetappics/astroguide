@@ -12,22 +12,22 @@ export default function ServiceDetailCard({
     features,
 }: ServiceDetailCardProps) {
     return (
-        <div className="min-h-[236px] rounded-[10px] p-6 
-                    bg-white/10 backdrop-blur-md backdrop-saturate-100 
-                    border border-white/30 shadow-inner">
-            <h3 className="text-2xl font-inria font-bold text-[#72271E] mb-3">
+        <div className="rounded-xl p-3.5 sm:p-4 md:p-5 
+                    bg-white/40 backdrop-blur-md backdrop-saturate-100 
+                    border border-white/60 shadow-[0_4px_16px_rgba(0,0,0,0.03)] hover:shadow-[0_8px_24px_rgba(246,151,30,0.1)] transition-all duration-300">
+            <h3 className="text-base sm:text-lg font-inria font-bold text-[#72271E] mb-1">
                 {title}
             </h3>
 
-            <p className="text-sm font-helvetica text-[#5C5C5C] mb-6">
+            <p className="text-xs sm:text-[13px] font-helvetica text-[#5C5C5C] mb-3 leading-relaxed">
                 {description}
             </p>
 
-            <div className="grid grid-cols-2 gap-x-6 gap-y-3">
+            <div className="grid grid-cols-2 gap-x-3 sm:gap-x-4 gap-y-1.5 sm:gap-y-2">
                 {features.map((feature, index) => (
-                    <div key={index} className="flex items-center gap-3">
-                        <div className="w-2.5 h-2.5 rounded-full bg-[#C1A983]"></div>
-                        <span className="text-sm font-helvetica text-[#5C5C5C]">
+                    <div key={index} className="flex items-center gap-2">
+                        <div className="w-1.5 h-1.5 rounded-full bg-[#C1A983] shrink-0"></div>
+                        <span className="text-[11px] sm:text-xs font-helvetica text-[#5C5C5C]">
                             {feature}
                         </span>
                     </div>
