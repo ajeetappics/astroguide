@@ -58,12 +58,12 @@ export default function PersonalizedServices() {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 items-center">
                 <div className="flex flex-col gap-3 sm:gap-4">
                     <div className="relative self-start">
-                        <h2 className="text-xl sm:text-2xl md:text-3xl font-bold font-['Inria_Serif'] text-[#4A2B23] leading-tight">
+                        <h2 className="text-2xl sm:text-3xl md:text-[34px] font-bold font-['Inria_Serif'] text-[#4A2B23] leading-tight">
                             Personalized Services
                         </h2>
                     </div>
 
-                    <p className="text-xs sm:text-sm font-helvetica text-[#000000AD] max-w-lg">
+                    <p className="text-sm sm:text-base font-helvetica text-[#000000AD] max-w-lg">
                         Unlock deeper insights into your life with our premium astrological services, crafted by expert astrologers with decades of experience.
                     </p>
                     

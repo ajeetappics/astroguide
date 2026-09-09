@@ -81,7 +81,7 @@ export default function BrowseCategory() {
 
         {/* Header Area */}
         <div className="container mx-auto max-w-6xl px-4 md:px-8 mb-3.5 md:mb-5 text-center md:text-left">
-          <h2 className="text-lg sm:text-xl md:text-2xl font-bold font-['Inria_Serif'] text-[#4A2B23] leading-tight">
+          <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-[32px] font-bold font-['Inria_Serif'] text-[#4A2B23] leading-tight">
             Trending Consultations
           </h2>
         </div>

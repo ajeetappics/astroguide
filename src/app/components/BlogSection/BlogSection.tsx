@@ -68,12 +68,12 @@ export default function BlogSection() {
             <span className="text-[#F6971E] font-bold font-helvetica tracking-wider uppercase text-[10px] sm:text-xs mb-1 block">
               Astrovani Updates
             </span>
-            <h2 className="text-lg sm:text-xl md:text-2xl font-bold font-['Inria_Serif'] text-[#4A2B23] leading-tight">
+            <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-[32px] font-bold font-['Inria_Serif'] text-[#4A2B23] leading-tight">
               Latest From Blog
             </h2>
           </div>
-          <button className="flex items-center gap-1.5 bg-white border border-[#F6971E]/30 text-[#F6971E] font-bold font-helvetica py-1.5 px-3.5 rounded-full hover:bg-[#F6971E] hover:text-white transition-all shadow-xs text-xs">
-            View All Articles <BsArrowRight className="text-xs" />
+          <button className="flex items-center gap-1.5 bg-white border border-[#F6971E]/30 text-[#F6971E] font-bold font-helvetica py-2 px-5 rounded-full hover:bg-[#F6971E] hover:text-white transition-all shadow-xs text-xs sm:text-sm cursor-pointer">
+            View All Articles <BsArrowRight className="text-sm" />
           </button>
         </div>
 
@@ -109,16 +109,16 @@ export default function BlogSection() {
                   {blog.date}
                 </div>
 
-                <h3 className="text-sm sm:text-base font-bold font-['Inria_Serif'] text-[#4A2B23] mb-1.5 group-hover:text-[#F6971E] transition-colors line-clamp-2 mt-0.5">
+                <h3 className="text-sm sm:text-base md:text-[18px] font-bold font-['Inria_Serif'] text-[#4A2B23] mb-1.5 group-hover:text-[#F6971E] transition-colors line-clamp-2 mt-0.5">
                   {blog.title}
                 </h3>
 
-                <p className="text-[#6b6b6b] font-helvetica text-xs leading-relaxed mb-3 flex-grow line-clamp-2">
+                <p className="text-[#6b6b6b] font-helvetica text-xs sm:text-[13px] md:text-sm leading-relaxed mb-3 flex-grow line-clamp-2">
                   {blog.excerpt}
                 </p>
 
                 {/* Animated Read More Link */}
-                <div className="mt-auto flex items-center text-[#F6971E] font-bold text-[11px] sm:text-xs uppercase tracking-wider group-hover:gap-2 gap-1.5 transition-all">
+                <div className="mt-auto flex items-center text-[#F6971E] font-bold text-xs sm:text-sm uppercase tracking-wider group-hover:gap-2 gap-1.5 transition-all">
                   Read Article
                   <BsArrowRight className="text-sm opacity-0 -ml-3 group-hover:opacity-100 group-hover:ml-0 transition-all duration-300" />
                 </div>

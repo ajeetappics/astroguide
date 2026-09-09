@@ -152,43 +152,43 @@ export default function AstrologerCard({ astro }: AstrologerCardProps) {
         </div>
 
         {/* Content Section */}
-        <div className="p-3.5 flex flex-col flex-grow">
+        <div className="p-3.5 sm:p-4 flex flex-col flex-grow">
           {/* Name & Rating */}
           <div className="flex justify-between items-center mb-1.5">
             <div className="flex items-center gap-1.5 min-w-0">
-              <h3 className="text-base font-bold text-[#72271E] font-['Inria_Serif'] line-clamp-1 group-hover:text-[#F6971E] transition-colors">
+              <h3 className="text-base sm:text-lg font-bold text-[#72271E] font-['Inria_Serif'] line-clamp-1 group-hover:text-[#F6971E] transition-colors">
                 {astro.name}
               </h3>
               {astro.isVerified && (
-                <BsPatchCheckFill className="text-[#00C853] text-base flex-shrink-0" />
+                <BsPatchCheckFill className="text-[#00C853] text-base sm:text-lg flex-shrink-0" />
               )}
             </div>
-            <div className="flex items-center gap-1 text-xs font-bold text-[#4A2B23] flex-shrink-0">
-              <BsStarFill className="text-[#F6971E] text-[11px]" />
+            <div className="flex items-center gap-1 text-xs sm:text-sm font-bold text-[#4A2B23] flex-shrink-0">
+              <BsStarFill className="text-[#F6971E] text-xs" />
               <span>{astro.rating}</span>
             </div>
           </div>
 
           {/* Info Text */}
-          <p className="text-xs text-gray-500 font-helvetica mb-0.5 line-clamp-1">
+          <p className="text-xs sm:text-[13px] text-gray-500 font-helvetica mb-0.5 line-clamp-1">
             {astro.languages}
           </p>
-          <p className="text-xs text-gray-600 font-helvetica mb-3 line-clamp-1">
+          <p className="text-xs sm:text-[13px] text-gray-600 font-helvetica mb-3 line-clamp-1">
             {astro.skills.join(", ")}
           </p>
 
           {/* Experience & Price (Both Del and Real Price) */}
           <div className="flex justify-between items-end mb-3 mt-auto pt-2 border-t border-gray-100">
-            <span className="text-xs text-gray-500 font-helvetica">
+            <span className="text-xs sm:text-[13px] text-gray-500 font-helvetica">
               {astro.experience}
             </span>
             <div className="flex flex-col items-end gap-0.5">
-              <span className="text-[10px] text-gray-400 line-through flex items-center">
-                <BsCurrencyRupee className="text-[10px] -mr-0.5" />
+              <span className="text-[10px] sm:text-[11px] text-gray-400 line-through flex items-center">
+                <BsCurrencyRupee className="text-[10px] sm:text-[11px] -mr-0.5" />
                 {originalPrice}
               </span>
-              <span className="text-base font-bold text-[#72271E] leading-none flex items-center">
-                <BsCurrencyRupee className="text-sm -mr-0.5" />
+              <span className="text-base sm:text-lg font-bold text-[#72271E] leading-none flex items-center">
+                <BsCurrencyRupee className="text-base -mr-0.5" />
                 {astro.price.replace('₹', '')}
                 <span className="text-xs font-bold text-[#72271E] ml-0.5">/min</span>
               </span>
@@ -198,7 +198,7 @@ export default function AstrologerCard({ astro }: AstrologerCardProps) {
           {/* Connect Button */}
           <button 
             onClick={handleConnectClick}
-            className="w-full bg-gradient-to-r from-[#F6971E] to-[#FFA733] text-white font-bold font-helvetica py-2 rounded-xl hover:shadow-[0_4px_15px_rgba(246,151,30,0.3)] transition-all flex items-center justify-center gap-1.5 text-xs relative z-20 cursor-pointer"
+            className="w-full bg-gradient-to-r from-[#F6971E] to-[#FFA733] text-white font-bold font-helvetica py-2 sm:py-2.5 rounded-xl hover:shadow-[0_4px_15px_rgba(246,151,30,0.3)] transition-all flex items-center justify-center gap-1.5 text-xs sm:text-[13px] relative z-20 cursor-pointer"
           >
             Connect Now
           </button>

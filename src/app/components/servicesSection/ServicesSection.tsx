@@ -106,7 +106,7 @@ export default function ServicesSection() {
 
         {/* Header Section */}
         <div className="container mx-auto max-w-6xl mb-3.5 md:mb-5 text-center md:text-left">
-          <h2 className="text-lg sm:text-xl md:text-2xl font-bold font-['Inria_Serif'] text-[#4A2B23] leading-tight">
+          <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-[32px] font-bold font-['Inria_Serif'] text-[#4A2B23] leading-tight">
             Astrology Services
           </h2>
         </div>

@@ -89,8 +89,8 @@ export default function CelebritySpotlight() {
       <div className="container mx-auto max-w-6xl relative z-10">
 
         {/* Header - Compact */}
-        <div className="mb-3 sm:mb-4 text-center md:text-left">
-          <h2 className="text-lg sm:text-xl md:text-2xl font-bold font-['Inria_Serif'] text-[#4A2B23] leading-tight">
+        <div className="mb-3.5 sm:mb-5 text-center md:text-left">
+          <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-[32px] font-bold font-['Inria_Serif'] text-[#4A2B23] leading-tight">
             <span>Celebrity Spotlight</span>
           </h2>
         </div>
@@ -124,7 +124,7 @@ export default function CelebritySpotlight() {
 
               {/* Title Description */}
               <div className="p-2 sm:p-2.5 bg-white flex-grow flex items-center">
-                <h3 className="text-[10px] sm:text-[11px] font-semibold text-[#1f1f1f] font-helvetica line-clamp-2 leading-snug">
+                <h3 className="text-[10px] sm:text-[11px] lg:text-xs font-semibold text-[#1f1f1f] font-helvetica line-clamp-2 leading-snug">
                   {item.title}
                 </h3>
               </div>

@@ -72,15 +72,15 @@ export default function AstrologerSection() {
         {/* Header Area */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-4 md:mb-6 gap-3 md:gap-4">
           <div className="max-w-3xl">
-            <h2 className="text-lg sm:text-xl md:text-2xl font-bold font-['Inria_Serif'] text-[#4A2B23] leading-tight mb-1">
+            <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-[32px] font-bold font-['Inria_Serif'] text-[#4A2B23] leading-tight mb-1 sm:mb-1.5">
               Talk to India's <span className="text-[#F6971E]">Top Rated</span> Astrologers
             </h2>
-            <p className="text-[#6b6b6b] font-helvetica text-xs sm:text-sm leading-relaxed">
+            <p className="text-[#6b6b6b] font-helvetica text-xs sm:text-sm md:text-[15px] leading-relaxed">
               Every astrologer below has cleared a 4-step verification — qualification, panel interview, live audits, and a 30-day probation.
             </p>
           </div>
-          <Link href="/astrologers" className="hidden md:flex flex-shrink-0 items-center gap-1.5 bg-white border border-[#F6971E] text-[#F6971E] font-bold font-helvetica py-1.5 px-3.5 rounded-full hover:bg-[#F6971E] hover:text-white transition-all shadow-xs text-xs">
-            View all astrologers <BsArrowRight className="text-xs" />
+          <Link href="/astrologers" className="hidden md:flex flex-shrink-0 items-center gap-1.5 bg-white border border-[#F6971E] text-[#F6971E] font-bold font-helvetica py-2 px-5 rounded-full hover:bg-[#F6971E] hover:text-white transition-all shadow-xs text-xs sm:text-sm">
+            View all astrologers <BsArrowRight className="text-sm" />
           </Link>
         </div>
 

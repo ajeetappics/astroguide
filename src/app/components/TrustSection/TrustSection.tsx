@@ -38,11 +38,11 @@ export default function TrustSection() {
             <div className="container mx-auto max-w-5xl px-4 sm:px-6 md:px-8 relative z-10">
 
                 {/* Section Header */}
-                <div className="text-center mb-6">
-                    <h2 className="text-xl sm:text-2xl md:text-3xl font-bold font-['Inria_Serif'] text-[#4A2B23] leading-tight mb-1.5">
+                <div className="text-center mb-6 sm:mb-8">
+                    <h2 className="text-2xl sm:text-3xl md:text-[34px] font-bold font-['Inria_Serif'] text-[#4A2B23] leading-tight mb-2">
                         Why trust <span className="text-[#F6971E]">Balaji Astro Guide?</span>
                     </h2>
-                    <p className="text-[#4A2B23]/70 font-helvetica max-w-xl mx-auto text-xs sm:text-sm">
+                    <p className="text-[#4A2B23]/70 font-helvetica max-w-xl mx-auto text-xs sm:text-sm md:text-base">
                         We are committed to providing you with the most authentic, secure, and reliable astrological guidance.
                     </p>
                 </div>
@@ -75,10 +75,10 @@ export default function TrustSection() {
 
                             {/* Text Content */}
                             <div className="relative z-10">
-                                <h4 className="text-base sm:text-lg text-[#4A2B23] font-bold font-['Inria_Serif'] mb-1.5 transition-colors duration-300 group-hover:text-[#F6971E]">
+                                <h4 className="text-lg sm:text-xl text-[#4A2B23] font-bold font-['Inria_Serif'] mb-1.5 transition-colors duration-300 group-hover:text-[#F6971E]">
                                     {feature.title}
                                 </h4>
-                                <p className="text-xs sm:text-[13px] text-[#4A2B23]/70 font-helvetica leading-relaxed">
+                                <p className="text-xs sm:text-sm text-[#4A2B23]/70 font-helvetica leading-relaxed">
                                     {feature.desc}
                                 </p>
                             </div>

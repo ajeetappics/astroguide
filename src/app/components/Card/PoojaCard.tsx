@@ -40,20 +40,20 @@ export default function PoojaCard({ pooja }: PoojaCardProps) {
       </div>
 
       {/* Content Section */}
-      <div className="p-2.5 sm:p-3 flex flex-col flex-grow">
-        <h3 className="text-sm sm:text-[15px] font-bold text-[#72271E] font-['Inria_Serif'] mb-1 group-hover:text-[#F6971E] transition-colors line-clamp-1">
+      <div className="p-3 sm:p-3.5 flex flex-col flex-grow">
+        <h3 className="text-sm sm:text-base md:text-[17px] font-bold text-[#72271E] font-['Inria_Serif'] mb-1 group-hover:text-[#F6971E] transition-colors line-clamp-1">
           {pooja.title}
         </h3>
 
-        <p className="text-[#6b6b6b] text-[11px] sm:text-xs font-helvetica leading-relaxed mb-2 line-clamp-2">
+        <p className="text-[#6b6b6b] text-xs sm:text-[13px] font-helvetica leading-relaxed mb-2.5 line-clamp-2">
           {pooja.description}
         </p>
 
         {/* Footer: Price & Button */}
-        <div className="mt-auto flex items-center justify-between pt-2 border-t border-gray-100">
+        <div className="mt-auto flex items-center justify-between pt-2.5 border-t border-gray-100">
           <div className="flex flex-col">
-            <span className="text-gray-400 text-[8px] sm:text-[9px] font-bold uppercase tracking-widest mb-0.5">Starts At</span>
-            <span className="text-sm sm:text-base font-bold text-[#4A2B23] flex items-center">
+            <span className="text-gray-400 text-[9px] sm:text-[10px] font-bold uppercase tracking-widest mb-0.5">Starts At</span>
+            <span className="text-base sm:text-lg font-bold text-[#4A2B23] flex items-center">
               <span className="font-sans">₹</span>
               {pooja.price.replace('₹', '')}
             </span>
@@ -63,9 +63,9 @@ export default function PoojaCard({ pooja }: PoojaCardProps) {
               e.preventDefault(); // Prevent Link navigation when clicking the button
               openPopup();
             }}
-            className="bg-[#4A2B23] whitespace-nowrap text-white hover:bg-[#F6971E] font-bold text-[11px] px-2.5 py-1 rounded-full transition-colors flex items-center gap-1 shadow-2xs cursor-pointer"
+            className="bg-[#4A2B23] whitespace-nowrap text-white hover:bg-[#F6971E] font-bold text-xs sm:text-[13px] px-3 py-1.5 rounded-full transition-colors flex items-center gap-1 shadow-2xs cursor-pointer"
           >
-            Connect <BsArrowRight className="text-[10px]" />
+            Connect <BsArrowRight className="text-xs" />
           </button>
         </div>
 

@@ -105,10 +105,10 @@ export default function DailyHoroscope() {
             <span className="text-[#F6971E] font-bold font-helvetica tracking-wider uppercase text-[10px] sm:text-xs mb-1 block">
               YOUR DAILY HOROSCOPE
             </span>
-            <h2 className="text-lg sm:text-xl md:text-2xl font-bold font-['Inria_Serif'] text-[#4A2B23] leading-tight">
+            <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-[32px] font-bold font-['Inria_Serif'] text-[#4A2B23] leading-tight mb-1">
               Your daily <span className="text-[#F6971E]">horoscope</span> reading
             </h2>
-            <p className="text-[#6b6b6b] font-helvetica text-xs sm:text-sm">
+            <p className="text-[#6b6b6b] font-helvetica text-xs sm:text-sm md:text-[15px]">
               Pick your raashi to see today's pillars at a glance.
             </p>
           </div>

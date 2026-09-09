@@ -43,7 +43,7 @@ export default function HowItWorks() {
                     <span className="text-[#F6971E] font-bold font-helvetica tracking-widest uppercase text-[10px] sm:text-xs mb-1 block">
                         HOW IT WORKS
                     </span>
-                    <h2 className="text-lg sm:text-xl md:text-2xl font-bold font-['Inria_Serif'] text-[#4A2B23] leading-tight">
+                    <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-[32px] font-bold font-['Inria_Serif'] text-[#4A2B23] leading-tight">
                         Your journey to cosmic wisdom <br className="hidden md:block" />
                         <span className="text-[#F6971E]">in four simple steps</span>
                     </h2>
@@ -73,10 +73,10 @@ export default function HowItWorks() {
 
                             {/* Content */}
                             <div className="relative z-10">
-                                <h3 className="text-sm sm:text-base font-bold text-[#4A2B23] font-['Inria_Serif'] mb-1 group-hover:text-[#F6971E] transition-colors duration-300">
+                                <h3 className="text-base sm:text-lg font-bold text-[#4A2B23] font-['Inria_Serif'] mb-1 group-hover:text-[#F6971E] transition-colors duration-300">
                                     {step.title}
                                 </h3>
-                                <p className="text-[#4A2B23]/75 font-helvetica text-[11px] sm:text-xs leading-relaxed">
+                                <p className="text-[#4A2B23]/75 font-helvetica text-xs sm:text-[13px] leading-relaxed">
                                     {step.description}
                                 </p>
                             </div>

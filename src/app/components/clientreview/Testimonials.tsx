@@ -66,7 +66,7 @@ export default function Testimonials() {
 
         {/* Header Section */}
         <div className="flex justify-between items-center mb-4 gap-3">
-          <h2 className="text-lg sm:text-xl md:text-2xl font-bold font-['Inria_Serif'] text-[#4A2B23] leading-tight">
+          <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-[32px] font-bold font-['Inria_Serif'] text-[#4A2B23] leading-tight">
             User reviews
           </h2>
 
@@ -74,13 +74,13 @@ export default function Testimonials() {
           <div className="flex items-center gap-2 sm:gap-3">
             <button
               onClick={scrollLeft}
-              className="w-8 h-8 sm:w-9 sm:h-9 rounded-full border border-[#4A2B23]/20 flex items-center justify-center text-[#4A2B23] hover:border-[#F6971E] hover:text-[#F6971E] hover:bg-[#F6971E]/5 transition-all shadow-xs"
+              className="w-8 h-8 sm:w-9 sm:h-9 rounded-full border border-[#4A2B23]/20 flex items-center justify-center text-[#4A2B23] hover:border-[#F6971E] hover:text-[#F6971E] hover:bg-[#F6971E]/5 transition-all shadow-xs cursor-pointer"
             >
               <BsChevronLeft className="text-xs sm:text-sm" />
             </button>
             <button
               onClick={scrollRight}
-              className="w-8 h-8 sm:w-9 sm:h-9 rounded-full border border-[#4A2B23]/20 flex items-center justify-center text-[#4A2B23] hover:border-[#F6971E] hover:text-[#F6971E] hover:bg-[#F6971E]/5 transition-all shadow-xs"
+              className="w-8 h-8 sm:w-9 sm:h-9 rounded-full border border-[#4A2B23]/20 flex items-center justify-center text-[#4A2B23] hover:border-[#F6971E] hover:text-[#F6971E] hover:bg-[#F6971E]/5 transition-all shadow-xs cursor-pointer"
             >
               <BsChevronRight className="text-xs sm:text-sm" />
             </button>
@@ -105,7 +105,7 @@ export default function Testimonials() {
 
               <div className="relative mb-3 flex-grow">
                 <BsQuote className="absolute -top-2 -left-2 text-2xl text-[#F6971E]/15 rotate-180" />
-                <p className="text-[#4A2B23] font-helvetica text-xs sm:text-[13px] leading-relaxed relative z-10 font-medium italic">
+                <p className="text-[#4A2B23] font-helvetica text-xs sm:text-sm md:text-[15px] leading-relaxed relative z-10 font-medium italic">
                   "{review.text}"
                 </p>
               </div>
@@ -122,8 +122,8 @@ export default function Testimonials() {
                   />
                 </div>
                 <div>
-                  <h4 className="font-bold text-[#4A2B23] text-xs sm:text-sm font-['Inria_Serif'] leading-tight">{review.name}</h4>
-                  <p className="text-[#F6971E] text-[10px] sm:text-[11px] font-helvetica tracking-wide capitalize mt-0.5">Given by: {review.astrologer}</p>
+                  <h4 className="font-bold text-[#4A2B23] text-sm sm:text-base font-['Inria_Serif'] leading-tight">{review.name}</h4>
+                  <p className="text-[#F6971E] text-[11px] sm:text-xs font-helvetica tracking-wide capitalize mt-0.5">Given by: {review.astrologer}</p>
                 </div>
               </div>
             </div>
