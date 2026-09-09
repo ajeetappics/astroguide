@@ -79,13 +79,12 @@ export default function PujasPage() {
                   return (
                     <div
                       key={index}
-                      className={`absolute top-0 left-0 w-full h-full transition-all duration-700 ease-in-out cursor-pointer ${
-                        position === 0
+                      className={`absolute top-0 left-0 w-full h-full transition-all duration-700 ease-in-out cursor-pointer ${position === 0
                           ? 'z-20 opacity-100 translate-x-0'
                           : position === 1
                             ? 'z-10 opacity-0 translate-x-full'
                             : 'z-10 opacity-0 -translate-x-full'
-                      }`}
+                        }`}
                       onClick={() => setCurrentSlide(index)}
                     >
                       <Image
@@ -106,9 +105,8 @@ export default function PujasPage() {
                   <button
                     key={idx}
                     onClick={() => setCurrentSlide(idx)}
-                    className={`w-2.5 h-2.5 rounded-full transition-all duration-300 cursor-pointer ${
-                      idx === currentSlide ? "bg-[#F6971E] w-6" : "bg-gray-300 hover:bg-[#F6971E]/50"
-                    }`}
+                    className={`w-2.5 h-2.5 rounded-full transition-all duration-300 cursor-pointer ${idx === currentSlide ? "bg-[#F6971E] w-6" : "bg-gray-300 hover:bg-[#F6971E]/50"
+                      }`}
                     aria-label={`Go to slide ${idx + 1}`}
                   />
                 ))}
@@ -122,10 +120,10 @@ export default function PujasPage() {
       {/* Search and Categories Section (Matching /astrologers page layout) */}
       <section className="container mx-auto max-w-7xl px-4 relative z-20">
 
-        {/* 1. Centered Search Bar */}
-        <div className="bg-white rounded-full shadow-lg p-1.5 md:p-2.5 flex items-center border border-gray-100 max-w-4xl mx-auto mb-8 md:mb-10 w-full focus-within:border-[#F6971E]/40 transition-all">
-          <div className="pl-3 md:pl-4 pr-1 md:pr-2 text-gray-400">
-            <svg className="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        {/* 1. Centered Search Bar - Sleek & compact on web and mobile */}
+        <div className="bg-white rounded-full shadow-md p-1 sm:p-1.5 flex items-center border border-gray-200/80 max-w-xl sm:max-w-2xl mx-auto mb-5 sm:mb-6 md:mb-8 w-full focus-within:border-[#F6971E]/50 focus-within:shadow-[0_4px_16px_rgba(246,151,30,0.12)] transition-all">
+          <div className="pl-3 pr-1 text-gray-400">
+            <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
             </svg>
           </div>
@@ -134,18 +132,18 @@ export default function PujasPage() {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search pooja by name or temple..."
-            className="flex-grow bg-transparent border-none outline-none px-2 md:px-4 py-1.5 md:py-2 font-helvetica text-gray-700 placeholder:text-gray-400 text-xs sm:text-sm md:text-base w-full min-w-0"
+            className="flex-grow bg-transparent border-none outline-none px-2 sm:px-3 py-1 sm:py-1.5 font-helvetica text-gray-700 placeholder:text-gray-400 text-xs sm:text-sm w-full min-w-0"
           />
           {searchQuery && (
             <button
               onClick={() => setSearchQuery("")}
-              className="p-1 text-gray-400 hover:text-gray-600 mr-1 sm:mr-2 cursor-pointer transition-colors"
+              className="p-1 text-gray-400 hover:text-gray-600 mr-1 cursor-pointer transition-colors"
               aria-label="Clear search"
             >
-              <BsX className="w-5 h-5" />
+              <BsX className="w-4 h-4" />
             </button>
           )}
-          <button className="bg-[#F6971E] text-white font-bold font-helvetica px-4 sm:px-6 md:px-8 py-2 md:py-3 rounded-full hover:bg-[#e5850b] transition-all whitespace-nowrap shadow-sm text-xs sm:text-sm md:text-base cursor-pointer">
+          <button className="bg-[#F6971E] text-white font-bold font-helvetica px-4 sm:px-6 py-1.5 sm:py-2 rounded-full hover:bg-[#e5850b] transition-all whitespace-nowrap shadow-xs text-xs sm:text-sm cursor-pointer">
             Search
           </button>
         </div>
