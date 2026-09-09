@@ -80,14 +80,14 @@ export default function BrowseCategory() {
       <div className="relative z-10 w-full">
 
         {/* Header Area */}
-        <div className="container mx-auto max-w-6xl px-4 md:px-8 mb-3.5 md:mb-5 text-center md:text-left">
+        <div className="container mx-auto max-w-6xl mb-3.5 md:mb-5 text-center md:text-left">
           <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-[32px] font-bold font-['Inria_Serif'] text-[#4A2B23] leading-tight">
             Trending Consultations
           </h2>
         </div>
 
         {/* Consultations Row - Static on Web, Touch-Scroll with Visible Indicator on Mobile */}
-        <div className="container mx-auto max-w-6xl px-4 md:px-8">
+        <div className="container mx-auto max-w-6xl">
           <div
             className="consultation-scroll flex items-center justify-start lg:justify-between gap-4 sm:gap-6 md:gap-8 overflow-x-auto pb-4 pt-1"
           >
