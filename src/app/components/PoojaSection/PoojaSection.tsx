@@ -3,7 +3,6 @@
 import React from 'react';
 import Link from 'next/link';
 import { BsArrowRight } from 'react-icons/bs';
-import { usePopup } from '../popup/PopupContext';
 import PoojaCard from '../Card/PoojaCard';
 
 export const pujaData = [
@@ -46,7 +45,6 @@ export const pujaData = [
 ];
 
 export default function PoojaSection() {
-  const { openPopup } = usePopup();
 
   return (
     <section className="bg-white py-5 md:py-8 px-4 md:px-8 relative overflow-hidden">

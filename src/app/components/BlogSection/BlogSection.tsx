@@ -3,6 +3,7 @@
 import React from 'react';
 import Image from 'next/image';
 import { BsArrowRight } from 'react-icons/bs';
+import Link from 'next/link';
 
 const blogData = [
   {
@@ -72,9 +73,9 @@ export default function BlogSection() {
               Latest From Blog
             </h2>
           </div>
-          <button className="flex items-center gap-1.5 bg-white border border-[#F6971E]/30 text-[#F6971E] font-bold font-helvetica py-2 px-5 rounded-full hover:bg-[#F6971E] hover:text-white transition-all shadow-xs text-xs sm:text-sm cursor-pointer">
+          <Link href={`${process.env.NEXT_PUBLIC_URL}/blog`} className="flex items-center gap-1.5 bg-white border border-[#F6971E]/30 text-[#F6971E] font-bold font-helvetica py-2 px-5 rounded-full hover:bg-[#F6971E] hover:text-white transition-all shadow-xs text-xs sm:text-sm cursor-pointer">
             View All Articles <BsArrowRight className="text-sm" />
-          </button>
+          </Link>
         </div>
 
         {/* Blog Cards: Horizontal Touch-Scroll on Responsive, 3-Column Grid on Desktop */}
