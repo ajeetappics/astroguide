@@ -17,7 +17,7 @@ function ExpandableText({ text, limit = 200 }: { text: string; limit?: number })
   if (!text) return null;
 
   if (text.length <= limit) {
-    return <p className="text-gray-600 font-helvetica text-sm sm:text-base leading-relaxed whitespace-pre-line">{text}</p>;
+    return <p className="text-gray-600 font-helvetica text-xs sm:text-sm md:text-[14px] leading-relaxed whitespace-pre-line">{text}</p>;
   }
 
   const truncated = text.slice(0, limit).trim();
@@ -26,16 +26,16 @@ function ExpandableText({ text, limit = 200 }: { text: string; limit?: number })
 
   return (
     <div>
-      <p className="text-gray-600 font-helvetica text-sm sm:text-base leading-relaxed whitespace-pre-line">
+      <p className="text-gray-600 font-helvetica text-xs sm:text-sm md:text-[14px] leading-relaxed whitespace-pre-line">
         {displayText}
       </p>
       <button
         type="button"
         onClick={() => setIsExpanded(!isExpanded)}
-        className="mt-2 inline-flex items-center gap-1.5 text-[#F6971E] hover:text-[#d47d0e] font-bold text-xs sm:text-sm cursor-pointer transition-colors"
+        className="mt-1.5 inline-flex items-center gap-1 text-[#F6971E] hover:text-[#d47d0e] font-bold text-xs cursor-pointer transition-colors"
       >
         <span>{isExpanded ? 'View Less' : 'View More'}</span>
-        <BsChevronDown className={`text-xs transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`} />
+        <BsChevronDown className={`text-[10px] transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`} />
       </button>
     </div>
   );
@@ -327,7 +327,7 @@ export default function PujaDetails() {
               )}
 
               {/* Pooja Name */}
-              <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold font-['Inria_Serif'] text-[#4A2B23] mb-2 leading-tight">
+              <h1 className="text-xl sm:text-2xl md:text-3xl font-bold font-['Inria_Serif'] text-[#4A2B23] mb-2 leading-tight">
                 {pooja.name}
               </h1>
 
@@ -337,17 +337,17 @@ export default function PujaDetails() {
               </div>
 
               {/* Pricing & CTA - directly attached below description */}
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-4 border-t border-gray-100">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-3.5 border-t border-gray-100">
                 <div className="flex flex-col">
-                  <span className="text-gray-400 uppercase tracking-widest text-[11px] font-bold mb-0.5">Base Price</span>
-                  <span className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#4A2B23] font-['Inria_Serif'] tracking-tight">
+                  <span className="text-gray-400 uppercase tracking-widest text-[10px] sm:text-[11px] font-bold mb-0.5">Base Price</span>
+                  <span className="text-xl sm:text-2xl md:text-3xl font-bold text-[#4A2B23] font-['Inria_Serif'] tracking-tight">
                     ₹{pooja.basePrice.toLocaleString('en-IN')}
                   </span>
                 </div>
 
                 <button
                   onClick={openPopup}
-                  className="w-full sm:w-auto bg-gradient-to-r from-[#F6971E] to-[#FFA733] hover:from-[#FFA733] hover:to-[#F6971E] text-white font-bold text-sm sm:text-base py-2.5 sm:py-3 px-8 sm:px-10 rounded-xl shadow-[0_4px_15px_rgba(246,151,30,0.3)] hover:scale-105 active:scale-95 transition-all cursor-pointer"
+                  className="w-full sm:w-auto bg-gradient-to-r from-[#F6971E] to-[#FFA733] hover:from-[#FFA733] hover:to-[#F6971E] text-white font-bold text-xs sm:text-sm py-2.5 px-6 sm:px-8 rounded-xl shadow-[0_4px_15px_rgba(246,151,30,0.3)] hover:scale-105 active:scale-95 transition-all cursor-pointer"
                 >
                   Book Pooja Now
                 </button>
@@ -359,13 +359,13 @@ export default function PujaDetails() {
         </div>
 
         {/* 4 Full-Width (100% Width) Sections: Description, Benefits, Procedure, What Happens After Order */}
-        <div className="mt-8 flex flex-col gap-6 w-full">
+        <div className="mt-7 flex flex-col gap-5 w-full">
 
           {/* 1. Description Section (100% Width) */}
-          <div className="w-full bg-white rounded-[24px] shadow-[0_4px_25px_rgba(0,0,0,0.03)] border border-[#F6971E]/15 p-6 sm:p-8">
-            <div className="flex items-center gap-2 mb-3">
-              <span className="w-2 h-6 rounded-full bg-[#F6971E]" />
-              <h2 className="text-xl sm:text-2xl font-bold font-['Inria_Serif'] text-[#72271E]">
+          <div className="w-full bg-white rounded-[20px] shadow-[0_4px_25px_rgba(0,0,0,0.03)] border border-[#F6971E]/15 p-5 sm:p-7">
+            <div className="flex items-center gap-2 mb-2.5">
+              <span className="w-1.5 h-4 sm:h-5 rounded-full bg-[#F6971E]" />
+              <h2 className="text-base sm:text-lg md:text-xl font-bold font-['Inria_Serif'] text-[#4A2B23]">
                 Description
               </h2>
             </div>
@@ -373,10 +373,10 @@ export default function PujaDetails() {
           </div>
 
           {/* 2. Benefits Section (100% Width) */}
-          <div className="w-full bg-white rounded-[24px] shadow-[0_4px_25px_rgba(0,0,0,0.03)] border border-[#F6971E]/15 p-6 sm:p-8">
-            <div className="flex items-center gap-2 mb-3">
-              <span className="w-2 h-6 rounded-full bg-[#F6971E]" />
-              <h2 className="text-xl sm:text-2xl font-bold font-['Inria_Serif'] text-[#72271E]">
+          <div className="w-full bg-white rounded-[20px] shadow-[0_4px_25px_rgba(0,0,0,0.03)] border border-[#F6971E]/15 p-5 sm:p-7">
+            <div className="flex items-center gap-2 mb-2.5">
+              <span className="w-1.5 h-4 sm:h-5 rounded-full bg-[#F6971E]" />
+              <h2 className="text-base sm:text-lg md:text-xl font-bold font-['Inria_Serif'] text-[#4A2B23]">
                 Benefits
               </h2>
             </div>
@@ -384,13 +384,13 @@ export default function PujaDetails() {
 
             {/* Preferred Days inside Benefits */}
             {pooja.preferredDays && pooja.preferredDays.length > 0 && (
-              <div className="mt-5 pt-4 border-t border-gray-100">
-                <h4 className="text-[10px] sm:text-xs font-bold uppercase tracking-widest text-gray-400 mb-2">
+              <div className="mt-4 pt-3.5 border-t border-gray-100">
+                <h4 className="text-[10px] sm:text-[11px] font-bold uppercase tracking-widest text-gray-400 mb-2">
                   Auspicious / Preferred Days
                 </h4>
-                <div className="flex flex-wrap gap-2">
+                <div className="flex flex-wrap gap-1.5">
                   {pooja.preferredDays.map((day) => (
-                    <span key={day} className="px-3 py-1 rounded-md bg-orange-50 border border-orange-200 text-xs font-semibold text-[#F6971E]">
+                    <span key={day} className="px-2.5 py-0.5 rounded-md bg-orange-50 border border-orange-200 text-xs font-semibold text-[#F6971E]">
                       {day}
                     </span>
                   ))}
@@ -400,10 +400,10 @@ export default function PujaDetails() {
           </div>
 
           {/* 3. Procedure Section (100% Width) */}
-          <div className="w-full bg-white rounded-[24px] shadow-[0_4px_25px_rgba(0,0,0,0.03)] border border-[#F6971E]/15 p-6 sm:p-8">
-            <div className="flex items-center gap-2 mb-3">
-              <span className="w-2 h-6 rounded-full bg-[#F6971E]" />
-              <h2 className="text-xl sm:text-2xl font-bold font-['Inria_Serif'] text-[#72271E]">
+          <div className="w-full bg-white rounded-[20px] shadow-[0_4px_25px_rgba(0,0,0,0.03)] border border-[#F6971E]/15 p-5 sm:p-7">
+            <div className="flex items-center gap-2 mb-2.5">
+              <span className="w-1.5 h-4 sm:h-5 rounded-full bg-[#F6971E]" />
+              <h2 className="text-base sm:text-lg md:text-xl font-bold font-['Inria_Serif'] text-[#4A2B23]">
                 Procedure
               </h2>
             </div>
@@ -411,10 +411,10 @@ export default function PujaDetails() {
           </div>
 
           {/* 4. What Happens After Order Section (100% Width) */}
-          <div className="w-full bg-white rounded-[24px] shadow-[0_4px_25px_rgba(0,0,0,0.03)] border border-[#F6971E]/15 p-6 sm:p-8">
-            <div className="flex items-center gap-2 mb-3">
-              <span className="w-2 h-6 rounded-full bg-[#F6971E]" />
-              <h2 className="text-xl sm:text-2xl font-bold font-['Inria_Serif'] text-[#72271E]">
+          <div className="w-full bg-white rounded-[20px] shadow-[0_4px_25px_rgba(0,0,0,0.03)] border border-[#F6971E]/15 p-5 sm:p-7">
+            <div className="flex items-center gap-2 mb-2.5">
+              <span className="w-1.5 h-4 sm:h-5 rounded-full bg-[#F6971E]" />
+              <h2 className="text-base sm:text-lg md:text-xl font-bold font-['Inria_Serif'] text-[#4A2B23]">
                 What Happens After Order
               </h2>
             </div>
@@ -425,9 +425,9 @@ export default function PujaDetails() {
 
         {/* FAQs Section */}
         {pooja.faqEntries && pooja.faqEntries.length > 0 && (
-          <div className="mt-14 max-w-4xl mx-auto">
-            <div className="text-center mb-8">
-              <h2 className="text-2xl md:text-3xl font-bold font-['Inria_Serif'] text-[#4A2B23] mb-2">
+          <div className="mt-12 max-w-4xl mx-auto">
+            <div className="text-center mb-6">
+              <h2 className="text-xl md:text-2xl font-bold font-['Inria_Serif'] text-[#4A2B23] mb-1.5">
                 Frequently Asked Questions
               </h2>
               <p className="text-gray-500 text-xs sm:text-sm">
@@ -435,11 +435,11 @@ export default function PujaDetails() {
               </p>
             </div>
 
-            <div className="flex flex-col gap-3">
+            <div className="flex flex-col gap-2.5">
               {pooja.faqEntries.map((faq, index) => (
                 <div 
                   key={faq._id || index} 
-                  className={`bg-white rounded-xl p-4 sm:p-5 border transition-all duration-300 ${
+                  className={`bg-white rounded-xl p-3.5 sm:p-4 border transition-all duration-300 ${
                     openFaq === index 
                       ? 'border-[#F6971E] shadow-[0_4px_20px_rgba(246,151,30,0.08)]' 
                       : 'border-[#F6971E]/15 shadow-[0_2px_10px_rgba(0,0,0,0.02)] hover:border-[#F6971E]/40'
@@ -449,22 +449,22 @@ export default function PujaDetails() {
                     onClick={() => setOpenFaq(openFaq === index ? null : index)}
                     className="w-full flex items-center justify-between text-left font-bold text-[#4A2B23] group cursor-pointer"
                   >
-                    <span className="text-sm sm:text-base pr-4 group-hover:text-[#F6971E] transition-colors">
+                    <span className="text-xs sm:text-sm md:text-[15px] pr-4 group-hover:text-[#F6971E] transition-colors">
                       {faq.question}
                     </span>
-                    <div className={`flex-shrink-0 w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center transition-all duration-300 ${
+                    <div className={`flex-shrink-0 w-6 h-6 sm:w-7 sm:h-7 rounded-full flex items-center justify-center transition-all duration-300 ${
                       openFaq === index 
                         ? 'bg-gradient-to-r from-[#F6971E] to-[#FFA733] text-white -rotate-180 shadow-sm' 
                         : 'bg-gray-50 text-gray-400 group-hover:bg-[#F6971E]/10 group-hover:text-[#F6971E]'
                     }`}>
-                      <BsChevronDown className="text-xs sm:text-sm font-bold" />
+                      <BsChevronDown className="text-xs font-bold" />
                     </div>
                   </button>
 
                   <div className={`overflow-hidden transition-all duration-300 ${
-                    openFaq === index ? 'max-h-60 mt-3 opacity-100' : 'max-h-0 opacity-0'
+                    openFaq === index ? 'max-h-60 mt-2.5 opacity-100' : 'max-h-0 opacity-0'
                   }`}>
-                    <p className="text-gray-600 font-helvetica text-xs sm:text-sm leading-relaxed pr-6 pt-3 border-t border-gray-100">
+                    <p className="text-gray-600 font-helvetica text-xs sm:text-sm leading-relaxed pr-4 pt-2.5 border-t border-gray-100">
                       {faq.answer}
                     </p>
                   </div>

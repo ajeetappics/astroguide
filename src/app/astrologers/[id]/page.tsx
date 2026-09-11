@@ -228,7 +228,7 @@ export default function AstrologerDetails() {
         {/* Pattern Overlay */}
         <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-white to-transparent mix-blend-overlay"></div>
 
-        <div className="container mx-auto max-w-7xl px-4 relative z-10 py-4 md:py-5">
+        <div className="container mx-auto max-w-6xl px-4 relative z-10 py-4 md:py-5">
           {/* Breadcrumbs */}
           <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 text-[11px] sm:text-xs md:text-sm font-bold tracking-wider uppercase text-[#4A2B23]/70">
             <Link href="/" className="hover:text-[#F6971E] transition-colors">Home</Link>
@@ -241,15 +241,15 @@ export default function AstrologerDetails() {
       </div>
 
       {/* Main Container (Pulled up to overlap banner with equal spacing) */}
-      <div className="container mx-auto max-w-7xl px-4 relative -mt-10 md:-mt-12 z-20">
+      <div className="container mx-auto max-w-6xl px-4 relative -mt-10 md:-mt-12 z-20">
 
         {/* Profile Header Card with embedded stats */}
-        <div className="bg-white rounded-[32px] p-5 sm:p-7 md:p-10 shadow-[0_20px_50px_rgba(0,0,0,0.06)] border border-[#F6971E]/10 mb-10 flex flex-col">
+        <div className="bg-white rounded-[28px] p-5 sm:p-7 md:p-8 shadow-[0_20px_50px_rgba(0,0,0,0.06)] border border-[#F6971E]/10 mb-8 flex flex-col">
 
-          <div className="flex flex-col md:flex-row gap-5 md:gap-8 lg:gap-10 items-center md:items-start text-center md:text-left border-b border-gray-100 pb-6 md:pb-8">
+          <div className="flex flex-col md:flex-row gap-5 md:gap-8 items-center md:items-start text-center md:text-left border-b border-gray-100 pb-6">
             {/* Avatar (Rounded Profile) */}
-            <div className="relative w-28 h-28 sm:w-32 sm:h-32 md:w-36 md:h-36 flex-shrink-0 mx-auto md:mx-0">
-              <div className="w-full h-full rounded-full border-[3px] sm:border-[4px] border-[#F6971E]/30 overflow-hidden bg-white shadow-md relative">
+            <div className="relative w-24 h-24 sm:w-28 sm:h-28 md:w-32 md:h-32 flex-shrink-0 mx-auto md:mx-0">
+              <div className="w-full h-full rounded-full border-[3px] border-[#F6971E]/30 overflow-hidden bg-white shadow-md relative">
                 <Image
                   src={astro1.profileImg}
                   alt={astro1.fullName}
@@ -265,7 +265,7 @@ export default function AstrologerDetails() {
                 <div className="min-w-0">
                   {/* Tag if present */}
                   {astro1.tag?.tagName && (
-                    <div className="mb-2 flex justify-center md:justify-start">
+                    <div className="mb-1.5 flex justify-center md:justify-start">
                       <span className="inline-flex items-center gap-1 text-[10px] sm:text-xs font-bold text-[#F6971E] bg-[#FFF8EB] border border-[#F6971E]/30 px-2.5 py-0.5 rounded-full uppercase tracking-wider shadow-2xs text-center max-w-full truncate">
                         <span className="shrink-0">🔥</span>
                         <span className="truncate">{astro1.tag.tagName}</span>
@@ -274,12 +274,12 @@ export default function AstrologerDetails() {
                   )}
 
                   {/* Astrologer Name & Verified Tick */}
-                  <div className="flex items-center justify-center md:justify-start gap-1.5 sm:gap-2 mb-2 flex-wrap">
-                    <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#4A2B23] font-['Inria_Serif'] leading-tight">
+                  <div className="flex items-center justify-center md:justify-start gap-1.5 sm:gap-2 mb-1.5 flex-wrap">
+                    <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-[#4A2B23] font-['Inria_Serif'] leading-tight">
                       {astro1.fullName}
                     </h1>
                     {astro1.isOtpVerified && (
-                      <BsPatchCheckFill className="text-[#00C853] text-xl sm:text-2xl shrink-0" title="OTP Verified" />
+                      <BsPatchCheckFill className="text-[#00C853] text-lg sm:text-xl shrink-0" title="OTP Verified" />
                     )}
                   </div>
 
@@ -301,22 +301,22 @@ export default function AstrologerDetails() {
                 </div>
 
                 {/* Price and Connect Button (Right Side) */}
-                <div className="w-full md:w-auto flex flex-col items-center md:items-end gap-3 mt-2 md:mt-0 shrink-0">
+                <div className="w-full md:w-auto flex flex-col items-center md:items-end gap-2.5 mt-2 md:mt-0 shrink-0">
                   <div className="flex items-baseline justify-center md:justify-end gap-2">
                     {astro1.chat?.ratePerMinute && (
-                      <span className="text-sm md:text-base text-gray-400 line-through font-medium flex items-center">
-                        <BsCurrencyRupee className="text-xs md:text-sm -mr-0.5" />
+                      <span className="text-xs sm:text-sm text-gray-400 line-through font-medium flex items-center">
+                        <BsCurrencyRupee className="text-xs -mr-0.5" />
                         {astro1.chat.ratePerMinute}/min
                       </span>
                     )}
-                    <span className="text-2xl md:text-3xl font-bold text-[#4A2B23] flex items-center">
-                      <BsCurrencyRupee className="text-xl md:text-2xl -mr-0.5" />
+                    <span className="text-xl sm:text-2xl md:text-[26px] font-bold text-[#4A2B23] flex items-center">
+                      <BsCurrencyRupee className="text-lg md:text-xl -mr-0.5" />
                       {astro1.chat?.offerPricePerMinute || 20}
-                      <span className="text-xs md:text-sm font-medium text-gray-500 ml-0.5">/min</span>
+                      <span className="text-xs font-medium text-gray-500 ml-0.5">/min</span>
                     </span>
                   </div>
 
-                  <button className="w-full sm:w-60 md:w-48 bg-gradient-to-r from-[#F6971E] to-[#FFA733] text-white font-bold py-3 md:py-3.5 rounded-2xl shadow-[0_8px_20px_rgba(246,151,30,0.25)] flex items-center justify-center gap-2 hover:shadow-[0_12px_25px_rgba(246,151,30,0.4)] hover:-translate-y-0.5 transition-all text-sm md:text-base cursor-pointer">
+                  <button className="w-full sm:w-56 md:w-44 bg-gradient-to-r from-[#F6971E] to-[#FFA733] text-white font-bold py-2.5 sm:py-3 rounded-xl shadow-[0_4px_15px_rgba(246,151,30,0.25)] flex items-center justify-center gap-1.5 hover:shadow-[0_8px_20px_rgba(246,151,30,0.35)] hover:-translate-y-0.5 transition-all text-xs sm:text-sm cursor-pointer">
                     <BsLightningChargeFill /> Connect Now
                   </button>
                 </div>
@@ -331,14 +331,14 @@ export default function AstrologerDetails() {
               <div className="grid grid-cols-3 gap-2 items-center text-center">
                 {/* 1. Experience */}
                 <div className="flex flex-col items-center justify-center py-1">
-                  <span className="text-lg sm:text-xl font-bold text-[#4A2B23]">{astro1.experience} Yrs</span>
+                  <span className="text-base sm:text-lg font-bold text-[#4A2B23]">{astro1.experience} Yrs</span>
                   <span className="text-[10px] sm:text-xs text-gray-500 font-bold uppercase tracking-wider">Experience</span>
                 </div>
 
                 {/* 2. Rating */}
                 <div className="flex flex-col items-center justify-center py-1 border-x border-gray-100">
-                  <span className="text-lg sm:text-xl font-bold text-[#4A2B23] flex items-center justify-center gap-1">
-                    <BsStarFill className="text-[#F6971E] text-sm sm:text-base" /> {displayRating}
+                  <span className="text-base sm:text-lg font-bold text-[#4A2B23] flex items-center justify-center gap-1">
+                    <BsStarFill className="text-[#F6971E] text-xs sm:text-sm" /> {displayRating}
                   </span>
                   <span className="text-[10px] sm:text-xs text-gray-500 font-bold uppercase tracking-wider">Rating</span>
                 </div>
@@ -349,12 +349,12 @@ export default function AstrologerDetails() {
                     onClick={() => setActiveVideo(astro1.videoIntro)}
                     className="flex flex-col items-center justify-center py-2 px-1 bg-[#FFFDF0] hover:bg-[#FFF2D6] border border-[#F6971E]/40 rounded-2xl transition-all cursor-pointer group shadow-2xs"
                   >
-                    <BsCameraVideo className="text-[#F6971E] text-lg mb-0.5 group-hover:scale-110 transition-transform" />
+                    <BsCameraVideo className="text-[#F6971E] text-base mb-0.5 group-hover:scale-110 transition-transform" />
                     <span className="text-[11px] font-bold text-[#4A2B23] leading-tight">Watch Intro</span>
                   </button>
                 ) : (
                   <div className="flex flex-col items-center justify-center py-1">
-                    <span className="text-lg font-bold text-[#4A2B23]">1k+</span>
+                    <span className="text-base font-bold text-[#4A2B23]">1k+</span>
                     <span className="text-[10px] text-gray-500 font-bold uppercase tracking-wider">Consults</span>
                   </div>
                 )}
@@ -363,7 +363,7 @@ export default function AstrologerDetails() {
               {/* Full Width 100% Private & Confidential below all three on mobile */}
               <div className="w-full bg-[#FFFDF0] border border-[#F6971E]/30 rounded-2xl p-3 flex items-center gap-3 shadow-2xs mt-4">
                 <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#F6971E] to-[#FFA733] text-white flex items-center justify-center shrink-0 shadow-xs">
-                  <BsShieldCheck className="text-lg" />
+                  <BsShieldCheck className="text-base" />
                 </div>
                 <div className="min-w-0 flex-1 text-left">
                   <h4 className="text-xs sm:text-sm font-bold text-[#4A2B23]">
@@ -382,14 +382,14 @@ export default function AstrologerDetails() {
               <div className="grid grid-cols-2 gap-4 items-center md:border-r border-gray-100 pr-4 lg:pr-8">
                 {/* Experience */}
                 <div className="flex flex-col items-center justify-center text-center">
-                  <span className="text-2xl lg:text-3xl font-bold text-[#4A2B23] mb-0.5">{astro1.experience} Yrs</span>
+                  <span className="text-xl lg:text-2xl font-bold text-[#4A2B23] mb-0.5">{astro1.experience} Yrs</span>
                   <span className="text-xs text-gray-500 font-bold uppercase tracking-wide">Experience</span>
                 </div>
 
                 {/* Rating */}
                 <div className="flex flex-col items-center justify-center text-center border-l border-gray-100">
-                  <span className="text-2xl lg:text-3xl font-bold text-[#4A2B23] mb-0.5 flex items-center justify-center gap-1.5">
-                    <BsStarFill className="text-[#F6971E] text-xl lg:text-2xl" /> {displayRating}
+                  <span className="text-xl lg:text-2xl font-bold text-[#4A2B23] mb-0.5 flex items-center justify-center gap-1.5">
+                    <BsStarFill className="text-[#F6971E] text-lg lg:text-xl" /> {displayRating}
                   </span>
                   <span className="text-xs text-gray-500 font-bold uppercase tracking-wide">Rating</span>
                 </div>
@@ -400,13 +400,13 @@ export default function AstrologerDetails() {
                 {/* 100% Private & Confidential Card */}
                 <div className="flex-1 bg-[#FFFDF0] border border-[#F6971E]/30 rounded-2xl p-3 px-4 flex items-center gap-3 shadow-2xs hover:border-[#F6971E]/50 transition-colors">
                   <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#F6971E] to-[#FFA733] text-white flex items-center justify-center shrink-0 shadow-xs">
-                    <BsShieldCheck className="text-xl" />
+                    <BsShieldCheck className="text-lg" />
                   </div>
                   <div className="min-w-0 text-left">
-                    <h4 className="text-sm font-bold text-[#4A2B23]">
+                    <h4 className="text-xs sm:text-sm font-bold text-[#4A2B23]">
                       100% Private &amp; Confidential
                     </h4>
-                    <p className="text-xs text-gray-500 leading-snug truncate lg:whitespace-normal">
+                    <p className="text-[11px] sm:text-xs text-gray-500 leading-snug truncate lg:whitespace-normal">
                       Get accurate answers to your life&apos;s biggest questions.
                     </p>
                   </div>
@@ -416,10 +416,10 @@ export default function AstrologerDetails() {
                 {astro1.videoIntro && (
                   <button
                     onClick={() => setActiveVideo(astro1.videoIntro)}
-                    className="flex items-center gap-2 px-3.5 lg:px-4 py-3 bg-[#FFFDF0] hover:bg-[#FFF0D4] border border-[#F6971E]/30 hover:border-[#F6971E] rounded-2xl transition-all cursor-pointer group shrink-0 shadow-2xs"
+                    className="flex items-center gap-2 px-3.5 lg:px-4 py-2.5 bg-[#FFFDF0] hover:bg-[#FFF0D4] border border-[#F6971E]/30 hover:border-[#F6971E] rounded-2xl transition-all cursor-pointer group shrink-0 shadow-2xs"
                   >
-                    <div className="w-9 h-9 rounded-xl bg-[#F6971E]/15 group-hover:bg-[#F6971E] text-[#F6971E] group-hover:text-white flex items-center justify-center transition-colors">
-                      <BsCameraVideo className="text-lg" />
+                    <div className="w-8 h-8 rounded-xl bg-[#F6971E]/15 group-hover:bg-[#F6971E] text-[#F6971E] group-hover:text-white flex items-center justify-center transition-colors">
+                      <BsCameraVideo className="text-base" />
                     </div>
                     <div className="text-left">
                       <span className="text-xs font-bold text-[#4A2B23] block group-hover:text-[#F6971E] transition-colors whitespace-nowrap">Watch Intro</span>
@@ -434,16 +434,16 @@ export default function AstrologerDetails() {
         </div>
 
         {/* Main Content Layout */}
-        <div className="w-full space-y-10">
+        <div className="w-full space-y-8">
 
           {/* About Section */}
-          <section className="bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-8 shadow-sm border border-[#F6971E]/15">
-            <h2 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold font-['Inria_Serif'] text-[#4A2B23] mb-4 sm:mb-6 flex items-center gap-2 sm:gap-2.5">
-              <span className="w-1 sm:w-1.5 h-5 sm:h-6 md:h-7 bg-[#F6971E] rounded-full inline-block shrink-0"></span>
+          <section className="bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-7 shadow-sm border border-[#F6971E]/15">
+            <h2 className="text-base sm:text-lg md:text-xl lg:text-2xl font-bold font-['Inria_Serif'] text-[#4A2B23] mb-3 sm:mb-4 flex items-center gap-2 sm:gap-2.5">
+              <span className="w-1 sm:w-1.5 h-4 sm:h-5 md:h-6 bg-[#F6971E] rounded-full inline-block shrink-0"></span>
               About {astro1.fullName}
             </h2>
 
-            <div className="prose max-w-none text-gray-600 text-base md:text-lg leading-relaxed space-y-4 font-normal">
+            <div className="prose max-w-none text-gray-600 text-xs sm:text-sm md:text-[15px] leading-relaxed space-y-3 font-normal">
               {astro1.profileBio ? (
                 <div>
                   <p className={`whitespace-pre-line leading-relaxed ${!isBioExpanded ? 'line-clamp-4' : ''}`}>
@@ -451,7 +451,7 @@ export default function AstrologerDetails() {
                   </p>
                   <button
                     onClick={() => setIsBioExpanded(!isBioExpanded)}
-                    className="mt-3 text-[#F6971E] hover:text-[#4A2B23] font-bold text-sm tracking-wider uppercase inline-flex items-center gap-1 cursor-pointer transition-colors"
+                    className="mt-2.5 text-[#F6971E] hover:text-[#4A2B23] font-bold text-xs tracking-wider uppercase inline-flex items-center gap-1 cursor-pointer transition-colors"
                   >
                     {isBioExpanded ? 'Read Less' : 'Read More'}
                   </button>
@@ -462,15 +462,15 @@ export default function AstrologerDetails() {
 
           {/* Videos Section */}
           {astro1.videos && astro1.videos.length > 0 && (
-            <section className="bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-8 shadow-sm border border-[#F6971E]/15">
-              <div className="flex items-center justify-between mb-4 sm:mb-6 border-b border-gray-100 pb-3 sm:pb-4">
+            <section className="bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-7 shadow-sm border border-[#F6971E]/15">
+              <div className="flex items-center justify-between mb-3 sm:mb-5 border-b border-gray-100 pb-3">
                 <div>
-                  <h2 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold font-['Inria_Serif'] text-[#4A2B23] flex items-center gap-2 sm:gap-2.5">
-                    <span className="w-1 sm:w-1.5 h-5 sm:h-6 md:h-7 bg-[#F6971E] rounded-full inline-block shrink-0"></span>
+                  <h2 className="text-base sm:text-lg md:text-xl lg:text-2xl font-bold font-['Inria_Serif'] text-[#4A2B23] flex items-center gap-2 sm:gap-2.5">
+                    <span className="w-1 sm:w-1.5 h-4 sm:h-5 md:h-6 bg-[#F6971E] rounded-full inline-block shrink-0"></span>
                     Videos
                   </h2>
                 </div>
-                <div className="hidden sm:flex items-center gap-1.5 text-xs text-[#F6971E] bg-[#FFF8EB] border border-[#F6971E]/20 px-3.5 py-1.5 rounded-full font-bold">
+                <div className="hidden sm:flex items-center gap-1.5 text-xs text-[#F6971E] bg-[#FFF8EB] border border-[#F6971E]/20 px-3 py-1 rounded-full font-bold">
                   <BsCameraVideoFill className="text-sm" /> Video Portfolio
                 </div>
               </div>
@@ -495,19 +495,19 @@ export default function AstrologerDetails() {
 
                       {/* Center White Circle Play Button */}
                       <div className="absolute inset-0 flex items-center justify-center">
-                        <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-white flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
-                          <BsPlayFill className="text-xl text-black ml-0.5" />
+                        <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-white flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                          <BsPlayFill className="text-lg text-black ml-0.5" />
                         </div>
                       </div>
                     </div>
 
                     {/* Text format */}
                     <div className="flex items-center justify-between text-xs px-1">
-                      <span className="font-bold text-[#4A2B23] flex items-center gap-1.5 truncate">
+                      <span className="font-bold text-[#4A2B23] flex items-center gap-1.5 truncate text-[11px] sm:text-xs">
                         <BsPlayCircleFill className="text-[#F6971E] shrink-0" />
                         <span className="truncate">Video #{idx + 1}</span>
                       </span>
-                      <span className="text-[#F6971E] font-semibold text-[11px] bg-[#FFF8EB] px-2 py-0.5 rounded-md border border-[#F6971E]/20 shrink-0">
+                      <span className="text-[#F6971E] font-semibold text-[10px] bg-[#FFF8EB] px-2 py-0.5 rounded-md border border-[#F6971E]/20 shrink-0">
                         MP4
                       </span>
                     </div>
@@ -519,11 +519,11 @@ export default function AstrologerDetails() {
 
           {/* Photo Gallery Section */}
           {astro1.photoGallery && astro1.photoGallery.length > 0 && (
-            <section className="bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-8 shadow-sm border border-[#F6971E]/15">
-              <div className="flex items-center justify-between mb-4 sm:mb-6 border-b border-gray-100 pb-3 sm:pb-4">
+            <section className="bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-7 shadow-sm border border-[#F6971E]/15">
+              <div className="flex items-center justify-between mb-3 sm:mb-5 border-b border-gray-100 pb-3">
                 <div>
-                  <h2 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold font-['Inria_Serif'] text-[#4A2B23] flex items-center gap-2 sm:gap-2.5">
-                    <span className="w-1 sm:w-1.5 h-5 sm:h-6 md:h-7 bg-[#F6971E] rounded-full inline-block shrink-0"></span>
+                  <h2 className="text-base sm:text-lg md:text-xl lg:text-2xl font-bold font-['Inria_Serif'] text-[#4A2B23] flex items-center gap-2 sm:gap-2.5">
+                    <span className="w-1 sm:w-1.5 h-4 sm:h-5 md:h-6 bg-[#F6971E] rounded-full inline-block shrink-0"></span>
                     Photo Gallery
                   </h2>
                 </div>
@@ -543,7 +543,7 @@ export default function AstrologerDetails() {
                       }}
                     />
                     <div
-                      className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white text-xl">
+                      className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white text-lg">
                       <BsImages />
                     </div>
                   </div>
@@ -555,16 +555,16 @@ export default function AstrologerDetails() {
           {/* 8. Verified Certificates & Credentials Gallery */}
           {((astro1.certificateGallery && astro1.certificateGallery.length > 0) || (astro1.certificates && astro1.certificates.length
             > 0)) && (
-              <section className="bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-8 shadow-sm border border-[#F6971E]/15">
-                <div className="flex items-center justify-between mb-4 sm:mb-6 border-b border-gray-100 pb-3 sm:pb-4">
+              <section className="bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-7 shadow-sm border border-[#F6971E]/15">
+                <div className="flex items-center justify-between mb-3 sm:mb-5 border-b border-gray-100 pb-3">
                   <div>
-                    <h2 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold font-['Inria_Serif'] text-[#4A2B23] flex items-center gap-2 sm:gap-2.5">
-                      <span className="w-1 sm:w-1.5 h-5 sm:h-6 md:h-7 bg-[#F6971E] rounded-full inline-block shrink-0"></span>
+                    <h2 className="text-base sm:text-lg md:text-xl lg:text-2xl font-bold font-['Inria_Serif'] text-[#4A2B23] flex items-center gap-2 sm:gap-2.5">
+                      <span className="w-1 sm:w-1.5 h-4 sm:h-5 md:h-6 bg-[#F6971E] rounded-full inline-block shrink-0"></span>
                       Verified Certificates & Accreditations
                     </h2>
                   </div>
                   <div
-                    className="hidden sm:flex items-center gap-1.5 text-xs text-[#F6971E] bg-[#FFF8EB] border border-[#F6971E]/20 px-3 py-1.5 rounded-full font-bold">
+                    className="hidden sm:flex items-center gap-1.5 text-xs text-[#F6971E] bg-[#FFF8EB] border border-[#F6971E]/20 px-3 py-1 rounded-full font-bold">
                     <BsAwardFill /> Authentic Documents
                   </div>
                 </div>
@@ -583,10 +583,14 @@ export default function AstrologerDetails() {
                             (e.currentTarget as HTMLElement).style.display = 'none';
                           }}
                         />
+                        <div
+                          className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white text-lg">
+                          <BsImages />
+                        </div>
                       </div>
                       <div className="flex items-center justify-between text-xs px-1">
-                        <span className="font-bold text-[#4A2B23]">Certificate #{idx + 1}</span>
-                        <span className="text-[#F6971E] font-semibold text-[11px] group-hover:underline">View</span>
+                        <span className="font-bold text-[#4A2B23] text-[11px] sm:text-xs">Certificate #{idx + 1}</span>
+                        <span className="text-[#F6971E] font-semibold text-[10px] group-hover:underline">View</span>
                       </div>
                     </div>
                   ))}
@@ -595,14 +599,14 @@ export default function AstrologerDetails() {
             )}
 
           {/* Reviews Section */}
-          <section className="bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-8 shadow-sm border border-gray-100">
-            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 sm:mb-8 gap-3 sm:gap-4 border-b border-gray-100 pb-4 sm:pb-6">
-              <h2 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold text-[#4A2B23] font-['Inria_Serif'] flex items-center gap-2 sm:gap-2.5">
-                <span className="w-1 sm:w-1.5 h-5 sm:h-6 md:h-7 bg-[#F6971E] rounded-full inline-block shrink-0"></span> Client Reviews
+          <section className="bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-7 shadow-sm border border-gray-100">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-5 sm:mb-6 gap-3 sm:gap-4 border-b border-gray-100 pb-3 sm:pb-4">
+              <h2 className="text-base sm:text-lg md:text-xl lg:text-2xl font-bold text-[#4A2B23] font-['Inria_Serif'] flex items-center gap-2 sm:gap-2.5">
+                <span className="w-1 sm:w-1.5 h-4 sm:h-5 md:h-6 bg-[#F6971E] rounded-full inline-block shrink-0"></span> Client Reviews
               </h2>
-              <div className="flex items-center gap-2.5 sm:gap-3 bg-[#FFFDF9] border border-[#F6971E]/20 px-3.5 sm:px-4 py-1.5 sm:py-2 rounded-full">
-                <span className="font-bold text-lg sm:text-xl text-[#4A2B23]">{displayRating}</span>
-                <div className="flex text-[#F6971E] text-sm sm:text-base items-center gap-0.5">
+              <div className="flex items-center gap-2 sm:gap-2.5 bg-[#FFFDF9] border border-[#F6971E]/20 px-3 sm:px-3.5 py-1 sm:py-1.5 rounded-full">
+                <span className="font-bold text-base sm:text-lg text-[#4A2B23]">{displayRating}</span>
+                <div className="flex text-[#F6971E] text-xs sm:text-sm items-center gap-0.5">
                   {Array.from({ length: 5 }, (_, starIdx) => {
                     const starVal = starIdx + 1;
                     const numRating = parseFloat(displayRating);
@@ -615,26 +619,26 @@ export default function AstrologerDetails() {
                     }
                   })}
                 </div>
-                <span className="text-xs text-gray-500 font-bold tracking-wide uppercase">{reviewsList.length} reviews</span>
+                <span className="text-[10px] sm:text-xs text-gray-500 font-bold tracking-wide uppercase">{reviewsList.length} reviews</span>
               </div>
             </div>
 
             {/* Review Cards: Horizontal Scroll on Mobile (< md), Vertical Stack on Web (>= md) */}
-            <div className="custom-x-scroll flex flex-row md:flex-col overflow-x-auto md:overflow-visible gap-4 md:gap-6 pb-4 pt-1 md:pb-0 md:pt-0 scroll-smooth">
+            <div className="custom-x-scroll flex flex-row md:flex-col overflow-x-auto md:overflow-visible gap-3 sm:gap-4 pb-4 pt-1 md:pb-0 md:pt-0 scroll-smooth">
               {(showAllReviews ? reviewsList : reviewsList.slice(0, 5)).map((review, i) => (
                 <div
                   key={i}
-                  className="w-[280px] sm:w-[320px] md:w-full flex-shrink-0 bg-gray-50 p-4 sm:p-5 md:p-6 rounded-2xl border border-gray-100 hover:border-[#F6971E]/30 transition-all flex flex-col justify-between shadow-2xs hover:shadow-sm"
+                  className="w-[280px] sm:w-[320px] md:w-full flex-shrink-0 bg-gray-50/70 p-3.5 sm:p-4 md:p-5 rounded-2xl border border-gray-100 hover:border-[#F6971E]/30 transition-all flex flex-col justify-between shadow-2xs hover:shadow-sm"
                 >
                   <div>
-                    <div className="flex items-start gap-3 sm:gap-4 mb-3 sm:mb-4">
-                      <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-[#F6971E] to-[#FFA733] text-white font-bold text-base sm:text-lg rounded-full flex items-center justify-center shadow-md shrink-0 mt-0.5">
+                    <div className="flex items-start gap-2.5 sm:gap-3 mb-2 sm:mb-3">
+                      <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-[#F6971E] to-[#FFA733] text-white font-bold text-xs sm:text-sm rounded-full flex items-center justify-center shadow-xs shrink-0 mt-0.5">
                         {review.name.charAt(0)}
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center justify-between gap-2">
-                          <span className="font-bold text-[#4A2B23] text-base sm:text-lg truncate">{review.name}</span>
-                          <div className="flex text-[#F6971E] text-xs sm:text-sm shrink-0 items-center gap-0.5">
+                          <span className="font-bold text-[#4A2B23] text-xs sm:text-sm md:text-[15px] truncate">{review.name}</span>
+                          <div className="flex text-[#F6971E] text-[10px] sm:text-xs shrink-0 items-center gap-0.5">
                             {Array.from({ length: 5 }, (_, starIdx) => {
                               const starVal = starIdx + 1;
                               const ratingVal = (review as any).stars || (review as any).rating || 5;
@@ -648,11 +652,11 @@ export default function AstrologerDetails() {
                             })}
                           </div>
                         </div>
-                        <span className="text-xs text-gray-400 font-medium block mt-0.5 truncate">Given By: {review.givenBy}</span>
+                        <span className="text-[10px] sm:text-[11px] text-gray-400 font-medium block mt-0.5 truncate">Given By: {review.givenBy}</span>
                       </div>
                     </div>
-                    <p className="text-[#4A2B23]/80 font-medium text-sm sm:text-base leading-relaxed">
-                      "{review.text}"
+                    <p className="text-[#4A2B23]/80 font-medium text-xs sm:text-sm leading-relaxed">
+                      &quot;{review.text}&quot;
                     </p>
                   </div>
                 </div>
@@ -660,7 +664,7 @@ export default function AstrologerDetails() {
             </div>
             <button
               onClick={() => setShowAllReviews(!showAllReviews)}
-              className="w-full mt-6 py-3.5 sm:py-4 rounded-xl border-2 border-gray-200 hover:border-[#F6971E] text-[#4A2B23] hover:text-[#F6971E] font-bold hover:bg-[#FFF8EB]/50 transition-all cursor-pointer flex items-center justify-center gap-2 text-sm sm:text-base shadow-2xs"
+              className="w-full mt-4 py-2.5 sm:py-3 rounded-xl border border-gray-200 hover:border-[#F6971E] text-[#4A2B23] hover:text-[#F6971E] font-bold hover:bg-[#FFF8EB]/50 transition-all cursor-pointer flex items-center justify-center gap-1.5 text-xs sm:text-sm shadow-2xs"
             >
               {showAllReviews ? "Show Less Reviews" : `View all reviews (${reviewsList.length})`}
             </button>
