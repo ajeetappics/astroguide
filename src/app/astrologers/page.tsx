@@ -82,7 +82,7 @@ export default function AstrologersPage() {
         </video>
         <div className="absolute inset-0 bg-gradient-to-t from-[#4A1A14] via-transparent to-transparent opacity-80" />
 
-        <div className="container mx-auto max-w-7xl flex flex-col items-center text-center relative z-10">
+        <div className="container mx-auto max-w-6xl flex flex-col items-center text-center relative z-10">
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white font-['Inria_Serif'] mb-3 sm:mb-4 drop-shadow-md">
             List of Expert Astrologers
           </h1>
@@ -95,7 +95,7 @@ export default function AstrologersPage() {
       </section>
 
       {/* Search and Tabs Section (Sized and structured cleanly matching /pooja) */}
-      <section className="container mx-auto max-w-7xl px-4 -mt-6 sm:-mt-8 relative z-20">
+      <section className="container mx-auto max-w-6xl px-4 -mt-6 sm:-mt-8 relative z-20">
 
         {/* 1. Search Bar - Sleek & compact on web and mobile */}
         <div className="bg-white rounded-full shadow-md p-1 sm:p-1.5 flex items-center border border-gray-200/80 max-w-xl sm:max-w-2xl mx-auto mb-5 sm:mb-6 md:mb-8 w-full focus-within:border-[#F6971E]/50 focus-within:shadow-[0_4px_16px_rgba(246,151,30,0.12)] transition-all">
@@ -231,7 +231,7 @@ export default function AstrologersPage() {
       </section>
 
       {/* Main Content Grid */}
-      <section className="container mx-auto max-w-7xl px-4">
+      <section className="container mx-auto max-w-6xl px-4">
 
         <div className="text-left mb-6 sm:mb-8">
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold font-['Inria_Serif'] text-[#72271E] mb-1 sm:mb-2">
@@ -242,9 +242,9 @@ export default function AstrologersPage() {
           </p>
         </div>
 
-        {/* Main Astrologers Grid (2 Columns on Tablet, 3 on Desktop, 4 on XL) */}
+        {/* Main Astrologers Grid (Matching Home page Talk to India's Top Rated Astrologers) */}
         {filteredAstrologers.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-5 md:gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-3.5 md:gap-4">
             {filteredAstrologers.map((astro) => (
               <AstrologerCard key={astro.id} astro={astro} />
             ))}

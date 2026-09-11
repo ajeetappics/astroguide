@@ -50,7 +50,7 @@ export default function PujasPage() {
           <div className="absolute top-[10%] right-[-10%] w-[50vw] h-[70vh] bg-[#F6971E]/20 rounded-full blur-[100px] animate-[pulse_8s_ease-in-out_infinite]"></div>
         </div>
 
-        <div className="container mx-auto max-w-7xl px-4 relative z-10">
+        <div className="container mx-auto max-w-6xl px-4 relative z-10">
           <div className="flex flex-col lg:flex-row items-center justify-between gap-10 lg:gap-8">
 
             {/* Left Content - Kept intact as original UI */}
@@ -118,7 +118,7 @@ export default function PujasPage() {
       </section>
 
       {/* Search and Categories Section (Matching /astrologers page layout) */}
-      <section className="container mx-auto max-w-7xl px-4 relative z-20">
+      <section className="container mx-auto max-w-6xl px-4 relative z-20">
 
         {/* 1. Centered Search Bar - Sleek & compact on web and mobile */}
         <div className="bg-white rounded-full shadow-md p-1 sm:p-1.5 flex items-center border border-gray-200/80 max-w-xl sm:max-w-2xl mx-auto mb-5 sm:mb-6 md:mb-8 w-full focus-within:border-[#F6971E]/50 focus-within:shadow-[0_4px_16px_rgba(246,151,30,0.12)] transition-all">
@@ -150,7 +150,7 @@ export default function PujasPage() {
 
         {/* 2. Scrollable Category Tabs */}
         <div
-          className="w-full overflow-x-auto pb-2 mb-8 md:mb-12"
+          className="w-full overflow-x-auto pb-2 mb-8 md:mb-10"
           style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
         >
           <style dangerouslySetInnerHTML={{
@@ -175,18 +175,18 @@ export default function PujasPage() {
 
         {/* 3. Section Title & Subtitle */}
         <div className="text-left mb-6 md:mb-8">
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold font-['Inria_Serif'] text-[#72271E] mb-1 sm:mb-2">
+          <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-[32px] font-bold font-['Inria_Serif'] text-[#4A2B23] leading-tight mb-1 sm:mb-1.5">
             Personalized Poojas
           </h2>
-          <p className="text-[#F6971E] font-medium font-helvetica text-xs sm:text-sm md:text-base">
+          <p className="text-[#6b6b6b] font-helvetica text-xs sm:text-sm md:text-[15px]">
             Experience Real Blessings with your Personal Sankalp
           </p>
         </div>
 
-        {/* 4. Pooja Cards Grid */}
+        {/* 4. Pooja Cards Grid (Matching Home page Personalized Poojas card size) */}
         {filteredPujas.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 lg:gap-10">
-            {filteredPujas.slice(0, 6).map((pooja) => (
+          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2.5 sm:gap-3 md:gap-3.5">
+            {filteredPujas.map((pooja) => (
               <PoojaCard key={`pooja-${pooja.id}`} pooja={pooja} />
             ))}
           </div>
