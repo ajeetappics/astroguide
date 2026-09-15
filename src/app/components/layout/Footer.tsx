@@ -12,12 +12,12 @@ export default function Footer() {
 
   return (
     <footer className="bg-[#EEE3D9]">
-      <div className="mx-auto w-full max-w-screen-xl p-8 md:p-12">
+      <div className="mx-auto w-full max-w-screen-xl p-6 sm:p-8 md:p-12">
 
-        {/* Adjusted grid: from md:grid-cols-6 → md:grid-cols-5 */}
-        <div className="grid grid-cols-1 gap-8 md:grid-cols-5">
+        {/* Responsive Grid: 2 cols on mobile, 3 cols on tablet, 5 cols on desktop */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-6 sm:gap-8">
 
-          <div className="md:col-span-2">
+          <div className="col-span-2 sm:col-span-3 md:col-span-2">
             <Link href="/" className="flex">
               <Image
                 src={mainLogo}
@@ -27,7 +27,7 @@ export default function Footer() {
                 height={100}
               />
             </Link>
-            <p className="mb-6 font-helvetica text-[#5C5C5C] leading-relaxed">
+            <p className="mb-6 font-helvetica text-[#5C5C5C] leading-relaxed text-sm sm:text-base">
               Discover your cosmic journey through authentic astrology and spiritual guidance. Your destiny awaits.
             </p>
             <div className="flex space-x-4">
@@ -48,13 +48,6 @@ export default function Footer() {
               >
                 <FaInstagram />
               </Link>
-
-              {/* <Link
-                href="#"
-                className="w-9 h-9 flex items-center justify-center rounded-full border border-[#72271E] text-[#72271E] hover:bg-[#72271E] hover:text-white transition-colors"
-              >
-                <FaTwitter />
-              </Link> */}
 
               <Link
                 href="https://youtube.com/@balaji_astroguide?si=XecUuu6Ws3Jq6_Oa"
@@ -97,61 +90,47 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Commented About Section */}
-          {/*
-          <div className="md:col-span-1">
-            <h2 className="mb-6 text-md font-bold font-['Inria_Serif'] text-[#72271E] uppercase tracking-wider">About</h2>
-            <ul className="space-y-4 font-helvetica text-[#5C5C5C]">
-              <li><Link href="/about/our-story" className="hover:underline">Our Story</Link></li>
-              <li><Link href="/astrologers" className="hover:underline">Our Astrologers</Link></li>
-              <li><Link href="/about/how-it-works" className="hover:underline">How It Works</Link></li>
-              <li><Link href="/success-stories" className="hover:underline">Success Stories</Link></li>
-            </ul>
-          </div>
-          */}
-
-          <div className="md:col-span-1">
-            <h2 className="mb-6 text-md font-bold font-['Inria_Serif'] text-[#72271E] uppercase tracking-wider">Services</h2>
-            <ul className="space-y-4 font-helvetica text-[#5C5C5C]">
+          {/* Services Column */}
+          <div className="col-span-1 sm:col-span-1 md:col-span-1">
+            <h2 className="mb-4 sm:mb-6 text-sm sm:text-md font-bold font-['Inria_Serif'] text-[#72271E] uppercase tracking-wider text-left">Services</h2>
+            <ul className="space-y-3 sm:space-y-4 font-helvetica text-[#5C5C5C] text-left text-sm sm:text-base">
               <li><Link href="/astrologers" className="hover:underline text-left block">Astrologers</Link></li>
               <li><Link href="/pooja" className="hover:underline text-left block">Pooja</Link></li>
               <li><Link href="/blog" className="hover:underline text-left block">Blog</Link></li>
-              <li><button onClick={openPopup} className="hover:underline text-left cursor-pointer">Daily Horoscope</button></li>
-              <li><button onClick={openPopup} className="hover:underline text-left cursor-pointer">Kundli Reading</button></li>
-              <li><button onClick={openPopup} className="hover:underline text-left cursor-pointer">Tarot Cards</button></li>
-              <li><button onClick={openPopup} className="hover:underline text-left cursor-pointer">Palm Reading</button></li>
-              {/* <li><button onClick={openPopup} className="hover:underline text-left cursor-pointer">Live Poojas</button></li> */}
+              <li><button onClick={openPopup} className="hover:underline text-left block cursor-pointer">Daily Horoscope</button></li>
+              <li><button onClick={openPopup} className="hover:underline text-left block cursor-pointer">Kundli Reading</button></li>
+              <li><button onClick={openPopup} className="hover:underline text-left block cursor-pointer">Tarot Cards</button></li>
+              <li><button onClick={openPopup} className="hover:underline text-left block cursor-pointer">Palm Reading</button></li>
             </ul>
           </div>
 
-          <div className="md:col-span-2 grid grid-cols-2 gap-8">
+          {/* Support & Legal: Stacked on mobile, 2 columns on tablet and desktop */}
+          <div className="col-span-1 sm:col-span-2 md:col-span-2 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-6 md:gap-8">
             <div>
-              <h2 className="mb-6 text-md font-bold font-['Inria_Serif'] text-[#72271E] uppercase tracking-wider">Support</h2>
-              <ul className="space-y-4 font-helvetica text-[#5C5C5C]">
-                <li><button onClick={openPopup} className="hover:underline text-left cursor-pointer">Help Center</button></li>
-                <li><Link href="/contact-us" className="hover:underline">Contact Us</Link></li>
-                {/* <li><Link href="/support/live-chat" className="hover:underline">Live Chat</Link></li>
-                <li><Link href="/support/customer-care" className="hover:underline">Customer Care</Link></li> */}
+              <h2 className="mb-4 sm:mb-6 text-sm sm:text-md font-bold font-['Inria_Serif'] text-[#72271E] uppercase tracking-wider text-left">Support</h2>
+              <ul className="space-y-3 sm:space-y-4 font-helvetica text-[#5C5C5C] text-left text-sm sm:text-base">
+                <li><button onClick={openPopup} className="hover:underline text-left block cursor-pointer">Help Center</button></li>
+                <li><Link href="/contact-us" className="hover:underline text-left block">Contact Us</Link></li>
               </ul>
             </div>
             <div>
-              <h2 className="mb-6 text-md font-bold font-['Inria_Serif'] text-[#72271E] uppercase tracking-wider">Legal</h2>
-              <ul className="space-y-4 font-helvetica text-[#5C5C5C]">
-                <li><Link href="/privacy-policy" target="_blank" className="hover:underline">Privacy Policy</Link></li>
-                <li><Link href="/terms-of-service" target="_blank" className="hover:underline">Terms of Service</Link></li>
-                <li><Link href="/refund-policy" target="_blank" className="hover:underline">Refund Policy</Link></li>
-                <li><button onClick={openPopup} className="hover:underline cursor-pointer">Disclaimer</button></li>
+              <h2 className="mb-4 sm:mb-6 text-sm sm:text-md font-bold font-['Inria_Serif'] text-[#72271E] uppercase tracking-wider text-left">Legal</h2>
+              <ul className="space-y-3 sm:space-y-4 font-helvetica text-[#5C5C5C] text-left text-sm sm:text-base">
+                <li><Link href="/privacy-policy" target="_blank" className="hover:underline text-left block">Privacy Policy</Link></li>
+                <li><Link href="/terms-of-service" target="_blank" className="hover:underline text-left block">Terms of Service</Link></li>
+                <li><Link href="/refund-policy" target="_blank" className="hover:underline text-left block">Refund Policy</Link></li>
+                <li><button onClick={openPopup} className="hover:underline text-left block cursor-pointer w-full">Disclaimer</button></li>
               </ul>
             </div>
           </div>
         </div>
 
-        <hr className="my-8 border-gray-300" />
-        <div className="flex flex-col md:flex-row justify-between items-center text-sm font-helvetica text-[#5C5C5C]">
-          <p className="mb-4 md:mb-0">
+        <hr className="my-6 md:my-8 border-gray-300" />
+        <div className="flex flex-col md:flex-row justify-between items-center text-xs sm:text-sm font-helvetica text-[#5C5C5C] gap-4">
+          <p className="text-center md:text-left">
             © 2026 @Balaji Astro Guide. All rights reserved. Embrace your cosmic destiny.
           </p>
-          <div className="flex flex-wrap justify-center md:justify-end gap-x-6 gap-y-2">
+          <div className="flex flex-wrap justify-center md:justify-end gap-x-4 sm:gap-x-6 gap-y-2">
             <Link href="/astrologers" className="hover:underline">Astrologers</Link>
             <Link href="/pooja" className="hover:underline">Pooja</Link>
             <Link href="/blog" className="hover:underline">Blog</Link>

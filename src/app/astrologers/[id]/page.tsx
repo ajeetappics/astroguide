@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { BsStarFill, BsStarHalf, BsStar, BsPatchCheckFill, BsLightningChargeFill, BsCheckCircleFill, BsChevronRight, BsShieldCheck, BsAwardFill, BsImages, BsX, BsCameraVideoFill, BsPlayCircleFill, BsPlayFill, BsCurrencyRupee, BsCameraVideo } from 'react-icons/bs';
+import { BsStarFill, BsStarHalf, BsStar, BsPatchCheckFill, BsLightningChargeFill, BsCheckCircleFill, BsChevronRight, BsShieldCheck, BsImages, BsX, BsCameraVideoFill, BsPlayFill, BsCurrencyRupee, BsCameraVideo } from 'react-icons/bs';
 import { astrologerData } from '@/app/components/AstrologerSection/AstrologerSection';
 import { notFound, useParams } from 'next/navigation';
 
@@ -216,6 +216,16 @@ export default function AstrologerDetails() {
 
   const displayRating = astro1.averageRating > 0 ? Number(astro1.averageRating).toFixed(1) : calculatedAverageRating;
 
+  // Combine all photos, certificates, and certificate gallery into a single unified Photo Gallery (deduplicating URLs)
+  const allGalleryPhotos = Array.from(
+    new Set([
+      ...(astro1.photoGallery || []),
+      ...(astro1.photos || []),
+      ...(astro1.certificateGallery || []),
+      ...(astro1.certificates || [])
+    ].filter(Boolean))
+  );
+
   return (
     <div className="min-h-screen bg-[#FFFDF9] pb-20 font-helvetica">
 
@@ -324,108 +334,68 @@ export default function AstrologerDetails() {
             </div>
           </div>
 
-          {/* Embedded Stats & Trust Bar */}
+          {/* Embedded Stats & Trust Bar: 3, 3, 4, 2 Grid */}
           <div className="pt-6">
-            {/* Mobile View: Top row has 3 items (Experience, Rating, Watch Intro), Bottom row has full-width "100% Private & Confidential" */}
-            <div className="flex flex-col md:hidden">
-              <div className="grid grid-cols-3 gap-2 items-center text-center">
-                {/* 1. Experience */}
-                <div className="flex flex-col items-center justify-center py-1">
-                  <span className="text-base sm:text-lg font-bold text-[#4A2B23]">{astro1.experience} Yrs</span>
-                  <span className="text-[10px] sm:text-xs text-gray-500 font-bold uppercase tracking-wider">Experience</span>
-                </div>
-
-                {/* 2. Rating */}
-                <div className="flex flex-col items-center justify-center py-1 border-x border-gray-100">
-                  <span className="text-base sm:text-lg font-bold text-[#4A2B23] flex items-center justify-center gap-1">
-                    <BsStarFill className="text-[#F6971E] text-xs sm:text-sm" /> {displayRating}
-                  </span>
-                  <span className="text-[10px] sm:text-xs text-gray-500 font-bold uppercase tracking-wider">Rating</span>
-                </div>
-
-                {/* 3. Watch Intro */}
-                {astro1.videoIntro ? (
-                  <button
-                    onClick={() => setActiveVideo(astro1.videoIntro)}
-                    className="flex flex-col items-center justify-center py-2 px-1 bg-[#FFFDF0] hover:bg-[#FFF2D6] border border-[#F6971E]/40 rounded-2xl transition-all cursor-pointer group shadow-2xs"
-                  >
-                    <BsCameraVideo className="text-[#F6971E] text-base mb-0.5 group-hover:scale-110 transition-transform" />
-                    <span className="text-[11px] font-bold text-[#4A2B23] leading-tight">Watch Intro</span>
-                  </button>
-                ) : (
-                  <div className="flex flex-col items-center justify-center py-1">
-                    <span className="text-base font-bold text-[#4A2B23]">1k+</span>
-                    <span className="text-[10px] text-gray-500 font-bold uppercase tracking-wider">Consults</span>
-                  </div>
-                )}
+            <div className="grid grid-cols-12 gap-2.5 sm:gap-3 lg:gap-4 items-stretch w-full">
+              {/* 1. Experience (3 cols) */}
+              <div className="col-span-6 md:col-span-3 flex flex-col items-center justify-center text-center py-2 bg-transparent">
+                <span className="text-lg sm:text-xl md:text-2xl font-bold text-[#4A2B23] mb-0.5 leading-tight">
+                  {astro1.experience} Yrs
+                </span>
+                <span className="text-[10px] sm:text-xs text-gray-500 font-bold uppercase tracking-wider">
+                  Experience
+                </span>
               </div>
 
-              {/* Full Width 100% Private & Confidential below all three on mobile */}
-              <div className="w-full bg-[#FFFDF0] border border-[#F6971E]/30 rounded-2xl p-3 flex items-center gap-3 shadow-2xs mt-4">
-                <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#F6971E] to-[#FFA733] text-white flex items-center justify-center shrink-0 shadow-xs">
-                  <BsShieldCheck className="text-base" />
+              {/* 2. Rating (3 cols) */}
+              <div className="col-span-6 md:col-span-3 flex flex-col items-center justify-center text-center py-2 border-l border-gray-100 bg-transparent">
+                <span className="text-lg sm:text-xl md:text-2xl font-bold text-[#4A2B23] mb-0.5 flex items-center justify-center gap-1.5 leading-tight">
+                  <BsStarFill className="text-[#F6971E] text-sm sm:text-base md:text-lg" /> {displayRating}
+                </span>
+                <span className="text-[10px] sm:text-xs text-gray-500 font-bold uppercase tracking-wider">
+                  Rating
+                </span>
+              </div>
+
+              {/* 3. 100% Private & Confidential (4 cols) */}
+              <div className="col-span-12 sm:col-span-7 md:col-span-4 bg-[#FFFDF0] border border-[#F6971E]/30 rounded-2xl p-2.5 sm:p-3 px-3 sm:px-3.5 flex items-center gap-2.5 sm:gap-3 shadow-2xs hover:border-[#F6971E]/50 transition-colors">
+                <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-gradient-to-br from-[#F6971E] to-[#FFA733] text-white flex items-center justify-center shrink-0 shadow-xs">
+                  <BsShieldCheck className="text-base sm:text-lg" />
                 </div>
                 <div className="min-w-0 flex-1 text-left">
-                  <h4 className="text-xs sm:text-sm font-bold text-[#4A2B23]">
+                  <h4 className="text-[11px] sm:text-xs font-bold text-[#4A2B23] leading-tight">
                     100% Private &amp; Confidential
                   </h4>
-                  <p className="text-[10px] sm:text-[11px] text-gray-500 leading-snug">
+                  <p className="text-[10px] sm:text-[11px] text-gray-500 leading-tight mt-0.5 line-clamp-2">
                     Get accurate answers to your life&apos;s biggest questions.
                   </p>
                 </div>
               </div>
-            </div>
 
-            {/* Desktop View: 50% Experience & Rating | 50% 100% Private & Watch Intro */}
-            <div className="hidden md:grid md:grid-cols-2 gap-6 lg:gap-8 items-center">
-              {/* Left Half (50%): Experience & Rating */}
-              <div className="grid grid-cols-2 gap-4 items-center md:border-r border-gray-100 pr-4 lg:pr-8">
-                {/* Experience */}
-                <div className="flex flex-col items-center justify-center text-center">
-                  <span className="text-xl lg:text-2xl font-bold text-[#4A2B23] mb-0.5">{astro1.experience} Yrs</span>
-                  <span className="text-xs text-gray-500 font-bold uppercase tracking-wide">Experience</span>
-                </div>
-
-                {/* Rating */}
-                <div className="flex flex-col items-center justify-center text-center border-l border-gray-100">
-                  <span className="text-xl lg:text-2xl font-bold text-[#4A2B23] mb-0.5 flex items-center justify-center gap-1.5">
-                    <BsStarFill className="text-[#F6971E] text-lg lg:text-xl" /> {displayRating}
-                  </span>
-                  <span className="text-xs text-gray-500 font-bold uppercase tracking-wide">Rating</span>
-                </div>
-              </div>
-
-              {/* Right Half (50%): 100% Private & Confidential + Watch Intro */}
-              <div className="flex items-center gap-3 w-full">
-                {/* 100% Private & Confidential Card */}
-                <div className="flex-1 bg-[#FFFDF0] border border-[#F6971E]/30 rounded-2xl p-3 px-4 flex items-center gap-3 shadow-2xs hover:border-[#F6971E]/50 transition-colors">
-                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#F6971E] to-[#FFA733] text-white flex items-center justify-center shrink-0 shadow-xs">
-                    <BsShieldCheck className="text-lg" />
-                  </div>
-                  <div className="min-w-0 text-left">
-                    <h4 className="text-xs sm:text-sm font-bold text-[#4A2B23]">
-                      100% Private &amp; Confidential
-                    </h4>
-                    <p className="text-[11px] sm:text-xs text-gray-500 leading-snug truncate lg:whitespace-normal">
-                      Get accurate answers to your life&apos;s biggest questions.
-                    </p>
-                  </div>
-                </div>
-
-                {/* Watch Intro Button */}
-                {astro1.videoIntro && (
+              {/* 4. Watch Intro (2 cols) */}
+              <div className="col-span-12 sm:col-span-5 md:col-span-2 flex items-center">
+                {astro1.videoIntro ? (
                   <button
                     onClick={() => setActiveVideo(astro1.videoIntro)}
-                    className="flex items-center gap-2 px-3.5 lg:px-4 py-2.5 bg-[#FFFDF0] hover:bg-[#FFF0D4] border border-[#F6971E]/30 hover:border-[#F6971E] rounded-2xl transition-all cursor-pointer group shrink-0 shadow-2xs"
+                    className="w-full h-full min-h-[48px] sm:min-h-[54px] flex items-center justify-center sm:justify-start gap-2 px-2.5 lg:px-3 py-2 bg-[#FFFDF0] hover:bg-[#FFF0D4] border border-[#F6971E]/30 hover:border-[#F6971E] rounded-2xl transition-all cursor-pointer group shrink-0 shadow-2xs"
                   >
-                    <div className="w-8 h-8 rounded-xl bg-[#F6971E]/15 group-hover:bg-[#F6971E] text-[#F6971E] group-hover:text-white flex items-center justify-center transition-colors">
-                      <BsCameraVideo className="text-base" />
+                    <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-[#F6971E]/15 group-hover:bg-[#F6971E] text-[#F6971E] group-hover:text-white flex items-center justify-center transition-colors shrink-0">
+                      <BsCameraVideo className="text-xs sm:text-sm lg:text-base" />
                     </div>
-                    <div className="text-left">
-                      <span className="text-xs font-bold text-[#4A2B23] block group-hover:text-[#F6971E] transition-colors whitespace-nowrap">Watch Intro</span>
-                      <span className="text-[10px] text-gray-400 font-medium block whitespace-nowrap">Video Profile</span>
+                    <div className="text-left min-w-0">
+                      <span className="text-[11px] sm:text-xs font-bold text-[#4A2B23] block group-hover:text-[#F6971E] transition-colors whitespace-nowrap">
+                        Watch Intro
+                      </span>
+                      <span className="text-[9px] sm:text-[10px] text-gray-400 font-medium block whitespace-nowrap">
+                        Video Profile
+                      </span>
                     </div>
                   </button>
+                ) : (
+                  <div className="w-full h-full min-h-[48px] sm:min-h-[54px] flex flex-col items-center justify-center py-1">
+                    <span className="text-base sm:text-xl font-bold text-[#4A2B23] leading-tight">1k+</span>
+                    <span className="text-[10px] text-gray-500 font-bold uppercase tracking-wider">Consults</span>
+                  </div>
                 )}
               </div>
             </div>
@@ -470,20 +440,17 @@ export default function AstrologerDetails() {
                     Videos
                   </h2>
                 </div>
-                <div className="hidden sm:flex items-center gap-1.5 text-xs text-[#F6971E] bg-[#FFF8EB] border border-[#F6971E]/20 px-3 py-1 rounded-full font-bold">
-                  <BsCameraVideoFill className="text-sm" /> Video Portfolio
-                </div>
               </div>
 
               <div className="custom-x-scroll flex gap-3.5 sm:gap-4 overflow-x-auto pb-4 pt-1 scroll-smooth">
                 {astro1.videos.map((videoUrl: string, idx: number) => (
                   <div
                     key={idx}
-                    className="w-[180px] sm:w-[210px] md:w-[230px] lg:w-[calc((100%-64px)/5)] lg:min-w-[calc((100%-64px)/5)] flex-shrink-0 group bg-[#FFFDF9] border border-[#F6971E]/20 hover:border-[#F6971E] rounded-2xl p-2.5 transition-all cursor-pointer shadow-2xs hover:shadow-md flex flex-col justify-between"
+                    className="w-[180px] sm:w-[210px] md:w-[230px] lg:w-[calc((100%-64px)/5)] lg:min-w-[calc((100%-64px)/5)] flex-shrink-0 group bg-[#FFFDF9] border border-[#F6971E]/20 hover:border-[#F6971E] rounded-2xl p-2 sm:p-2.5 transition-all cursor-pointer shadow-2xs hover:shadow-md"
                     onClick={() => setActiveVideo(videoUrl)}
                   >
                     {/* Video Thumbnail Container with Play Button */}
-                    <div className="relative aspect-video w-full rounded-xl overflow-hidden bg-black border border-gray-100 mb-2 shadow-inner">
+                    <div className="relative aspect-video w-full rounded-xl overflow-hidden bg-black border border-gray-100 shadow-inner">
                       <video
                         src={videoUrl}
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
@@ -500,25 +467,14 @@ export default function AstrologerDetails() {
                         </div>
                       </div>
                     </div>
-
-                    {/* Text format */}
-                    <div className="flex items-center justify-between text-xs px-1">
-                      <span className="font-bold text-[#4A2B23] flex items-center gap-1.5 truncate text-[11px] sm:text-xs">
-                        <BsPlayCircleFill className="text-[#F6971E] shrink-0" />
-                        <span className="truncate">Video #{idx + 1}</span>
-                      </span>
-                      <span className="text-[#F6971E] font-semibold text-[10px] bg-[#FFF8EB] px-2 py-0.5 rounded-md border border-[#F6971E]/20 shrink-0">
-                        MP4
-                      </span>
-                    </div>
                   </div>
                 ))}
               </div>
             </section>
           )}
 
-          {/* Photo Gallery Section */}
-          {astro1.photoGallery && astro1.photoGallery.length > 0 && (
+          {/* Photo Gallery Section (Includes all certificates, credentials, and gallery photos) */}
+          {allGalleryPhotos && allGalleryPhotos.length > 0 && (
             <section className="bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-7 shadow-sm border border-[#F6971E]/15">
               <div className="flex items-center justify-between mb-3 sm:mb-5 border-b border-gray-100 pb-3">
                 <div>
@@ -530,7 +486,7 @@ export default function AstrologerDetails() {
               </div>
 
               <div className="custom-x-scroll flex gap-3.5 sm:gap-4 overflow-x-auto pb-4 pt-1 scroll-smooth">
-                {astro1.photoGallery.map((photoUrl: any, idx: any) => (
+                {allGalleryPhotos.map((photoUrl: any, idx: any) => (
                   <div key={idx}
                     onClick={() => setPreviewImage(photoUrl)}
                     className="w-[160px] sm:w-[190px] md:w-[210px] lg:w-[calc((100%-64px)/5)] lg:min-w-[calc((100%-64px)/5)] flex-shrink-0 group relative aspect-square rounded-2xl overflow-hidden bg-gray-100 border border-gray-200
@@ -551,52 +507,6 @@ export default function AstrologerDetails() {
               </div>
             </section>
           )}
-
-          {/* 8. Verified Certificates & Credentials Gallery */}
-          {((astro1.certificateGallery && astro1.certificateGallery.length > 0) || (astro1.certificates && astro1.certificates.length
-            > 0)) && (
-              <section className="bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-7 shadow-sm border border-[#F6971E]/15">
-                <div className="flex items-center justify-between mb-3 sm:mb-5 border-b border-gray-100 pb-3">
-                  <div>
-                    <h2 className="text-base sm:text-lg md:text-xl lg:text-2xl font-bold font-['Inria_Serif'] text-[#4A2B23] flex items-center gap-2 sm:gap-2.5">
-                      <span className="w-1 sm:w-1.5 h-4 sm:h-5 md:h-6 bg-[#F6971E] rounded-full inline-block shrink-0"></span>
-                      Verified Certificates & Accreditations
-                    </h2>
-                  </div>
-                  <div
-                    className="hidden sm:flex items-center gap-1.5 text-xs text-[#F6971E] bg-[#FFF8EB] border border-[#F6971E]/20 px-3 py-1 rounded-full font-bold">
-                    <BsAwardFill /> Authentic Documents
-                  </div>
-                </div>
-
-                <div className="custom-x-scroll flex gap-3.5 sm:gap-4 overflow-x-auto pb-4 pt-1 scroll-smooth">
-                  {[...(astro1.certificateGallery || []), ...(astro1.certificates || [])].map((certUrl, idx) => (
-                    <div key={idx}
-                      onClick={() => setPreviewImage(certUrl)}
-                      className="w-[180px] sm:w-[210px] md:w-[230px] lg:w-[calc((100%-64px)/5)] lg:min-w-[calc((100%-64px)/5)] flex-shrink-0 group bg-[#FFFDF9] border border-[#F6971E]/20 hover:border-[#F6971E] rounded-2xl p-2.5 transition-all
-              cursor-pointer shadow-2xs hover:shadow-md flex flex-col justify-between"
-                    >
-                      <div className="relative aspect-4/3 w-full rounded-xl overflow-hidden bg-gray-100 border border-gray-100 mb-2">
-                        <img src={certUrl} alt={`Certificate ${idx + 1}`}
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy"
-                          onError={(e) => {
-                            (e.currentTarget as HTMLElement).style.display = 'none';
-                          }}
-                        />
-                        <div
-                          className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white text-lg">
-                          <BsImages />
-                        </div>
-                      </div>
-                      <div className="flex items-center justify-between text-xs px-1">
-                        <span className="font-bold text-[#4A2B23] text-[11px] sm:text-xs">Certificate #{idx + 1}</span>
-                        <span className="text-[#F6971E] font-semibold text-[10px] group-hover:underline">View</span>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </section>
-            )}
 
           {/* Reviews Section */}
           <section className="bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-7 shadow-sm border border-gray-100">
