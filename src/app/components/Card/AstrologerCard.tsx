@@ -48,7 +48,7 @@ export default function AstrologerCard({ astro }: AstrologerCardProps) {
       >
         {/* Left: Avatar + Trending Badge + 5 Stars */}
         <div className="flex flex-col items-center flex-shrink-0">
-          <div className="relative w-[95px] h-[105px] sm:w-[105px] sm:h-[115px] rounded-2xl border-2 border-[#F6971E] overflow-hidden bg-gray-50">
+          <div className="relative w-[95px] h-[130px] sm:w-[105px] sm:h-[140px] rounded-2xl border-2 border-[#F6971E] overflow-hidden bg-gray-50">
             <Image
               src={astro.imageUrl}
               alt={astro.name}
