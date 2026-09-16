@@ -1,29 +1,23 @@
 'use client';
 import React from 'react';
-import { BsChatDots, BsPeople, BsTelephone } from 'react-icons/bs';
+import { BsPeople, BsTelephone } from 'react-icons/bs';
 import { IoSparkles } from 'react-icons/io5';
 
 const stepsData = [
     {
         number: "01",
-        icon: BsChatDots,
-        title: "Ask a Question",
-        description: "Share your spiritual question or concern with our intuitive platform to get started."
-    },
-    {
-        number: "02",
         icon: BsPeople,
         title: "Select Astrologer",
         description: "Browse and choose from our highly qualified experts who perfectly match your needs."
     },
     {
-        number: "03",
+        number: "02",
         icon: BsTelephone,
         title: "Chat / Call",
         description: "Connect instantly through a secure, private chat or voice call consultation."
     },
     {
-        number: "04",
+        number: "03",
         icon: IoSparkles,
         title: "Receive Guidance",
         description: "Get personalized, accurate insights and effective spiritual remedies for a better life."
@@ -45,15 +39,15 @@ export default function HowItWorks() {
                     </span>
                     <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-[32px] font-bold font-['Inria_Serif'] text-[#4A2B23] leading-tight">
                         Your journey to cosmic wisdom <br className="hidden md:block" />
-                        <span className="text-[#F6971E]">in four simple steps</span>
+                        <span className="text-[#F6971E]">in three simple steps</span>
                     </h2>
                 </div>
 
                 {/* Steps Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-3.5 md:gap-4 relative">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3 sm:gap-4 md:gap-6 relative">
 
                     {/* Connecting dashed line (visible only on large screens) */}
-                    <div className="hidden lg:block absolute top-[38px] left-[10%] w-[80%] h-[2px] border-t-2 border-dashed border-[#F6971E]/30 z-0"></div>
+                    <div className="hidden lg:block absolute top-[38px] left-[15%] w-[70%] h-[2px] border-t-2 border-dashed border-[#F6971E]/30 z-0"></div>
 
                     {stepsData.map((step, index) => (
                         <div
