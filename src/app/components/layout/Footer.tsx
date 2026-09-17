@@ -96,6 +96,7 @@ export default function Footer() {
             <ul className="space-y-3 sm:space-y-4 font-helvetica text-[#5C5C5C] text-left text-sm sm:text-base">
               <li><Link href="/astrologers" className="hover:underline text-left block">Astrologers</Link></li>
               <li><Link href="/pooja" className="hover:underline text-left block">Pooja</Link></li>
+              <li><Link href="/spell" className="hover:underline text-left block">Spells</Link></li>
               <li><Link href="/blog" className="hover:underline text-left block">Blog</Link></li>
               <li><button onClick={openPopup} className="hover:underline text-left block cursor-pointer">Daily Horoscope</button></li>
               <li><button onClick={openPopup} className="hover:underline text-left block cursor-pointer">Kundli Reading</button></li>
@@ -133,6 +134,7 @@ export default function Footer() {
           <div className="flex flex-wrap justify-center md:justify-end gap-x-4 sm:gap-x-6 gap-y-2">
             <Link href="/astrologers" className="hover:underline">Astrologers</Link>
             <Link href="/pooja" className="hover:underline">Pooja</Link>
+            <Link href="/spell" className="hover:underline">Spells</Link>
             <Link href="/blog" className="hover:underline">Blog</Link>
             <Link href="/privacy-policy" target="_blank" className="hover:underline">Privacy Policy</Link>
             <Link href="/terms-of-service" target="_blank" className="hover:underline">Terms of Service</Link>

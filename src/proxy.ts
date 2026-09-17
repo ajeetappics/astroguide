@@ -56,7 +56,9 @@ export function proxy(request: NextRequest) {
     // '/register',
     // '/thank-you',
     '/pooja',
-    '/astrologers'
+    '/astrologers',
+    '/spell',
+    '/spells'
   ];
 
   // Remove trailing slash for comparison (except for home /)
@@ -64,7 +66,7 @@ export function proxy(request: NextRequest) {
     ? pathname.slice(0, -1)
     : pathname;
 
-  if (!allowedPaths.includes(normalizedPath) && !normalizedPath.startsWith('/astrologers/') && !normalizedPath.startsWith('/pooja/') && !normalizedPath.startsWith('/blog/')) {
+  if (!allowedPaths.includes(normalizedPath) && !normalizedPath.startsWith('/astrologers/') && !normalizedPath.startsWith('/pooja/') && !normalizedPath.startsWith('/spell/') && !normalizedPath.startsWith('/spells/') && !normalizedPath.startsWith('/blog/')) {
     // If path is not allowed, redirect to homepage
     return NextResponse.redirect(new URL('/', request.url));
   }

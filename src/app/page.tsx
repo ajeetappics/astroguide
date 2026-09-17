@@ -6,6 +6,7 @@ import BrowseCategory from './components/BrowseCategory/BrowseCategory'
 import AstrologerSection from './components/AstrologerSection/AstrologerSection'
 import CelebritySpotlight from './components/CelebritySpotlight/CelebritySpotlight'
 import PoojaSection from './components/PoojaSection/PoojaSection'
+import SpellSection from './components/SpellSection/SpellSection'
 import DailyHoroscope from './components/DailyHoroscope/DailyHoroscope'
 import HowItWorks from './components/worksection/HowItWorks'
 import Testimonials from './components/clientreview/Testimonials'
@@ -22,6 +23,7 @@ function page() {
       <CelebritySpotlight />
       <BrowseCategory />
       <PoojaSection />
+      <SpellSection />
       <DailyHoroscope />
       <HowItWorks />
       <PersonalizedServices />

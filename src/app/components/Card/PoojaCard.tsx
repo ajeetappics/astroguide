@@ -17,14 +17,15 @@ export interface PujaData {
 
 interface PoojaCardProps {
   pooja: PujaData;
+  basePath?: string;
 }
 
-export default function PoojaCard({ pooja }: PoojaCardProps) {
+export default function PoojaCard({ pooja, basePath = "/pooja" }: PoojaCardProps) {
   const { openPopup } = usePopup();
 
   return (
     <Link
-      href={`/pooja/${pooja.id}`}
+      href={`${basePath}/${pooja.id}`}
       className="bg-white rounded-2xl overflow-hidden shadow-[0_4px_16px_rgba(0,0,0,0.04)] hover:shadow-[0_12px_30px_rgba(246,151,30,0.12)] border border-[#F6971E]/15 hover:border-[#F6971E]/50 transition-all duration-500 hover:-translate-y-1 flex flex-col group h-full block"
     >
 

@@ -65,11 +65,11 @@ export default function PujasPage() {
               </p>
             </div>
 
-            {/* Right Banner Image Slider (Layout matching Home Page MainBanner with increased height) */}
-            <div className="relative z-10 w-full lg:w-[55%] flex items-center justify-center">
+            {/* Right Banner Image Slider (Matching App Slider 2:1 Aspect Ratio) */}
+            <div className="relative z-10 w-full lg:w-[52%] flex items-center justify-center">
 
               {/* Carousel Container */}
-              <div className="relative w-full h-[190px] sm:h-[250px] md:h-[300px] lg:h-[340px] overflow-hidden rounded-2xl md:rounded-3xl shadow-[0_15px_35px_rgba(0,0,0,0.12)] border border-orange-100/70">
+              <div className="relative w-full aspect-[2/1] overflow-hidden rounded-2xl md:rounded-3xl shadow-[0_15px_35px_rgba(0,0,0,0.12)] border border-orange-100/70">
                 {sliderImages.map((img, index) => {
                   let position = 0;
                   if (index === currentSlide) position = 0;
@@ -91,7 +91,7 @@ export default function PujasPage() {
                         src={img}
                         alt={`Pooja Slide ${index + 1}`}
                         fill
-                        className="object-cover rounded-2xl md:rounded-3xl"
+                        className="object-fill rounded-2xl md:rounded-3xl"
                         priority={index === 0}
                       />
                     </div>
