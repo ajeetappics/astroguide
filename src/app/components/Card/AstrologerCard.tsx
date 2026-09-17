@@ -77,12 +77,12 @@ export default function AstrologerCard({ astro }: AstrologerCardProps) {
         <div className="flex flex-col justify-between flex-grow min-w-0">
           <div>
             {/* Row 1: Name & Verified Badge */}
-            <div className="flex items-center justify-between gap-1 mb-1">
+            <div className="flex items-center gap-1.5 mb-1 min-w-0">
               <h3 className="text-base sm:text-lg font-bold text-[#1f1f1f] font-helvetica truncate">
                 {astro.name}
               </h3>
               {astro.isVerified && (
-                <BsPatchCheckFill className="text-[#00C853] text-lg flex-shrink-0" />
+                <BsPatchCheckFill className="text-[#00C853] text-base sm:text-lg flex-shrink-0" />
               )}
             </div>
 

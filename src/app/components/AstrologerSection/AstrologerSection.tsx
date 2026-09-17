@@ -8,7 +8,7 @@ import AstrologerCard, { AstrologerData } from '../Card/AstrologerCard';
 export const astrologerData: AstrologerData[] = [
   {
     id: 1,
-    name: "Surinder1",
+    name: "Surinder Kumar Sharma",
     isVerified: true,
     isCelebrity: true,
     skills: ["Vedic", "Vastu", "Lal Kitab"],
@@ -21,7 +21,7 @@ export const astrologerData: AstrologerData[] = [
   },
   {
     id: 2,
-    name: "Viehana",
+    name: "Viehana Sharma ji",
     isVerified: true,
     isCelebrity: true,
     skills: ["Tarot", "Vedic", "Numerology"],
@@ -34,7 +34,7 @@ export const astrologerData: AstrologerData[] = [
   },
   {
     id: 3,
-    name: "Rachna",
+    name: "Rachna Singh ji",
     isVerified: true,
     isCelebrity: true,
     skills: ["Numerology", "Tarot", "Face Reading"],
@@ -47,7 +47,7 @@ export const astrologerData: AstrologerData[] = [
   },
   {
     id: 4,
-    name: "Rukmini",
+    name: "Rukmini Devi",
     isVerified: true,
     isCelebrity: true,
     skills: ["Tarot", "Life Coach"],
