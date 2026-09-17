@@ -4,11 +4,11 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
-import { 
-  BsChevronRight, 
+import {
+  BsChevronRight,
   BsChevronDown
 } from 'react-icons/bs';
-import { usePopup } from '../../components/popup/PopupContext';
+import { usePopup } from '../../../components/popup/PopupContext';
 
 // Helper component for expandable text with 200-limit and View More / View Less
 function ExpandableText({ text, limit = 200 }: { text: string; limit?: number }) {
@@ -258,8 +258,8 @@ export default function PujaDetails() {
   const [openFaq, setOpenFaq] = useState<number | null>(0);
 
   // Determine displayed categories (default 3, or all when expanded)
-  const visibleCategories = showAllCategories 
-    ? pooja.categoryId 
+  const visibleCategories = showAllCategories
+    ? pooja.categoryId
     : pooja.categoryId.slice(0, 3);
 
   return (
@@ -282,12 +282,12 @@ export default function PujaDetails() {
             {/* Left: Compact Single Image */}
             <div className="w-full lg:w-[35%] max-w-[320px] sm:max-w-[340px] flex-shrink-0 mx-auto lg:mx-0">
               <div className="relative aspect-[4/3] sm:aspect-square w-full rounded-[18px] sm:rounded-[22px] overflow-hidden shadow-md border border-orange-100/70 bg-[#FFFDF9] group">
-                <Image 
-                  src={pooja.image} 
-                  alt={pooja.name} 
-                  fill 
-                  className="object-cover transition-transform duration-700 group-hover:scale-105" 
-                  priority 
+                <Image
+                  src={pooja.image}
+                  alt={pooja.name}
+                  fill
+                  className="object-cover transition-transform duration-700 group-hover:scale-105"
+                  priority
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent pointer-events-none" />
               </div>
@@ -300,7 +300,7 @@ export default function PujaDetails() {
               {pooja.categoryId && pooja.categoryId.length > 0 && (
                 <div className="flex flex-wrap items-center gap-2 mb-2.5">
                   {visibleCategories.map((cat) => (
-                    <span 
+                    <span
                       key={cat._id}
                       className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full text-xs font-semibold bg-orange-50 text-[#F6971E] border border-orange-200/60 shadow-2xs"
                     >
@@ -437,13 +437,12 @@ export default function PujaDetails() {
 
             <div className="flex flex-col gap-2.5">
               {pooja.faqEntries.map((faq, index) => (
-                <div 
-                  key={faq._id || index} 
-                  className={`bg-white rounded-xl p-3.5 sm:p-4 border transition-all duration-300 ${
-                    openFaq === index 
-                      ? 'border-[#F6971E] shadow-[0_4px_20px_rgba(246,151,30,0.08)]' 
+                <div
+                  key={faq._id || index}
+                  className={`bg-white rounded-xl p-3.5 sm:p-4 border transition-all duration-300 ${openFaq === index
+                      ? 'border-[#F6971E] shadow-[0_4px_20px_rgba(246,151,30,0.08)]'
                       : 'border-[#F6971E]/15 shadow-[0_2px_10px_rgba(0,0,0,0.02)] hover:border-[#F6971E]/40'
-                  }`}
+                    }`}
                 >
                   <button
                     onClick={() => setOpenFaq(openFaq === index ? null : index)}
@@ -452,18 +451,16 @@ export default function PujaDetails() {
                     <span className="text-xs sm:text-sm md:text-[15px] pr-4 group-hover:text-[#F6971E] transition-colors">
                       {faq.question}
                     </span>
-                    <div className={`flex-shrink-0 w-6 h-6 sm:w-7 sm:h-7 rounded-full flex items-center justify-center transition-all duration-300 ${
-                      openFaq === index 
-                        ? 'bg-gradient-to-r from-[#F6971E] to-[#FFA733] text-white -rotate-180 shadow-sm' 
+                    <div className={`flex-shrink-0 w-6 h-6 sm:w-7 sm:h-7 rounded-full flex items-center justify-center transition-all duration-300 ${openFaq === index
+                        ? 'bg-gradient-to-r from-[#F6971E] to-[#FFA733] text-white -rotate-180 shadow-sm'
                         : 'bg-gray-50 text-gray-400 group-hover:bg-[#F6971E]/10 group-hover:text-[#F6971E]'
-                    }`}>
+                      }`}>
                       <BsChevronDown className="text-xs font-bold" />
                     </div>
                   </button>
 
-                  <div className={`overflow-hidden transition-all duration-300 ${
-                    openFaq === index ? 'max-h-60 mt-2.5 opacity-100' : 'max-h-0 opacity-0'
-                  }`}>
+                  <div className={`overflow-hidden transition-all duration-300 ${openFaq === index ? 'max-h-60 mt-2.5 opacity-100' : 'max-h-0 opacity-0'
+                    }`}>
                     <p className="text-gray-600 font-helvetica text-xs sm:text-sm leading-relaxed pr-4 pt-2.5 border-t border-gray-100">
                       {faq.answer}
                     </p>

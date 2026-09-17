@@ -154,9 +154,9 @@ export default function AstrologerCard({ astro }: AstrologerCardProps) {
         {/* Content Section */}
         <div className="p-3.5 sm:p-4 flex flex-col flex-grow">
           {/* Name & Rating */}
-          <div className="flex justify-between items-center mb-1.5">
-            <div className="flex items-center gap-1.5 min-w-0">
-              <h3 className="text-base sm:text-lg font-bold text-[#72271E] font-['Inria_Serif'] line-clamp-1 group-hover:text-[#F6971E] transition-colors">
+          <div className="flex justify-between items-center gap-2.5 mb-1.5">
+            <div className="flex items-center gap-1.5 min-w-0 flex-1">
+              <h3 className="text-base sm:text-lg font-bold text-[#72271E] font-['Inria_Serif'] truncate group-hover:text-[#F6971E] transition-colors">
                 {astro.name}
               </h3>
               {astro.isVerified && (

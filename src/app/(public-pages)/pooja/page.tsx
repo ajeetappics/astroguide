@@ -4,8 +4,8 @@ import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { BsArrowRight, BsSearch, BsX } from 'react-icons/bs';
-import PoojaCard from '../components/Card/PoojaCard';
-import { pujaData } from '../components/PoojaSection/PoojaSection';
+import PoojaCard from '../../components/Card/PoojaCard';
+import { pujaData } from '../../components/PoojaSection/PoojaSection';
 
 export default function PujasPage() {
   const sliderImages = [
@@ -80,10 +80,10 @@ export default function PujasPage() {
                     <div
                       key={index}
                       className={`absolute top-0 left-0 w-full h-full transition-all duration-700 ease-in-out cursor-pointer ${position === 0
-                          ? 'z-20 opacity-100 translate-x-0'
-                          : position === 1
-                            ? 'z-10 opacity-0 translate-x-full'
-                            : 'z-10 opacity-0 -translate-x-full'
+                        ? 'z-20 opacity-100 translate-x-0'
+                        : position === 1
+                          ? 'z-10 opacity-0 translate-x-full'
+                          : 'z-10 opacity-0 -translate-x-full'
                         }`}
                       onClick={() => setCurrentSlide(index)}
                     >

@@ -2,21 +2,13 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { BsSearch, BsX } from 'react-icons/bs';
-import { BiFilterAlt } from 'react-icons/bi';
-import { useRouter } from 'next/navigation';
-import AstrologerCard from '../components/Card/AstrologerCard';
-import type { AstrologerData } from '../components/Card/AstrologerCard';
-import { astrologerData } from '../components/AstrologerSection/AstrologerSection';
+import { BsX } from 'react-icons/bs';
+import AstrologerCard from '../../components/Card/AstrologerCard';
+import type { AstrologerData } from '../../components/Card/AstrologerCard';
+import { astrologerData } from '../../components/AstrologerSection/AstrologerSection';
 
 export default function AstrologersPage() {
-  const router = useRouter();
-  // We'll duplicate the astrologerData a few times just to show a nice grid of cards for the demo
-  const allAstrologers: AstrologerData[] = [
-    ...astrologerData,
-    ...astrologerData.map(a => ({ ...a, id: a.id + 10 })),
-    ...astrologerData.map(a => ({ ...a, id: a.id + 20 }))
-  ];
+  const allAstrologers: AstrologerData[] = astrologerData;
 
   const tabs = ["All", "Love", "Education", "Career", "Marriage", "Health", "Wealth", "Legal", "Finance", "Remedies", "Parent"];
   const [activeTab, setActiveTab] = React.useState("All");
@@ -25,7 +17,7 @@ export default function AstrologersPage() {
   const [selectedSort, setSelectedSort] = React.useState("Popularity");
 
   // Filter astrologers based on search and tab
-  const filteredAstrologers = allAstrologers.filter((astro) => {
+  const filteredAstrologers = allAstrologers?.filter((astro) => {
     // Tab filter
     if (activeTab !== "All") {
       const matchTab = astro.skills.some(skill => skill.toLowerCase().includes(activeTab.toLowerCase()));

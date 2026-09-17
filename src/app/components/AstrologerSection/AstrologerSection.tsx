@@ -11,52 +11,130 @@ export const astrologerData: AstrologerData[] = [
     name: "Surinder Kumar Sharma",
     isVerified: true,
     isCelebrity: true,
-    skills: ["Vedic", "Vastu", "Lal Kitab"],
+    skills: ["Career", "Finance", "Remedies", "Vedic"],
     languages: "English • Hindi",
     experience: "25 yrs exp",
     rating: "5.0",
     totalCalls: "10k+",
     price: "₹165",
-    imageUrl: "/images/astro-1.jpg" // AI generated Pandit image
+    imageUrl: "/images/astro-1.jpg"
   },
   {
     id: 2,
     name: "Viehana Sharma ji",
     isVerified: true,
     isCelebrity: true,
-    skills: ["Tarot", "Vedic", "Numerology"],
+    skills: ["Love", "Marriage", "Tarot", "Remedies"],
     languages: "English • Hindi",
     experience: "10 yrs exp",
     rating: "5.0",
     totalCalls: "50k+",
     price: "₹130",
-    imageUrl: "/images/astro-2.jpg" // AI generated Female Astrologer
+    imageUrl: "/images/astro-2.jpg"
   },
   {
     id: 3,
     name: "Rachna Singh ji",
     isVerified: true,
     isCelebrity: true,
-    skills: ["Numerology", "Tarot", "Face Reading"],
+    skills: ["Education", "Career", "Parent", "Numerology"],
     languages: "English • Hindi",
     experience: "15 yrs exp",
     rating: "5.0",
     totalCalls: "50k+",
     price: "₹107",
-    imageUrl: "/images/astro-3.jpg" // AI generated Pandit image
+    imageUrl: "/images/astro-3.jpg"
   },
   {
     id: 4,
     name: "Rukmini Devi",
     isVerified: true,
     isCelebrity: true,
-    skills: ["Tarot", "Life Coach"],
+    skills: ["Health", "Love", "Remedies", "Life Coach"],
     languages: "Hindi",
     experience: "6 yrs exp",
     rating: "5.0",
     totalCalls: "10k+",
     price: "₹44",
-    imageUrl: "/images/astro-4.jpg" // AI generated Female Astrologer
+    imageUrl: "/images/astro-4.jpg"
+  },
+  {
+    id: 5,
+    name: "Pandit Radhe Shyam",
+    isVerified: true,
+    isCelebrity: true,
+    skills: ["Legal", "Wealth", "Remedies", "Vedic"],
+    languages: "Hindi • Sanskrit",
+    experience: "22 yrs exp",
+    rating: "4.9",
+    totalCalls: "35k+",
+    price: "₹140",
+    imageUrl: "/images/astro-5.jpg"
+  },
+  {
+    id: 6,
+    name: "Acharya Vidyadhar",
+    isVerified: true,
+    isCelebrity: true,
+    skills: ["Wealth", "Finance", "Career", "Vastu"],
+    languages: "English • Hindi",
+    experience: "28 yrs exp",
+    rating: "5.0",
+    totalCalls: "60k+",
+    price: "₹180",
+    imageUrl: "/images/astro-6.jpg"
+  },
+  {
+    id: 7,
+    name: "Tarot Sunita Rawat",
+    isVerified: true,
+    isCelebrity: true,
+    skills: ["Love", "Marriage", "Parent", "Tarot"],
+    languages: "English • Hindi",
+    experience: "12 yrs exp",
+    rating: "4.9",
+    totalCalls: "28k+",
+    price: "₹95",
+    imageUrl: "/images/astro-7.jpg"
+  },
+  {
+    id: 8,
+    name: "Dr. Arvind Joshi",
+    isVerified: true,
+    isCelebrity: true,
+    skills: ["Education", "Career", "Finance", "Palmistry"],
+    languages: "English • Hindi",
+    experience: "18 yrs exp",
+    rating: "5.0",
+    totalCalls: "42k+",
+    price: "₹120",
+    imageUrl: "/images/astro-8.jpg"
+  },
+  {
+    id: 9,
+    name: "Acharya Devendra Shastri",
+    isVerified: true,
+    isCelebrity: true,
+    skills: ["Parent", "Health", "Remedies", "Kundli"],
+    languages: "Hindi • Sanskrit",
+    experience: "26 yrs exp",
+    rating: "5.0",
+    totalCalls: "48k+",
+    price: "₹155",
+    imageUrl: "/images/astro-9.jpg"
+  },
+  {
+    id: 10,
+    name: "Meenakshi Swaminathan",
+    isVerified: true,
+    isCelebrity: true,
+    skills: ["Legal", "Marriage", "Wealth", "Vedic"],
+    languages: "English • Hindi",
+    experience: "14 yrs exp",
+    rating: "4.9",
+    totalCalls: "22k+",
+    price: "₹110",
+    imageUrl: "/images/astro-10.jpg"
   }
 ];
 
@@ -86,9 +164,9 @@ export default function AstrologerSection() {
 
         {/* Astrologers Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-3.5 md:gap-4">
-          {astrologerData.map((astro) => (
+          {astrologerData && astrologerData?.length > 0 ? astrologerData?.slice(0, 4)?.map((astro) => (
             <AstrologerCard key={astro.id} astro={astro} />
-          ))}
+          )) : (<div className='text-center col-span-4 text-[#F6971E]'>No Astrologer Data Found!</div>)}
         </div>
 
         {/* Responsive View All Astrologers Button (Visible on small screens below the cards) */}
