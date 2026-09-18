@@ -169,24 +169,14 @@ export default function AstrologersListing({ initialCategory = "All" }: Astrolog
           loop
           muted
           playsInline
-          className="absolute inset-0 w-full h-full object-cover opacity-40"
+          poster="ages/astrology-bg.png"
+          className="absolute inset-0 w-full h-full object-cover opacity-50"
         >
-          <source src="/images/astrology-video.MP4" type="video/mp4" />
-          <source src="/astrology-video.MP4" type="video/mp4" />
+          <source src="/images/astrology-video.mp4" type="video/mp4" />
         </video>
         <div className="absolute inset-0 bg-gradient-to-t from-[#4A1A14] via-transparent to-transparent opacity-80" />
 
         <div className="container mx-auto max-w-6xl flex flex-col items-center text-center relative z-10">
-          {activeTab !== "All" && (
-            <div className="flex items-center gap-2 text-xs sm:text-sm text-[#F6971E] font-helvetica mb-2">
-              <Link href="/astrologers" className="hover:underline opacity-80">Astrologers</Link>
-              <span>/</span>
-              <Link href="/astrologers/category" className="hover:underline opacity-80">Categories</Link>
-              <span>/</span>
-              <span className="font-semibold text-white">{activeTab}</span>
-            </div>
-          )}
-
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white font-['Inria_Serif'] mb-3 sm:mb-4 drop-shadow-md">
             {categoryInfo.title}
           </h1>
