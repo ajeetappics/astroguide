@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import { BsX } from 'react-icons/bs';
 import AstrologerCard, { AstrologerData } from '../Card/AstrologerCard';
 import { astrologerData } from '../AstrologerSection/AstrologerSection';
+import AstrologerHeroBanner from './AstrologerHeroBanner';
 
 export interface AstrologersListingProps {
   initialCategory?: string;
@@ -162,28 +163,10 @@ export default function AstrologersListing({ initialCategory = "All" }: Astrolog
     <main className="min-h-screen bg-[#FFFDF9] pb-24">
 
       {/* Hero Header Section */}
-      <section className="bg-[#4A1A14] pt-28 sm:pt-36 lg:pt-44 pb-14 sm:pb-20 lg:pb-24 px-4 relative overflow-hidden">
-        {/* Astrology Background Video with Overlay */}
-        <video
-          autoPlay
-          loop
-          muted
-          playsInline
-          className="absolute inset-0 w-full h-full object-cover opacity-50"
-        >
-          <source src="/images/astrology-video.mp4" type="video/mp4" />
-        </video>
-        <div className="absolute inset-0 bg-gradient-to-t from-[#4A1A14] via-transparent to-transparent opacity-80" />
-
-        <div className="container mx-auto max-w-6xl flex flex-col items-center text-center relative z-10">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white font-['Inria_Serif'] mb-3 sm:mb-4 drop-shadow-md">
-            {categoryInfo.title}
-          </h1>
-          <p className="text-[#FDF7E1] font-helvetica text-xs sm:text-sm md:text-base max-w-2xl leading-relaxed opacity-95">
-            {categoryInfo.subtitle}
-          </p>
-        </div>
-      </section>
+      <AstrologerHeroBanner
+        title={categoryInfo.title}
+        subtitle={categoryInfo.subtitle}
+      />
 
       {/* Main Content Area: Floating Search, Tabs & Astrologer Grid */}
       <section className="container mx-auto max-w-7xl px-4 -mt-6 sm:-mt-8 relative z-20">
