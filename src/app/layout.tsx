@@ -84,13 +84,13 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: "https://storage.googleapis.com/astro-vani-storage/admin/1763637578154-logo.svg",
+        url: "https://storage.googleapis.com/astro-vani-storage/admin/1789712859319-asto_logo.png",
         width: 1200,
         height: 630,
         alt: "Balaji Astro Guide",
       },
       {
-        url: "https://storage.googleapis.com/astro-vani-storage/admin/1763637578154-logo.svg",
+        url: "https://storage.googleapis.com/astro-vani-storage/admin/1789712859319-asto_logo.png",
         width: 1200,
         height: 630,
         alt: "Balaji Astro Guide",

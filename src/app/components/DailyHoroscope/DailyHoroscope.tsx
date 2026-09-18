@@ -94,10 +94,10 @@ export default function DailyHoroscope() {
     overallScore: overallScore.score,
     overallGrade: overallScore.grade,
     metrics: [
-      { label: "RELATIONSHIP", value: areaOfLife?.relationship.status || "Harmonious", percent: areaOfLife?.relationship.score || 85 },
-      { label: "CAREER & WORK", value: areaOfLife?.career.status || "High Momentum", percent: areaOfLife?.career.score || 90 },
-      { label: "FINANCE & WEALTH", value: areaOfLife?.finance.status || "Stable", percent: areaOfLife?.finance.score || 82 },
-      { label: "HEALTH & VITALITY", value: areaOfLife?.health.status || "Robust", percent: areaOfLife?.health.score || 85 }
+      { label: "RELATIONSHIP", value: areaOfLife?.relationship.status || "Harmonious", percent: areaOfLife?.relationship.score || 85, barColorFrom: "#F87171", barColorTo: "#DE5149" },
+      { label: "CAREER & WORK", value: areaOfLife?.career.status || "High Momentum", percent: areaOfLife?.career.score || 90, barColorFrom: "#FDE047", barColorTo: "#EAB308" },
+      { label: "FINANCE & WEALTH", value: areaOfLife?.finance.status || "Stable", percent: areaOfLife?.finance.score || 82, barColorFrom: "#4ADE80", barColorTo: "#4BB870" },
+      { label: "HEALTH & VITALITY", value: areaOfLife?.health.status || "Robust", percent: areaOfLife?.health.score || 85, barColorFrom: "#FB923C", barColorTo: "#EE892C" }
     ]
   };
 
@@ -244,8 +244,11 @@ export default function DailyHoroscope() {
                     </div>
                     <div className="w-full bg-gray-200/60 h-2 rounded-full overflow-hidden">
                       <div
-                        className="bg-gradient-to-r from-[#F6971E] to-[#FFA733] h-full rounded-full transition-all duration-1000 ease-out"
-                        style={{ width: animateProgress ? `${metric.percent}%` : '0%' }}
+                        className="h-full rounded-full transition-all duration-1000 ease-out"
+                        style={{
+                          width: animateProgress ? `${metric.percent}%` : '0%',
+                          background: `linear-gradient(to right, ${metric.barColorFrom || '#cb7e1aff'}, ${metric.barColorTo || '#FFA733'})`
+                        }}
                       />
                     </div>
                   </div>
