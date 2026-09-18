@@ -169,7 +169,6 @@ export default function AstrologersListing({ initialCategory = "All" }: Astrolog
           loop
           muted
           playsInline
-          poster="ages/astrology-bg.png"
           className="absolute inset-0 w-full h-full object-cover opacity-50"
         >
           <source src="/images/astrology-video.mp4" type="video/mp4" />

@@ -1,6 +1,6 @@
 import React, { Suspense } from 'react';
 import type { Metadata } from 'next';
-import AstrologerCategoriesHub from '@/app/components/AstrologerListing/AstrologerCategoriesHub';
+import AstrologersListing from '@/app/components/AstrologerListing/AstrologersListing';
 
 export const metadata: Metadata = {
   title: "All Astrology Consultation Categories | Astrovani",
@@ -18,7 +18,7 @@ export const metadata: Metadata = {
 export default function AstrologerCategoryIndexPage() {
   return (
     <Suspense fallback={<div className="min-h-screen bg-[#FFFDF9]" />}>
-      <AstrologerCategoriesHub />
+      <AstrologersListing initialCategory="All" />
     </Suspense>
   );
 }
