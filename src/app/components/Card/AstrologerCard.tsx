@@ -21,12 +21,16 @@ export interface AstrologerData {
 }
 
 interface AstrologerCardProps {
-  astro: AstrologerData;
+  astro?: AstrologerData;
+  astrologer?: AstrologerData;
 }
 
-export default function AstrologerCard({ astro }: AstrologerCardProps) {
+export default function AstrologerCard({ astro: astroProp, astrologer: astrologerProp }: AstrologerCardProps) {
+  const astro = (astroProp || astrologerProp)!;
   const { openPopup } = usePopup();
   const router = useRouter();
+
+  if (!astro) return null;
 
   const handleCardClick = () => {
     router.push(`/astrologers/${astro.id}`);

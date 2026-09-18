@@ -1,0 +1,402 @@
+{
+  "lastUpdated": "2026-09-17T00:00:00.000Z",
+  "displayDate": "September 17, 2026",
+  "signs": {
+    "aries": {
+      "id": "aries",
+      "name": "Aries",
+      "hindiName": "Mesh",
+      "dateRange": "Mar 21 - Apr 19",
+      "ruler": "Mars (Mangal)",
+      "element": "Fire",
+      "overview": "Cosmic energies bring high dynamic drive and leadership potential today. The Moon transit favors swift problem-solving and decisive career moves.",
+      "luckyToday": {
+        "color": "Coral Red",
+        "number": 9,
+        "mood": "Confident & Resilient",
+        "symbol": "The Ram (♈)",
+        "stone": "Red Coral (Moonga)",
+        "auspiciousTime": "09:00 AM - 11:15 AM"
+      },
+      "areaOfLife": {
+        "physique": { "score": 88, "status": "Energetic", "description": "High physical stamina and endurance; ideal for physical activities and workouts." },
+        "status": { "score": 85, "status": "Respected", "description": "Your authority and decision-making command respect in social and professional circles." },
+        "finance": { "score": 78, "status": "Stable", "description": "Steady financial flow; keep a disciplined eye on impulse expenditures." },
+        "relationship": { "score": 82, "status": "Harmonious", "description": "Warm mutual affection; heartfelt conversations dissolve minor past tensions." },
+        "career": { "score": 90, "status": "High Momentum", "description": "Key projects advance swiftly; leadership initiatives receive executive backing." },
+        "travel": { "score": 74, "status": "Favorable", "description": "Short business trips or daily commutes yield productive and timely results." },
+        "family": { "score": 84, "status": "Peaceful", "description": "Pleasant domestic environment; positive discussions regarding property or home comforts." },
+        "friends": { "score": 80, "status": "Supportive", "description": "A close friend offers valuable advice or collaborates on a shared idea." },
+        "health": { "score": 86, "status": "Robust", "description": "Vitality is strong; maintain proper hydration and balanced nutrition throughout the day." }
+      },
+      "overallCosmicScore": {
+        "score": 83,
+        "grade": "Highly Favorable",
+        "summary": "Planetary transits heavily favor career growth, physique, and family peace."
+      }
+    },
+    "taurus": {
+      "id": "taurus",
+      "name": "Taurus",
+      "hindiName": "Vrishabh",
+      "dateRange": "Apr 20 - May 20",
+      "ruler": "Venus (Shukra)",
+      "element": "Earth",
+      "overview": "Venus bestows creative brilliance and aesthetic satisfaction today. Your methodical patience ensures financial and interpersonal stability.",
+      "luckyToday": {
+        "color": "Lotus Pink",
+        "number": 6,
+        "mood": "Peaceful & Grounded",
+        "symbol": "The Bull (♉)",
+        "stone": "Diamond (Heera)",
+        "auspiciousTime": "01:15 PM - 03:30 PM"
+      },
+      "areaOfLife": {
+        "physique": { "score": 82, "status": "Balanced", "description": "Physical vitality is solid; avoid heavy or oily foods to preserve high energy levels." },
+        "status": { "score": 87, "status": "Prestigious", "description": "Colleagues admire your reliability, poise, and dependable problem-solving demeanor." },
+        "finance": { "score": 89, "status": "Prosperous", "description": "Strong monetary gains through smart investments or pending payment clearances." },
+        "relationship": { "score": 88, "status": "Affectionate", "description": "Romantic bonds deepen through quality time, mutual appreciation, and loyalty." },
+        "career": { "score": 83, "status": "Steady Growth", "description": "Methodical efforts yield tangible milestones; long-term planning pays off." },
+        "travel": { "score": 71, "status": "Moderate", "description": "Local travel is smooth; confirm travel itineraries before departure." },
+        "family": { "score": 86, "status": "Cherished", "description": "Family gatherings or conversations bring comforting emotional warmth." },
+        "friends": { "score": 84, "status": "Loyal", "description": "Trusted companions provide honest perspectives and comforting camaraderie." },
+        "health": { "score": 83, "status": "Good", "description": "General wellness is satisfactory; gentle evening walks will soothe any stress." }
+      },
+      "overallCosmicScore": {
+        "score": 84,
+        "grade": "Very Auspicious",
+        "summary": "Venus strengthens financial prosperity, romantic bonding, and emotional peace."
+      }
+    },
+    "gemini": {
+      "id": "gemini",
+      "name": "Gemini",
+      "hindiName": "Mithun",
+      "dateRange": "May 21 - Jun 20",
+      "ruler": "Mercury (Budh)",
+      "element": "Air",
+      "overview": "Mercury activates your communicative eloquence and mental agility. Ideal day for negotiating deals, learning new skills, and networking.",
+      "luckyToday": {
+        "color": "Emerald Green",
+        "number": 5,
+        "mood": "Curious & Expressive",
+        "symbol": "The Twins (♊)",
+        "stone": "Emerald (Panna)",
+        "auspiciousTime": "11:00 AM - 01:15 PM"
+      },
+      "areaOfLife": {
+        "physique": { "score": 80, "status": "Active", "description": "High nervous energy; keep your body grounded through stretching and deep breathing." },
+        "status": { "score": 84, "status": "Influential", "description": "Persuasive communication strengthens your social presence and intellectual reputation." },
+        "finance": { "score": 81, "status": "Promising", "description": "Smart ideas open new revenue channels; review contract clauses carefully." },
+        "relationship": { "score": 79, "status": "Lively", "description": "Playful banter keeps connections vibrant; practice active listening with partners." },
+        "career": { "score": 88, "status": "Dynamic", "description": "Presentations and negotiations yield fruitful results; quick thinking solves challenges." },
+        "travel": { "score": 85, "status": "Exciting", "description": "Spontaneous transit or short journeys open up fresh viewpoints and fruitful encounters." },
+        "family": { "score": 78, "status": "Calm", "description": "Clear communication helps resolve minor domestic differences effortlessly." },
+        "friends": { "score": 92, "status": "Vibrant", "description": "Social life thrives; lively meetups and intellectual conversations inspire you." },
+        "health": { "score": 81, "status": "Alert", "description": "Mind is exceptionally sharp; balance screen time with restorative pauses." }
+      },
+      "overallCosmicScore": {
+        "score": 83,
+        "grade": "Highly Favorable",
+        "summary": "Intellectual dexterity and networking opportunities dominate today's stars."
+      }
+    },
+    "cancer": {
+      "id": "cancer",
+      "name": "Cancer",
+      "hindiName": "Kark",
+      "dateRange": "Jun 21 - Jul 22",
+      "ruler": "Moon (Chandra)",
+      "element": "Water",
+      "overview": "The Moon enhances your intuitive perception and emotional intelligence. Domestic matters and inner reflections bring deep fulfillment.",
+      "luckyToday": {
+        "color": "Pearl White",
+        "number": 2,
+        "mood": "Intuitive & Caring",
+        "symbol": "The Crab (♋)",
+        "stone": "Natural Pearl (Moti)",
+        "auspiciousTime": "07:15 PM - 09:30 PM"
+      },
+      "areaOfLife": {
+        "physique": { "score": 81, "status": "Gentle", "description": "Patience with bodily rhythms is essential; favor soothing herbal teas and light meals." },
+        "status": { "score": 83, "status": "Respected", "description": "Your empathy and trustworthy guidance win sincere admiration from peers." },
+        "finance": { "score": 84, "status": "Secure", "description": "Long-term savings and family financial security stay firmly well-protected." },
+        "relationship": { "score": 90, "status": "Deeply Connected", "description": "Unspoken emotional bonds flourish; partners appreciate your tender care and devotion." },
+        "career": { "score": 82, "status": "Focused", "description": "Intuition guides strategic decisions; projects requiring creative insight succeed." },
+        "travel": { "score": 70, "status": "Restful", "description": "Travel near water bodies or serene spiritual sites proves mentally rejuvenating." },
+        "family": { "score": 93, "status": "Blissful", "description": "Home is a sanctuary of love; bonds with maternal figures and elders grow stronger." },
+        "friends": { "score": 82, "status": "Comforting", "description": "Confiding in a heartfelt friend offers emotional relief and grounding clarity." },
+        "health": { "score": 82, "status": "Serene", "description": "Digestive wellness improves when emotional stressors are consciously released." }
+      },
+      "overallCosmicScore": {
+        "score": 85,
+        "grade": "Very Auspicious",
+        "summary": "Deep emotional harmony and familial bliss form the backbone of today's transit."
+      }
+    },
+    "leo": {
+      "id": "leo",
+      "name": "Leo",
+      "hindiName": "Singh",
+      "dateRange": "Jul 23 - Aug 22",
+      "ruler": "Sun (Surya)",
+      "element": "Fire",
+      "overview": "The Sun illuminates your charisma, self-assurance, and creative spark. Step forward into the spotlight to inspire colleagues and loved ones.",
+      "luckyToday": {
+        "color": "Golden Saffron",
+        "number": 1,
+        "mood": "Radiant & Magnanimous",
+        "symbol": "The Lion (♌)",
+        "stone": "Ruby (Manikya)",
+        "auspiciousTime": "08:15 AM - 10:45 AM"
+      },
+      "areaOfLife": {
+        "physique": { "score": 89, "status": "Vibrant", "description": "Radiant physical aura and vital energy; bodily stamina peaks during morning hours." },
+        "status": { "score": 93, "status": "Commanding", "description": "Natural leadership shines brightly; peers look to you for visionary direction." },
+        "finance": { "score": 83, "status": "Abundant", "description": "Generous financial prospects; invest with foresight rather than flamboyant spending." },
+        "relationship": { "score": 86, "status": "Passionate", "description": "Warm gestures and grand romantic expressions evoke enthusiastic partner responses." },
+        "career": { "score": 91, "status": "Victorious", "description": "High visibility projects succeed; recognition from higher authorities is indicated." },
+        "travel": { "score": 76, "status": "Pleasurable", "description": "Travel related to business or celebratory events unfolds smoothly." },
+        "family": { "score": 85, "status": "Supportive", "description": "You take charge of domestic matters with benevolence, earning family gratitude." },
+        "friends": { "score": 88, "status": "Loyal Circle", "description": "You are the vibrant center of social circles; friends rally around your enthusiasm." },
+        "health": { "score": 87, "status": "Strong", "description": "Heart health and spinal posture benefit from moderate yogic stretching." }
+      },
+      "overallCosmicScore": {
+        "score": 87,
+        "grade": "Extremely Favorable",
+        "summary": "Sun transit crowns you with leadership authority, magnetic charm, and career triumph."
+      }
+    },
+    "virgo": {
+      "id": "virgo",
+      "name": "Virgo",
+      "hindiName": "Kanya",
+      "dateRange": "Aug 23 - Sep 22",
+      "ruler": "Mercury (Budh)",
+      "element": "Earth",
+      "overview": "Mercury sharpens your attention to detail and practical discernment. Organize complex tasks and implement systematic improvements today.",
+      "luckyToday": {
+        "color": "Forest Green",
+        "number": 5,
+        "mood": "Discerning & Productive",
+        "symbol": "The Maiden (♍)",
+        "stone": "Emerald (Panna)",
+        "auspiciousTime": "02:30 PM - 04:45 PM"
+      },
+      "areaOfLife": {
+        "physique": { "score": 81, "status": "Tuned", "description": "Bodily rhythm benefits from structured routines and wholesome fiber-rich nutrition." },
+        "status": { "score": 86, "status": "Trusted", "description": "Your meticulous accuracy and integrity make you an indispensable advisor." },
+        "finance": { "score": 87, "status": "Cautious & Sound", "description": "Analytical budgeting preserves capital; excellent day for auditing balances." },
+        "relationship": { "score": 80, "status": "Sincere", "description": "Show care through helpful acts of service rather than critical perfectionism." },
+        "career": { "score": 89, "status": "Organized Mastery", "description": "Complex logistical hurdles dissolve under your systematic precision." },
+        "travel": { "score": 73, "status": "Purposeful", "description": "Well-planned itineraries avoid hiccups; double-check documents before travel." },
+        "family": { "score": 82, "status": "Helpful", "description": "Assisting siblings or family members with practical chores creates warm solidarity." },
+        "friends": { "score": 81, "status": "Reliable", "description": "Friends seek your candid, objective counsel for navigating tricky situations." },
+        "health": { "score": 84, "status": "Disciplined", "description": "Mind-gut harmony improves with mindful eating and herbal digestive teas." }
+      },
+      "overallCosmicScore": {
+        "score": 83,
+        "grade": "Highly Favorable",
+        "summary": "Exceptional organizational focus and financial prudence secure peace of mind."
+      }
+    },
+    "libra": {
+      "id": "libra",
+      "name": "Libra",
+      "hindiName": "Tula",
+      "dateRange": "Sep 23 - Oct 22",
+      "ruler": "Venus (Shukra)",
+      "element": "Air",
+      "overview": "Venus grants balance, diplomatic charm, and aesthetic grace today. Ideal transit for partnership negotiations, mediation, and creative arts.",
+      "luckyToday": {
+        "color": "Sky Blue",
+        "number": 6,
+        "mood": "Balanced & Harmonious",
+        "symbol": "The Scales (♎)",
+        "stone": "Diamond / Opal",
+        "auspiciousTime": "03:45 PM - 05:45 PM"
+      },
+      "areaOfLife": {
+        "physique": { "score": 83, "status": "Graceful", "description": "Physical poise is high; gentle workouts like yoga or swimming harmonize your posture." },
+        "status": { "score": 88, "status": "Diplomatic", "description": "Your fair judgment and ability to bridge opposing viewpoints win wide praise." },
+        "finance": { "score": 82, "status": "Equilibrium", "description": "Balanced cash flow; partnership ventures hold positive medium-term promise." },
+        "relationship": { "score": 91, "status": "Romantic Bliss", "description": "Mutual empathy, romance, and shared aesthetic tastes elevate intimacy to new heights." },
+        "career": { "score": 85, "status": "Collaborative", "description": "Joint ventures and team agreements progress smoothly; contracts find balance." },
+        "travel": { "score": 78, "status": "Scenic", "description": "Leisurely journeys or visits to art galleries and scenic spots bring joy." },
+        "family": { "score": 83, "status": "Equable", "description": "Domestic tranquility is maintained through your tactful peacemaking skills." },
+        "friends": { "score": 87, "status": "Sociable", "description": "Graceful social interactions bring delightful invitations and cultural exchanges." },
+        "health": { "score": 83, "status": "Balanced", "description": "Kidney and hydration balance are essential; drink sufficient fresh water." }
+      },
+      "overallCosmicScore": {
+        "score": 85,
+        "grade": "Very Auspicious",
+        "summary": "Venus blesses partnerships with harmony, artistic elevation, and diplomatic success."
+      }
+    },
+    "scorpio": {
+      "id": "scorpio",
+      "name": "Scorpio",
+      "hindiName": "Vrishchik",
+      "dateRange": "Oct 23 - Nov 21",
+      "ruler": "Mars & Ketu",
+      "element": "Water",
+      "overview": "Deep transformative planetary energies empower your focus and willpower. Unravel hidden truths and execute strategies with unwavering conviction.",
+      "luckyToday": {
+        "color": "Deep Maroon",
+        "number": 8,
+        "mood": "Determined & Intense",
+        "symbol": "The Scorpion (♏)",
+        "stone": "Red Coral (Moonga)",
+        "auspiciousTime": "10:15 AM - 12:30 PM"
+      },
+      "areaOfLife": {
+        "physique": { "score": 87, "status": "Resilient", "description": "Great inner stamina and cellular recovery; high pain tolerance and physical grit." },
+        "status": { "score": 89, "status": "Formidable", "description": "Your quiet aura of strength and decisive competence commands serious respect." },
+        "finance": { "score": 86, "status": "Strategic Gains", "description": "Gains through legacy assets, tax savings, or joint resources are favored." },
+        "relationship": { "score": 85, "status": "Intensely Loyal", "description": "Emotional depth and steadfast loyalty solidify genuine bonds; release petty jealousy." },
+        "career": { "score": 90, "status": "Transformational", "description": "Research, investigation, and strategic overhauls deliver breakthrough results." },
+        "travel": { "score": 72, "status": "Focused", "description": "Travel undertaken with clear strategic purpose reaches its destination efficiently." },
+        "family": { "score": 80, "status": "Protective", "description": "You fiercely safeguard family interests; open communication softens emotional barriers." },
+        "friends": { "score": 82, "status": "Selective", "description": "Quality matters over quantity; confide strictly in your time-tested inner circle." },
+        "health": { "score": 85, "status": "Detoxifying", "description": "Excellent time for internal detox, breathwork, and releasing stored mental tension." }
+      },
+      "overallCosmicScore": {
+        "score": 86,
+        "grade": "Extremely Favorable",
+        "summary": "Penetrating focus and unwavering determination guarantee strategic victories."
+      }
+    },
+    "sagittarius": {
+      "id": "sagittarius",
+      "name": "Sagittarius",
+      "hindiName": "Dhanu",
+      "dateRange": "Nov 22 - Dec 21",
+      "ruler": "Jupiter (Brihaspati)",
+      "element": "Fire",
+      "overview": "Jupiter expands your optimism, philosophical wisdom, and visionary horizons. Fortune favors bold ethical endeavors and higher education goals.",
+      "luckyToday": {
+        "color": "Bright Saffron",
+        "number": 3,
+        "mood": "Optimistic & Philosophical",
+        "symbol": "The Archer (♐)",
+        "stone": "Yellow Sapphire (Pukhraj)",
+        "auspiciousTime": "06:45 AM - 09:00 AM"
+      },
+      "areaOfLife": {
+        "physique": { "score": 85, "status": "Athletic", "description": "High enthusiasm for outdoor movement and sports; stretch legs and hips thoroughly." },
+        "status": { "score": 90, "status": "Visionary", "description": "Your inspirational ideas and noble ethical stance attract widespread goodwill." },
+        "finance": { "score": 85, "status": "Expanding", "description": "Good prospects for long-term investments, mentor guidance, or foreign commerce." },
+        "relationship": { "score": 83, "status": "Adventurous", "description": "Shared philosophical explorations and humorous dates rejuvenate romantic spark." },
+        "career": { "score": 89, "status": "High Horizons", "description": "Projects dealing with media, law, higher learning, or international clients thrive." },
+        "travel": { "score": 91, "status": "Expansive", "description": "Long-distance journeys and spiritual pilgrimages bring profound clarity and joy." },
+        "family": { "score": 84, "status": "Uplifting", "description": "Elder blessings and cheerful family banter cultivate a joyful home atmosphere." },
+        "friends": { "score": 88, "status": "Inspiring", "description": "Interactions with mentors and forward-thinking peers open new doors." },
+        "health": { "score": 84, "status": "Brisk", "description": "Liver and metabolic wellness benefit from moderate portion sizes and fresh fruit." }
+      },
+      "overallCosmicScore": {
+        "score": 87,
+        "grade": "Extremely Favorable",
+        "summary": "Jupiter pours grace on educational pursuits, travel, and visionary initiatives."
+      }
+    },
+    "capricorn": {
+      "id": "capricorn",
+      "name": "Capricorn",
+      "hindiName": "Makar",
+      "dateRange": "Dec 22 - Jan 19",
+      "ruler": "Saturn (Shani)",
+      "element": "Earth",
+      "overview": "Saturn rewards disciplined patience, pragmatic organization, and perseverance. Professional responsibility unlocks long-lasting accomplishments.",
+      "luckyToday": {
+        "color": "Charcoal Black / Navy",
+        "number": 8,
+        "mood": "Composed & Disciplined",
+        "symbol": "The Sea-Goat (♑)",
+        "stone": "Blue Sapphire (Neelam)",
+        "auspiciousTime": "04:30 PM - 06:45 PM"
+      },
+      "areaOfLife": {
+        "physique": { "score": 83, "status": "Durable", "description": "Good skeletal stamina; strengthen joints and knees through gentle strength training." },
+        "status": { "score": 92, "status": "Authoritative", "description": "Your steadfast maturity and unwavering integrity earn executive esteem." },
+        "finance": { "score": 88, "status": "Solid Foundation", "description": "Prudent asset accumulation and conservative wealth strategies bear secure fruit." },
+        "relationship": { "score": 79, "status": "Devoted", "description": "Loyalty runs deep beneath practical acts of care; share your feelings more openly." },
+        "career": { "score": 93, "status": "Pinnacle Focus", "description": "Demanding professional duties are accomplished flawlessly; leaders note your grit." },
+        "travel": { "score": 72, "status": "Constructive", "description": "Travel dedicated to official objectives yields concrete, verifiable milestones." },
+        "family": { "score": 82, "status": "Dutiful", "description": "Honoring ancestral responsibilities and elder needs creates lasting domestic stability." },
+        "friends": { "score": 80, "status": "Steadfast", "description": "A small circle of dependable, time-tested allies provides mutual support." },
+        "health": { "score": 84, "status": "Grounded", "description": "Bone and dental care are highlighted; get regular natural sunlight for Vitamin D." }
+      },
+      "overallCosmicScore": {
+        "score": 85,
+        "grade": "Very Auspicious",
+        "summary": "Saturn rewards persistent labor with durable career standing and fiscal security."
+      }
+    },
+    "aquarius": {
+      "id": "aquarius",
+      "name": "Aquarius",
+      "hindiName": "Kumbh",
+      "dateRange": "Jan 20 - Feb 18",
+      "ruler": "Saturn & Rahu",
+      "element": "Air",
+      "overview": "Planetary transits ignite visionary innovations and humanitarian collaborations. Out-of-the-box thinking solves tricky longstanding bottlenecks.",
+      "luckyToday": {
+        "color": "Electric Cyan",
+        "number": 4,
+        "mood": "Innovative & Free-Spirited",
+        "symbol": "The Water-Bearer (♒)",
+        "stone": "Blue Sapphire (Neelam)",
+        "auspiciousTime": "03:00 PM - 05:15 PM"
+      },
+      "areaOfLife": {
+        "physique": { "score": 81, "status": "Dynamic", "description": "Circulation needs regular movement; avoid prolonged sitting by taking active breaks." },
+        "status": { "score": 87, "status": "Trailblazer", "description": "Progressive perspectives and inventive ideas position you as a thought leader." },
+        "finance": { "score": 83, "status": "Ingenious", "description": "Earnings through digital channels or collaborative ventures show positive upside." },
+        "relationship": { "score": 81, "status": "Intellectually Linked", "description": "Freedom and intellectual rapport foster romantic satisfaction; celebrate individuality." },
+        "career": { "score": 89, "status": "Breakthrough", "description": "Technology, engineering, and community-driven initiatives receive cosmic momentum." },
+        "travel": { "score": 79, "status": "Novel", "description": "Exploring unconventional locations or modern hubs sparks refreshing creativity." },
+        "family": { "score": 80, "status": "Supportive", "description": "Broadminded discussions help younger family members feel understood and guided." },
+        "friends": { "score": 91, "status": "Network Strength", "description": "Community circles, group chats, and social alliances offer great camaraderie." },
+        "health": { "score": 82, "status": "Stimulated", "description": "Balance mental hyperactivity with calming meditation or sound therapy in the evening." }
+      },
+      "overallCosmicScore": {
+        "score": 84,
+        "grade": "Very Auspicious",
+        "summary": "Inventive thinking and powerful social networks drive your cosmic success today."
+      }
+    },
+    "pisces": {
+      "id": "pisces",
+      "name": "Pisces",
+      "hindiName": "Meen",
+      "dateRange": "Feb 19 - Mar 20",
+      "ruler": "Jupiter (Brihaspati)",
+      "element": "Water",
+      "overview": "Jupiter awakens divine compassion, artistic imagination, and spiritual peace. Trust your sixth sense in personal and professional situations.",
+      "luckyToday": {
+        "color": "Sea Green / Pale Gold",
+        "number": 3,
+        "mood": "Imaginative & Compassionate",
+        "symbol": "The Fishes (♓)",
+        "stone": "Yellow Sapphire (Pukhraj)",
+        "auspiciousTime": "08:30 PM - 10:45 PM"
+      },
+      "areaOfLife": {
+        "physique": { "score": 82, "status": "Subtle", "description": "Gentle foot reflexology and adequate rest restore vitality after stressful work." },
+        "status": { "score": 86, "status": "Beloved", "description": "Your compassionate warmth and non-judgmental nature attract genuine adoration." },
+        "finance": { "score": 82, "status": "Flowing", "description": "Charitable acts multiply cosmic blessings; keep accounts accurate and transparent." },
+        "relationship": { "score": 92, "status": "Soulful", "description": "Deep telepathic connection and tenderness unite partners in spiritual harmony." },
+        "career": { "score": 85, "status": "Artistic Flair", "description": "Creative arts, counseling, healing, and intuitive pursuits meet with high success." },
+        "travel": { "score": 83, "status": "Poetic", "description": "Travel to spiritual retreats or serene nature spots rejuvenates the spirit." },
+        "family": { "score": 87, "status": "Affectionate", "description": "Loving family dynamics; heartfelt understanding resolves subtle emotional needs." },
+        "friends": { "score": 85, "status": "Empathetic", "description": "True soul connections provide emotional sanctuary and quiet mutual comfort." },
+        "health": { "score": 84, "status": "Serene Balance", "description": "Sleep quality is prime; limit late-night screen exposure to experience restorative rest." }
+      },
+      "overallCosmicScore": {
+        "score": 86,
+        "grade": "Extremely Favorable",
+        "summary": "High spiritual intuition and soulful connections wrap your day in divine grace."
+      }
+    }
+  }
+}

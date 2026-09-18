@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useState, useEffect, useRef } from 'react';
+import Link from 'next/link';
 import { BsArrowRight } from 'react-icons/bs';
 import {
   TbZodiacAries, TbZodiacTaurus, TbZodiacGemini, TbZodiacCancer,
@@ -8,6 +9,7 @@ import {
   TbZodiacSagittarius, TbZodiacCapricorn, TbZodiacAquarius, TbZodiacPisces
 } from 'react-icons/tb';
 import { usePopup } from '../popup/PopupContext';
+import { getSignHoroscope } from '@/services/horoscopeService';
 
 const zodiacSigns = [
   { id: 'aries', name: 'Aries', hindiName: 'Mesh', date: 'Mar 21 - Apr 19', icon: TbZodiacAries },
@@ -40,7 +42,7 @@ export default function DailyHoroscope() {
     return () => clearTimeout(timeout);
   }, [activeSign]);
 
-  // Auto-rotate every 2 seconds if not hovered
+  // Auto-rotate every 3.5 seconds if not hovered
   useEffect(() => {
     if (isHovered) return;
 
@@ -63,28 +65,39 @@ export default function DailyHoroscope() {
 
         return zodiacSigns[nextIndex];
       });
-    }, 2000);
+    }, 3500);
 
     return () => clearInterval(interval);
   }, [isHovered]);
 
-  // Generate deterministic unique values based on sign length for variety
-  const getDynamicScore = (base: number) => {
-    const variance = (activeSign.name.length * 7) % 30;
-    return Math.min(100, Math.max(40, base - 15 + variance));
+  // Fetch from static horoscope data service
+  const staticSignData = getSignHoroscope(activeSign.id);
+  const luckyToday = staticSignData?.luckyToday || {
+    color: activeSign.name.length % 2 === 0 ? "Golden Saffron" : "Warm Amber",
+    number: (activeSign.name.length % 9) + 1,
+    mood: activeSign.name.length % 2 === 0 ? "Optimistic & Focused" : "Calm & Reflective",
+    symbol: "♈",
+    stone: "Gemstone",
+    auspiciousTime: "10:30 AM - 12:15 PM"
   };
+  const areaOfLife = staticSignData?.areaOfLife;
+  const overallScore = staticSignData?.overallCosmicScore || { score: 84, grade: "Highly Favorable" };
 
-  // Dummy data based on active sign (for demonstration)
   const horoscopeData = {
-    text: `${activeSign.name}, it's time to stop being afraid of failure and just try. Failures have their own lessons to teach, which can be beneficial for the future, so keep your eyes on the prize. The cosmic energies are aligning to support your next big leap.`,
-    mood: activeSign.name.length % 2 === 0 ? "Optimistic" : "Anxious",
-    luckyNumber: (activeSign.name.length % 9) + 1,
-    color: activeSign.name.length % 2 === 0 ? "#86efac" : "#fca5a5",
+    text: staticSignData?.overview || `${activeSign.name} (${activeSign.hindiName}), today celestial movements bring clarity to your long-pending priorities. The Moon transit favors conscious decision-making and creative confidence. Avoid over-analyzing minor hurdles and channel your focus into purposeful action.`,
+    mood: luckyToday.mood,
+    luckyNumber: luckyToday.number,
+    color: luckyToday.color,
+    stone: luckyToday.stone,
+    symbol: luckyToday.symbol,
+    favorableTime: luckyToday.auspiciousTime,
+    overallScore: overallScore.score,
+    overallGrade: overallScore.grade,
     metrics: [
-      { label: "LOVE", value: getDynamicScore(80) > 70 ? "Good" : "Average", percent: getDynamicScore(80), color: "bg-[#F6971E]" },
-      { label: "CAREER", value: getDynamicScore(90) > 80 ? "High" : "Stable", percent: getDynamicScore(90), color: "bg-[#F6971E]" },
-      { label: "HEALTH", value: getDynamicScore(85) > 75 ? "Strong" : "Fair", percent: getDynamicScore(85), color: "bg-[#F6971E]" },
-      { label: "MONEY", value: getDynamicScore(75) > 65 ? "Strong" : "Average", percent: getDynamicScore(75), color: "bg-[#F6971E]" }
+      { label: "RELATIONSHIP", value: areaOfLife?.relationship.status || "Harmonious", percent: areaOfLife?.relationship.score || 85 },
+      { label: "CAREER & WORK", value: areaOfLife?.career.status || "High Momentum", percent: areaOfLife?.career.score || 90 },
+      { label: "FINANCE & WEALTH", value: areaOfLife?.finance.status || "Stable", percent: areaOfLife?.finance.score || 82 },
+      { label: "HEALTH & VITALITY", value: areaOfLife?.health.status || "Robust", percent: areaOfLife?.health.score || 85 }
     ]
   };
 
@@ -99,8 +112,8 @@ export default function DailyHoroscope() {
 
       <div className="container mx-auto relative z-10 max-w-6xl">
 
-        {/* Header & Tabs */}
-        <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end mb-4 md:mb-6 gap-3 md:gap-4">
+        {/* Header & CTA Link */}
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-4 md:mb-6 gap-3 md:gap-4">
           <div>
             <span className="text-[#F6971E] font-bold font-helvetica tracking-wider uppercase text-[10px] sm:text-xs mb-1 block">
               YOUR DAILY HOROSCOPE
@@ -109,9 +122,12 @@ export default function DailyHoroscope() {
               Your daily <span className="text-[#F6971E]">horoscope</span> reading
             </h2>
             <p className="text-[#6b6b6b] font-helvetica text-xs sm:text-sm md:text-[15px]">
-              Pick your raashi to see today's pillars at a glance.
+              Pick your raashi to see today&apos;s pillars at a glance.
             </p>
           </div>
+          <Link href="/horoscope/daily-horoscope" className="flex-shrink-0 flex items-center gap-1.5 bg-white border border-[#F6971E] text-[#F6971E] font-bold font-helvetica py-2 px-5 rounded-full hover:bg-[#F6971E] hover:text-white transition-all shadow-xs text-xs sm:text-sm">
+            View full horoscope <BsArrowRight className="text-sm" />
+          </Link>
         </div>
 
         {/* Zodiac Selector (Horizontal Scrollable) */}
@@ -125,10 +141,13 @@ export default function DailyHoroscope() {
             const Icon = sign.icon;
             const isActive = activeSign.id === sign.id;
             return (
-              <button
+              <Link
                 key={sign.id}
+                href={`/horoscope/daily-horoscope/${sign.id}`}
+                onMouseEnter={() => setActiveSign(sign)}
                 onClick={() => setActiveSign(sign)}
-                className={`flex-shrink-0 flex flex-col items-center justify-center w-18 sm:w-20 md:w-22 h-22 sm:h-24 md:h-26 rounded-xl border transition-all duration-300 ${isActive
+                title={`View daily horoscope for ${sign.name} (${sign.hindiName})`}
+                className={`flex-shrink-0 flex flex-col items-center justify-center w-18 sm:w-20 md:w-22 h-22 sm:h-24 md:h-26 rounded-xl border transition-all duration-300 cursor-pointer ${isActive
                   ? 'bg-gradient-to-b from-[#FEF8E2] to-white border-[#F6971E] shadow-[0_6px_16px_rgba(246,151,30,0.15)] -translate-y-1'
                   : 'bg-white border-gray-100 shadow-xs hover:border-[#F6971E]/30 hover:-translate-y-0.5'
                   }`}
@@ -143,11 +162,116 @@ export default function DailyHoroscope() {
                 <span className="text-[9px] text-gray-400 uppercase tracking-wide">
                   {sign.hindiName}
                 </span>
-              </button>
+              </Link>
             );
           })}
         </div>
 
+        {/* Selected Sign Detailed Horoscope Reading Card */}
+        <div className="mt-4 sm:mt-5 bg-white rounded-2xl sm:rounded-3xl border border-[#F6971E]/20 shadow-[0_10px_35px_rgba(0,0,0,0.04)] p-4 sm:p-6 md:p-7 transition-all duration-500">
+          <div className="flex flex-col lg:flex-row gap-5 lg:gap-8 items-stretch justify-between">
+
+            {/* Left: Sign Info, Prediction Text & Lucky Matrix */}
+            <div className="w-full lg:w-[58%] flex flex-col justify-between space-y-3.5">
+              {/* Header Badge & Title */}
+              <div className="flex items-center gap-3">
+                <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-gradient-to-br from-[#FEF8E2] to-[#FFF3D6] border border-[#F6971E]/30 flex items-center justify-center text-[#F6971E] shadow-xs flex-shrink-0">
+                  <ActiveIcon className="text-2xl sm:text-3xl" />
+                </div>
+                <div>
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <h3 className="text-lg sm:text-2xl font-bold font-['Inria_Serif'] text-[#4A2B23]">
+                      {activeSign.name}
+                    </h3>
+                    <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-orange-50 text-[#F6971E] border border-orange-200/60">
+                      {activeSign.hindiName}
+                    </span>
+                    <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-amber-100/80 text-[#72271E]">
+                      Score: {horoscopeData.overallScore}% ({horoscopeData.overallGrade})
+                    </span>
+                  </div>
+                  <p className="text-xs text-[#F6971E] font-bold">
+                    Today&apos;s Cosmic Overview &bull; {activeSign.date}
+                  </p>
+                </div>
+              </div>
+
+              {/* Prediction Text */}
+              <p className="text-gray-600 font-helvetica text-xs sm:text-sm md:text-[14px] leading-relaxed">
+                {horoscopeData.text}
+              </p>
+
+              {/* Lucky Matrix Pills */}
+              <div className="flex flex-wrap items-center gap-2 pt-1 border-t border-gray-100">
+                <div className="px-3 py-1 rounded-full bg-orange-50/70 border border-orange-200/50 text-xs font-semibold text-[#72271E] flex items-center gap-1.5">
+                  <span className="text-gray-400">Number:</span>
+                  <span className="text-[#F6971E] font-bold">{horoscopeData.luckyNumber}</span>
+                </div>
+                <div className="px-3 py-1 rounded-full bg-orange-50/70 border border-orange-200/50 text-xs font-semibold text-[#72271E] flex items-center gap-1.5">
+                  <span className="text-gray-400">Color:</span>
+                  <span className="w-2.5 h-2.5 rounded-full inline-block bg-[#F6971E]"></span>
+                  <span className="text-[#4A2B23] font-bold">{horoscopeData.color}</span>
+                </div>
+                <div className="px-3 py-1 rounded-full bg-orange-50/70 border border-orange-200/50 text-xs font-semibold text-[#72271E] flex items-center gap-1.5">
+                  <span className="text-gray-400">Stone:</span>
+                  <span className="text-[#F6971E] font-bold">{horoscopeData.stone}</span>
+                </div>
+                <div className="px-3 py-1 rounded-full bg-orange-50/70 border border-orange-200/50 text-xs font-semibold text-[#72271E] flex items-center gap-1.5">
+                  <span className="text-gray-400">Time:</span>
+                  <span className="text-[#4A2B23] font-bold">{horoscopeData.favorableTime}</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Right: 4 Life Pillars & Action CTAs */}
+            <div className="w-full lg:w-[42%] flex flex-col justify-between bg-[#FFFDF9] rounded-2xl border border-orange-100/80 p-4 sm:p-5 space-y-3.5">
+              <div className="flex items-center justify-between border-b border-gray-100 pb-2">
+                <h4 className="text-xs sm:text-sm font-bold uppercase tracking-wider text-[#4A2B23] font-['Inria_Serif']">
+                  Today&apos;s Life Pillars
+                </h4>
+                <span className="text-[11px] font-semibold text-[#F6971E]">
+                  {horoscopeData.overallGrade}
+                </span>
+              </div>
+
+              {/* Metrics Progress Bars */}
+              <div className="space-y-2.5">
+                {horoscopeData.metrics.map((metric, idx) => (
+                  <div key={idx} className="space-y-1">
+                    <div className="flex justify-between items-center text-xs">
+                      <span className="text-gray-500 font-semibold font-helvetica text-[11px] sm:text-xs">{metric.label}</span>
+                      <span className="text-[#4A2B23] font-bold text-[11px] sm:text-xs">{metric.value} ({metric.percent}%)</span>
+                    </div>
+                    <div className="w-full bg-gray-200/60 h-2 rounded-full overflow-hidden">
+                      <div
+                        className="bg-gradient-to-r from-[#F6971E] to-[#FFA733] h-full rounded-full transition-all duration-1000 ease-out"
+                        style={{ width: animateProgress ? `${metric.percent}%` : '0%' }}
+                      />
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Action Buttons */}
+              <div className="pt-2 flex flex-col sm:flex-row gap-2">
+                <button
+                  onClick={openPopup}
+                  className="flex-1 bg-gradient-to-r from-[#F6971E] to-[#FFA733] hover:from-[#FFA733] hover:to-[#F6971E] text-white font-bold text-xs sm:text-sm py-2 px-3.5 rounded-xl shadow-xs transition-all text-center cursor-pointer"
+                >
+                  Consult Astrologer
+                </button>
+                <Link
+                  href={`/horoscope/daily-horoscope/${activeSign.id}`}
+                  className="flex-1 bg-white border border-[#F6971E] text-[#F6971E] hover:bg-[#F6971E] hover:text-white font-bold text-xs sm:text-sm py-2 px-3.5 rounded-xl transition-all text-center flex items-center justify-center gap-1 shadow-2xs"
+                >
+                  <span>View in detail</span>
+                  <BsArrowRight className="text-xs" />
+                </Link>
+              </div>
+            </div>
+
+          </div>
+        </div>
 
       </div>
 

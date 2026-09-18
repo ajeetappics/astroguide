@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { usePopup } from '../popup/PopupContext';
 
 interface ServiceCardProps {
@@ -9,16 +10,14 @@ interface ServiceCardProps {
   title: string;
   description: string;
   isActive?: boolean;
+  href?: string;
 }
 
-export default function ServiceCard({ icon, title, description, isActive = false }: ServiceCardProps) {
+export default function ServiceCard({ icon, title, description, isActive = false, href }: ServiceCardProps) {
   const { openPopup } = usePopup();
 
-  return (
-    <div
-      onClick={openPopup}
-      className={`cursor-pointer group flex flex-col items-center justify-center gap-1.5 sm:gap-2 md:gap-3 transition-all duration-300 ${isActive ? 'scale-105' : 'hover:-translate-y-1'}`}
-    >
+  const cardContent = (
+    <>
       <div className={`w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 lg:w-20 lg:h-20 xl:w-24 xl:h-24 rounded-full flex items-center justify-center bg-white shadow-[0_4px_15px_rgba(0,0,0,0.06)] border ${isActive ? 'border-[#F6971E] shadow-[0_4px_20px_rgba(246,151,30,0.2)]' : 'border-[#F6971E]/20'} group-hover:border-[#F6971E] transition-all duration-300 group-hover:shadow-[0_8px_25px_rgba(246,151,30,0.15)]`}>
         <Image
           src={icon}
@@ -32,6 +31,22 @@ export default function ServiceCard({ icon, title, description, isActive = false
       <h3 className={`text-xs sm:text-xs md:text-sm font-bold text-center transition-colors font-helvetica leading-tight ${isActive ? 'text-[#F6971E]' : 'text-[#72271E] group-hover:text-[#F6971E]'}`}>
         {title}
       </h3>
+    </>
+  );
+
+  const containerClasses = `cursor-pointer group flex flex-col items-center justify-center gap-1.5 sm:gap-2 md:gap-3 transition-all duration-300 ${isActive ? 'scale-105' : 'hover:-translate-y-1'}`;
+
+  if (href) {
+    return (
+      <Link href={href} className={containerClasses}>
+        {cardContent}
+      </Link>
+    );
+  }
+
+  return (
+    <div onClick={openPopup} className={containerClasses}>
+      {cardContent}
     </div>
   );
 }

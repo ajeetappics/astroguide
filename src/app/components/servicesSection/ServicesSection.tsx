@@ -13,7 +13,8 @@ const servicesData = [
     icon: "/images/zodiac.svg",
     title: "Daily Horoscope",
     description: "Get insights into your day based on your zodiac sign movements.",
-    actionText: "Check Now"
+    actionText: "Check Now",
+    href: "/horoscope/daily-horoscope"
   },
   {
     icon: "/images/kundli.svg",
@@ -55,13 +56,15 @@ const servicesData = [
     icon: "/images/poojaIcon.svg",
     title: "Pooja",
     description: "Perform sacred rituals for peace, prosperity and spiritual growth.",
-    actionText: "Book Now"
+    actionText: "Book Now",
+    href: "/pooja"
   },
   {
     icon: "/images/spellIcon.svg",
     title: "Spell",
     description: "Ancient spells and remedies to overcome life's obstacles.",
-    actionText: "View Now"
+    actionText: "View Now",
+    href: "/spell"
   }
 ];
 
@@ -122,6 +125,7 @@ export default function ServicesSection() {
                   icon={service.icon}
                   title={service.title}
                   description={service.description}
+                  href={service.href}
                 />
               </div>
             ))}

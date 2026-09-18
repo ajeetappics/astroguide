@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Image from 'next/image';
-import { usePopup } from '../popup/PopupContext';
+import Link from 'next/link';
 
 const categoryData = [
   {
@@ -50,7 +50,6 @@ const categoryData = [
 ];
 
 export default function BrowseCategory() {
-  const { openPopup } = usePopup();
 
   return (
     <section className="bg-[#fdf7e1] py-5 md:py-8 relative overflow-hidden">
@@ -93,8 +92,8 @@ export default function BrowseCategory() {
           >
             {categoryData.map((category) => (
               <div key={category.id} className="flex-none w-20 sm:w-24 md:w-28 lg:w-32">
-                <div
-                  onClick={openPopup}
+                <Link
+                  href={`/astrologers/category/${encodeURIComponent(category.title.toLowerCase())}`}
                   className="cursor-pointer group flex flex-col items-center justify-center gap-2 sm:gap-2.5 transition-all duration-300 hover:-translate-y-1"
                 >
                   <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 rounded-full flex items-center justify-center bg-white shadow-[0_4px_15px_rgba(0,0,0,0.06)] border border-[#F6971E]/20 group-hover:border-[#F6971E] transition-all duration-300 group-hover:shadow-[0_8px_25px_rgba(246,151,30,0.15)]">
@@ -110,7 +109,7 @@ export default function BrowseCategory() {
                   <h3 className="text-xs sm:text-sm md:text-base font-bold text-center text-[#72271E] group-hover:text-[#F6971E] transition-colors font-helvetica">
                     {category.title}
                   </h3>
-                </div>
+                </Link>
               </div>
             ))}
           </div>
