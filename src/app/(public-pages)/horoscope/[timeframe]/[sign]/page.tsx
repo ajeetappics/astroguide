@@ -118,11 +118,10 @@ export default function SignHoroscopeDetailPage() {
                 <Link
                   key={tf.slug}
                   href={`/horoscope/${tf.slug}/${signData.id}`}
-                  className={`px-3.5 sm:px-5 py-1.5 sm:py-2 rounded-xl sm:rounded-full text-xs sm:text-sm font-bold transition-all cursor-pointer ${
-                    isActive
+                  className={`px-3.5 sm:px-5 py-1.5 sm:py-2 rounded-xl sm:rounded-full text-xs sm:text-sm font-bold transition-all cursor-pointer ${isActive
                       ? 'bg-gradient-to-r from-[#F6971E] to-[#FFA733] text-white shadow-xs'
                       : 'text-[#4A2B23] hover:bg-orange-50 hover:text-[#F6971E]'
-                  }`}
+                    }`}
                 >
                   {tf.label}
                 </Link>
@@ -204,7 +203,10 @@ export default function SignHoroscopeDetailPage() {
                   <BsPaletteFill className="text-xs text-[#F6971E]" />
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="w-3 h-3 rounded-full flex-shrink-0 bg-[#F6971E]"></span>
+                  <span
+                    className="w-3.5 h-3.5 rounded-full flex-shrink-0 border border-black/15 shadow-xs"
+                    style={{ backgroundColor: luckyToday.colorCode || '#F6971E' }}
+                  />
                   <span className="text-xs sm:text-[13px] font-bold text-[#4A2B23] line-clamp-1">
                     {luckyToday.color}
                   </span>
@@ -358,15 +360,13 @@ export default function SignHoroscopeDetailPage() {
                 <Link
                   key={otherSign.id}
                   href={`/horoscope/${timeframe.slug}/${otherSign.id}`}
-                  className={`group flex flex-col items-center justify-center p-3 rounded-2xl border transition-all ${
-                    isCurrent
+                  className={`group flex flex-col items-center justify-center p-3 rounded-2xl border transition-all ${isCurrent
                       ? 'bg-orange-50 border-[#F6971E] shadow-2xs pointer-events-none'
                       : 'bg-white border-gray-100 hover:border-[#F6971E]/50 hover:shadow-xs hover:-translate-y-0.5'
-                  }`}
+                    }`}
                 >
-                  <div className={`w-10 h-10 rounded-xl flex items-center justify-center mb-1.5 transition-all ${
-                    isCurrent ? 'bg-[#F6971E] text-white' : 'bg-orange-50/70 text-[#F6971E] group-hover:bg-[#F6971E] group-hover:text-white'
-                  }`}>
+                  <div className={`w-10 h-10 rounded-xl flex items-center justify-center mb-1.5 transition-all ${isCurrent ? 'bg-[#F6971E] text-white' : 'bg-orange-50/70 text-[#F6971E] group-hover:bg-[#F6971E] group-hover:text-white'
+                    }`}>
                     <OtherIcon className="text-xl" />
                   </div>
                   <span className="font-bold text-xs text-[#4A2B23] text-center">

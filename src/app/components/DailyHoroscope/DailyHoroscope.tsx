@@ -88,6 +88,7 @@ export default function DailyHoroscope() {
     mood: luckyToday.mood,
     luckyNumber: luckyToday.number,
     color: luckyToday.color,
+    colorCode: (luckyToday as any).colorCode || "#F6971E",
     stone: luckyToday.stone,
     symbol: luckyToday.symbol,
     favorableTime: luckyToday.auspiciousTime,
@@ -209,7 +210,10 @@ export default function DailyHoroscope() {
                 </div>
                 <div className="px-3 py-1 rounded-full bg-orange-50/70 border border-orange-200/50 text-xs font-semibold text-[#72271E] flex items-center gap-1.5">
                   <span className="text-gray-400">Color:</span>
-                  <span className="w-2.5 h-2.5 rounded-full inline-block bg-[#F6971E]"></span>
+                  <span
+                    className="w-2.5 h-2.5 rounded-full inline-block border border-black/15 shadow-xs flex-shrink-0"
+                    style={{ backgroundColor: horoscopeData.colorCode }}
+                  />
                   <span className="text-[#4A2B23] font-bold">{horoscopeData.color}</span>
                 </div>
                 <div className="px-3 py-1 rounded-full bg-orange-50/70 border border-orange-200/50 text-xs font-semibold text-[#72271E] flex items-center gap-1.5">

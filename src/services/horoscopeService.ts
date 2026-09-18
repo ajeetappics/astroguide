@@ -2,6 +2,7 @@ import rawHoroscopeData from '../data/horoscopeData.json';
 
 export interface LuckyToday {
   color: string;
+  colorCode?: string;
   number: number;
   mood: string;
   symbol: string;

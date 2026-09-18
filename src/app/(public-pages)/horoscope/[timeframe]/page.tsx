@@ -164,8 +164,11 @@ export default function TimeframeHoroscopePage() {
                   {/* Quick Lucky Factor Pill */}
                   {signData && (
                     <div className="flex items-center justify-between text-[11px] bg-[#FFFDF9] border border-orange-100 rounded-xl px-2.5 py-1.5 mb-3.5">
-                      <div className="flex items-center gap-1 text-gray-500">
-                        <BsPaletteFill className="text-[#F6971E] text-[10px]" />
+                      <div className="flex items-center gap-1.5 text-gray-500">
+                        <span
+                          className="w-2 h-2 rounded-full inline-block flex-shrink-0 border border-black/15 shadow-xs"
+                          style={{ backgroundColor: signData.luckyToday.colorCode || '#F6971E' }}
+                        />
                         <span className="truncate max-w-[85px]">{signData.luckyToday.color}</span>
                       </div>
                       <div className="flex items-center gap-1 text-gray-500">

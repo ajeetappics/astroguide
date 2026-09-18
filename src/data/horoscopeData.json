@@ -12,6 +12,7 @@
       "overview": "Cosmic energies bring high dynamic drive and leadership potential today. The Moon transit favors swift problem-solving and decisive career moves.",
       "luckyToday": {
         "color": "Coral Red",
+        "colorCode": "#E53E3E",
         "number": 9,
         "mood": "Confident & Resilient",
         "symbol": "The Ram (♈)",
@@ -45,6 +46,7 @@
       "overview": "Venus bestows creative brilliance and aesthetic satisfaction today. Your methodical patience ensures financial and interpersonal stability.",
       "luckyToday": {
         "color": "Lotus Pink",
+        "colorCode": "#EC4899",
         "number": 6,
         "mood": "Peaceful & Grounded",
         "symbol": "The Bull (♉)",
@@ -78,6 +80,7 @@
       "overview": "Mercury activates your communicative eloquence and mental agility. Ideal day for negotiating deals, learning new skills, and networking.",
       "luckyToday": {
         "color": "Emerald Green",
+        "colorCode": "#10B981",
         "number": 5,
         "mood": "Curious & Expressive",
         "symbol": "The Twins (♊)",
@@ -111,6 +114,7 @@
       "overview": "The Moon enhances your intuitive perception and emotional intelligence. Domestic matters and inner reflections bring deep fulfillment.",
       "luckyToday": {
         "color": "Pearl White",
+        "colorCode": "#CBD5E1",
         "number": 2,
         "mood": "Intuitive & Caring",
         "symbol": "The Crab (♋)",
@@ -144,6 +148,7 @@
       "overview": "The Sun illuminates your charisma, self-assurance, and creative spark. Step forward into the spotlight to inspire colleagues and loved ones.",
       "luckyToday": {
         "color": "Golden Saffron",
+        "colorCode": "#F59E0B",
         "number": 1,
         "mood": "Radiant & Magnanimous",
         "symbol": "The Lion (♌)",
@@ -177,6 +182,7 @@
       "overview": "Mercury sharpens your attention to detail and practical discernment. Organize complex tasks and implement systematic improvements today.",
       "luckyToday": {
         "color": "Forest Green",
+        "colorCode": "#15803D",
         "number": 5,
         "mood": "Discerning & Productive",
         "symbol": "The Maiden (♍)",
@@ -210,6 +216,7 @@
       "overview": "Venus grants balance, diplomatic charm, and aesthetic grace today. Ideal transit for partnership negotiations, mediation, and creative arts.",
       "luckyToday": {
         "color": "Sky Blue",
+        "colorCode": "#0EA5E9",
         "number": 6,
         "mood": "Balanced & Harmonious",
         "symbol": "The Scales (♎)",
@@ -243,6 +250,7 @@
       "overview": "Deep transformative planetary energies empower your focus and willpower. Unravel hidden truths and execute strategies with unwavering conviction.",
       "luckyToday": {
         "color": "Deep Maroon",
+        "colorCode": "#991B1B",
         "number": 8,
         "mood": "Determined & Intense",
         "symbol": "The Scorpion (♏)",
@@ -276,6 +284,7 @@
       "overview": "Jupiter expands your optimism, philosophical wisdom, and visionary horizons. Fortune favors bold ethical endeavors and higher education goals.",
       "luckyToday": {
         "color": "Bright Saffron",
+        "colorCode": "#F97316",
         "number": 3,
         "mood": "Optimistic & Philosophical",
         "symbol": "The Archer (♐)",
@@ -309,6 +318,7 @@
       "overview": "Saturn rewards disciplined patience, pragmatic organization, and perseverance. Professional responsibility unlocks long-lasting accomplishments.",
       "luckyToday": {
         "color": "Charcoal Black / Navy",
+        "colorCode": "#1E293B",
         "number": 8,
         "mood": "Composed & Disciplined",
         "symbol": "The Sea-Goat (♑)",
@@ -342,6 +352,7 @@
       "overview": "Planetary transits ignite visionary innovations and humanitarian collaborations. Out-of-the-box thinking solves tricky longstanding bottlenecks.",
       "luckyToday": {
         "color": "Electric Cyan",
+        "colorCode": "#06B6D4",
         "number": 4,
         "mood": "Innovative & Free-Spirited",
         "symbol": "The Water-Bearer (♒)",
@@ -375,6 +386,7 @@
       "overview": "Jupiter awakens divine compassion, artistic imagination, and spiritual peace. Trust your sixth sense in personal and professional situations.",
       "luckyToday": {
         "color": "Sea Green / Pale Gold",
+        "colorCode": "#14B8A6",
         "number": 3,
         "mood": "Imaginative & Compassionate",
         "symbol": "The Fishes (♓)",
