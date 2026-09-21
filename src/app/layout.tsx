@@ -110,12 +110,6 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <head>
-        <link rel="preconnect" href="https://storage.googleapis.com" crossOrigin="anonymous" />
-        <link rel="dns-prefetch" href="https://storage.googleapis.com" />
-        <link rel="preconnect" href="https://atsro-vani-prod-v1.s3.ap-south-1.amazonaws.com" crossOrigin="anonymous" />
-        <link rel="dns-prefetch" href="https://atsro-vani-prod-v1.s3.ap-south-1.amazonaws.com" />
-      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${inriaSerif.variable} ${ingridDarling.variable} ${helvetica.variable} antialiased`}
         suppressHydrationWarning

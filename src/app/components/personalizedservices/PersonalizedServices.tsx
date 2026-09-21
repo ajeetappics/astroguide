@@ -48,8 +48,6 @@ export default function PersonalizedServices() {
                       </div>
                   </div>
               </div>
-
-
         </div>
 
         <div className="relative z-10 container mx-auto max-w-6xl">
