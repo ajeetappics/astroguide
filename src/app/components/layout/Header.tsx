@@ -58,6 +58,7 @@ export default function Header() {
                                     src={astrovaniLogo}
                                     alt="Balaji Astro Guide Logo"
                                     fill
+                                    sizes="160px"
                                     className="object-contain object-left"
                                     priority
                                 />
