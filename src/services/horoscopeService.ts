@@ -62,13 +62,13 @@ export interface TimeframeConfig {
 }
 
 export const TIMEFRAMES: TimeframeConfig[] = [
-  {
-    slug: 'yesterday-horoscope',
-    label: 'Yesterday',
-    title: "Yesterday's Horoscope",
-    subTitle: 'Review of celestial transits and their energetic outcomes',
-    periodDescription: 'Vedic planetary review for Yesterday.'
-  },
+  // {
+  //   slug: 'yesterday-horoscope',
+  //   label: 'Yesterday',
+  //   title: "Yesterday's Horoscope",
+  //   subTitle: 'Review of celestial transits and their energetic outcomes',
+  //   periodDescription: 'Vedic planetary review for Yesterday.'
+  // },
   {
     slug: 'daily-horoscope',
     label: 'Daily',
@@ -76,13 +76,13 @@ export const TIMEFRAMES: TimeframeConfig[] = [
     subTitle: 'Ancient Vedic Wisdom • Daily Mid-Night Gochar Updates',
     periodDescription: 'Vedic astrology forecast for Today.'
   },
-  {
-    slug: 'tomorrow-horoscope',
-    label: 'Tomorrow',
-    title: "Tomorrow's Horoscope",
-    subTitle: 'Plan ahead with upcoming lunar & planetary transits',
-    periodDescription: 'Advance Vedic guidance for Tomorrow.'
-  },
+  // {
+  //   slug: 'tomorrow-horoscope',
+  //   label: 'Tomorrow',
+  //   title: "Tomorrow's Horoscope",
+  //   subTitle: 'Plan ahead with upcoming lunar & planetary transits',
+  //   periodDescription: 'Advance Vedic guidance for Tomorrow.'
+  // },
   {
     slug: 'weekly-horoscope',
     label: 'Weekly',
@@ -139,13 +139,14 @@ export function getSignHoroscope(signId: string): SignHoroscope | undefined {
 }
 
 export function getTimeframeConfig(rawSlug?: string): TimeframeConfig {
-  if (!rawSlug) return TIMEFRAMES[1]; // default to daily-horoscope
+  const dailyDefault = TIMEFRAMES.find(t => t.slug === 'daily-horoscope') || TIMEFRAMES[0];
+  if (!rawSlug) return dailyDefault;
   const slug = rawSlug.toLowerCase().trim();
   if (slug === 'today' || slug === 'today-horoscope' || slug === 'daily') {
-    return TIMEFRAMES[1];
+    return dailyDefault;
   }
   const found = TIMEFRAMES.find(t => t.slug === slug);
-  return found || TIMEFRAMES[1];
+  return found || dailyDefault;
 }
 
 export function isValidTimeframe(slug: string): boolean {
@@ -164,11 +165,12 @@ export function getSignHoroscopeForTimeframe(
   const tf = getTimeframeConfig(timeframeSlug);
 
   let overview = sign.overview;
-  if (tf.slug === 'tomorrow-horoscope') {
-    overview = `Looking ahead to tomorrow, planetary transits favor preparation, proactive communication, and strategic planning for ${sign.name} (${sign.hindiName}). Celestial alignment under ${sign.ruler} indicates renewed drive and clarity for your immediate goals.`;
-  } else if (tf.slug === 'yesterday-horoscope') {
-    overview = `Reflecting on yesterday's cosmic influences, ${sign.name} (${sign.hindiName}) experienced transits led by ${sign.ruler} that brought foundational lessons and closed pending cycles. Take forward the insights gained.`;
-  } else if (tf.slug === 'weekly-horoscope') {
+  // if (tf.slug === 'tomorrow-horoscope') {
+  //   overview = `Looking ahead to tomorrow, planetary transits favor preparation, proactive communication, and strategic planning for ${sign.name} (${sign.hindiName}). Celestial alignment under ${sign.ruler} indicates renewed drive and clarity for your immediate goals.`;
+  // } else if (tf.slug === 'yesterday-horoscope') {
+  //   overview = `Reflecting on yesterday's cosmic influences, ${sign.name} (${sign.hindiName}) experienced transits led by ${sign.ruler} that brought foundational lessons and closed pending cycles. Take forward the insights gained.`;
+  // } else 
+  if (tf.slug === 'weekly-horoscope') {
     overview = `Throughout this week, ${sign.name} (${sign.hindiName}) navigates a dynamic celestial cycle. Influence of ${sign.ruler} brings pivotal opportunities in work, relationships, and financial ventures. Trust your disciplined instincts.`;
   } else if (tf.slug === 'monthly-horoscope') {
     overview = `This month highlights expansive growth and stability for ${sign.name} (${sign.hindiName}). Key transits under ${sign.ruler} support long-term commitments, investments, and domestic harmony.`;

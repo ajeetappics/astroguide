@@ -298,9 +298,9 @@ export default function Footer() {
             <Link href="/pooja" className="hover:text-[#F6971E] hover:underline transition-colors">Pooja</Link>
             <Link href="/spell" className="hover:text-[#F6971E] hover:underline transition-colors">Spells</Link>
             <Link href="/blog" className="hover:text-[#F6971E] hover:underline transition-colors">Blog</Link>
-            <Link href="/privacy-policy" target="_blank" className="hover:text-[#F6971E] hover:underline transition-colors">Privacy Policy</Link>
+            {/* <Link href="/privacy-policy" target="_blank" className="hover:text-[#F6971E] hover:underline transition-colors">Privacy Policy</Link>
             <Link href="/terms-of-service" target="_blank" className="hover:text-[#F6971E] hover:underline transition-colors">Terms of Service</Link>
-            <Link href="/refund-policy" target="_blank" className="hover:text-[#F6971E] hover:underline transition-colors">Refund Policy</Link>
+            <Link href="/refund-policy" target="_blank" className="hover:text-[#F6971E] hover:underline transition-colors">Refund Policy</Link> */}
             <Link href="/contact-us" target="_blank" className="hover:text-[#F6971E] hover:underline transition-colors">Contact Us</Link>
           </div>
         </div>

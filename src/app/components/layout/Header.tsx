@@ -14,8 +14,8 @@ const ASTROLOGER_URL = (process.env.NEXT_PUBLIC_ASTROLOGER_URL && process.env.NE
 
 const horoscopeMenuItems = [
   { label: 'Daily Horoscope', href: '/horoscope/daily-horoscope' },
-  { label: "Tomorrow's Horoscope", href: '/horoscope/tomorrow-horoscope' },
-  { label: "Yesterday's Horoscope", href: '/horoscope/yesterday-horoscope' },
+  // { label: "Tomorrow's Horoscope", href: '/horoscope/tomorrow-horoscope' },
+  // { label: "Yesterday's Horoscope", href: '/horoscope/yesterday-horoscope' },
   { label: 'Weekly Horoscope', href: '/horoscope/weekly-horoscope' },
   { label: 'Monthly Horoscope', href: '/horoscope/monthly-horoscope' },
   { label: 'Yearly Horoscope', href: '/horoscope/yearly-horoscope' },
