@@ -8,6 +8,7 @@ import apple_store from '@/assets/images/apple_store.svg';
 import google_store from '@/assets/images/google_store.svg';
 import { usePopup } from '../popup/PopupContext';
 import Image from 'next/image';
+import { pujaData } from '../PoojaSection/PoojaSection';
 
 export default function Footer() {
   const { openPopup } = usePopup();
@@ -228,32 +229,22 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* 4. Free Services */}
+          {/* 4. Top Poojas */}
           <div>
             <h2 className="mb-3.5 sm:mb-4 text-sm sm:text-md font-bold font-['Inria_Serif'] text-[#72271E] uppercase tracking-wider text-left">
-              Free Services
+              Top Poojas
             </h2>
             <ul className="space-y-2.5 sm:space-y-3 font-helvetica text-[#5C5C5C] text-left text-xs sm:text-sm">
-              <li>
-                <button onClick={openPopup} className="hover:text-[#F6971E] hover:underline text-left block cursor-pointer transition-colors w-full">
-                  Free Kundli
-                </button>
-              </li>
-              <li>
-                <button onClick={openPopup} className="hover:text-[#F6971E] hover:underline text-left block cursor-pointer transition-colors w-full">
-                  Match Making
-                </button>
-              </li>
-              <li>
-                <button onClick={openPopup} className="hover:text-[#F6971E] hover:underline text-left block cursor-pointer transition-colors w-full">
-                  Baby Kundli Generator
-                </button>
-              </li>
-              <li>
-                <button onClick={openPopup} className="hover:text-[#F6971E] hover:underline text-left block cursor-pointer transition-colors w-full">
-                  Numerology
-                </button>
-              </li>
+              {pujaData.slice(0, 6).map((pooja) => (
+                <li key={pooja.id}>
+                  <Link
+                    href={`/pooja/${pooja.id}`}
+                    className="hover:text-[#F6971E] hover:underline text-left block transition-colors"
+                  >
+                    {pooja.title}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
 
