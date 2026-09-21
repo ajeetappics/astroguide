@@ -3,7 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { FaFacebookF, FaInstagram, FaYoutube } from 'react-icons/fa';
-import mainLogo from '@/assets/images/logo.svg';
+import mainLogo from '@/assets/images/logo_new.png';
 import apple_store from '@/assets/images/apple_store.svg';
 import google_store from '@/assets/images/google_store.svg';
 import { usePopup } from '../popup/PopupContext';

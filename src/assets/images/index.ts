@@ -1,10 +1,10 @@
-export { default as mainLogo } from "./logo.svg";
+export { default as mainLogo } from "./logo_new.png";
 export { default as userImage } from "./user-image.webp";
 export { default as lineStyle } from "./Line.svg";
 export { default as backgroundImg } from "./background-img.svg";
 export { default as welcomeImage } from "./ImageWithFallback.png";
 export { default as thankyoImage } from "./ImageWithFallback2.png";
-export { default as astrovaniLogo } from "./astrovani-logo.svg";
+export { default as astrovaniLogo } from "./astrovani-logo_new.png";
 export { default as fullLogo } from "./main-logo.svg";
 export { default as SecurePayments } from "./SecurePayments.png";
 export { default as VerifiedAstrologers } from "./VerifiedAstrologers.png";
