@@ -114,32 +114,32 @@ export default function Footer() {
             <ul className="space-y-2.5 sm:space-y-3 font-helvetica text-[#5C5C5C] text-left text-xs sm:text-sm">
               <li>
                 <Link href="/horoscope/daily-horoscope" className="hover:text-[#F6971E] hover:underline text-left block transition-colors">
-                  Daily horoscope
+                  Daily Horoscope
                 </Link>
               </li>
               <li>
                 <Link href="/horoscope/weekly-horoscope" className="hover:text-[#F6971E] hover:underline text-left block transition-colors">
-                  Weekly horoscope
+                  Weekly Horoscope
                 </Link>
               </li>
               <li>
                 <Link href="/horoscope/monthly-horoscope" className="hover:text-[#F6971E] hover:underline text-left block transition-colors">
-                  Monthly horoscope
+                  Monthly Horoscope
                 </Link>
               </li>
               <li>
                 <Link href="/horoscope/yearly-horoscope" className="hover:text-[#F6971E] hover:underline text-left block transition-colors">
-                  Yearly horoscope
+                  Yearly Horoscope
                 </Link>
               </li>
               <li>
                 <button onClick={openPopup} className="hover:text-[#F6971E] hover:underline text-left block cursor-pointer transition-colors w-full">
-                  Love horoscope
+                  Love Horoscope
                 </button>
               </li>
               <li>
                 <button onClick={openPopup} className="hover:text-[#F6971E] hover:underline text-left block cursor-pointer transition-colors w-full">
-                  Finance horoscope
+                  Finance Horoscope
                 </button>
               </li>
               <li>
@@ -207,7 +207,7 @@ export default function Footer() {
             <ul className="space-y-2.5 sm:space-y-3 font-helvetica text-[#5C5C5C] text-left text-xs sm:text-sm">
               <li>
                 <button onClick={openPopup} className="hover:text-[#F6971E] hover:underline text-left block cursor-pointer transition-colors w-full">
-                  Today&apos;s panchang
+                  Today&apos;s Panchang
                 </button>
               </li>
               <li>
@@ -217,12 +217,12 @@ export default function Footer() {
               </li>
               <li>
                 <button onClick={openPopup} className="hover:text-[#F6971E] hover:underline text-left block cursor-pointer transition-colors w-full">
-                  Today choghadiya
+                  Today Choghadiya
                 </button>
               </li>
               <li>
                 <button onClick={openPopup} className="hover:text-[#F6971E] hover:underline text-left block cursor-pointer transition-colors w-full">
-                  Tommorrow Panchang
+                  Tomorrow Panchang
                 </button>
               </li>
             </ul>
@@ -241,7 +241,7 @@ export default function Footer() {
               </li>
               <li>
                 <button onClick={openPopup} className="hover:text-[#F6971E] hover:underline text-left block cursor-pointer transition-colors w-full">
-                  Match making
+                  Match Making
                 </button>
               </li>
               <li>
@@ -265,7 +265,7 @@ export default function Footer() {
             <ul className="space-y-2.5 sm:space-y-3 font-helvetica text-[#5C5C5C] text-left text-xs sm:text-sm">
               <li>
                 <Link href="/privacy-policy" target="_blank" className="hover:text-[#F6971E] hover:underline text-left block transition-colors">
-                  Privacy policy
+                  Privacy Policy
                 </Link>
               </li>
               <li>
@@ -275,12 +275,17 @@ export default function Footer() {
               </li>
               <li>
                 <Link href="/refund-policy" target="_blank" className="hover:text-[#F6971E] hover:underline text-left block transition-colors">
-                  Refund policy
+                  Refund Policy
                 </Link>
               </li>
               <li>
                 <Link href="/contact-us" target="_blank" className="hover:text-[#F6971E] hover:underline text-left block transition-colors">
-                  About US
+                  About Us
+                </Link>
+              </li>
+              <li>
+                <Link href="/sitemap.xml" target="_blank" className="hover:text-[#F6971E] hover:underline text-left block transition-colors">
+                  Sitemap
                 </Link>
               </li>
             </ul>
