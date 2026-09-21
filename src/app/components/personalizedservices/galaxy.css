@@ -24,7 +24,7 @@ body {
     width: 900px;
     height: 900px;
     position: absolute;
-    top: 50%;
+    top: 53%;
     right: 15%;
     transform: translate(50%, -50%);
 }
@@ -32,7 +32,7 @@ body {
 /* ------------ Orbits ------------ */
 .orbit {
     position: absolute;
-    top: 50%;
+    top: 53%;
     right: 20%;
     border-radius: 50%;
     transform: translate(50%, -50%) rotate(0deg);
@@ -74,6 +74,7 @@ body {
     height: 1300px;
     animation-duration: 100s;
 }
+
 /* ------------ Planets ------------ */
 .planet {
     position: absolute;
@@ -115,6 +116,7 @@ body {
     background-color: #fcb657;
     box-shadow: 0 0 25px rgba(255, 200, 100, 0.3);
 }
+
 /* ------------ Animations ------------ */
 @keyframes rotateOrbit {
     from {

@@ -88,6 +88,7 @@ export default function MainBanner() {
                       src={img}
                       alt={`Astrology Slide ${index + 1}`}
                       fill
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 55vw, 650px"
                       className="object-fill rounded-[10px]"
                       priority={index === 0}
                     />

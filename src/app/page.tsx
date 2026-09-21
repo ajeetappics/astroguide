@@ -15,7 +15,7 @@ import TrustSection from './components/TrustSection/TrustSection'
 
 function page() {
   return (
-    <div>
+    <main>
       <MainBanner />
       <ServicesSection />
       <AstrologerSection />
@@ -29,7 +29,7 @@ function page() {
       <Testimonials />
       <BlogSection />
       <TrustSection />
-    </div>
+    </main>
   )
 }
 

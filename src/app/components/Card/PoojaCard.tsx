@@ -2,7 +2,6 @@ import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { BsArrowRight } from 'react-icons/bs';
-import { BiMap } from 'react-icons/bi';
 import { usePopup } from '../popup/PopupContext';
 
 export interface PujaData {
@@ -35,6 +34,7 @@ export default function PoojaCard({ pooja, basePath = "/pooja" }: PoojaCardProps
           src={pooja.image}
           alt={pooja.title}
           fill
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 350px"
           className="object-cover transition-transform duration-700 group-hover:scale-105"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-[#4A1A14]/80 to-transparent"></div>

@@ -57,6 +57,7 @@ export default function AstrologerCard({ astro: astroProp, astrologer: astrologe
               src={astro.imageUrl}
               alt={astro.name}
               fill
+              sizes="110px"
               className="object-cover"
             />
 
@@ -143,6 +144,7 @@ export default function AstrologerCard({ astro: astroProp, astrologer: astrologe
             src={astro.imageUrl} 
             alt={astro.name} 
             fill 
+            sizes="(max-width: 1200px) 25vw, 280px"
             className="object-cover transition-transform duration-500 group-hover:scale-105"
           />
 

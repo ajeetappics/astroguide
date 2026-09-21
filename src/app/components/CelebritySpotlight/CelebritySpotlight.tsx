@@ -110,6 +110,7 @@ export default function CelebritySpotlight() {
                   src={item.thumbnail}
                   alt={item.title}
                   fill
+                  sizes="(max-width: 640px) 150px, (max-width: 1024px) 180px, 200px"
                   className="object-cover group-hover:scale-105 transition-transform duration-500"
                 />
                 <div className="absolute inset-0 bg-black/15 group-hover:bg-black/25 transition-colors duration-300" />

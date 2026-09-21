@@ -74,12 +74,14 @@ export default function Testimonials() {
           <div className="flex items-center gap-2 sm:gap-3">
             <button
               onClick={scrollLeft}
+              aria-label="Previous testimonial"
               className="w-8 h-8 sm:w-9 sm:h-9 rounded-full border border-[#4A2B23]/20 flex items-center justify-center text-[#4A2B23] hover:border-[#F6971E] hover:text-[#F6971E] hover:bg-[#F6971E]/5 transition-all shadow-xs cursor-pointer"
             >
               <BsChevronLeft className="text-xs sm:text-sm" />
             </button>
             <button
               onClick={scrollRight}
+              aria-label="Next testimonial"
               className="w-8 h-8 sm:w-9 sm:h-9 rounded-full border border-[#4A2B23]/20 flex items-center justify-center text-[#4A2B23] hover:border-[#F6971E] hover:text-[#F6971E] hover:bg-[#F6971E]/5 transition-all shadow-xs cursor-pointer"
             >
               <BsChevronRight className="text-xs sm:text-sm" />

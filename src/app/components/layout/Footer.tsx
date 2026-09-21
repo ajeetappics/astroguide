@@ -3,9 +3,11 @@
 import React from 'react';
 import Link from 'next/link';
 import { FaFacebookF, FaInstagram, FaYoutube } from 'react-icons/fa';
-import Image from 'next/image';
-import { apple_store, google_store, mainLogo } from '@/assets/images';
+import mainLogo from '@/assets/images/logo.svg';
+import apple_store from '@/assets/images/apple_store.svg';
+import google_store from '@/assets/images/google_store.svg';
 import { usePopup } from '../popup/PopupContext';
+import Image from 'next/image';
 
 export default function Footer() {
   const { openPopup } = usePopup();

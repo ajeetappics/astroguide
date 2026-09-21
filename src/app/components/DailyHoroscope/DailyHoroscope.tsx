@@ -248,9 +248,9 @@ export default function DailyHoroscope() {
                     </div>
                     <div className="w-full bg-gray-200/60 h-2 rounded-full overflow-hidden">
                       <div
-                        className="h-full rounded-full transition-all duration-1000 ease-out"
+                        className="h-full w-full rounded-full transition-transform duration-1000 ease-out origin-left will-change-transform"
                         style={{
-                          width: animateProgress ? `${metric.percent}%` : '0%',
+                          transform: `scaleX(${animateProgress ? metric.percent / 100 : 0})`,
                           background: `linear-gradient(to right, ${metric.barColorFrom || '#cb7e1aff'}, ${metric.barColorTo || '#FFA733'})`
                         }}
                       />

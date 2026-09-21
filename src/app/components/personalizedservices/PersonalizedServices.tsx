@@ -1,9 +1,7 @@
 import React from 'react';
-import Image from 'next/image';
-import'./galaxy.css';
+import './galaxy.css';
 
 import ServiceDetailCard from '../Card/ServiceDetailCard';
-import { backgroundImg } from '@/assets/images';
 
 const servicesListData = [
     {
