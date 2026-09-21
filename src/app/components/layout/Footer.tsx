@@ -133,7 +133,7 @@ export default function Footer() {
                   Yearly Horoscope
                 </Link>
               </li>
-              <li>
+              {/* <li>
                 <button onClick={openPopup} className="hover:text-[#F6971E] hover:underline text-left block cursor-pointer transition-colors w-full">
                   Love Horoscope
                 </button>
@@ -142,7 +142,7 @@ export default function Footer() {
                 <button onClick={openPopup} className="hover:text-[#F6971E] hover:underline text-left block cursor-pointer transition-colors w-full">
                   Finance Horoscope
                 </button>
-              </li>
+              </li> */}
               <li>
                 <Link href="/horoscope/yearly-horoscope" className="hover:text-[#F6971E] hover:underline text-left block transition-colors">
                   Horoscope 2027
@@ -192,11 +192,11 @@ export default function Footer() {
                   Mantras
                 </button>
               </li>
-              <li>
+              {/* <li>
                 <button onClick={openPopup} className="hover:text-[#F6971E] hover:underline text-left block cursor-pointer transition-colors w-full">
                   Festivals
                 </button>
-              </li>
+              </li> */}
             </ul>
           </div>
 
