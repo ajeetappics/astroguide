@@ -10,7 +10,6 @@ import SpellSection from './components/SpellSection/SpellSection'
 import DailyHoroscope from './components/DailyHoroscope/DailyHoroscope'
 import HowItWorks from './components/worksection/HowItWorks'
 import Testimonials from './components/clientreview/Testimonials'
-import CtaSection from './components/CtaSection/CtaSection'
 import PersonalizedServices from './components/personalizedservices/PersonalizedServices'
 import TrustSection from './components/TrustSection/TrustSection'
 
@@ -29,7 +28,6 @@ function page() {
       <PersonalizedServices />
       <Testimonials />
       <BlogSection />
-      <CtaSection />
       <TrustSection />
     </div>
   )
