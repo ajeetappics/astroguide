@@ -9,7 +9,6 @@ import { PopupProvider } from "./components/popup/PopupContext";
 import Popup from "./components/popup/Popup";
 import SchemaScript from "./schema/SchemaScript";
 import { organizationSchema, websiteSchema, serviceSchema } from "./schema/staticSchemas";
-import SmoothScroll from "./components/layout/SmoothScroll";
 
 const helvetica = {
   variable: "--font-helvetica",
@@ -117,7 +116,6 @@ export default function RootLayout({
       >
         <SchemaScript schema={[organizationSchema, websiteSchema, serviceSchema]} />
         <StoreProvider>
-          <SmoothScroll>
             <PopupProvider>
               <Header />
               {children}
@@ -141,7 +139,6 @@ export default function RootLayout({
               <Footer />
               <Popup />
             </PopupProvider>
-          </SmoothScroll>
         </StoreProvider >
       </body>
     </html>
