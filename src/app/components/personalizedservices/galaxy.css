@@ -18,7 +18,7 @@ body {
     filter: drop-shadow(0 0 60px rgba(0, 100, 255, .4));
     z-index: 5;
     opacity: .95;
-    background-image: url("../../../assets/images/earth.svg");
+    background-image: url("../../../assets/images/earth_new.png");
     background-size: cover;
     border-radius: 50%;
     width: 900px;
@@ -87,7 +87,7 @@ body {
 .planet.moon {
     width: 250px;
     height: 250px;
-    background-image: url("../../../assets/images/moon.svg");
+    background-image: url("../../../assets/images/moon_new.png");
     background-size: cover;
     opacity: 0.8;
 }
