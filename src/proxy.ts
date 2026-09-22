@@ -52,6 +52,7 @@ export function proxy(request: NextRequest) {
     '/sitemap-pages.xml',
     '/sitemap-blog.xml',
     '/astrologer-sitemap.xml',
+    '/astrologer-category-sitemap.xml',
     // '/login',
     // '/otp',
     // '/register',

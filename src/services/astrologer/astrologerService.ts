@@ -112,6 +112,7 @@ export const mapAstroToCard = (raw: any): AstrologerData => {
 
   return {
     id: raw._id || raw.id || String(Math.random()),
+    slug: raw.slug || raw._id || raw.id,
     name: formatName(raw.fullName || raw.name),
     isVerified: raw.isOtpVerified ?? raw.isProfileCompleted ?? true,
     isCelebrity: Boolean(raw.isFeatured),
@@ -230,29 +231,46 @@ export const fetchTopAstrologers = async (): Promise<{ astrologers: AstrologerDa
 };
 
 /**
- * Fetch astrologer details by ID:
- * https://preprod.api.astrovani-balaji.store/user/astro/:id
+ * Fetch astrologer details by ID or Slug:
+ * GET https://preprod.api.astrovani-balaji.store/user/astro/:idOrSlug
  */
-export const fetchAstrologerById = async (id: string): Promise<any> => {
-  if (!id) return null;
-  const url = `${API_URL}/user/astro/${id}`;
+export const fetchAstrologerById = async (idOrSlug: string): Promise<any> => {
+  if (!idOrSlug) return null;
+  const url = `${API_URL}/user/astro/${idOrSlug}`;
 
   try {
-    // Priority: POST with empty body as per curl --data ''
-    const response = await axios.post(url, {});
+    const response = await axios.get(url);
     const resData = response.data;
     return resData?.data || resData?.astrologer || resData;
   } catch (error) {
-    try {
-      // Fallback: GET request
-      const response = await axios.get(url);
-      const resData = response.data;
-      return resData?.data || resData?.astrologer || resData;
-    } catch (getErr) {
-      console.error(`Error fetching astrologer details for id ${id}:`, getErr);
-      return null;
-    }
+    console.error(`Error fetching astrologer details for ${idOrSlug}:`, error);
+    return null;
   }
 };
+
+export const fetchAstrologerBySlug = fetchAstrologerById;
+
+/**
+ * Fetch astrologer reviews / session feedbacks:
+ * GET https://preprod.api.astrovani-balaji.store/user/sessionfeedbacks/:id?page=1&limit=10
+ */
+export const fetchAstrologerFeedbacks = async (
+  id: string,
+  page = 1,
+  limit = 10
+): Promise<any> => {
+  if (!id) return null;
+  const url = `${API_URL}/user/sessionfeedbacks/${id}?page=${page}&limit=${limit}`;
+
+  try {
+    const response = await axios.get(url);
+    const resData = response.data;
+    return resData?.data || resData;
+  } catch (error) {
+    console.error(`Error fetching feedbacks for astrologer id ${id}:`, error);
+    return null;
+  }
+};
+
 
 

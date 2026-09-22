@@ -5,7 +5,6 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { BsX, BsChevronLeft, BsChevronRight } from 'react-icons/bs';
 import AstrologerCard, { AstrologerData } from '../Card/AstrologerCard';
-import { astrologerData } from '../AstrologerSection/AstrologerSection';
 import AstrologerHeroBanner from './AstrologerHeroBanner';
 import { fetchAstroList } from '@/services/astrologer/astrologerService';
 
@@ -113,16 +112,8 @@ export default function AstrologersListing({ initialCategory = "All" }: Astrolog
   }, [initialCategory]);
 
   const [activeTab, setActiveTab] = useState<string>(resolvedCategory);
-  const [allAstrologers, setAllAstrologers] = useState<AstrologerData[]>(() => {
-    if (!initialCategory || initialCategory.toLowerCase() === "all") {
-      return astrologerData;
-    }
-    const filtered = astrologerData.filter(a =>
-      a.skills.some(s => s.toLowerCase().includes(initialCategory.toLowerCase()))
-    );
-    return filtered.length > 0 ? filtered : astrologerData;
-  });
-  const [isLoading, setIsLoading] = useState(false);
+  const [allAstrologers, setAllAstrologers] = useState<AstrologerData[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [totalCount, setTotalCount] = useState(0);

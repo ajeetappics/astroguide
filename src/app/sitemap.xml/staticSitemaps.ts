@@ -20,6 +20,12 @@ export const staticUrls = [
     changefreq: 'daily',
     priority: 0.9,
   },
+  {
+    loc: `${SITE_URL}/astrologer-category-sitemap.xml`,
+    lastmod: new Date().toISOString().split('T')[0],
+    changefreq: 'weekly',
+    priority: 0.8,
+  },
   // {
   //   loc: `${SITE_URL}/login`,
   //   lastmod: new Date().toISOString().split('T')[0],

@@ -3,180 +3,59 @@
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { BsStarFill, BsStarHalf, BsStar, BsPatchCheckFill, BsLightningChargeFill, BsCheckCircleFill, BsChevronRight, BsShieldCheck, BsImages, BsX, BsCameraVideoFill, BsPlayFill, BsCurrencyRupee, BsCameraVideo } from 'react-icons/bs';
+import { BsStarFill, BsStarHalf, BsStar, BsPatchCheckFill, BsLightningChargeFill, BsCheckCircleFill, BsChevronRight, BsChevronLeft, BsShieldCheck, BsImages, BsX, BsCameraVideoFill, BsPlayFill, BsCurrencyRupee, BsCameraVideo } from 'react-icons/bs';
 import { useParams } from 'next/navigation';
-import { fetchAstrologerById } from '@/services/astrologer/astrologerService';
+import { fetchAstrologerById, fetchAstrologerFeedbacks } from '@/services/astrologer/astrologerService';
 import { sanitizeImageUrl } from '@/utils/imageUtils';
 
-const astroFallback: any = {
-    "chat": {
-      "ratePerMinute": 80,
-      "offerPricePerMinute": 20
-    },
-    "call": {
-      "ratePerMinute": 40,
-      "offerPricePerMinute": 20
-    },
-    "videoCall": {
-      "ratePerMinute": 50,
-      "offerPricePerMinute": 10,
-      "ratePerSession": 200,
-      "offerPricePerSession": 100
-    },
-    "_id": "6a61ed27dd079f131f4cadfc",
-    "profileImg": "https://storage.googleapis.com/astro-vani-storage/admin/1788845278260-images.jpg",
-    "totalEarning": 38497,
-    "mobileNumber": "9860986098",
-    "countryCode": "+91",
-    "aadharImg": [],
-    "isRegistered": true,
-    "otp": null,
-    "isOtpVerified": true,
-    "isProfileCompleted": false,
-    "isDeleted": false,
-    "photos": ["https://storage.googleapis.com/astro-vani-storage/admin/1788845094307-shared image (6).jfif", "https://storage.googleapis.com/astro-vani-storage/admin/1788845094624-image (8).png", "https://storage.googleapis.com/astro-vani-storage/admin/1788845094803-book.png", "https://storage.googleapis.com/astro-vani-storage/admin/1788845094970-Gemini_Generated_Image_y12wery12wery12w.jpg", "https://storage.googleapis.com/astro-vani-storage/admin/1788845095128-Balaji-Astro-Guide-07-23-2026_06_00_PM.png"
-    ],
-    "videos": ["https://storage.googleapis.com/astro-vani-storage/admin/1788845151185-184752-873923078_medium.mp4", "https://storage.googleapis.com/astro-vani-storage/admin/1788845151389-106739-674268552_medium.mp4"
-    ],
-    "photoGallery": ["https://storage.googleapis.com/astro-vani-storage/admin/1788845166125-shared image (6).jfif", "https://storage.googleapis.com/astro-vani-storage/admin/1788845166311-image (8).png", "https://storage.googleapis.com/astro-vani-storage/admin/1788845166461-book.png", "https://storage.googleapis.com/astro-vani-storage/admin/1788845166607-Gemini_Generated_Image_y12wery12wery12w.jpg", "https://storage.googleapis.com/astro-vani-storage/admin/1788845166759-Balaji-Astro-Guide-07-23-2026_06_00_PM.png"
-    ],
-    "certificateGallery": ["https://storage.googleapis.com/astro-vani-storage/admin/1788845195758-shared image (6).jfif", "https://storage.googleapis.com/astro-vani-storage/admin/1788845195905-image (8).png", "https://storage.googleapis.com/astro-vani-storage/admin/1788845196044-book.png", "https://storage.googleapis.com/astro-vani-storage/admin/1788845196190-Gemini_Generated_Image_y12wery12wery12w.jpg", "https://storage.googleapis.com/astro-vani-storage/admin/1788845196329-Balaji-Astro-Guide-07-23-2026_06_00_PM.png", "https://storage.googleapis.com/astro-vani-storage/admin/1788845196473-Space Rocket.png", "https://storage.googleapis.com/astro-vani-storage/admin/1788845196614-1776500559919-scaled_screenshot_20260418-135229.jpg", "https://storage.googleapis.com/astro-vani-storage/admin/1788845196767-gift.png"
-    ],
-    "certificates": [
-      "https://storage.googleapis.com/astro-vani-storage/astrologers/1784802702100-scaled_99f58121-d132-403e-ab6c-c8939d99d9b6-1_all_151.png"
-    ],
-    "languages": [
-      {
-        "_id": "68f376df41db2c9bc08ba5ca",
-        "languageName": "Gujarati",
-        "createdAt": "2025-10-18T11:15:43.498Z",
-        "updatedAt": "2025-10-18T11:15:43.498Z"
-      },
-      {
-        "_id": "68eb67a041fa1548bfcc2215",
-        "languageName": "Hindi",
-        "createdAt": "2025-10-12T08:32:32.273Z",
-        "updatedAt": "2025-10-12T08:32:32.273Z"
-      },
-      {
-        "_id": "68eb5a18f39e87050d93a4fe",
-        "languageName": "English",
-        "createdAt": "2025-10-12T07:34:48.562Z",
-        "updatedAt": "2025-10-12T07:34:48.562Z"
-      }
-    ],
-    "expertise": [
-      {
-        "_id": "690dd5a901f53eb3236b5692",
-        "expertiseName": "Business",
-        "expertiseIcon": "https://storage.googleapis.com/astro-vani-storage/admin/1762697441535-243956.png",
-        "createdAt": "2025-11-07T11:19:05.115Z",
-        "updatedAt": "2025-11-09T14:10:43.067Z"
-      },
-      {
-        "_id": "68eb716c66c9e3ebbf1545fc",
-        "expertiseName": "Finance",
-        "createdAt": "2025-10-12T09:14:20.150Z",
-        "updatedAt": "2025-10-12T15:59:21.352Z",
-        "expertiseIcon": "https://atsro-vani-prod-v1.s3.ap-south-1.amazonaws.com/admin/1760284758809-Finance.png"
-      },
-      {
-        "_id": "68eb715f66c9e3ebbf1545ec",
-        "expertiseName": "Legal",
-        "createdAt": "2025-10-12T09:14:07.036Z",
-        "updatedAt": "2025-10-12T15:59:50.640Z",
-        "expertiseIcon": "https://atsro-vani-prod-v1.s3.ap-south-1.amazonaws.com/admin/1760284786405-Legal.png"
-      },
-      {
-        "_id": "68eb6d794b1b2d95f35b475f",
-        "expertiseName": "Kundli",
-        "createdAt": "2025-10-12T08:57:29.838Z",
-        "updatedAt": "2025-10-12T08:57:29.838Z"
-      },
-      {
-        "_id": "68eb6d254b1b2d95f35b46fa",
-        "expertiseName": "Palm Read",
-        "createdAt": "2025-10-12T08:56:05.599Z",
-        "updatedAt": "2025-10-28T09:23:15.121Z",
-        "expertiseIcon": "h"
-      },
-      {
-        "_id": "68dbce5fa7ce524ef050d46d",
-        "expertiseName": "Health",
-        "expertiseIcon": "https://storage.googleapis.com/astro-vani-storage/admin/1763041981963-health.png",
-        "createdAt": "2025-09-30T12:34:39.106Z",
-        "updatedAt": "2025-11-13T13:53:03.880Z"
-      }
-    ],
-    "commissionPercentage": 50,
-    "isFeatured": false,
-    "extraDiscount": "0",
-    "isCallEnabled": true,
-    "isChatEnabled": true,
-    "isAppointmentEnabled": false,
-    "isVideoCallEnabled": false,
-    "isBusy": false,
-    "isManuallyBusy": false,
-    "isFeesRateGiven": false,
-    "isAvailabilityGiven": true,
-    "isDeletedByAdmin": false,
-    "isBankDetailGiven": false,
-    "isProfileVerified": true,
-    "verifiedByAdmin": false,
-    "isApprovedUpdateRequest": true,
-    "profileVisitCount": 119,
-    "createdAt": "2026-07-23T10:29:59.996Z",
-    "updatedAt": "2026-09-08T05:28:02.822Z",
-    "__v": 26,
-    "city": "Jaipur",
-    "email": "poojaastro@yopmail.com",
-    "experience": "12",
-    "fullName": "Astro harshita new",
-    "gender": "Female",
-    "pincode": "302021",
-    "qualification": "Postgraduate",
-    "state": "Rajasthan",
-    "address": "Jaipur, Rajasthan, 302021",
-    "profileBio": "Surinder1 is a highly experienced astrologer specializing in Vedic and Vastu. With a deep understanding of ancient wisdom and modern applications, Surinder1 provides accurate predictions and effective remedies.Dedicated to helping individuals navigate life's challenges, Surinder1 has guided thousands towards a path of clarity, peace, and success.Whether you are facing issues in love, career, or personal growth, their profound knowledge and empathetic approach offer a guiding light.\nSurinder1 is a highly experienced astrologer specializing in Vedic and Vastu.With a deep understanding of ancient wisdom and modern applications, Surinder1 provides accurate predictions and effectiveremedies.\n\nDedicated to helping individuals navigate life's challenges, Surinder1 has guided thousands towards a pathof clarity, peace, and success.Whether you are facing issues in love, career, or personal growth, their profoundknowledge and empathetic approach offer a guiding light.\nSurinder1 is a highly experienced astrologer specializing inVedic and Vastu.With a deep understanding of ancient wisdom and modern applications, Surinder1 provides accuratepredictions and effective remedies.\n\nDedicated to helping individuals navigate life's challenges, Surinder1 has guidedthousands towards a path of clarity, peace, and success.Whether you are facing issues in love, career, or personalgrowth, their profound knowledge and empathetic approach offer a guiding light.",
-    "videoIntro": "https://storage.googleapis.com/astro-vani-storage/admin/1788845109879-184752-873923078_medium.mp4",
-    "isAvailableforPooja": false,
-    "isBlacklisted": false,
-    "tag": {
-      "_id": "6a38e5c7fb8bcfbf0b86fc25",
-      "tagName": "most booked in balaji astro guide"
-    },
-    "totalOrders": 0,
-    "averageRating": 0,
-    "ratingCounts": {
-      "rating1": 0,
-      "rating2": 0,
-      "rating3": 0,
-      "rating4": 0,
-      "rating5": 0
-    },
-    "id": "6a61ed27dd079f131f4cadfc",
-    "createdBy": {
-      "_id": "6a61ed27dd079f131f4cadfc",
-      "fullName": "Astro harshita new",
-      "email": "poojaastro@yopmail.com",
-      "mobileNumber": "9860986098"
-    }
-  };
+const REVIEWS_PER_PAGE = 10;
+
+const getReviewPageNumbers = (current: number, total: number): (number | string)[] => {
+  if (total <= 5) {
+    return Array.from({ length: total }, (_, i) => i + 1);
+  }
+
+  const pages: (number | string)[] = [];
+  pages.push(1);
+
+  if (current > 3) {
+    pages.push('dots-1');
+  }
+
+  const start = Math.max(2, current - 1);
+  const end = Math.min(total - 1, current + 1);
+
+  for (let i = start; i <= end; i++) {
+    pages.push(i);
+  }
+
+  if (current < total - 2) {
+    pages.push('dots-2');
+  }
+
+  pages.push(total);
+  return pages;
+};
 
 export default function AstrologerDetails() {
   const params = useParams();
   const astroId = (params?.id as string) || '';
 
-  const [astro, setAstro] = useState<any>(astroFallback);
+  const [astro, setAstro] = useState<any>(null);
+  const [feedbacksData, setFeedbacksData] = useState<any>(null);
+  const [reviewPage, setReviewPage] = useState(1);
+  const [isReviewsLoading, setIsReviewsLoading] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isBioExpanded, setIsBioExpanded] = useState(false);
   const [previewImage, setPreviewImage] = useState<string | null>(null);
   const [activeVideo, setActiveVideo] = useState<string | null>(null);
-  const [showAllReviews, setShowAllReviews] = useState(false);
 
   useEffect(() => {
     let isMounted = true;
-    if (!astroId) return;
+    if (!astroId) {
+      setIsLoading(false);
+      return;
+    }
 
     const loadDetails = async () => {
       try {
@@ -184,9 +63,14 @@ export default function AstrologerDetails() {
         const data = await fetchAstrologerById(astroId);
         if (isMounted && data) {
           setAstro(data);
+          const feedbackTargetId = data._id || data.id || astroId;
+          const feedbacks = await fetchAstrologerFeedbacks(feedbackTargetId, 1, REVIEWS_PER_PAGE);
+          if (isMounted && feedbacks) {
+            setFeedbacksData(feedbacks);
+          }
         }
       } catch (err) {
-        console.error('Error loading astrologer details:', err);
+        console.error('Error loading astrologer details/feedbacks:', err);
       } finally {
         if (isMounted) setIsLoading(false);
       }
@@ -217,29 +101,142 @@ export default function AstrologerDetails() {
     };
   }, [previewImage, activeVideo]);
 
-  const currentAstro = astro || astroFallback;
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-[#FFFDF9] pb-20 font-helvetica">
+        {/* Banner Skeleton */}
+        <div className="relative w-full bg-[#fdf7e1] pt-[70px] lg:pt-[80px] pb-10 md:pb-12 animate-pulse">
+          <div className="container mx-auto max-w-6xl px-4 py-4 md:py-5">
+            <div className="h-4 bg-[#F6971E]/20 rounded w-48 mb-2"></div>
+          </div>
+        </div>
+        {/* Profile Card Skeleton */}
+        <div className="container mx-auto max-w-6xl px-4 relative -mt-10 md:-mt-12 z-20">
+          <div className="bg-white rounded-[28px] p-6 sm:p-8 shadow-sm border border-[#F6971E]/10 mb-8 animate-pulse">
+            <div className="flex flex-col md:flex-row gap-6 items-center md:items-start border-b border-gray-100 pb-6">
+              <div className="w-28 h-28 md:w-32 md:h-32 rounded-full bg-gray-200 shrink-0"></div>
+              <div className="flex-1 w-full space-y-3 pt-2 text-center md:text-left">
+                <div className="h-7 bg-gray-200 rounded w-1/3 mx-auto md:mx-0"></div>
+                <div className="h-4 bg-gray-100 rounded w-1/2 mx-auto md:mx-0"></div>
+                <div className="h-4 bg-gray-100 rounded w-1/4 mx-auto md:mx-0"></div>
+              </div>
+            </div>
+            <div className="pt-6 grid grid-cols-2 md:grid-cols-4 gap-4">
+              <div className="h-12 bg-gray-100 rounded-xl"></div>
+              <div className="h-12 bg-gray-100 rounded-xl"></div>
+              <div className="h-12 bg-gray-100 rounded-xl"></div>
+              <div className="h-12 bg-gray-100 rounded-xl"></div>
+            </div>
+          </div>
+          {/* About Skeleton */}
+          <div className="bg-white rounded-3xl p-6 shadow-sm border border-[#F6971E]/15 animate-pulse space-y-3">
+            <div className="h-5 bg-gray-200 rounded w-40 mb-4"></div>
+            <div className="h-4 bg-gray-100 rounded w-full"></div>
+            <div className="h-4 bg-gray-100 rounded w-5/6"></div>
+            <div className="h-4 bg-gray-100 rounded w-3/4"></div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
-  const reviewsList = [
-    { name: "Amrita S.", text: "Your remedies are magic sir, it has really helped me a lot. Thank you so much! 🙏💖", givenBy: "Mohan Sharma", stars: 5 },
-    { name: "Rahul V.", text: "Very accurate predictions. I was amazed by how detailed the reading was. Highly recommended.", givenBy: "Kavita Verma", stars: 5 },
-    { name: "Pooja M.", text: "Best astrology consultation I have ever had! The career guidance and gemstones suggested worked wonders for me.", givenBy: "Suresh Gupta", stars: 4.5 },
-    { name: "Vikram S.", text: "Bahut hi accurate prediction kiya. Business issues ko lekar jo remedy batayi usse positive results mile.", givenBy: "Anil Joshi", stars: 5 },
-    { name: "Neha K.", text: "Thank you for the wonderful relationship advice. Everything you predicted came true within a month! 🙏", givenBy: "Deepak Mehta", stars: 4 },
-    { name: "Rajesh P.", text: "Very polite and patient listener. Explained all my Kundli doshas and simple remedies with great clarity.", givenBy: "Sunita Yadav", stars: 5 },
-    { name: "Sneha R.", text: "I was very confused about my higher studies. Your guidance gave me clarity and confidence. Truly grateful! ✨", givenBy: "Manoj Tiwari", stars: 4.5 },
-    { name: "Amitabh D.", text: "Extremely knowledgeable and genuine astrologer. The remedies suggested are very simple and effective.", givenBy: "Rakesh Agarwal", stars: 5 },
-    { name: "Priya C.", text: "Sahi rasta dikhane ke liye dhanyawad. Marriage matching aur timing predictions bilkul accurate thi.", givenBy: "Alok Saxena", stars: 4 },
-    { name: "Manish K.", text: "Amazing experience! The health insights and puja suggestions brought so much peace to our family.", givenBy: "Vikas Dubey", stars: 5 }
-  ];
+  if (!astro) {
+    return (
+      <div className="min-h-screen bg-[#FFFDF9] flex flex-col items-center justify-center p-6 text-center font-helvetica pt-28 pb-20">
+        <div className="w-16 h-16 rounded-full bg-[#FFF8EB] border border-[#F6971E]/30 flex items-center justify-center text-[#F6971E] text-2xl mb-4 shadow-sm">
+          ✨
+        </div>
+        <h2 className="text-2xl sm:text-3xl font-bold font-['Inria_Serif'] text-[#4A2B23] mb-2">
+          Astrologer Not Found
+        </h2>
+        <p className="text-gray-500 max-w-md mb-6 text-sm">
+          The astrologer profile you are looking for does not exist or may have been removed.
+        </p>
+        <Link
+          href="/astrologers"
+          className="bg-gradient-to-r from-[#F6971E] to-[#FFA733] text-white font-bold py-2.5 px-6 rounded-xl shadow-[0_4px_15px_rgba(246,151,30,0.25)] hover:opacity-95 transition-all text-sm"
+        >
+          Explore All Astrologers
+        </Link>
+      </div>
+    );
+  }
 
-  const calculatedAverageRating = (
-    reviewsList.reduce((acc, curr) => acc + (curr.stars || 5), 0) / reviewsList.length
-  ).toFixed(1);
+  const currentAstro = astro;
+
+  const rawFeedbacks: any[] = Array.isArray(feedbacksData)
+    ? feedbacksData
+    : (feedbacksData?.sessionFeedbacks || feedbacksData?.feedbacks || feedbacksData?.data?.sessionFeedbacks || []);
+
+  const totalReviewsCount = feedbacksData?.pagination?.totalDocs ?? feedbacksData?.data?.pagination?.totalDocs ?? rawFeedbacks.length;
+  const totalReviewPages = feedbacksData?.pagination?.totalPages ?? feedbacksData?.data?.pagination?.totalPages ?? Math.max(1, Math.ceil(totalReviewsCount / REVIEWS_PER_PAGE));
+
+  const handleReviewPageChange = async (newPage: number) => {
+    if (newPage < 1 || newPage > totalReviewPages || newPage === reviewPage || isReviewsLoading) return;
+    setReviewPage(newPage);
+    try {
+      setIsReviewsLoading(true);
+      const feedbackTargetId = currentAstro?._id || currentAstro?.id || astroId;
+      const data = await fetchAstrologerFeedbacks(feedbackTargetId, newPage, REVIEWS_PER_PAGE);
+      if (data) {
+        setFeedbacksData(data);
+      }
+      const reviewsEl = document.getElementById('reviews-section');
+      if (reviewsEl) {
+        reviewsEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    } catch (err) {
+      console.error('Error loading review page:', err);
+    } finally {
+      setIsReviewsLoading(false);
+    }
+  };
+
+  const apiAverageRating = feedbacksData?.averageRating ?? feedbacksData?.data?.averageRating;
 
   const displayRating =
-    currentAstro.averageRating !== undefined && Number(currentAstro.averageRating) > 0
-      ? Number(currentAstro.averageRating).toFixed(1)
-      : calculatedAverageRating;
+    apiAverageRating !== undefined && Number(apiAverageRating) > 0
+      ? Number(apiAverageRating).toFixed(1)
+      : (currentAstro.averageRating !== undefined && Number(currentAstro.averageRating) > 0
+        ? Number(currentAstro.averageRating).toFixed(1)
+        : (rawFeedbacks.length > 0
+            ? (rawFeedbacks.reduce((acc: number, curr: any) => acc + (Number(curr.rating) || 5), 0) / rawFeedbacks.length).toFixed(1)
+            : "5.0"));
+
+  const defaultCompliments: Record<number, string> = {
+    5: "Very accurate predictions and very helpful remedies. Truly grateful for the guidance!",
+    4: "Good consultation and clear explanation of all planetary positions and queries.",
+    3: "Helpful session with decent insights.",
+    2: "Average session.",
+    1: "Needs improvement."
+  };
+
+  const reviewsList = rawFeedbacks.map((item: any, index: number) => {
+    const rawName = item.userFullName?.trim();
+    const name = rawName && rawName !== "" ? rawName : `Client ${index + 1}`;
+    const stars = Number(item.rating) || 5;
+    const dateFormatted = item.createdAt
+      ? new Date(item.createdAt).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" })
+      : "";
+
+    const text =
+      item.comment ||
+      item.feedback ||
+      item.review ||
+      item.text ||
+      item.message ||
+      defaultCompliments[stars] ||
+      defaultCompliments[5];
+
+    return {
+      id: item._id || index,
+      name,
+      userProfileImg: item.userProfileImg ? sanitizeImageUrl(item.userProfileImg, "") : null,
+      stars,
+      date: dateFormatted,
+      text,
+    };
+  });
 
   // Combine all photos, certificates, and certificate gallery into a single unified Photo Gallery (deduplicating URLs)
   const allGalleryPhotos = Array.from(
@@ -382,7 +379,7 @@ export default function AstrologerDetails() {
                   <BsStarFill className="text-[#F6971E] text-sm sm:text-base md:text-lg" /> {displayRating}
                 </span>
                 <span className="text-[10px] sm:text-xs text-gray-500 font-bold uppercase tracking-wider">
-                  Rating
+                  Rating {totalReviewsCount > 0 ? `(${totalReviewsCount})` : ''}
                 </span>
               </div>
 
@@ -538,7 +535,7 @@ export default function AstrologerDetails() {
           )}
 
           {/* Reviews Section */}
-          <section className="bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-7 shadow-sm border border-gray-100">
+          <section id="reviews-section" className="bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-7 shadow-sm border border-gray-100">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-5 sm:mb-6 gap-3 sm:gap-4 border-b border-gray-100 pb-3 sm:pb-4">
               <h2 className="text-base sm:text-lg md:text-xl lg:text-2xl font-bold text-[#4A2B23] font-['Inria_Serif'] flex items-center gap-2 sm:gap-2.5">
                 <span className="w-1 sm:w-1.5 h-4 sm:h-5 md:h-6 bg-[#F6971E] rounded-full inline-block shrink-0"></span> Client Reviews
@@ -558,55 +555,136 @@ export default function AstrologerDetails() {
                     }
                   })}
                 </div>
-                <span className="text-[10px] sm:text-xs text-gray-500 font-bold tracking-wide uppercase">{reviewsList.length} reviews</span>
+                <span className="text-[10px] sm:text-xs text-gray-500 font-bold tracking-wide uppercase">
+                  {totalReviewsCount} {totalReviewsCount === 1 ? 'review' : 'reviews'}
+                </span>
               </div>
             </div>
 
-            {/* Review Cards: Horizontal Scroll on Mobile (< md), Vertical Stack on Web (>= md) */}
-            <div className="custom-x-scroll flex flex-row md:flex-col overflow-x-auto md:overflow-visible gap-3 sm:gap-4 pb-4 pt-1 md:pb-0 md:pt-0 scroll-smooth">
-              {(showAllReviews ? reviewsList : reviewsList.slice(0, 5)).map((review, i) => (
-                <div
-                  key={i}
-                  className="w-[280px] sm:w-[320px] md:w-full flex-shrink-0 bg-gray-50/70 p-3.5 sm:p-4 md:p-5 rounded-2xl border border-gray-100 hover:border-[#F6971E]/30 transition-all flex flex-col justify-between shadow-2xs hover:shadow-sm"
-                >
-                  <div>
-                    <div className="flex items-start gap-2.5 sm:gap-3 mb-2 sm:mb-3">
-                      <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-[#F6971E] to-[#FFA733] text-white font-bold text-xs sm:text-sm rounded-full flex items-center justify-center shadow-xs shrink-0 mt-0.5">
-                        {review.name.charAt(0)}
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center justify-between gap-2">
-                          <span className="font-bold text-[#4A2B23] text-xs sm:text-sm md:text-[15px] truncate">{review.name}</span>
-                          <div className="flex text-[#F6971E] text-[10px] sm:text-xs shrink-0 items-center gap-0.5">
-                            {Array.from({ length: 5 }, (_, starIdx) => {
-                              const starVal = starIdx + 1;
-                              const ratingVal = (review as any).stars || (review as any).rating || 5;
-                              if (ratingVal >= starVal) {
-                                return <BsStarFill key={starIdx} />;
-                              } else if (ratingVal >= starVal - 0.5) {
-                                return <BsStarHalf key={starIdx} />;
-                              } else {
-                                return <BsStar key={starIdx} className="text-gray-300" />;
-                              }
-                            })}
+            {/* Review Cards */}
+            {reviewsList && reviewsList.length > 0 ? (
+              <>
+                <div className={`custom-x-scroll flex flex-row md:flex-col overflow-x-auto md:overflow-visible gap-3 sm:gap-4 pb-4 pt-1 md:pb-0 md:pt-0 scroll-smooth transition-opacity duration-200 ${isReviewsLoading ? 'opacity-50 pointer-events-none' : 'opacity-100'}`}>
+                  {reviewsList.map((review: any, i: number) => (
+                    <div
+                      key={review.id || i}
+                      className="w-[280px] sm:w-[320px] md:w-full flex-shrink-0 bg-gray-50/70 p-3.5 sm:p-4 md:p-5 rounded-2xl border border-gray-100 hover:border-[#F6971E]/30 transition-all flex flex-col justify-between shadow-2xs hover:shadow-sm"
+                    >
+                      <div>
+                        <div className="flex items-start gap-2.5 sm:gap-3 mb-2 sm:mb-3">
+                          {review.userProfileImg ? (
+                            <div className="relative w-8 h-8 sm:w-10 sm:h-10 rounded-full overflow-hidden shrink-0 border border-gray-200">
+                              <Image
+                                src={review.userProfileImg}
+                                alt={review.name}
+                                fill
+                                className="object-cover"
+                              />
+                            </div>
+                          ) : (
+                            <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-[#F6971E] to-[#FFA733] text-white font-bold text-xs sm:text-sm rounded-full flex items-center justify-center shadow-xs shrink-0 mt-0.5">
+                              {review.name.charAt(0).toUpperCase()}
+                            </div>
+                          )}
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center justify-between gap-2">
+                              <span className="font-bold text-[#4A2B23] text-xs sm:text-sm md:text-[15px] truncate">{review.name}</span>
+                              <div className="flex text-[#F6971E] text-[10px] sm:text-xs shrink-0 items-center gap-0.5">
+                                {Array.from({ length: 5 }, (_, starIdx) => {
+                                  const starVal = starIdx + 1;
+                                  const ratingVal = review.stars;
+                                  if (ratingVal >= starVal) {
+                                    return <BsStarFill key={starIdx} />;
+                                  } else if (ratingVal >= starVal - 0.5) {
+                                    return <BsStarHalf key={starIdx} />;
+                                  } else {
+                                    return <BsStar key={starIdx} className="text-gray-300" />;
+                                  }
+                                })}
+                              </div>
+                            </div>
+                            {review.date && (
+                              <span className="text-[10px] sm:text-[11px] text-gray-400 font-medium block mt-0.5 truncate">
+                                {review.date}
+                              </span>
+                            )}
                           </div>
                         </div>
-                        <span className="text-[10px] sm:text-[11px] text-gray-400 font-medium block mt-0.5 truncate">Given By: {review.givenBy}</span>
+                        <p className="text-[#4A2B23]/80 font-medium text-xs sm:text-sm leading-relaxed">
+                          &quot;{review.text}&quot;
+                        </p>
                       </div>
                     </div>
-                    <p className="text-[#4A2B23]/80 font-medium text-xs sm:text-sm leading-relaxed">
-                      &quot;{review.text}&quot;
-                    </p>
-                  </div>
+                  ))}
                 </div>
-              ))}
-            </div>
-            <button
-              onClick={() => setShowAllReviews(!showAllReviews)}
-              className="w-full mt-4 py-2.5 sm:py-3 rounded-xl border border-gray-200 hover:border-[#F6971E] text-[#4A2B23] hover:text-[#F6971E] font-bold hover:bg-[#FFF8EB]/50 transition-all cursor-pointer flex items-center justify-center gap-1.5 text-xs sm:text-sm shadow-2xs"
-            >
-              {showAllReviews ? "Show Less Reviews" : `View all reviews (${reviewsList.length})`}
-            </button>
+
+                {/* Pagination Controls */}
+                {totalReviewPages > 1 && (
+                  <div className="mt-6 pt-5 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-4">
+                    <p className="text-xs sm:text-sm text-gray-500 font-helvetica order-2 sm:order-1">
+                      Showing <span className="font-bold text-[#4A2B23]">{(reviewPage - 1) * REVIEWS_PER_PAGE + 1}</span> - <span className="font-bold text-[#4A2B23]">{Math.min(reviewPage * REVIEWS_PER_PAGE, totalReviewsCount)}</span> of <span className="font-bold text-[#4A2B23]">{totalReviewsCount}</span> reviews
+                    </p>
+
+                    <div className="flex items-center gap-1.5 sm:gap-2 order-1 sm:order-2 flex-wrap justify-center">
+                      {/* Prev Button */}
+                      <button
+                        onClick={() => handleReviewPageChange(reviewPage - 1)}
+                        disabled={reviewPage === 1 || isReviewsLoading}
+                        className="flex items-center gap-1 px-3 py-1.5 rounded-full border border-gray-200 text-xs font-bold text-[#4A2B23] bg-white hover:border-[#F6971E] hover:text-[#F6971E] disabled:opacity-40 disabled:cursor-not-allowed transition-all shadow-2xs cursor-pointer"
+                        aria-label="Previous Reviews Page"
+                      >
+                        <BsChevronLeft className="text-xs" />
+                        <span>Prev</span>
+                      </button>
+
+                      {/* Page Numbers */}
+                      <div className="flex items-center gap-1">
+                        {getReviewPageNumbers(reviewPage, totalReviewPages).map((p, idx) => {
+                          if (typeof p === 'string') {
+                            return (
+                              <span key={`dots-${idx}`} className="px-1 text-xs text-gray-400 font-bold select-none">
+                                ...
+                              </span>
+                            );
+                          }
+                          const isCurrent = p === reviewPage;
+                          return (
+                            <button
+                              key={p}
+                              onClick={() => handleReviewPageChange(p)}
+                              disabled={isReviewsLoading}
+                              className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full text-xs font-bold flex items-center justify-center transition-all cursor-pointer ${
+                                isCurrent
+                                  ? 'bg-[#F6971E] text-white shadow-[0_2px_8px_rgba(246,151,30,0.35)]'
+                                  : 'bg-white border border-gray-200 text-[#4A2B23] hover:border-[#F6971E] hover:text-[#F6971E]'
+                              }`}
+                            >
+                              {p}
+                            </button>
+                          );
+                        })}
+                      </div>
+
+                      {/* Next Button */}
+                      <button
+                        onClick={() => handleReviewPageChange(reviewPage + 1)}
+                        disabled={reviewPage >= totalReviewPages || isReviewsLoading}
+                        className="flex items-center gap-1 px-3 py-1.5 rounded-full border border-gray-200 text-xs font-bold text-[#4A2B23] bg-white hover:border-[#F6971E] hover:text-[#F6971E] disabled:opacity-40 disabled:cursor-not-allowed transition-all shadow-2xs cursor-pointer"
+                        aria-label="Next Reviews Page"
+                      >
+                        <span>Next</span>
+                        <BsChevronRight className="text-xs" />
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </>
+            ) : (
+              <div className="text-center py-10 bg-[#FFFDF9] rounded-2xl border border-dashed border-[#F6971E]/30 p-6">
+                <p className="text-[#4A2B23] font-medium text-sm">No client reviews yet for this astrologer.</p>
+                <p className="text-gray-400 text-xs mt-1">Be the first to consult and share your feedback!</p>
+              </div>
+            )}
           </section>
 
         </div>

@@ -20,6 +20,10 @@ export async function GET() {
     <loc>${SITE_URL}/astrologer-sitemap.xml</loc>
     <lastmod>${currentDate}</lastmod>
   </sitemap>
+  <sitemap>
+    <loc>${SITE_URL}/astrologer-category-sitemap.xml</loc>
+    <lastmod>${currentDate}</lastmod>
+  </sitemap>
 </sitemapindex>`;
 
   return new NextResponse(sitemapIndex.trim(), {

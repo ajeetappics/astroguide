@@ -9,6 +9,7 @@ import { sanitizeImageUrl } from '@/utils/imageUtils';
 
 export interface AstrologerData {
   id: number | string;
+  slug?: string;
   name: string;
   isVerified: boolean;
   isCelebrity: boolean;
@@ -40,7 +41,8 @@ export default function AstrologerCard({ astro: astroProp, astrologer: astrologe
   if (!astro) return null;
 
   const handleCardClick = () => {
-    router.push(`/astrologers/${astro.id}`);
+    const identifier = astro.slug || astro.id;
+    router.push(`/astrologers/${identifier}`);
   };
 
   const handleConnectClick = (e: React.MouseEvent) => {

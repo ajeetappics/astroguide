@@ -16,31 +16,6 @@ export async function GET() {
       <priority>0.9</priority>
     </url>`;
 
-  // Category URLs
-  const categories = [
-    'love',
-    'education',
-    'career',
-    'marriage',
-    'health',
-    'wealth',
-    'legal',
-    'finance',
-    'remedies',
-    'parent',
-    'business',
-  ];
-
-  for (const cat of categories) {
-    dynamicUrlsXml += `
-    <url>
-      <loc>${SITE_URL}/astrologers/category/${cat}</loc>
-      <lastmod>${currentDate}</lastmod>
-      <changefreq>weekly</changefreq>
-      <priority>0.8</priority>
-    </url>`;
-  }
-
   try {
     // Fetch astrologers from backend API
     const res = await fetch(`${API_URL}/user/astroList?page=1&limit=1000`, {
@@ -57,9 +32,9 @@ export async function GET() {
 
       dynamicUrlsXml += astrologers
         .map((astro: any) => {
-          const id = astro._id || astro.id;
-          if (!id) return '';
-          const loc = `${SITE_URL}/astrologers/${id}`
+          const slugOrId = astro.slug || astro._id || astro.id;
+          if (!slugOrId) return '';
+          const loc = `${SITE_URL}/astrologers/${slugOrId}`
             .replace(/&/g, '&amp;')
             .replace(/</g, '&lt;')
             .replace(/>/g, '&gt;');
