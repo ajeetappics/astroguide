@@ -40,7 +40,7 @@ const ingridDarling = Ingrid_Darling({
 
 export const metadata: Metadata = {
   title: "Balaji Astro Guide",
-  description: "Balaji Astro Guide is the best astrology website for online astrology predictions from the best astrologers of India. Our astrologer can get answers to all your worries",
+  description: "Balaji Astro Guide is India's premier online astrology platform for accurate Kundali predictions and expert consultation with verified Vedic astrologers.",
   keywords: [
     "Talk to astrologer online",
     "Chat with astrologer",
