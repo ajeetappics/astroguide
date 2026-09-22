@@ -51,6 +51,7 @@ export function proxy(request: NextRequest) {
     '/pooja-details',
     '/sitemap-pages.xml',
     '/sitemap-blog.xml',
+    '/astrologer-sitemap.xml',
     // '/login',
     // '/otp',
     // '/register',

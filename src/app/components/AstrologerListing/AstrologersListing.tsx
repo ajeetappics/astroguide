@@ -3,14 +3,44 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { BsX } from 'react-icons/bs';
+import { BsX, BsChevronLeft, BsChevronRight } from 'react-icons/bs';
 import AstrologerCard, { AstrologerData } from '../Card/AstrologerCard';
 import { astrologerData } from '../AstrologerSection/AstrologerSection';
 import AstrologerHeroBanner from './AstrologerHeroBanner';
+import { fetchAstroList } from '@/services/astrologer/astrologerService';
 
 export interface AstrologersListingProps {
   initialCategory?: string;
 }
+
+const ITEMS_PER_PAGE = 20;
+
+const getPageNumbers = (current: number, total: number): (number | string)[] => {
+  if (total <= 7) {
+    return Array.from({ length: total }, (_, i) => i + 1);
+  }
+
+  const pages: (number | string)[] = [];
+  pages.push(1);
+
+  if (current > 3) {
+    pages.push('dots-1');
+  }
+
+  const start = Math.max(2, current - 1);
+  const end = Math.min(total - 1, current + 1);
+
+  for (let i = start; i <= end; i++) {
+    pages.push(i);
+  }
+
+  if (current < total - 2) {
+    pages.push('dots-2');
+  }
+
+  pages.push(total);
+  return pages;
+};
 
 const TABS = [
   "All",
@@ -75,9 +105,6 @@ const CATEGORY_DESCRIPTIONS: Record<string, { title: string; subtitle: string }>
 };
 
 export default function AstrologersListing({ initialCategory = "All" }: AstrologersListingProps) {
-  const allAstrologers: AstrologerData[] = astrologerData;
-  const router = useRouter();
-
   // Find matching tab case-insensitively
   const resolvedCategory = useMemo(() => {
     if (!initialCategory || initialCategory.toLowerCase() === "all") return "All";
@@ -86,17 +113,76 @@ export default function AstrologersListing({ initialCategory = "All" }: Astrolog
   }, [initialCategory]);
 
   const [activeTab, setActiveTab] = useState<string>(resolvedCategory);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [isSortOpen, setIsSortOpen] = useState(false);
-  const [selectedSort, setSelectedSort] = useState("Popularity");
+  const [allAstrologers, setAllAstrologers] = useState<AstrologerData[]>(() => {
+    if (!initialCategory || initialCategory.toLowerCase() === "all") {
+      return astrologerData;
+    }
+    const filtered = astrologerData.filter(a =>
+      a.skills.some(s => s.toLowerCase().includes(initialCategory.toLowerCase()))
+    );
+    return filtered.length > 0 ? filtered : astrologerData;
+  });
+  const [isLoading, setIsLoading] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalCount, setTotalCount] = useState(0);
+  const router = useRouter();
 
   // Sync if initialCategory prop changes
   useEffect(() => {
     setActiveTab(resolvedCategory);
+    setCurrentPage(1);
   }, [resolvedCategory]);
+
+  useEffect(() => {
+    let isMounted = true;
+    const loadAstrologers = async () => {
+      try {
+        setIsLoading(true);
+        const expertiseParam =
+          activeTab && activeTab.toLowerCase() !== "all"
+            ? activeTab.toLowerCase()
+            : undefined;
+
+        const { astrologers: apiList, total, totalPages: pages } = await fetchAstroList(
+          currentPage,
+          ITEMS_PER_PAGE,
+          expertiseParam
+        );
+        if (isMounted) {
+          setAllAstrologers(apiList || []);
+          setTotalCount(total || 0);
+          setTotalPages(pages || 1);
+        }
+      } catch (err) {
+        console.error("Error loading astrologers from API:", err);
+      } finally {
+        if (isMounted) setIsLoading(false);
+      }
+    };
+    loadAstrologers();
+    return () => {
+      isMounted = false;
+    };
+  }, [activeTab, currentPage]);
+
+  const [searchQuery, setSearchQuery] = useState("");
+  const [isSortOpen, setIsSortOpen] = useState(false);
+  const [selectedSort, setSelectedSort] = useState("Popularity");
+
+  const handlePageChange = (newPage: number) => {
+    if (newPage >= 1 && newPage <= totalPages && newPage !== currentPage) {
+      setCurrentPage(newPage);
+      const section = document.getElementById('astrologer-listing-section');
+      if (section) {
+        section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+  };
 
   const handleTabChange = (tab: string) => {
     setActiveTab(tab);
+    setCurrentPage(1);
     if (tab.toLowerCase() === "all") {
       router.push('/astrologers');
     } else {
@@ -104,16 +190,9 @@ export default function AstrologersListing({ initialCategory = "All" }: Astrolog
     }
   };
 
-  // Filter astrologers based on search and tab
+  // Filter astrologers based on search and sort
   const filteredAstrologers = useMemo(() => {
     return allAstrologers?.filter((astro) => {
-      // Tab filter
-      if (activeTab !== "All") {
-        const matchTab = astro.skills.some(skill =>
-          skill.toLowerCase().includes(activeTab.toLowerCase())
-        );
-        if (!matchTab) return false;
-      }
       // Search query filter
       if (searchQuery.trim()) {
         const q = searchQuery.toLowerCase();
@@ -169,7 +248,7 @@ export default function AstrologersListing({ initialCategory = "All" }: Astrolog
       />
 
       {/* Main Content Area: Floating Search, Tabs & Astrologer Grid */}
-      <section className="container mx-auto max-w-7xl px-4 -mt-6 sm:-mt-8 relative z-20">
+      <section id="astrologer-listing-section" className="container mx-auto max-w-7xl px-4 -mt-6 sm:-mt-8 relative z-20">
 
         {/* 1. Search Bar */}
         <div className="bg-white rounded-full shadow-md p-1 sm:p-1.5 flex items-center border border-gray-200/80 max-w-xl sm:max-w-2xl mx-auto mb-5 sm:mb-6 md:mb-8 w-full focus-within:border-[#F6971E]/50 focus-within:shadow-[0_4px_16px_rgba(246,151,30,0.12)] transition-all">
@@ -304,7 +383,18 @@ export default function AstrologersListing({ initialCategory = "All" }: Astrolog
         )}
 
         {/* 3. Astrologers Grid (Clean 4-column layout on desktop) */}
-        {filteredAstrologers?.length > 0 ? (
+        {isLoading ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 md:gap-6 animate-pulse">
+            {[...Array(8)].map((_, i) => (
+              <div key={i} className="bg-white rounded-2xl h-[340px] border border-gray-100 p-4 flex flex-col justify-between shadow-xs">
+                <div className="w-full h-44 bg-gray-200 rounded-xl mb-3"></div>
+                <div className="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
+                <div className="h-3 bg-gray-100 rounded w-1/2 mb-4"></div>
+                <div className="h-8 bg-gray-200 rounded-xl w-full"></div>
+              </div>
+            ))}
+          </div>
+        ) : filteredAstrologers?.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 md:gap-6">
             {filteredAstrologers.map((astro) => (
               <AstrologerCard key={astro.id} astro={astro} />
@@ -324,6 +414,69 @@ export default function AstrologersListing({ initialCategory = "All" }: Astrolog
             >
               Clear Filters
             </button>
+          </div>
+        )}
+
+        {/* 4. Pagination Controls */}
+        {!isLoading && totalPages > 1 && (
+          <div className="mt-8 sm:mt-12 flex flex-col sm:flex-row items-center justify-between gap-4 pt-6 border-t border-gray-100">
+            {/* Showing Info */}
+            <p className="text-xs sm:text-sm text-gray-500 font-helvetica order-2 sm:order-1">
+              Showing <span className="font-semibold text-[#4A2B23]">{totalCount > 0 ? (currentPage - 1) * ITEMS_PER_PAGE + 1 : 0}</span> - <span className="font-semibold text-[#4A2B23]">{Math.min(currentPage * ITEMS_PER_PAGE, totalCount)}</span> of <span className="font-semibold text-[#4A2B23]">{totalCount}</span> astrologers
+            </p>
+
+            {/* Pagination Buttons */}
+            <div className="flex items-center gap-1.5 sm:gap-2 order-1 sm:order-2 flex-wrap justify-center">
+              {/* Prev Button */}
+              <button
+                onClick={() => handlePageChange(currentPage - 1)}
+                disabled={currentPage === 1 || isLoading}
+                className="flex items-center gap-1 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full border border-gray-200 text-xs sm:text-sm font-bold text-[#4A2B23] bg-white hover:border-[#F6971E] hover:text-[#F6971E] disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:border-gray-200 disabled:hover:text-[#4A2B23] transition-all shadow-xs cursor-pointer"
+                aria-label="Previous Page"
+              >
+                <BsChevronLeft className="text-xs sm:text-sm" />
+                <span className="hidden sm:inline">Prev</span>
+              </button>
+
+              {/* Page Numbers */}
+              <div className="flex items-center gap-1 sm:gap-1.5">
+                {getPageNumbers(currentPage, totalPages).map((p, idx) => {
+                  if (typeof p === 'string') {
+                    return (
+                      <span key={`dots-${idx}`} className="px-1.5 sm:px-2 text-xs sm:text-sm text-gray-400 font-bold select-none">
+                        ...
+                      </span>
+                    );
+                  }
+                  const isCurrent = p === currentPage;
+                  return (
+                    <button
+                      key={p}
+                      onClick={() => handlePageChange(p)}
+                      disabled={isLoading}
+                      className={`w-8 h-8 sm:w-9 sm:h-9 rounded-full text-xs sm:text-sm font-bold flex items-center justify-center transition-all cursor-pointer ${
+                        isCurrent
+                          ? 'bg-[#F6971E] text-white shadow-[0_4px_10px_rgba(246,151,30,0.3)]'
+                          : 'bg-white border border-gray-200 text-[#4A2B23] hover:border-[#F6971E] hover:text-[#F6971E]'
+                      }`}
+                    >
+                      {p}
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Next Button */}
+              <button
+                onClick={() => handlePageChange(currentPage + 1)}
+                disabled={currentPage === totalPages || isLoading}
+                className="flex items-center gap-1 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full border border-gray-200 text-xs sm:text-sm font-bold text-[#4A2B23] bg-white hover:border-[#F6971E] hover:text-[#F6971E] disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:border-gray-200 disabled:hover:text-[#4A2B23] transition-all shadow-xs cursor-pointer"
+                aria-label="Next Page"
+              >
+                <span className="hidden sm:inline">Next</span>
+                <BsChevronRight className="text-xs sm:text-sm" />
+              </button>
+            </div>
           </div>
         )}
       </section>

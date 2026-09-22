@@ -4,36 +4,11 @@ import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { BsStarFill, BsStarHalf, BsStar, BsPatchCheckFill, BsLightningChargeFill, BsCheckCircleFill, BsChevronRight, BsShieldCheck, BsImages, BsX, BsCameraVideoFill, BsPlayFill, BsCurrencyRupee, BsCameraVideo } from 'react-icons/bs';
-import { astrologerData } from '@/app/components/AstrologerSection/AstrologerSection';
-import { notFound, useParams } from 'next/navigation';
+import { useParams } from 'next/navigation';
+import { fetchAstrologerById } from '@/services/astrologer/astrologerService';
+import { sanitizeImageUrl } from '@/utils/imageUtils';
 
-export default function AstrologerDetails() {
-  // const params = useParams();
-  // const id = parseInt(params.id as string);
-  const [isBioExpanded, setIsBioExpanded] = useState(false);
-  const [previewImage, setPreviewImage] = useState<string | null>(null);
-  const [activeVideo, setActiveVideo] = useState<string | null>(null);
-  const [showAllReviews, setShowAllReviews] = useState(false);
-
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        setPreviewImage(null);
-        setActiveVideo(null);
-      }
-    };
-    if (previewImage || activeVideo) {
-      document.body.style.overflow = 'hidden';
-      window.addEventListener('keydown', handleKeyDown);
-    } else {
-      document.body.style.overflow = '';
-    }
-    return () => {
-      document.body.style.overflow = '';
-      window.removeEventListener('keydown', handleKeyDown);
-    };
-  }, [previewImage, activeVideo]);
-  const astro1: any = {
+const astroFallback: any = {
     "chat": {
       "ratePerMinute": 80,
       "offerPricePerMinute": 20
@@ -188,14 +163,61 @@ export default function AstrologerDetails() {
     }
   };
 
-  // Since we duplicated data in the list view (adding 10, 20 to IDs), 
-  // we map any ID back to the base 4 astrologers so the page doesn't break
-  // const baseId = ((id - 1) % 4) + 1;
-  // const astro = astrologerData.find(a => a.id === baseId);
+export default function AstrologerDetails() {
+  const params = useParams();
+  const astroId = (params?.id as string) || '';
 
-  // if (!astro) {
-  //   notFound();
-  // }
+  const [astro, setAstro] = useState<any>(astroFallback);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isBioExpanded, setIsBioExpanded] = useState(false);
+  const [previewImage, setPreviewImage] = useState<string | null>(null);
+  const [activeVideo, setActiveVideo] = useState<string | null>(null);
+  const [showAllReviews, setShowAllReviews] = useState(false);
+
+  useEffect(() => {
+    let isMounted = true;
+    if (!astroId) return;
+
+    const loadDetails = async () => {
+      try {
+        setIsLoading(true);
+        const data = await fetchAstrologerById(astroId);
+        if (isMounted && data) {
+          setAstro(data);
+        }
+      } catch (err) {
+        console.error('Error loading astrologer details:', err);
+      } finally {
+        if (isMounted) setIsLoading(false);
+      }
+    };
+
+    loadDetails();
+    return () => {
+      isMounted = false;
+    };
+  }, [astroId]);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setPreviewImage(null);
+        setActiveVideo(null);
+      }
+    };
+    if (previewImage || activeVideo) {
+      document.body.style.overflow = 'hidden';
+      window.addEventListener('keydown', handleKeyDown);
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [previewImage, activeVideo]);
+
+  const currentAstro = astro || astroFallback;
 
   const reviewsList = [
     { name: "Amrita S.", text: "Your remedies are magic sir, it has really helped me a lot. Thank you so much! 🙏💖", givenBy: "Mohan Sharma", stars: 5 },
@@ -214,17 +236,20 @@ export default function AstrologerDetails() {
     reviewsList.reduce((acc, curr) => acc + (curr.stars || 5), 0) / reviewsList.length
   ).toFixed(1);
 
-  const displayRating = astro1.averageRating > 0 ? Number(astro1.averageRating).toFixed(1) : calculatedAverageRating;
+  const displayRating =
+    currentAstro.averageRating !== undefined && Number(currentAstro.averageRating) > 0
+      ? Number(currentAstro.averageRating).toFixed(1)
+      : calculatedAverageRating;
 
   // Combine all photos, certificates, and certificate gallery into a single unified Photo Gallery (deduplicating URLs)
   const allGalleryPhotos = Array.from(
     new Set([
-      ...(astro1.photoGallery || []),
-      ...(astro1.photos || []),
-      ...(astro1.certificateGallery || []),
-      ...(astro1.certificates || [])
+      ...(currentAstro.photoGallery || []),
+      ...(currentAstro.photos || []),
+      ...(currentAstro.certificateGallery || []),
+      ...(currentAstro.certificates || [])
     ].filter(Boolean))
-  );
+  ).map((p: any) => sanitizeImageUrl(p));
 
   return (
     <div className="min-h-screen bg-[#FFFDF9] pb-20 font-helvetica">
@@ -245,7 +270,7 @@ export default function AstrologerDetails() {
             <BsChevronRight className="text-[9px] shrink-0" />
             <Link href="/astrologers" className="hover:text-[#F6971E] transition-colors">Astrologers</Link>
             <BsChevronRight className="text-[9px] shrink-0" />
-            <span className="text-[#F6971E] truncate max-w-[200px] sm:max-w-none">{astro1.fullName}</span>
+            <span className="text-[#F6971E] truncate max-w-[200px] sm:max-w-none">{currentAstro.fullName || "Astrologer"}</span>
           </div>
         </div>
       </div>
@@ -261,8 +286,8 @@ export default function AstrologerDetails() {
             <div className="relative w-24 h-24 sm:w-28 sm:h-28 md:w-32 md:h-32 flex-shrink-0 mx-auto md:mx-0">
               <div className="w-full h-full rounded-full border-[3px] border-[#F6971E]/30 overflow-hidden bg-white shadow-md relative">
                 <Image
-                  src={astro1.profileImg}
-                  alt={astro1.fullName}
+                  src={sanitizeImageUrl(currentAstro.profileImg)}
+                  alt={currentAstro.fullName || "Astrologer"}
                   fill
                   className="object-cover"
                 />
@@ -274,11 +299,11 @@ export default function AstrologerDetails() {
               <div className="flex flex-col md:flex-row md:items-start justify-between gap-4 w-full">
                 <div className="min-w-0">
                   {/* Tag if present */}
-                  {astro1.tag?.tagName && (
+                  {currentAstro.tag?.tagName && (
                     <div className="mb-1.5 flex justify-center md:justify-start">
                       <span className="inline-flex items-center gap-1 text-[10px] sm:text-xs font-bold text-[#F6971E] bg-[#FFF8EB] border border-[#F6971E]/30 px-2.5 py-0.5 rounded-full uppercase tracking-wider shadow-2xs text-center max-w-full truncate">
                         <span className="shrink-0">🔥</span>
-                        <span className="truncate">{astro1.tag.tagName}</span>
+                        <span className="truncate">{currentAstro.tag.tagName}</span>
                       </span>
                     </div>
                   )}
@@ -286,26 +311,30 @@ export default function AstrologerDetails() {
                   {/* Astrologer Name & Verified Tick */}
                   <div className="flex items-center justify-center md:justify-start gap-1.5 sm:gap-2 mb-1.5 flex-wrap">
                     <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-[#4A2B23] font-['Inria_Serif'] leading-tight">
-                      {astro1.fullName}
+                      {currentAstro.fullName || "Astrologer"}
                     </h1>
-                    {astro1.isOtpVerified && (
+                    {currentAstro.isOtpVerified && (
                       <BsPatchCheckFill className="text-[#00C853] text-lg sm:text-xl shrink-0" title="OTP Verified" />
                     )}
                   </div>
 
                   {/* Expertise */}
-                  {astro1?.expertise && (
+                  {currentAstro?.expertise && currentAstro.expertise.length > 0 && (
                     <p className="text-xs sm:text-sm text-gray-600 text-left leading-relaxed mt-1">
                       <span className="text-gray-400 uppercase tracking-wider text-[10px] sm:text-xs font-bold mr-1.5">Expertise:</span>
-                      <span className="font-semibold text-[#4A2B23]">{astro1.expertise?.map((exp: any) => exp.expertiseName).join(' • ')}</span>
+                      <span className="font-semibold text-[#4A2B23]">
+                        {currentAstro.expertise.map((exp: any) => (typeof exp === 'string' ? exp : exp?.expertiseName)).filter(Boolean).join(' • ')}
+                      </span>
                     </p>
                   )}
 
                   {/* Languages */}
-                  {astro1?.languages && (
+                  {currentAstro?.languages && currentAstro.languages.length > 0 && (
                     <p className="text-xs sm:text-sm text-gray-600 text-left leading-relaxed mt-1">
                       <span className="text-gray-400 uppercase tracking-wider text-[10px] sm:text-xs font-bold mr-1.5">Languages:</span>
-                      <span className="font-semibold text-[#4A2B23]">{astro1.languages?.map((lang: any) => lang.languageName).join(' • ')}</span>
+                      <span className="font-semibold text-[#4A2B23]">
+                        {currentAstro.languages.map((lang: any) => (typeof lang === 'string' ? lang : lang?.languageName)).filter(Boolean).join(' • ')}
+                      </span>
                     </p>
                   )}
                 </div>
@@ -313,15 +342,15 @@ export default function AstrologerDetails() {
                 {/* Price and Connect Button (Right Side) */}
                 <div className="w-full md:w-auto flex flex-col items-center md:items-end gap-2.5 mt-2 md:mt-0 shrink-0">
                   <div className="flex items-baseline justify-center md:justify-end gap-2">
-                    {astro1.chat?.ratePerMinute && (
+                    {(currentAstro.chat?.ratePerMinute || currentAstro.call?.ratePerMinute) && (
                       <span className="text-xs sm:text-sm text-gray-400 line-through font-medium flex items-center">
                         <BsCurrencyRupee className="text-xs -mr-0.5" />
-                        {astro1.chat.ratePerMinute}/min
+                        {currentAstro.chat?.ratePerMinute || currentAstro.call?.ratePerMinute}/min
                       </span>
                     )}
                     <span className="text-xl sm:text-2xl md:text-[26px] font-bold text-[#4A2B23] flex items-center">
                       <BsCurrencyRupee className="text-lg md:text-xl -mr-0.5" />
-                      {astro1.chat?.offerPricePerMinute || 20}
+                      {currentAstro.chat?.offerPricePerMinute || currentAstro.call?.offerPricePerMinute || 20}
                       <span className="text-xs font-medium text-gray-500 ml-0.5">/min</span>
                     </span>
                   </div>
@@ -340,7 +369,7 @@ export default function AstrologerDetails() {
               {/* 1. Experience (3 cols) */}
               <div className="col-span-6 md:col-span-3 flex flex-col items-center justify-center text-center py-2 bg-transparent">
                 <span className="text-lg sm:text-xl md:text-2xl font-bold text-[#4A2B23] mb-0.5 leading-tight">
-                  {astro1.experience} Yrs
+                  {currentAstro.experience || 0} Yrs
                 </span>
                 <span className="text-[10px] sm:text-xs text-gray-500 font-bold uppercase tracking-wider">
                   Experience
@@ -374,9 +403,9 @@ export default function AstrologerDetails() {
 
               {/* 4. Watch Intro (2 cols) */}
               <div className="col-span-12 sm:col-span-5 md:col-span-2 flex items-center">
-                {astro1.videoIntro ? (
+                {currentAstro.videoIntro ? (
                   <button
-                    onClick={() => setActiveVideo(astro1.videoIntro)}
+                    onClick={() => setActiveVideo(currentAstro.videoIntro)}
                     className="w-full h-full min-h-[48px] sm:min-h-[54px] flex items-center justify-center sm:justify-start gap-2 px-2.5 lg:px-3 py-2 bg-[#FFFDF0] hover:bg-[#FFF0D4] border border-[#F6971E]/30 hover:border-[#F6971E] rounded-2xl transition-all cursor-pointer group shrink-0 shadow-2xs"
                   >
                     <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-[#F6971E]/15 group-hover:bg-[#F6971E] text-[#F6971E] group-hover:text-white flex items-center justify-center transition-colors shrink-0">
@@ -410,14 +439,14 @@ export default function AstrologerDetails() {
           <section className="bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-7 shadow-sm border border-[#F6971E]/15">
             <h2 className="text-base sm:text-lg md:text-xl lg:text-2xl font-bold font-['Inria_Serif'] text-[#4A2B23] mb-3 sm:mb-4 flex items-center gap-2 sm:gap-2.5">
               <span className="w-1 sm:w-1.5 h-4 sm:h-5 md:h-6 bg-[#F6971E] rounded-full inline-block shrink-0"></span>
-              About {astro1.fullName}
+              About {currentAstro.fullName || "Astrologer"}
             </h2>
 
             <div className="prose max-w-none text-gray-600 text-xs sm:text-sm md:text-[15px] leading-relaxed space-y-3 font-normal">
-              {astro1.profileBio ? (
+              {(currentAstro.profileBio || currentAstro.bio || currentAstro.about) ? (
                 <div>
                   <p className={`whitespace-pre-line leading-relaxed ${!isBioExpanded ? 'line-clamp-4' : ''}`}>
-                    {astro1.profileBio}
+                    {currentAstro.profileBio || currentAstro.bio || currentAstro.about}
                   </p>
                   <button
                     onClick={() => setIsBioExpanded(!isBioExpanded)}
@@ -431,7 +460,7 @@ export default function AstrologerDetails() {
           </section>
 
           {/* Videos Section */}
-          {astro1.videos && astro1.videos.length > 0 && (
+          {currentAstro.videos && currentAstro.videos.length > 0 && (
             <section className="bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-7 shadow-sm border border-[#F6971E]/15">
               <div className="flex items-center justify-between mb-3 sm:mb-5 border-b border-gray-100 pb-3">
                 <div>
@@ -443,7 +472,7 @@ export default function AstrologerDetails() {
               </div>
 
               <div className="custom-x-scroll flex gap-3.5 sm:gap-4 overflow-x-auto pb-4 pt-1 scroll-smooth">
-                {astro1.videos.map((videoUrl: string, idx: number) => (
+                {currentAstro.videos.map((videoUrl: string, idx: number) => (
                   <div
                     key={idx}
                     className="w-[180px] sm:w-[210px] md:w-[230px] lg:w-[calc((100%-64px)/5)] lg:min-w-[calc((100%-64px)/5)] flex-shrink-0 group bg-[#FFFDF9] border border-[#F6971E]/20 hover:border-[#F6971E] rounded-2xl p-2 sm:p-2.5 transition-all cursor-pointer shadow-2xs hover:shadow-md"

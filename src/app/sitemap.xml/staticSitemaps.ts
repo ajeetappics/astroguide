@@ -8,6 +8,18 @@ export const staticUrls = [
     changefreq: 'weekly',
     priority: 1.0,
   },
+  {
+    loc: `${SITE_URL}/astrologers`,
+    lastmod: new Date().toISOString().split('T')[0],
+    changefreq: 'daily',
+    priority: 0.9,
+  },
+  {
+    loc: `${SITE_URL}/astrologer-sitemap.xml`,
+    lastmod: new Date().toISOString().split('T')[0],
+    changefreq: 'daily',
+    priority: 0.9,
+  },
   // {
   //   loc: `${SITE_URL}/login`,
   //   lastmod: new Date().toISOString().split('T')[0],

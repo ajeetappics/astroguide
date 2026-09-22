@@ -1,13 +1,14 @@
 'use client'
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { BsStarFill, BsPatchCheckFill, BsCurrencyRupee } from 'react-icons/bs';
 import { usePopup } from '../popup/PopupContext';
+import { sanitizeImageUrl } from '@/utils/imageUtils';
 
 export interface AstrologerData {
-  id: number;
+  id: number | string;
   name: string;
   isVerified: boolean;
   isCelebrity: boolean;
@@ -29,6 +30,12 @@ export default function AstrologerCard({ astro: astroProp, astrologer: astrologe
   const astro = (astroProp || astrologerProp)!;
   const { openPopup } = usePopup();
   const router = useRouter();
+
+  const [imgSrc, setImgSrc] = useState(() => sanitizeImageUrl(astro?.imageUrl));
+
+  useEffect(() => {
+    setImgSrc(sanitizeImageUrl(astro?.imageUrl));
+  }, [astro?.imageUrl]);
 
   if (!astro) return null;
 
@@ -54,11 +61,12 @@ export default function AstrologerCard({ astro: astroProp, astrologer: astrologe
         <div className="flex flex-col items-center flex-shrink-0">
           <div className="relative w-[95px] h-[130px] sm:w-[105px] sm:h-[140px] rounded-2xl border-2 border-[#F6971E] overflow-hidden bg-gray-50">
             <Image
-              src={astro.imageUrl}
+              src={imgSrc}
               alt={astro.name}
               fill
               sizes="110px"
               className="object-cover"
+              onError={() => setImgSrc("/images/astro-1.jpg")}
             />
 
             {/* Trending Badge Overlay */}
@@ -141,11 +149,12 @@ export default function AstrologerCard({ astro: astroProp, astrologer: astrologe
         {/* Top Image Section */}
         <div className="block relative w-full aspect-[4/3] overflow-hidden bg-gray-100">
           <Image 
-            src={astro.imageUrl} 
+            src={imgSrc} 
             alt={astro.name} 
             fill 
             sizes="(max-width: 1200px) 25vw, 280px"
             className="object-cover transition-transform duration-500 group-hover:scale-105"
+            onError={() => setImgSrc("/images/astro-1.jpg")}
           />
 
           {/* Trending Badge Overlay on Desktop Web */}

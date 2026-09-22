@@ -252,4 +252,5 @@ const commonService = {
     fetchExperienceLevels,
 };
 
+export { sanitizeImageUrl } from "@/utils/imageUtils";
 export default commonService;

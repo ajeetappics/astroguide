@@ -21,7 +21,7 @@ export default function AstrologerHeroBanner({
         loop
         muted
         playsInline
-        poster="/images/astrology-bg.jpg"
+        poster="/images/premium-astro-bg.jpg"
         className="absolute inset-0 w-full h-full object-cover opacity-50 pointer-events-none"
       >
         <source src="/images/astrology-video.mp4" type="video/mp4" />

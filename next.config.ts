@@ -18,6 +18,11 @@ const nextConfig: NextConfig = {
         hostname: "storage.googleapis.com",
         pathname: "/**",
       },
+      {
+        protocol: "https",
+        hostname: "atsro-vani-prod-v1.s3.ap-south-1.amazonaws.com",
+        pathname: "/**",
+      },
     ],
   },
 

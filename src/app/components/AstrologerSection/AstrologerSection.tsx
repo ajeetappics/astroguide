@@ -1,9 +1,10 @@
 'use client'
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { BsArrowRight } from 'react-icons/bs';
 import AstrologerCard, { AstrologerData } from '../Card/AstrologerCard';
+import { fetchTopAstrologers } from '@/services/astrologer/astrologerService';
 
 export const astrologerData: AstrologerData[] = [
   {
@@ -139,6 +140,26 @@ export const astrologerData: AstrologerData[] = [
 ];
 
 export default function AstrologerSection() {
+  const [astrologers, setAstrologers] = useState<AstrologerData[]>(astrologerData.slice(0, 4));
+
+  useEffect(() => {
+    let isMounted = true;
+    const loadAstrologers = async () => {
+      try {
+        const { astrologers: apiList } = await fetchTopAstrologers();
+        if (isMounted && apiList && apiList.length > 0) {
+          setAstrologers(apiList.slice(0, 4));
+        }
+      } catch (err) {
+        console.error("Error loading top astrologers:", err);
+      }
+    };
+    loadAstrologers();
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
   return (
     <section className="bg-white py-6 md:py-10 px-4 md:px-8 relative overflow-hidden">
       
@@ -164,9 +185,15 @@ export default function AstrologerSection() {
 
         {/* Astrologers Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-3.5 md:gap-4">
-          {astrologerData && astrologerData?.length > 0 ? astrologerData?.slice(0, 4)?.map((astro) => (
-            <AstrologerCard key={astro.id} astro={astro} />
-          )) : (<div className='text-center col-span-4 text-[#F6971E]'>No Astrologer Data Found!</div>)}
+          {astrologers && astrologers.length > 0 ? (
+            astrologers.map((astro) => (
+              <AstrologerCard key={astro.id} astro={astro} />
+            ))
+          ) : (
+            <div className="text-center col-span-4 text-[#F6971E] py-8">
+              No Astrologer Data Found!
+            </div>
+          )}
         </div>
 
         {/* Responsive View All Astrologers Button (Visible on small screens below the cards) */}
