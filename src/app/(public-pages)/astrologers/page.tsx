@@ -6,7 +6,7 @@ const SITE_URL = process.env.NEXT_PUBLIC_URL || 'https://astroguide-three.vercel
 
 export const metadata: Metadata = {
   title: "Talk to Best Astrologers Online | Top Vedic Astrologers Consultation - Astrovani",
-  description: "Consult India's top verified astrologers online via call or chat on Astrovani. Get accurate predictions for Love, Marriage, Career, Finance, Health & Vedic remedies 24/7.",
+  description: "Consult India's top verified astrologers online via call or chat on Astrovani. Get accurate predictions for Love, Marriage, Career & Finance 24/7.",
   keywords: [
     "astrologers online",
     "talk to astrologer",
@@ -84,7 +84,7 @@ const astrologerPageSchema = {
       "@id": `${SITE_URL}/astrologers#webpage`,
       "url": `${SITE_URL}/astrologers`,
       "name": "Talk to Best Astrologers Online | Top Vedic Astrologers Consultation - Astrovani",
-      "description": "Consult India's top verified astrologers online via call or chat on Astrovani. Get accurate predictions for Love, Marriage, Career, Finance, Health & Vedic remedies 24/7.",
+      "description": "Consult India's top verified astrologers online via call or chat on Astrovani. Get accurate predictions for Love, Marriage, Career & Finance 24/7.",
       "isPartOf": {
         "@type": "WebSite",
         "@id": `${SITE_URL}/#website`,

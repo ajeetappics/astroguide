@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 
 export interface AstrologerHeroBannerProps {
   title: string;
@@ -13,10 +13,21 @@ export default function AstrologerHeroBanner({
   subtitle,
   breadcrumbs
 }: AstrologerHeroBannerProps) {
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.defaultMuted = true;
+      videoRef.current.muted = true;
+      videoRef.current.volume = 0;
+    }
+  }, []);
+
   return (
     <section className="bg-[#4A1A14] pt-28 sm:pt-36 lg:pt-44 pb-14 sm:pb-20 lg:pb-24 px-4 relative overflow-hidden">
       {/* Astrology Background Video with Overlay */}
       <video
+        ref={videoRef}
         autoPlay
         loop
         muted
