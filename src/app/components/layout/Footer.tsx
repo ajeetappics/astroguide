@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { FaFacebookF, FaInstagram, FaYoutube } from 'react-icons/fa';
 import mainLogo from '@/assets/images/logo_new.png';
@@ -8,10 +8,30 @@ import apple_store from '@/assets/images/apple_store.svg';
 import google_store from '@/assets/images/google_store.svg';
 import { usePopup } from '../popup/PopupContext';
 import Image from 'next/image';
-import { pujaData } from '../PoojaSection/PoojaSection';
+import { fetchPoojaList } from '@/services/pooja/poojaService';
+import { PujaData } from '../Card/PoojaCard';
 
 export default function Footer() {
   const { openPopup } = usePopup();
+  const [topPoojas, setTopPoojas] = useState<PujaData[]>([]);
+
+  useEffect(() => {
+    let isMounted = true;
+    const loadFooterPoojas = async () => {
+      try {
+        const res = await fetchPoojaList(1, 10);
+        if (isMounted && res.poojas && res.poojas.length > 0) {
+          setTopPoojas(res.poojas.slice(0, 6));
+        }
+      } catch (err) {
+        console.error('Error fetching footer poojas:', err);
+      }
+    };
+    loadFooterPoojas();
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   return (
     <footer className="bg-[#EEE3D9]">
@@ -235,16 +255,22 @@ export default function Footer() {
               Top Poojas
             </h2>
             <ul className="space-y-2.5 sm:space-y-3 font-helvetica text-[#5C5C5C] text-left text-xs sm:text-sm">
-              {pujaData.slice(0, 6).map((pooja) => (
-                <li key={pooja.id}>
-                  <Link
-                    href={`/pooja/${pooja.id}`}
-                    className="hover:text-[#F6971E] hover:underline text-left block transition-colors"
-                  >
-                    {pooja.title}
-                  </Link>
-                </li>
-              ))}
+              {topPoojas.length > 0 ? (
+                topPoojas.map((pooja) => (
+                  <li key={pooja.id}>
+                    <Link
+                      href={`/pooja/${pooja.slug || pooja.id}`}
+                      className="hover:text-[#F6971E] hover:underline text-left block transition-colors line-clamp-1"
+                    >
+                      {pooja.title}
+                    </Link>
+                  </li>
+                ))
+              ) : (
+                [...Array(5)].map((_, i) => (
+                  <li key={i} className="h-4 bg-[#e2d5c8] rounded w-3/4 animate-pulse" />
+                ))
+              )}
             </ul>
           </div>
 

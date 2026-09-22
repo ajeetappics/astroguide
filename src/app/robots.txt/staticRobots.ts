@@ -11,14 +11,12 @@ export const robotsRules = {
   userAgent: '*',
   allow: [
     '/',
-    // '/login',
-    // '/register',
-    // '/otp',
+    '/pooja',
+    '/astrologers',
     '/contact-us',
     '/privacy-policy',
     '/refund-policy',
     '/terms-of-service',
-    // '/thank-you',
   ],
   disallow: [
     '/information',

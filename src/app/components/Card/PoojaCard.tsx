@@ -1,17 +1,20 @@
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { BsArrowRight } from 'react-icons/bs';
-import { usePopup } from '../popup/PopupContext';
 
 export interface PujaData {
-  id: number;
+  id: number | string;
+  _id?: string;
+  slug?: string;
   title: string;
   description: string;
-  location: string;
-  date: string;
+  location?: string;
+  date?: string;
   price: string;
   image: string;
+  raw?: any;
 }
 
 interface PoojaCardProps {
@@ -20,12 +23,20 @@ interface PoojaCardProps {
 }
 
 export default function PoojaCard({ pooja, basePath = "/pooja" }: PoojaCardProps) {
-  const { openPopup } = usePopup();
+  const router = useRouter();
+  const identifier = pooja.slug || pooja.id;
+  const poojaId = pooja._id || pooja.id;
+  const baseUrl = (process.env.NEXT_PUBLIC_URL || '').replace(/\/$/, '');
+  const connectUrl = `${baseUrl}/pooja-details?poojaId=${poojaId}`;
+
+  const handleCardClick = () => {
+    router.push(`${basePath}/${identifier}`);
+  };
 
   return (
-    <Link
-      href={`${basePath}/${pooja.id}`}
-      className="bg-white rounded-2xl overflow-hidden shadow-[0_4px_16px_rgba(0,0,0,0.04)] hover:shadow-[0_12px_30px_rgba(246,151,30,0.12)] border border-[#F6971E]/15 hover:border-[#F6971E]/50 transition-all duration-500 hover:-translate-y-1 flex flex-col group h-full block"
+    <div
+      onClick={handleCardClick}
+      className="bg-white rounded-2xl overflow-hidden shadow-[0_4px_16px_rgba(0,0,0,0.04)] hover:shadow-[0_12px_30px_rgba(246,151,30,0.12)] border border-[#F6971E]/15 hover:border-[#F6971E]/50 transition-all duration-500 hover:-translate-y-1 flex flex-col group h-full cursor-pointer"
     >
 
       {/* Image Section - Compact height */}
@@ -59,19 +70,17 @@ export default function PoojaCard({ pooja, basePath = "/pooja" }: PoojaCardProps
               {pooja.price.replace('₹', '')}
             </span>
           </div>
-          <button
-            onClick={(e) => {
-              e.preventDefault(); // Prevent Link navigation when clicking the button
-              openPopup();
-            }}
-            className="bg-[#4A2B23] whitespace-nowrap text-white hover:bg-[#F6971E] font-bold text-xs sm:text-[13px] px-3 py-1.5 rounded-full transition-colors flex items-center gap-1 shadow-2xs cursor-pointer"
+          <Link
+            href={connectUrl}
+            onClick={(e) => e.stopPropagation()}
+            className="bg-[#4A2B23] whitespace-nowrap text-white hover:bg-[#F6971E] font-bold text-xs sm:text-[13px] px-3 py-1.5 rounded-full transition-colors flex items-center gap-1 shadow-2xs cursor-pointer z-10"
           >
             Connect <BsArrowRight className="text-xs" />
-          </button>
+          </Link>
         </div>
 
       </div>
 
-    </Link>
+    </div>
   );
 }

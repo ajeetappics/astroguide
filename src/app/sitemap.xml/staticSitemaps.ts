@@ -26,6 +26,18 @@ export const staticUrls = [
     changefreq: 'weekly',
     priority: 0.8,
   },
+  {
+    loc: `${SITE_URL}/pooja`,
+    lastmod: new Date().toISOString().split('T')[0],
+    changefreq: 'daily',
+    priority: 0.9,
+  },
+  {
+    loc: `${SITE_URL}/pooja-sitemap.xml`,
+    lastmod: new Date().toISOString().split('T')[0],
+    changefreq: 'daily',
+    priority: 0.9,
+  },
   // {
   //   loc: `${SITE_URL}/login`,
   //   lastmod: new Date().toISOString().split('T')[0],

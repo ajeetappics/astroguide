@@ -1,14 +1,21 @@
 'use client'
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams } from 'next/navigation';
 import {
   BsChevronRight,
   BsChevronDown
 } from 'react-icons/bs';
-import { usePopup } from '../../../components/popup/PopupContext';
+import { fetchPoojaById } from '@/services/pooja/poojaService';
+
+export interface CategoryItem {
+  _id?: string;
+  categoryName: string;
+  icon?: string;
+  [key: string]: any;
+}
 
 // Helper component for expandable text with 200-limit and View More / View Less
 function ExpandableText({ text, limit = 200 }: { text: string; limit?: number }) {
@@ -43,224 +50,98 @@ function ExpandableText({ text, limit = 200 }: { text: string; limit?: number })
 
 export default function PujaDetails() {
   const params = useParams();
-  const router = useRouter();
-  const { openPopup } = usePopup();
+  const slugOrId = (params?.id as string) || '';
 
   // State to show all categories or only 3
   const [showAllCategories, setShowAllCategories] = useState(false);
+  const [pooja, setPooja] = useState<any>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
-  // Complete data object matching user's specification
-  const pooja = {
-    "_id": "6a7489eecb9ef5a42e8b189e",
-    "name": "Rahu test",
-    "description": "Experience authentic Vedic rituals performed by certified expert priests from India's most sacred temples, delivered live to your home. Experience authentic Vedic rituals performed by certified expert priests from India's most sacred temples, delivered live to your home. Experience authentic Vedic rituals performed by certified expert priests from India's most sacred temples, delivered live to your home. Experience authentic Vedic rituals performed by certified expert priests from India's most sacred temples, delivered live to your home. Experience authentic Vedic rituals performed by certified expert priests from India's most sacred temples, delivered live to your home. Experience authentic Vedic rituals performed by certified expert priests from India's most sacred temples, delivered live to your home. Experience authentic Vedic rituals performed by certified expert priests from India's most sacred temples, delivered live to your home. Experience authentic Vedic rituals performed by.",
-    "image": "https://storage.googleapis.com/astro-vani-storage/admin/1786022750418-chercker.jpg",
-    "benefits": "Experience authentic Vedic rituals performed by certified expert priests from India's most sacred temples, delivered live to your home. Experience authentic Vedic rituals performed by certified expert priests from India's most sacred temples, delivered live to your home. Experience authentic Vedic rituals performed by certified expert priests from India's most sacred temples, delivered live to your home. Experience authentic Vedic rituals performed by certified expert priests from India's most sacred temples, delivered live to your home. Experience authentic Vedic rituals performed by certified expert priests from India's most sacred temples, delivered live to your home. Experience authentic Vedic rituals performed by certified expert priests from India's most sacred temples, delivered live to your home. Experience authentic Vedic rituals performed by certified expert priests from India's most sacred temples, delivered live to your home. Experience authentic Vedic rituals performed by.",
-    "keywords": [],
-    "peopleType": "Individual",
-    "basePrice": 1500,
-    "duration": 15,
-    "categoryId": [
-      {
-        "_id": "6a69cccddc1a587997197f52",
-        "categoryName": "Spell",
-        "icon": "https://storage.googleapis.com/astro-vani-storage/admin/1785415313460-spell.jpg",
-        "createdAt": "2026-07-29T09:50:05.364Z",
-        "updatedAt": "2026-08-14T10:05:33.874Z",
-        "__v": 0,
-        "isSpell": true,
-        "isActive": true
-      },
-      {
-        "_id": "6a64808d8b004e9d442bda82",
-        "categoryName": "Love",
-        "icon": "https://storage.googleapis.com/astro-vani-storage/admin/1785762819657-hearts.png",
-        "createdAt": "2026-07-25T09:23:25.946Z",
-        "updatedAt": "2026-08-14T10:05:54.433Z",
-        "__v": 0,
-        "isSpell": false,
-        "isActive": true
-      },
-      {
-        "_id": "6a6316aebd35bfff0b2df6cb",
-        "categoryName": "Puja for Success",
-        "icon": "https://storage.googleapis.com/astro-vani-storage/admin/1785761909834-success.png",
-        "createdAt": "2026-07-24T07:39:26.622Z",
-        "updatedAt": "2026-08-14T10:05:59.820Z",
-        "__v": 0,
-        "isSpell": false,
-        "isActive": true
-      },
-      {
-        "_id": "6a6315fcbd35bfff0b2df6b4",
-        "categoryName": "Protection & Family Peace",
-        "icon": "https://storage.googleapis.com/astro-vani-storage/admin/1785762854104-family.png",
-        "createdAt": "2026-07-24T07:36:28.773Z",
-        "updatedAt": "2026-08-14T10:06:01.422Z",
-        "__v": 0,
-        "isSpell": false,
-        "isActive": true
-      },
-      {
-        "_id": "6a6315e3bd35bfff0b2df6ac",
-        "categoryName": "Power",
-        "icon": "https://storage.googleapis.com/astro-vani-storage/admin/1786007580686-punch.png",
-        "createdAt": "2026-07-24T07:36:03.347Z",
-        "updatedAt": "2026-08-14T10:06:02.867Z",
-        "__v": 0,
-        "isSpell": false,
-        "isActive": true
-      },
-      {
-        "_id": "6a63158e51b2b304dee03260",
-        "categoryName": "Court Case Vijay",
-        "icon": "https://storage.googleapis.com/astro-vani-storage/admin/1785761957381-law.png",
-        "createdAt": "2026-07-24T07:34:38.463Z",
-        "updatedAt": "2026-08-14T10:06:04.169Z",
-        "__v": 0,
-        "isSpell": false,
-        "isActive": true
-      },
-      {
-        "_id": "6a636510d16517a2b1d6fc6d",
-        "categoryName": "Marriage",
-        "icon": "https://storage.googleapis.com/astro-vani-storage/admin/1785761923653-marriage.png",
-        "createdAt": "2026-07-24T13:13:52.979Z",
-        "updatedAt": "2026-08-14T10:05:56.810Z",
-        "__v": 0,
-        "isSpell": false,
-        "isActive": true
+  useEffect(() => {
+    if (!slugOrId) return;
+    let isMounted = true;
+
+    const loadPoojaDetails = async () => {
+      try {
+        setIsLoading(true);
+        const data = await fetchPoojaById(slugOrId);
+        if (isMounted && data) {
+          setPooja(data);
+          // If slug is available and current URL was accessed by MongoDB id, update browser URL to slug
+          if (data.slug && data.slug !== slugOrId && typeof window !== 'undefined') {
+            window.history.replaceState(null, '', `/pooja/${data.slug}`);
+          }
+        }
+      } catch (err) {
+        console.error('Error fetching pooja details for:', slugOrId, err);
+      } finally {
+        if (isMounted) setIsLoading(false);
       }
-    ],
-    "poojaTagId": null,
-    "includedServices": {
-      "sankalp": true,
-      "templePhotos": false,
-      "videoCall": false,
-      "poojaVideo": true,
-      "prasadDispatch": false,
-      "personalizedMantra": true
-    },
-    "prasadDelivery": false,
-    "isRecommended": false,
-    "isNegativeEnergyRemoval": false,
-    "regions": ["India"],
-    "isActive": true,
-    "isTrending": true,
-    "createdBy": null,
-    "totalBookings": 0,
-    "averageRating": 0,
-    "totalReviews": 0,
-    "preferredDays": [
-      "Sunday",
-      "Monday",
-      "Tuesday",
-      "Wednesday",
-      "Thursday",
-      "Friday"
-    ],
-    "procedure": "Experience authentic Vedic rituals performed by certified expert priests from India's most sacred temples, delivered live to your home. Experience authentic Vedic rituals performed by certified expert priests from India's most sacred temples, delivered live to your home. Experience authentic Vedicr.",
-    "whatHappensAfterOrder": "Experience authentic Vedic rituals performed by certified expert priests from India's most sacred temples, delivered live to your home. Experience authentic Vedic rituals performed by certified expert priests from India's most sacred temples, delivered live to your home. Experience authentic Vedicr.",
-    "startDateTime": "2026-08-06T13:21:00.000Z",
-    "endDateTime": "2026-08-09T13:18:00.000Z",
-    "bookingOpenTill": "2026-08-08T13:19:00.000Z",
-    "createdAt": "2026-08-06T13:19:42.725Z",
-    "updatedAt": "2026-09-08T09:45:53.806Z",
-    "__v": 0,
-    "poojaFaqId": [],
-    "isBookable": false,
-    "faqEntries": [
-      {
-        "_id": "6a7d5c18e28e81f73f965072",
-        "question": "pooja?",
-        "answer": "This Pooja brings peace,life.",
-        "isActive": true,
-        "createdAt": "2026-08-13T05:54:32.951Z",
-        "updatedAt": "2026-08-13T06:34:31.003Z",
-        "__v": 0
-      },
-      {
-        "_id": "6a7c100f22b626fff51dd0f3",
-        "question": "hvyyjh five",
-        "answer": "gdygds five",
-        "isActive": true,
-        "createdAt": "2026-08-12T06:17:51.061Z",
-        "updatedAt": "2026-08-12T06:17:51.061Z",
-        "__v": 0
-      },
-      {
-        "_id": "6a7c100f22b626fff51dd0f1",
-        "question": "que fourgfbeyc",
-        "answer": "faq que ans four",
-        "isActive": true,
-        "createdAt": "2026-08-12T06:17:51.053Z",
-        "updatedAt": "2026-08-12T06:17:51.053Z",
-        "__v": 0
-      },
-      {
-        "_id": "6a7c100f22b626fff51dd0ed",
-        "question": "What is the primary benefit of performing Ganesh Puja?",
-        "answer": "It removes obstacles, brings prosperity, improves wisdom, and is ideal before starting new ventures.",
-        "isActive": true,
-        "createdAt": "2026-08-12T06:17:51.034Z",
-        "updatedAt": "2026-08-12T06:17:51.034Z",
-        "__v": 0
-      },
-      {
-        "_id": "6a7c100f22b626fff51dd0eb",
-        "question": "Can I perform this pooja online via video call?",
-        "answer": "Yes, online video call streaming is supported as part of our included services.",
-        "isActive": true,
-        "createdAt": "2026-08-12T06:17:51.023Z",
-        "updatedAt": "2026-08-12T06:17:51.023Z",
-        "__v": 0
-      },
-      {
-        "_id": "6a7c100f22b626fff51dd0ef",
-        "question": "ugfyuds",
-        "answer": "subfcuidvyisdfcyuv",
-        "isActive": true,
-        "createdAt": "2026-08-12T06:17:51.043Z",
-        "updatedAt": "2026-08-12T06:17:51.043Z",
-        "__v": 0
-      },
-      {
-        "_id": "6a7bc8bdb6eca8e230e5b5c7",
-        "question": "Question 1",
-        "answer": "Answer 1",
-        "isActive": true,
-        "createdAt": "2026-08-12T01:13:33.282Z",
-        "updatedAt": "2026-08-12T01:13:33.282Z",
-        "__v": 0
-      },
-      {
-        "_id": "6a748bfecb9ef5a42e8b1ab2",
-        "question": "What is the duration of one session?",
-        "answer": "A spell session generally takes 20–40 minutes, depending on the astrologer and the nature of the spell.",
-        "isActive": true,
-        "createdAt": "2026-08-06T13:28:30.894Z",
-        "updatedAt": "2026-08-06T13:28:30.894Z",
-        "__v": 0
-      },
-      {
-        "_id": "6a74973340546e255f2a9a64",
-        "question": "Aut nostrum nostrud",
-        "answer": "Molestias ducimus a",
-        "isActive": true,
-        "createdAt": "2026-08-06T14:16:19.435Z",
-        "updatedAt": "2026-08-06T14:16:19.435Z",
-        "__v": 0
-      }
-    ]
-  };
+    };
+
+    loadPoojaDetails();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [slugOrId]);
 
   // FAQ State (default first open)
   const [openFaq, setOpenFaq] = useState<number | null>(0);
 
+  // Loading skeleton state
+  if (isLoading && !pooja) {
+    return (
+      <main className="min-h-screen bg-[#FFFDF9] pt-28 pb-[80px] font-helvetica">
+        <div className="container mx-auto max-w-6xl px-4 animate-pulse">
+          <div className="h-4 bg-gray-200 rounded w-48 mb-6 mt-4" />
+          <div className="bg-white rounded-[24px] sm:rounded-[28px] p-6 sm:p-8 border border-orange-100 flex flex-col lg:flex-row gap-8 items-center">
+            <div className="w-full lg:w-[42%] aspect-[4/2.5] bg-gray-200 rounded-2xl" />
+            <div className="w-full lg:w-[58%] flex flex-col justify-center gap-3">
+              <div className="h-6 bg-gray-200 rounded-full w-28" />
+              <div className="h-8 bg-gray-200 rounded w-3/4" />
+              <div className="h-4 bg-gray-100 rounded w-full" />
+              <div className="h-4 bg-gray-100 rounded w-5/6" />
+              <div className="h-10 bg-gray-200 rounded-xl w-44 mt-4" />
+            </div>
+          </div>
+          <div className="mt-7 flex flex-col gap-5">
+            <div className="h-28 bg-white rounded-2xl border border-orange-100" />
+            <div className="h-28 bg-white rounded-2xl border border-orange-100" />
+          </div>
+        </div>
+      </main>
+    );
+  }
+
+  // Not found state
+  if (!pooja) {
+    return (
+      <main className="min-h-screen bg-[#FFFDF9] pt-28 pb-[80px] font-helvetica flex items-center justify-center">
+        <div className="text-center p-8 sm:p-10 bg-white rounded-3xl shadow-sm border border-[#F6971E]/20 max-w-md mx-4">
+          <h2 className="text-2xl font-bold font-['Inria_Serif'] text-[#4A2B23] mb-2">Pooja Not Found</h2>
+          <p className="text-gray-500 text-sm mb-6">The requested pooja details could not be loaded or are no longer available.</p>
+          <Link
+            href="/pooja"
+            className="inline-flex items-center justify-center bg-gradient-to-r from-[#F6971E] to-[#FFA733] text-white font-bold px-6 py-2.5 rounded-xl shadow-md hover:scale-105 transition-all text-sm"
+          >
+            Browse All Poojas
+          </Link>
+        </div>
+      </main>
+    );
+  }
+
   // Determine displayed categories (default 3, or all when expanded)
+  const categories: CategoryItem[] = Array.isArray(pooja?.categoryId) ? pooja.categoryId : [];
   const visibleCategories = showAllCategories
-    ? pooja.categoryId
-    : pooja.categoryId.slice(0, 3);
+    ? categories
+    : categories.slice(0, 3);
+
+  const poojaName = pooja?.name || pooja?.title || pooja?.poojaName || 'Sacred Pooja';
+  const poojaImage = pooja?.image || pooja?.imageUrl || '/images/poojas/ganesha_pooja.jpg';
+  const rawPrice = pooja?.basePrice ?? pooja?.price ?? 1100;
+  const formattedPrice = (typeof rawPrice === 'number' ? rawPrice : Number(String(rawPrice).replace(/[^\d.]/g, '')) || 1100).toLocaleString('en-IN');
 
   return (
     <main className="min-h-screen bg-[#FFFDF9] pt-28 pb-[80px] font-helvetica">
@@ -272,7 +153,7 @@ export default function PujaDetails() {
           <BsChevronRight className="text-[10px]" />
           <Link href="/pooja" className="hover:text-[#F6971E] transition-colors">Pooja Services</Link>
           <BsChevronRight className="text-[10px]" />
-          <span className="text-[#F6971E] line-clamp-1">{pooja.name}</span>
+          <span className="text-[#F6971E] line-clamp-1">{poojaName}</span>
         </div>
 
         {/* Unified Main Details Card */}
@@ -283,8 +164,8 @@ export default function PujaDetails() {
             <div className="w-full lg:w-[42%] max-w-full lg:max-w-[460px] flex-shrink-0 mx-auto lg:mx-0">
               <div className="relative aspect-[4/2.5] w-full rounded-[18px] sm:rounded-[22px] overflow-hidden shadow-md border border-orange-100/70 bg-[#FFFDF9] group">
                 <Image
-                  src={pooja.image}
-                  alt={pooja.name}
+                  src={poojaImage}
+                  alt={poojaName}
                   fill
                   className="object-cover transition-transform duration-700 group-hover:scale-105"
                   priority
@@ -297,9 +178,9 @@ export default function PujaDetails() {
             <div className="w-full lg:w-[58%] flex flex-col justify-center">
 
               {/* Categories Badges (3 visible by default + View More / View Less toggle) */}
-              {pooja.categoryId && pooja.categoryId.length > 0 && (
+              {categories.length > 0 && (
                 <div className="flex flex-wrap items-center gap-2 mb-2.5">
-                  {visibleCategories.map((cat) => (
+                  {visibleCategories.map((cat: CategoryItem) => (
                     <span
                       key={cat._id}
                       className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full text-xs font-semibold bg-orange-50 text-[#F6971E] border border-orange-200/60 shadow-2xs"
@@ -314,13 +195,13 @@ export default function PujaDetails() {
                   ))}
 
                   {/* View More / View Less Button for Categories */}
-                  {pooja.categoryId.length > 3 && (
+                  {categories.length > 3 && (
                     <button
                       type="button"
                       onClick={() => setShowAllCategories(!showAllCategories)}
                       className="inline-flex items-center gap-1 px-3 py-0.5 rounded-full text-xs font-bold bg-amber-50 hover:bg-amber-100 text-[#F6971E] border border-[#F6971E]/30 transition-colors cursor-pointer"
                     >
-                      <span>{showAllCategories ? 'View Less' : `+${pooja.categoryId.length - 3} View More`}</span>
+                      <span>{showAllCategories ? 'View Less' : `+${categories.length - 3} View More`}</span>
                     </button>
                   )}
                 </div>
@@ -328,29 +209,31 @@ export default function PujaDetails() {
 
               {/* Pooja Name */}
               <h1 className="text-xl sm:text-2xl md:text-3xl font-bold font-['Inria_Serif'] text-[#4A2B23] mb-2 leading-tight">
-                {pooja.name}
+                {poojaName}
               </h1>
 
               {/* Description Snippet (with View More / View Less) */}
-              <div className="mb-4">
-                <ExpandableText text={pooja.description} limit={200} />
-              </div>
+              {pooja.description && (
+                <div className="mb-4">
+                  <ExpandableText text={pooja.description} limit={200} />
+                </div>
+              )}
 
               {/* Pricing & CTA - directly attached below description */}
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-3.5 border-t border-gray-100">
                 <div className="flex flex-col">
                   <span className="text-gray-400 uppercase tracking-widest text-[10px] sm:text-[11px] font-bold mb-0.5">Base Price</span>
                   <span className="text-xl sm:text-2xl md:text-3xl font-bold text-[#4A2B23] font-['Inria_Serif'] tracking-tight">
-                    ₹{pooja.basePrice.toLocaleString('en-IN')}
+                    ₹{formattedPrice}
                   </span>
                 </div>
 
-                <button
-                  onClick={openPopup}
-                  className="w-full sm:w-auto bg-gradient-to-r from-[#F6971E] to-[#FFA733] hover:from-[#FFA733] hover:to-[#F6971E] text-white font-bold text-xs sm:text-sm py-2.5 px-6 sm:px-8 rounded-xl shadow-[0_4px_15px_rgba(246,151,30,0.3)] hover:scale-105 active:scale-95 transition-all cursor-pointer"
+                <Link
+                  href={`${(process.env.NEXT_PUBLIC_URL || '').replace(/\/$/, '')}/pooja-details?poojaId=${pooja?._id || pooja?.id || slugOrId}`}
+                  className="w-full sm:w-auto bg-gradient-to-r from-[#F6971E] to-[#FFA733] hover:from-[#FFA733] hover:to-[#F6971E] text-white font-bold text-xs sm:text-sm py-2.5 px-6 sm:px-8 rounded-xl shadow-[0_4px_15px_rgba(246,151,30,0.3)] hover:scale-105 active:scale-95 transition-all cursor-pointer flex items-center justify-center text-center"
                 >
                   Book Pooja Now
-                </button>
+                </Link>
               </div>
 
             </div>
@@ -359,69 +242,79 @@ export default function PujaDetails() {
         </div>
 
         {/* 4 Full-Width (100% Width) Sections: Description, Benefits, Procedure, What Happens After Order */}
-        <div className="mt-7 flex flex-col gap-5 w-full">
+        {(pooja.description || pooja.benefits || pooja.procedure || pooja.whatHappensAfterOrder) && (
+          <div className="mt-7 flex flex-col gap-5 w-full">
 
-          {/* 1. Description Section (100% Width) */}
-          <div className="w-full bg-white rounded-[20px] shadow-[0_4px_25px_rgba(0,0,0,0.03)] border border-[#F6971E]/15 p-5 sm:p-7">
-            <div className="flex items-center gap-2 mb-2.5">
-              <span className="w-1.5 h-4 sm:h-5 rounded-full bg-[#F6971E]" />
-              <h2 className="text-base sm:text-lg md:text-xl font-bold font-['Inria_Serif'] text-[#4A2B23]">
-                Description
-              </h2>
-            </div>
-            <ExpandableText text={pooja.description} limit={200} />
-          </div>
-
-          {/* 2. Benefits Section (100% Width) */}
-          <div className="w-full bg-white rounded-[20px] shadow-[0_4px_25px_rgba(0,0,0,0.03)] border border-[#F6971E]/15 p-5 sm:p-7">
-            <div className="flex items-center gap-2 mb-2.5">
-              <span className="w-1.5 h-4 sm:h-5 rounded-full bg-[#F6971E]" />
-              <h2 className="text-base sm:text-lg md:text-xl font-bold font-['Inria_Serif'] text-[#4A2B23]">
-                Benefits
-              </h2>
-            </div>
-            <ExpandableText text={pooja.benefits} limit={200} />
-
-            {/* Preferred Days inside Benefits */}
-            {pooja.preferredDays && pooja.preferredDays.length > 0 && (
-              <div className="mt-4 pt-3.5 border-t border-gray-100">
-                <h4 className="text-[10px] sm:text-[11px] font-bold uppercase tracking-widest text-gray-400 mb-2">
-                  Auspicious / Preferred Days
-                </h4>
-                <div className="flex flex-wrap gap-1.5">
-                  {pooja.preferredDays.map((day) => (
-                    <span key={day} className="px-2.5 py-0.5 rounded-md bg-orange-50 border border-orange-200 text-xs font-semibold text-[#F6971E]">
-                      {day}
-                    </span>
-                  ))}
+            {/* 1. Description Section (100% Width) */}
+            {pooja.description && (
+              <div className="w-full bg-white rounded-[20px] shadow-[0_4px_25px_rgba(0,0,0,0.03)] border border-[#F6971E]/15 p-5 sm:p-7">
+                <div className="flex items-center gap-2 mb-2.5">
+                  <span className="w-1.5 h-4 sm:h-5 rounded-full bg-[#F6971E]" />
+                  <h2 className="text-base sm:text-lg md:text-xl font-bold font-['Inria_Serif'] text-[#4A2B23]">
+                    Description
+                  </h2>
                 </div>
+                <ExpandableText text={pooja.description} limit={200} />
               </div>
             )}
-          </div>
 
-          {/* 3. Procedure Section (100% Width) */}
-          <div className="w-full bg-white rounded-[20px] shadow-[0_4px_25px_rgba(0,0,0,0.03)] border border-[#F6971E]/15 p-5 sm:p-7">
-            <div className="flex items-center gap-2 mb-2.5">
-              <span className="w-1.5 h-4 sm:h-5 rounded-full bg-[#F6971E]" />
-              <h2 className="text-base sm:text-lg md:text-xl font-bold font-['Inria_Serif'] text-[#4A2B23]">
-                Procedure
-              </h2>
-            </div>
-            <ExpandableText text={pooja.procedure} limit={200} />
-          </div>
+            {/* 2. Benefits Section (100% Width) */}
+            {pooja.benefits && (
+              <div className="w-full bg-white rounded-[20px] shadow-[0_4px_25px_rgba(0,0,0,0.03)] border border-[#F6971E]/15 p-5 sm:p-7">
+                <div className="flex items-center gap-2 mb-2.5">
+                  <span className="w-1.5 h-4 sm:h-5 rounded-full bg-[#F6971E]" />
+                  <h2 className="text-base sm:text-lg md:text-xl font-bold font-['Inria_Serif'] text-[#4A2B23]">
+                    Benefits
+                  </h2>
+                </div>
+                <ExpandableText text={pooja.benefits} limit={200} />
 
-          {/* 4. What Happens After Order Section (100% Width) */}
-          <div className="w-full bg-white rounded-[20px] shadow-[0_4px_25px_rgba(0,0,0,0.03)] border border-[#F6971E]/15 p-5 sm:p-7">
-            <div className="flex items-center gap-2 mb-2.5">
-              <span className="w-1.5 h-4 sm:h-5 rounded-full bg-[#F6971E]" />
-              <h2 className="text-base sm:text-lg md:text-xl font-bold font-['Inria_Serif'] text-[#4A2B23]">
-                What Happens After Order
-              </h2>
-            </div>
-            <ExpandableText text={pooja.whatHappensAfterOrder} limit={200} />
-          </div>
+                {/* Preferred Days inside Benefits */}
+                {pooja.preferredDays && pooja.preferredDays.length > 0 && (
+                  <div className="mt-4 pt-3.5 border-t border-gray-100">
+                    <h4 className="text-[10px] sm:text-[11px] font-bold uppercase tracking-widest text-gray-400 mb-2">
+                      Auspicious / Preferred Days
+                    </h4>
+                    <div className="flex flex-wrap gap-1.5">
+                      {pooja.preferredDays.map((day: string) => (
+                        <span key={day} className="px-2.5 py-0.5 rounded-md bg-orange-50 border border-orange-200 text-xs font-semibold text-[#F6971E]">
+                          {day}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
 
-        </div>
+            {/* 3. Procedure Section (100% Width) */}
+            {pooja.procedure && (
+              <div className="w-full bg-white rounded-[20px] shadow-[0_4px_25px_rgba(0,0,0,0.03)] border border-[#F6971E]/15 p-5 sm:p-7">
+                <div className="flex items-center gap-2 mb-2.5">
+                  <span className="w-1.5 h-4 sm:h-5 rounded-full bg-[#F6971E]" />
+                  <h2 className="text-base sm:text-lg md:text-xl font-bold font-['Inria_Serif'] text-[#4A2B23]">
+                    Procedure
+                  </h2>
+                </div>
+                <ExpandableText text={pooja.procedure} limit={200} />
+              </div>
+            )}
+
+            {/* 4. What Happens After Order Section (100% Width) */}
+            {pooja.whatHappensAfterOrder && (
+              <div className="w-full bg-white rounded-[20px] shadow-[0_4px_25px_rgba(0,0,0,0.03)] border border-[#F6971E]/15 p-5 sm:p-7">
+                <div className="flex items-center gap-2 mb-2.5">
+                  <span className="w-1.5 h-4 sm:h-5 rounded-full bg-[#F6971E]" />
+                  <h2 className="text-base sm:text-lg md:text-xl font-bold font-['Inria_Serif'] text-[#4A2B23]">
+                    What Happens After Order
+                  </h2>
+                </div>
+                <ExpandableText text={pooja.whatHappensAfterOrder} limit={200} />
+              </div>
+            )}
+
+          </div>
+        )}
 
         {/* FAQs Section */}
         {pooja.faqEntries && pooja.faqEntries.length > 0 && (
@@ -431,12 +324,12 @@ export default function PujaDetails() {
                 Frequently Asked Questions
               </h2>
               <p className="text-gray-500 text-xs sm:text-sm">
-                Everything you need to know about {pooja.name}
+                Everything you need to know about {poojaName}
               </p>
             </div>
 
             <div className="flex flex-col gap-2.5">
-              {pooja.faqEntries.map((faq, index) => (
+              {pooja.faqEntries.map((faq: any, index: number) => (
                 <div
                   key={faq._id || index}
                   className={`bg-white rounded-xl p-3.5 sm:p-4 border transition-all duration-300 ${openFaq === index

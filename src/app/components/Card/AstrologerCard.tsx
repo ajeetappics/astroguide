@@ -2,13 +2,14 @@
 
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { BsStarFill, BsPatchCheckFill, BsCurrencyRupee } from 'react-icons/bs';
-import { usePopup } from '../popup/PopupContext';
 import { sanitizeImageUrl } from '@/utils/imageUtils';
 
 export interface AstrologerData {
-  id: number | string;
+  id: string;
+  _id?: string;
   slug?: string;
   name: string;
   isVerified: boolean;
@@ -29,7 +30,6 @@ interface AstrologerCardProps {
 
 export default function AstrologerCard({ astro: astroProp, astrologer: astrologerProp }: AstrologerCardProps) {
   const astro = (astroProp || astrologerProp)!;
-  const { openPopup } = usePopup();
   const router = useRouter();
 
   const [imgSrc, setImgSrc] = useState(() => sanitizeImageUrl(astro?.imageUrl));
@@ -45,10 +45,8 @@ export default function AstrologerCard({ astro: astroProp, astrologer: astrologe
     router.push(`/astrologers/${identifier}`);
   };
 
-  const handleConnectClick = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    openPopup();
-  };
+  const astroId = astro?._id || astro?.id;
+  const connectUrl = `${process.env.NEXT_PUBLIC_URL}/astrologer-profile?astroId=${astroId}`;
 
   const originalPrice = Math.round(parseInt(astro.price.replace(/[^\d]/g, '') || '25') * 1.35);
 
@@ -133,27 +131,28 @@ export default function AstrologerCard({ astro: astroProp, astrologer: astrologe
 
           {/* Row 5: Connect Button */}
           <div className="mt-auto pt-1">
-            <button
-              onClick={handleConnectClick}
-              className="w-full bg-gradient-to-r from-[#F6971E] to-[#FFA733] text-white font-bold font-helvetica py-2 px-4 rounded-xl shadow-[0_2px_8px_rgba(246,151,30,0.25)] hover:opacity-95 active:scale-95 transition-all flex items-center justify-center text-xs sm:text-sm"
+            <Link
+              href={connectUrl}
+              onClick={(e) => e.stopPropagation()}
+              className="w-full bg-gradient-to-r from-[#F6971E] to-[#FFA733] text-white font-bold font-helvetica py-2 px-4 rounded-xl shadow-[0_2px_8px_rgba(246,151,30,0.25)] hover:opacity-95 active:scale-95 transition-all flex items-center justify-center text-xs sm:text-sm cursor-pointer"
             >
               Connect Now
-            </button>
+            </Link>
           </div>
         </div>
       </div>
 
       {/* 🖥️ Desktop Web Card (Clean 4-column layout) */}
-      <div 
+      <div
         onClick={handleCardClick}
         className="hidden lg:flex bg-white rounded-2xl shadow-[0_4px_16px_rgba(0,0,0,0.05)] border border-[#F6971E]/20 hover:border-[#F6971E]/50 hover:shadow-[0_8px_24px_rgba(246,151,30,0.12)] transition-all duration-300 hover:-translate-y-1 flex-col relative overflow-hidden h-full cursor-pointer group"
       >
         {/* Top Image Section */}
         <div className="block relative w-full aspect-[4/3] overflow-hidden bg-gray-100">
-          <Image 
-            src={imgSrc} 
-            alt={astro.name} 
-            fill 
+          <Image
+            src={imgSrc}
+            alt={astro.name}
+            fill
             sizes="(max-width: 1200px) 25vw, 280px"
             className="object-cover transition-transform duration-500 group-hover:scale-105"
             onError={() => setImgSrc("/images/astro-1.jpg")}
@@ -210,15 +209,16 @@ export default function AstrologerCard({ astro: astroProp, astrologer: astrologe
                 <span className="text-xs font-bold text-[#72271E] ml-0.5">/min</span>
               </span>
             </div>
-          </div> 
+          </div>
 
           {/* Connect Button */}
-          <button 
-            onClick={handleConnectClick}
+          <Link
+            href={connectUrl}
+            onClick={(e) => e.stopPropagation()}
             className="w-full bg-gradient-to-r from-[#F6971E] to-[#FFA733] text-white font-bold font-helvetica py-2 sm:py-2.5 rounded-xl hover:shadow-[0_4px_15px_rgba(246,151,30,0.3)] transition-all flex items-center justify-center gap-1.5 text-xs sm:text-[13px] relative z-20 cursor-pointer"
           >
             Connect Now
-          </button>
+          </Link>
         </div>
       </div>
     </>

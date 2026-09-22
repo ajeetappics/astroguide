@@ -1,50 +1,37 @@
 'use client'
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { BsArrowRight } from 'react-icons/bs';
-import PoojaCard from '../Card/PoojaCard';
-
-export const pujaData = [
-  {
-    id: 1,
-    title: "Sarva Karya Siddhi Pooja",
-    description: "For success in life, career, and spirituality. Remove blockages, delays, and setbacks.",
-    location: "Pardeshwar Mandir / Ujjain",
-    date: "21 MARCH 26, SATURDAY",
-    price: "₹2,100",
-    image: "/images/poojas/ganesha_pooja.jpg"
-  },
-  {
-    id: 2,
-    title: "Maha Mrityunjaya Pooja",
-    description: "A powerful healing pooja performed for longevity, health, and relief from chronic illnesses.",
-    location: "Trimbakeshwar Temple / Nashik",
-    date: "25 MARCH 26, WEDNESDAY",
-    price: "₹5,100",
-    image: "/images/poojas/shiva_pooja.jpg"
-  },
-  {
-    id: 3,
-    title: "Navgraha Shanti Pooja",
-    description: "Pacify all nine planets to remove doshas from your birth chart and invite prosperity and peace.",
-    location: "Navgraha Mandir / Ujjain",
-    date: "28 MARCH 26, SATURDAY",
-    price: "₹3,500",
-    image: "/images/poojas/navgraha_pooja.jpg"
-  },
-  {
-    id: 4,
-    title: "Mangal Dosh Nivaran Pooja",
-    description: "Specifically designed to remove the malefic effects of Mars (Mangal) for a happy married life.",
-    location: "Mangalnath Mandir / Ujjain",
-    date: "02 APRIL 26, THURSDAY",
-    price: "₹4,200",
-    image: "/images/poojas/mangal_pooja.jpg"
-  }
-];
+import PoojaCard, { PujaData } from '../Card/PoojaCard';
+import { fetchPoojaList } from '@/services/pooja/poojaService';
 
 export default function PoojaSection() {
+  const [poojas, setPoojas] = useState<PujaData[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    let isMounted = true;
+    const loadPoojas = async () => {
+      try {
+        setIsLoading(true);
+        const res = await fetchPoojaList(1, 10);
+        if (isMounted && res.poojas && res.poojas.length > 0) {
+          setPoojas(res.poojas);
+        }
+      } catch (err) {
+        console.error("Error loading poojas for home section:", err);
+      } finally {
+        if (isMounted) {
+          setIsLoading(false);
+        }
+      }
+    };
+    loadPoojas();
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   return (
     <section className="bg-white py-5 md:py-8 px-4 md:px-8 relative overflow-hidden">
@@ -93,13 +80,27 @@ export default function PoojaSection() {
         </div>
 
         {/* Pooja Cards: Horizontal Touch-Scroll on Responsive, 4-Column Grid on Desktop */}
-        <div className="pooja-scroll flex lg:grid lg:grid-cols-4 gap-2.5 sm:gap-3 md:gap-3.5 overflow-x-auto lg:overflow-visible pb-2 lg:pb-0 snap-x snap-mandatory">
-          {pujaData.map((pooja) => (
-            <div key={pooja.id} className="w-[165px] sm:w-[190px] md:w-[215px] lg:w-auto flex-shrink-0 snap-start flex flex-col h-full">
-              <PoojaCard pooja={pooja} />
-            </div>
-          ))}
-        </div>
+        {isLoading ? (
+          <div className="pooja-scroll flex lg:grid lg:grid-cols-4 gap-2.5 sm:gap-3 md:gap-3.5 overflow-x-auto lg:overflow-visible pb-2 lg:pb-0">
+            {[...Array(4)].map((_, i) => (
+              <div key={i} className="w-[165px] sm:w-[190px] md:w-[215px] lg:w-auto flex-shrink-0 flex flex-col h-[280px] bg-white rounded-2xl border border-gray-100 p-3 animate-pulse">
+                <div className="h-[120px] bg-gray-200 rounded-xl mb-3" />
+                <div className="h-4 bg-gray-200 rounded w-3/4 mb-2" />
+                <div className="h-3 bg-gray-100 rounded w-full mb-1" />
+                <div className="h-3 bg-gray-100 rounded w-2/3 mb-auto" />
+                <div className="h-6 bg-gray-100 rounded w-1/2 mt-3" />
+              </div>
+            ))}
+          </div>
+        ) : poojas.length > 0 ? (
+          <div className="pooja-scroll flex lg:grid lg:grid-cols-4 gap-2.5 sm:gap-3 md:gap-3.5 overflow-x-auto lg:overflow-visible pb-2 lg:pb-0 snap-x snap-mandatory">
+            {poojas.map((pooja) => (
+              <div key={pooja.id} className="w-[165px] sm:w-[190px] md:w-[215px] lg:w-auto flex-shrink-0 snap-start flex flex-col h-full">
+                <PoojaCard pooja={pooja} />
+              </div>
+            ))}
+          </div>
+        ) : null}
 
       </div>
     </section>

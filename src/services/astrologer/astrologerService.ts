@@ -112,6 +112,7 @@ export const mapAstroToCard = (raw: any): AstrologerData => {
 
   return {
     id: raw._id || raw.id || String(Math.random()),
+    _id: raw._id || raw.id,
     slug: raw.slug || raw._id || raw.id,
     name: formatName(raw.fullName || raw.name),
     isVerified: raw.isOtpVerified ?? raw.isProfileCompleted ?? true,
