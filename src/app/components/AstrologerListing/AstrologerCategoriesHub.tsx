@@ -7,23 +7,85 @@ import { BsSearch, BsX } from 'react-icons/bs';
 import AstrologerHeroBanner from './AstrologerHeroBanner';
 
 export interface AstrologyCategoryItem {
+  id?: string;
   slug: string;
   name: string;
   icon: string;
 }
 
 export const ALL_ASTROLOGY_CATEGORIES: AstrologyCategoryItem[] = [
-  { slug: "love", name: "Love", icon: "/images/love.png" },
-  { slug: "marriage", name: "Marriage", icon: "/images/marriage.png" },
-  { slug: "career", name: "Career", icon: "/images/career_color.png" },
-  { slug: "education", name: "Education", icon: "/images/kundli.svg" },
-  { slug: "health", name: "Health", icon: "/images/health.png" },
-  { slug: "finance", name: "Finance", icon: "/images/finance.png" },
-  { slug: "business", name: "Business", icon: "/images/business.png" },
-  { slug: "wealth", name: "Wealth", icon: "/images/palmReading.svg" },
-  { slug: "legal", name: "Legal", icon: "/images/matchMaking.svg" },
-  { slug: "remedies", name: "Remedies", icon: "/images/poojaIcon.svg" },
-  { slug: "parent", name: "Parent", icon: "/images/babyNames.svg" },
+  {
+    id: "690dd5a901f53eb3236b5692",
+    slug: "business",
+    name: "Business",
+    icon: "https://storage.googleapis.com/astro-vani-storage/admin/1772533406862-cooperation.png"
+  },
+  {
+    id: "68eb9fa341fa1548bfcc7660",
+    slug: "career",
+    name: "Career",
+    icon: "https://storage.googleapis.com/astro-vani-storage/admin/1772532058726-career-path%20(2).png"
+  },
+  {
+    id: "68eb719866c9e3ebbf154630",
+    slug: "wealth",
+    name: "Wealth",
+    icon: "https://storage.googleapis.com/astro-vani-storage/admin/1772532137141-wealth.png"
+  },
+  {
+    id: "68eb718966c9e3ebbf15461c",
+    slug: "education",
+    name: "Education",
+    icon: "https://storage.googleapis.com/astro-vani-storage/admin/1772532231978-education.png"
+  },
+  {
+    id: "68eb716c66c9e3ebbf1545fc",
+    slug: "finance",
+    name: "Finance",
+    icon: "https://storage.googleapis.com/astro-vani-storage/admin/1772532313076-trend.png"
+  },
+  {
+    id: "68eb715f66c9e3ebbf1545ec",
+    slug: "legal",
+    name: "Legal",
+    icon: "https://storage.googleapis.com/astro-vani-storage/admin/1772532384352-balance.png"
+  },
+  {
+    id: "68eb715266c9e3ebbf1545da",
+    slug: "child",
+    name: "Child",
+    icon: "https://storage.googleapis.com/astro-vani-storage/admin/1772532463380-child.png"
+  },
+  {
+    id: "68eb70d666c9e3ebbf154555",
+    slug: "marriage",
+    name: "Marriage",
+    icon: "https://storage.googleapis.com/astro-vani-storage/admin/1772532579055-wedding-rings.png"
+  },
+  {
+    id: "68eb70c066c9e3ebbf15453d",
+    slug: "love",
+    name: "Love",
+    icon: "https://storage.googleapis.com/astro-vani-storage/admin/1772532659489-hug.png"
+  },
+  {
+    id: "68eb6d344b1b2d95f35b470c",
+    slug: "tarot",
+    name: "Tarot",
+    icon: "https://storage.googleapis.com/astro-vani-storage/admin/1772532785961-tarot.png"
+  },
+  {
+    id: "68eb6d254b1b2d95f35b46fa",
+    slug: "palm-read",
+    name: "Palm Read",
+    icon: "https://storage.googleapis.com/astro-vani-storage/admin/1772533100276-palmistry.png"
+  },
+  {
+    id: "68dbce5fa7ce524ef050d46d",
+    slug: "health",
+    name: "Health",
+    icon: "https://storage.googleapis.com/astro-vani-storage/admin/1772533281668-cardiogram%20(1).png"
+  }
 ];
 
 export default function AstrologerCategoriesHub() {
@@ -88,6 +150,7 @@ export default function AstrologerCategoriesHub() {
                     alt={category.name}
                     width={48}
                     height={48}
+                    unoptimized
                     className="w-8 h-8 sm:w-10 sm:h-10 md:w-11 md:h-11 object-contain transition-transform duration-300 group-hover:scale-110"
                   />
                 </div>

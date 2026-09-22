@@ -17,17 +17,18 @@ export async function GET() {
 
   // Individual Category URLs
   const categories = [
-    'love',
-    'marriage',
-    'career',
-    'education',
-    'health',
-    'finance',
     'business',
+    'career',
     'wealth',
+    'education',
+    'finance',
     'legal',
-    'remedies',
-    'parent',
+    'child',
+    'marriage',
+    'love',
+    'tarot',
+    'palm-read',
+    'health',
   ];
 
   for (const cat of categories) {

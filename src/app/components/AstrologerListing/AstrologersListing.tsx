@@ -3,7 +3,17 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { BsX, BsChevronLeft, BsChevronRight } from 'react-icons/bs';
+import {
+  BsX,
+  BsChevronLeft,
+  BsChevronRight,
+  BsShieldCheck,
+  BsFillChatDotsFill,
+  BsClockHistory,
+  BsTranslate,
+  BsChevronDown,
+  BsChevronUp,
+} from 'react-icons/bs';
 import AstrologerCard, { AstrologerData } from '../Card/AstrologerCard';
 import AstrologerHeroBanner from './AstrologerHeroBanner';
 import { fetchAstroList } from '@/services/astrologer/astrologerService';
@@ -43,65 +53,101 @@ const getPageNumbers = (current: number, total: number): (number | string)[] => 
 
 const TABS = [
   "All",
-  "Love",
-  "Education",
+  "Business",
   "Career",
-  "Marriage",
-  "Health",
   "Wealth",
-  "Legal",
+  "Education",
   "Finance",
-  "Remedies",
-  "Parent",
-  "Business"
+  "Legal",
+  "Child",
+  "Marriage",
+  "Love",
+  "Tarot",
+  "Palm Read",
+  "Health"
 ];
 
 const CATEGORY_DESCRIPTIONS: Record<string, { title: string; subtitle: string }> = {
-  love: {
-    title: "Best Love & Relationship Astrologers",
-    subtitle: "Resolve love disputes, breakups, partner compatibility, and relationship concerns with expert astrologers."
-  },
-  marriage: {
-    title: "Top Marriage Astrologers Online",
-    subtitle: "Get accurate Kundali Milan, marriage timing predictions, delay in marriage solutions, and marital harmony remedies."
+  business: {
+    title: "Business & Partnership Astrologers",
+    subtitle: "Choose auspicious business names, launch dates, partnership compatibility, and business growth remedies."
   },
   career: {
     title: "Expert Career & Job Astrologers",
     subtitle: "Overcome career roadblocks, job switch doubts, promotion delays, and business ventures with astrological guidance."
   },
-  education: {
-    title: "Education & Exam Astrology Experts",
-    subtitle: "Guidance for competitive exams, higher education choices, study concentration, and academic success."
-  },
-  health: {
-    title: "Health & Wellness Astrologers",
-    subtitle: "Astrological analysis for chronic health issues, recovery timelines, and planetary remedies for wellness."
-  },
   wealth: {
     title: "Wealth & Prosperity Astrologers",
     subtitle: "Unlock financial abundance, wealth accumulation, and ancestral property guidance through Vedic astrology."
+  },
+  education: {
+    title: "Education & Exam Astrology Experts",
+    subtitle: "Guidance for competitive exams, higher education choices, study concentration, and academic success."
   },
   finance: {
     title: "Finance & Investment Astrologers",
     subtitle: "Expert consultation on debt clearance, investments, business finances, and financial stability."
   },
-  business: {
-    title: "Business & Partnership Astrologers",
-    subtitle: "Choose auspicious business names, launch dates, partnership compatibility, and business growth remedies."
-  },
   legal: {
     title: "Court Case & Legal Dispute Astrologers",
     subtitle: "Astrological solutions and favorable periods for property disputes, litigation, and legal matters."
   },
-  remedies: {
-    title: "Vedic Remedies & Gemstone Astrologers",
-    subtitle: "Personalized puja recommendations, yantras, gemstones, and Vedic remedies tailored to your birth chart."
-  },
-  parent: {
-    title: "Parenting & Child Astrology Experts",
+  child: {
+    title: "Child & Parenting Astrology Experts",
     subtitle: "Childbirth predictions, child behavior understanding, naming ceremonies, and family well-being."
+  },
+  marriage: {
+    title: "Top Marriage Astrologers Online",
+    subtitle: "Get accurate Kundali Milan, marriage timing predictions, delay in marriage solutions, and marital harmony remedies."
+  },
+  love: {
+    title: "Best Love & Relationship Astrologers",
+    subtitle: "Resolve love disputes, breakups, partner compatibility, and relationship concerns with expert astrologers."
+  },
+  tarot: {
+    title: "Tarot Card Readers Online",
+    subtitle: "Intuitive tarot reading for clarity in love, career, major life decisions, and personal dilemmas."
+  },
+  "palm read": {
+    title: "Palm Reading & Hastrekha Experts",
+    subtitle: "In-depth palmistry analysis for future predictions, life line, career line, and destiny insights."
+  },
+  "palm-read": {
+    title: "Palm Reading & Hastrekha Experts",
+    subtitle: "In-depth palmistry analysis for future predictions, life line, career line, and destiny insights."
+  },
+  health: {
+    title: "Health & Wellness Astrologers",
+    subtitle: "Astrological analysis for chronic health issues, recovery timelines, and planetary remedies for wellness."
   }
 };
+
+const ASTROLOGER_FAQS = [
+  {
+    question: "How can I consult an astrologer online on Astrovani?",
+    answer: "Browse our directory of verified astrologers, view their specializations, experience, ratings, and language preferences. Once you choose the right astrologer, click 'Consult Now' to instantly start a chat or call session."
+  },
+  {
+    question: "Are the astrologers on Astrovani genuine and verified?",
+    answer: "Yes, 100%. Every astrologer on Astrovani goes through a rigorous multi-stage verification process by senior Vedic scholars to assess their subject mastery, experience, and prediction accuracy."
+  },
+  {
+    question: "What details do I need to provide for an accurate horoscope reading?",
+    answer: "To calculate your Janam Kundali (birth chart) accurately, you need to provide your Date of Birth, exact Time of Birth, and Place of Birth. If birth time is unknown, our astrologers can also consult using Prashna Kundali, Palmistry, or Tarot reading."
+  },
+  {
+    question: "Can online astrologers help with marriage and relationship problems?",
+    answer: "Yes. Our love and relationship experts specialize in Kundali Milan (Gun Milan), Manglik dosha analysis, delay in marriage remedies, love compatibility, and resolving relationship discord through proven Vedic remedies."
+  },
+  {
+    question: "Is my personal information and consultation confidential?",
+    answer: "Absolutely. Astrovani ensures complete end-to-end privacy and confidentiality. Your personal information, birth details, and chat conversations are completely secure and never shared with third parties."
+  },
+  {
+    question: "Which astrology systems and services are available?",
+    answer: "Astrovani hosts top experts across Vedic Astrology, KP System, Nadi Astrology, Tarot Card Reading, Numerology, Vastu Shastra, Gemstone Consultation, and Palmistry."
+  }
+];
 
 export default function AstrologersListing({ initialCategory = "All" }: AstrologersListingProps) {
   // Find matching tab case-insensitively
@@ -117,6 +163,7 @@ export default function AstrologersListing({ initialCategory = "All" }: Astrolog
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
+  const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
   const router = useRouter();
 
   // Sync if initialCategory prop changes
@@ -221,12 +268,12 @@ export default function AstrologersListing({ initialCategory = "All" }: Astrolog
   // Dynamic headings for category landing
   const categoryInfo = activeTab !== "All"
     ? CATEGORY_DESCRIPTIONS[activeTab.toLowerCase()] || {
-      title: `${activeTab} Astrologers`,
-      subtitle: `Connect with India's best ${activeTab} astrologers for personal horoscope analysis and guidance.`
+      title: `${activeTab} Astrologers Online`,
+      subtitle: `Connect with India's best ${activeTab} astrologers for personal horoscope analysis, accurate predictions, and Vedic remedies.`
     }
     : {
-      title: "List of Expert Astrologers",
-      subtitle: "Connect with India's most genuine and experienced Vedic astrologers, tarot readers, and numerologists for instant guidance."
+      title: "Talk to Best Astrologers Online - Verified Vedic Astrologers",
+      subtitle: "Connect with India's most genuine and experienced Vedic astrologers, tarot readers, and numerologists for instant chat & call consultation."
     };
 
   return (
@@ -236,6 +283,10 @@ export default function AstrologersListing({ initialCategory = "All" }: Astrolog
       <AstrologerHeroBanner
         title={categoryInfo.title}
         subtitle={categoryInfo.subtitle}
+        breadcrumbs={[
+          { label: "Home", href: "/" },
+          { label: activeTab === "All" ? "Astrologers" : `${activeTab} Astrologers` }
+        ]}
       />
 
       {/* Main Content Area: Floating Search, Tabs & Astrologer Grid */}
@@ -470,6 +521,108 @@ export default function AstrologersListing({ initialCategory = "All" }: Astrolog
             </div>
           </div>
         )}
+      </section>
+
+      {/* 5. SEO Section: Why Consult Astrologers on Astrovani */}
+      <section className="container mx-auto max-w-6xl px-4 mt-16 sm:mt-20">
+        <div className="text-center max-w-2xl mx-auto mb-10 sm:mb-12">
+          <span className="text-[#F6971E] text-xs sm:text-sm font-bold tracking-widest uppercase mb-1.5 block">
+            Why Choose Us
+          </span>
+          <h2 className="text-2xl sm:text-3xl font-bold font-['Inria_Serif'] text-[#4A2B23] mb-3">
+            Why Consult Astrologers on Astrovani?
+          </h2>
+          <p className="text-gray-600 text-xs sm:text-sm leading-relaxed">
+            Experience authentic Vedic astrology guidance with complete privacy, verified experts, and accurate life solutions.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+          <div className="bg-white rounded-2xl p-5 sm:p-6 border border-[#F6971E]/15 shadow-xs hover:shadow-md hover:border-[#F6971E]/40 transition-all text-center flex flex-col items-center">
+            <div className="w-12 h-12 rounded-xl bg-[#FFF8EB] border border-[#F6971E]/30 flex items-center justify-center text-[#F6971E] text-2xl mb-3.5">
+              <BsShieldCheck />
+            </div>
+            <h3 className="text-[#4A2B23] font-bold text-base mb-1.5 font-helvetica">100% Verified Experts</h3>
+            <p className="text-gray-500 text-xs leading-relaxed">
+              Every astrologer undergoes rigorous multi-level verification and prediction accuracy assessment.
+            </p>
+          </div>
+
+          <div className="bg-white rounded-2xl p-5 sm:p-6 border border-[#F6971E]/15 shadow-xs hover:shadow-md hover:border-[#F6971E]/40 transition-all text-center flex flex-col items-center">
+            <div className="w-12 h-12 rounded-xl bg-[#FFF8EB] border border-[#F6971E]/30 flex items-center justify-center text-[#F6971E] text-xl mb-3.5">
+              <BsClockHistory />
+            </div>
+            <h3 className="text-[#4A2B23] font-bold text-base mb-1.5 font-helvetica">24/7 Availability</h3>
+            <p className="text-gray-500 text-xs leading-relaxed">
+              Connect anytime, day or night, for instant guidance when making critical life decisions.
+            </p>
+          </div>
+
+          <div className="bg-white rounded-2xl p-5 sm:p-6 border border-[#F6971E]/15 shadow-xs hover:shadow-md hover:border-[#F6971E]/40 transition-all text-center flex flex-col items-center">
+            <div className="w-12 h-12 rounded-xl bg-[#FFF8EB] border border-[#F6971E]/30 flex items-center justify-center text-[#F6971E] text-xl mb-3.5">
+              <BsFillChatDotsFill />
+            </div>
+            <h3 className="text-[#4A2B23] font-bold text-base mb-1.5 font-helvetica">Complete Confidentiality</h3>
+            <p className="text-gray-500 text-xs leading-relaxed">
+              Your personal data, birth chart details, and discussions remain 100% private and encrypted.
+            </p>
+          </div>
+
+          <div className="bg-white rounded-2xl p-5 sm:p-6 border border-[#F6971E]/15 shadow-xs hover:shadow-md hover:border-[#F6971E]/40 transition-all text-center flex flex-col items-center">
+            <div className="w-12 h-12 rounded-xl bg-[#FFF8EB] border border-[#F6971E]/30 flex items-center justify-center text-[#F6971E] text-xl mb-3.5">
+              <BsTranslate />
+            </div>
+            <h3 className="text-[#4A2B23] font-bold text-base mb-1.5 font-helvetica">Multi-Language Consult</h3>
+            <p className="text-gray-500 text-xs leading-relaxed">
+              Consult comfortably in Hindi, English, Punjabi, Marathi, Gujarati, Bengali, and more.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* 6. SEO Section: Frequently Asked Questions (Accordion) */}
+      <section className="container mx-auto max-w-4xl px-4 mt-16 sm:mt-20">
+        <div className="text-center max-w-2xl mx-auto mb-8 sm:mb-10">
+          <span className="text-[#F6971E] text-xs sm:text-sm font-bold tracking-widest uppercase mb-1.5 block">
+            Common Inquiries
+          </span>
+          <h2 className="text-2xl sm:text-3xl font-bold font-['Inria_Serif'] text-[#4A2B23] mb-3">
+            Frequently Asked Questions
+          </h2>
+          <p className="text-gray-600 text-xs sm:text-sm leading-relaxed">
+            Find quick answers about consulting online astrologers, birth chart accuracy, and consultation privacy.
+          </p>
+        </div>
+
+        <div className="space-y-3">
+          {ASTROLOGER_FAQS.map((faq, index) => {
+            const isOpen = openFaqIndex === index;
+            return (
+              <div
+                key={index}
+                className="bg-white rounded-2xl border border-gray-200/80 overflow-hidden transition-all shadow-xs"
+              >
+                <button
+                  onClick={() => setOpenFaqIndex(isOpen ? null : index)}
+                  className="w-full text-left px-4 sm:px-6 py-4 flex items-center justify-between gap-4 font-semibold text-sm sm:text-base text-[#4A2B23] hover:text-[#F6971E] transition-colors cursor-pointer"
+                  aria-expanded={isOpen}
+                >
+                  <span className="leading-snug">{faq.question}</span>
+                  <div className={`w-7 h-7 rounded-full flex items-center justify-center shrink-0 transition-colors ${
+                    isOpen ? 'bg-[#F6971E] text-white' : 'bg-gray-100 text-gray-500'
+                  }`}>
+                    {isOpen ? <BsChevronUp className="w-3.5 h-3.5" /> : <BsChevronDown className="w-3.5 h-3.5" />}
+                  </div>
+                </button>
+                {isOpen && (
+                  <div className="px-4 sm:px-6 pb-4 pt-1 text-xs sm:text-sm text-gray-600 leading-relaxed border-t border-gray-100">
+                    {faq.answer}
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
       </section>
 
     </main>
