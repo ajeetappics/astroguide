@@ -7,6 +7,7 @@ import StoreProvider from "@/store/StoreProvider";
 import { Toaster } from "react-hot-toast";
 import { PopupProvider } from "./components/popup/PopupContext";
 import Popup from "./components/popup/Popup";
+import ScrollToTop from "./components/ScrollToTop/ScrollToTop";
 import SchemaScript from "./schema/SchemaScript";
 import { organizationSchema, websiteSchema, serviceSchema } from "./schema/staticSchemas";
 
@@ -138,6 +139,7 @@ export default function RootLayout({
               />
               <Footer />
               <Popup />
+              <ScrollToTop />
             </PopupProvider>
         </StoreProvider >
       </body>

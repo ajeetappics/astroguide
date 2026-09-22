@@ -1,14 +1,21 @@
 'use client'
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams } from 'next/navigation';
 import {
   BsChevronRight,
   BsChevronDown
 } from 'react-icons/bs';
-import { usePopup } from '../../../components/popup/PopupContext';
+import { fetchPoojaById, getCategoryByIdOrName } from '@/services/pooja/poojaService';
+
+export interface CategoryItem {
+  _id?: string;
+  categoryName: string;
+  icon?: string;
+  [key: string]: any;
+}
 
 // Helper component for expandable text with 200-limit and View More / View Less
 function ExpandableText({ text, limit = 200 }: { text: string; limit?: number }) {
@@ -43,117 +50,124 @@ function ExpandableText({ text, limit = 200 }: { text: string; limit?: number })
 
 export default function SpellDetails() {
   const params = useParams();
-  const router = useRouter();
-  const { openPopup } = usePopup();
+  const slugOrId = (params?.id as string) || '';
 
   // State to show all categories or only 3
   const [showAllCategories, setShowAllCategories] = useState(false);
+  const [spell, setSpell] = useState<any>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
-  // Spell data matching the pooja details structure
-  const spell = {
-    "_id": "6a7489eecb9ef5a42e8b189f",
-    "name": "Love Binding & Attraction Spell",
-    "description": "Experience authentic sacred Vedic spell rituals performed by certified expert spiritual masters from India's most mystical shrines. Cast with powerful beeja mantras to remove misunderstandings, strengthen deep emotional bonds, and attract lasting soulmate love into your life. Every ritual is conducted with personal sankalp dedicated specifically to your name and birth chart.",
-    "image": "https://storage.googleapis.com/astro-vani-storage/admin/1786022750418-chercker.jpg",
-    "benefits": "Deepens mutual affection and emotional understanding | Dissolves communication barriers and ego clashes | Shields the relationship from negative external interference | Attracts harmonious marriage and lifelong loyalty | Eliminates chronic anxiety regarding love and partnership stability.",
-    "keywords": [],
-    "peopleType": "Individual",
-    "basePrice": 1500,
-    "duration": 25,
-    "categoryId": [
-      {
-        "_id": "6a69cccddc1a587997197f52",
-        "categoryName": "Spell",
-        "icon": "https://storage.googleapis.com/astro-vani-storage/admin/1785415313460-spell.jpg",
-        "isSpell": true,
-        "isActive": true
-      },
-      {
-        "_id": "6a64808d8b004e9d442bda82",
-        "categoryName": "Love",
-        "icon": "https://storage.googleapis.com/astro-vani-storage/admin/1785762819657-hearts.png",
-        "isSpell": false,
-        "isActive": true
-      },
-      {
-        "_id": "6a6316aebd35bfff0b2df6cb",
-        "categoryName": "Ritual for Harmony",
-        "icon": "https://storage.googleapis.com/astro-vani-storage/admin/1785761909834-success.png",
-        "isSpell": false,
-        "isActive": true
-      },
-      {
-        "_id": "6a6315fcbd35bfff0b2df6b4",
-        "categoryName": "Protection & Peace",
-        "icon": "https://storage.googleapis.com/astro-vani-storage/admin/1785762854104-family.png",
-        "isSpell": false,
-        "isActive": true
-      },
-      {
-        "_id": "6a636510d16517a2b1d6fc6d",
-        "categoryName": "Marriage",
-        "icon": "https://storage.googleapis.com/astro-vani-storage/admin/1785761923653-marriage.png",
-        "isSpell": false,
-        "isActive": true
+  useEffect(() => {
+    if (!slugOrId) return;
+    let isMounted = true;
+
+    const loadSpellDetails = async () => {
+      try {
+        setIsLoading(true);
+        const data = await fetchPoojaById(slugOrId);
+        if (isMounted && data) {
+          setSpell(data);
+          // If slug is available and current URL was accessed by MongoDB id, update browser URL to slug
+          if (data.slug && data.slug !== slugOrId && typeof window !== 'undefined') {
+            window.history.replaceState(null, '', `/spell/${data.slug}`);
+          }
+        }
+      } catch (err) {
+        console.error('Error fetching spell details for:', slugOrId, err);
+      } finally {
+        if (isMounted) setIsLoading(false);
       }
-    ],
-    "poojaTagId": null,
-    "includedServices": {
-      "sankalp": true,
-      "templePhotos": true,
-      "videoCall": false,
-      "poojaVideo": true,
-      "prasadDispatch": false,
-      "personalizedMantra": true
-    },
-    "prasadDelivery": false,
-    "isRecommended": true,
-    "isNegativeEnergyRemoval": false,
-    "regions": ["India"],
-    "isActive": true,
-    "isTrending": true,
-    "preferredDays": [
-      "Friday",
-      "Sunday",
-      "Tuesday"
-    ],
-    "procedure": "The spell begins with sacred purifying rituals (Shuddhikaran) and invoking divine cosmic energies. Our spiritual master prepares an energized yantra with specific herbs and sacred oils. Dedicated beeja mantras are chanted 1008 times under your name, gotra, and birth details to create positive energetic alignment.",
-    "whatHappensAfterOrder": "Within 24 hours of booking, our Vedic astrologer team confirms your astrological birth chart details and sankalp timing. The sacred spell is cast on the most auspicious Muhurat. You receive HD photos, energized mantra guidance, and completion confirmation directly on your dashboard.",
-    "faqEntries": [
-      {
-        "_id": "faq-spell-1",
-        "question": "What is a Vedic Spell and how does it work?",
-        "answer": "A Vedic spell is a positive spiritual ritual performed using ancient Beeja mantras, energized yantras, and cosmic vibrations to eliminate negative obstacles and attract desired outcomes into your life.",
-        "isActive": true
-      },
-      {
-        "_id": "faq-spell-2",
-        "question": "Does this spell have any negative side effects?",
-        "answer": "No. All our spells and rituals are completely Satvik and pure Vedic energy practices designed purely for benevolence, healing, harmony, and protection. No harmful techniques are ever used.",
-        "isActive": true
-      },
-      {
-        "_id": "faq-spell-3",
-        "question": "How soon will I experience the positive effects?",
-        "answer": "Energy manifestations typically begin within 7 to 21 days after the ritual, as planetary alignments and energetic blockages dissolve.",
-        "isActive": true
-      },
-      {
-        "_id": "faq-spell-4",
-        "question": "Do I need to be physically present during the ritual?",
-        "answer": "No, your physical presence is not required. The ritual is conducted through your personal Sankalp (name, date of birth, gotra, and photo). All proofs and updates will be shared digitally.",
-        "isActive": true
-      }
-    ]
-  };
+    };
+
+    loadSpellDetails();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [slugOrId]);
 
   // FAQ State (default first open)
   const [openFaq, setOpenFaq] = useState<number | null>(0);
 
+  // Loading skeleton state
+  if (isLoading && !spell) {
+    return (
+      <main className="min-h-screen bg-[#FFFDF9] pt-28 pb-[80px] font-helvetica">
+        <div className="container mx-auto max-w-6xl px-4 animate-pulse">
+          <div className="h-4 bg-gray-200 rounded w-48 mb-6 mt-4" />
+          <div className="bg-white rounded-[24px] sm:rounded-[28px] p-6 sm:p-8 border border-orange-100 flex flex-col lg:flex-row gap-8 items-center">
+            <div className="w-full lg:w-[42%] aspect-[4/2.5] bg-gray-200 rounded-2xl" />
+            <div className="w-full lg:w-[58%] flex flex-col justify-center gap-3">
+              <div className="h-6 bg-gray-200 rounded-full w-28" />
+              <div className="h-8 bg-gray-200 rounded w-3/4" />
+              <div className="h-4 bg-gray-100 rounded w-full" />
+              <div className="h-4 bg-gray-100 rounded w-5/6" />
+              <div className="h-10 bg-gray-200 rounded-xl w-44 mt-4" />
+            </div>
+          </div>
+          <div className="mt-7 flex flex-col gap-5">
+            <div className="h-28 bg-white rounded-2xl border border-orange-100" />
+            <div className="h-28 bg-white rounded-2xl border border-orange-100" />
+          </div>
+        </div>
+      </main>
+    );
+  }
+
+  // Not found state
+  if (!spell) {
+    return (
+      <main className="min-h-screen bg-[#FFFDF9] pt-28 pb-[80px] font-helvetica flex items-center justify-center">
+        <div className="text-center p-8 sm:p-10 bg-white rounded-3xl shadow-sm border border-[#F6971E]/20 max-w-md mx-4">
+          <h2 className="text-2xl font-bold font-['Inria_Serif'] text-[#4A2B23] mb-2">Spell Not Found</h2>
+          <p className="text-gray-500 text-sm mb-6">The requested spell details could not be loaded or are no longer available.</p>
+          <Link
+            href="/spell"
+            className="inline-flex items-center justify-center bg-gradient-to-r from-[#F6971E] to-[#FFA733] text-white font-bold px-6 py-2.5 rounded-xl shadow-md hover:scale-105 transition-all text-sm"
+          >
+            Browse All Spells
+          </Link>
+        </div>
+      </main>
+    );
+  }
+
   // Determine displayed categories (default 3, or all when expanded)
+  const rawCategories: any[] = Array.isArray(spell?.categoryId) ? spell.categoryId : [];
+  const categories: CategoryItem[] = rawCategories.map((c: any) => {
+    if (typeof c === 'string') {
+      const match = getCategoryByIdOrName(c);
+      return {
+        _id: c,
+        categoryName: match?.categoryName || c,
+      };
+    }
+    const match = getCategoryByIdOrName(c?._id || c?.categoryName);
+    return {
+      ...c,
+      categoryName: c?.categoryName || match?.categoryName || 'Sacred Spell',
+    };
+  });
   const visibleCategories = showAllCategories
-    ? spell.categoryId
-    : spell.categoryId.slice(0, 3);
+    ? categories
+    : categories.slice(0, 3);
+
+  const spellName = spell?.name || spell?.title || spell?.poojaName || 'Sacred Spell';
+  const spellImage = spell?.image || spell?.imageUrl || '/images/poojas/ganesha_pooja.jpg';
+  const rawPrice = spell?.basePrice ?? spell?.price ?? 1500;
+  const formattedPrice = (typeof rawPrice === 'number' ? rawPrice : Number(String(rawPrice).replace(/[^\d.]/g, '')) || 1500).toLocaleString('en-IN');
+  const spellId = spell?._id || spell?.id || slugOrId;
+  const baseUrl = (process.env.NEXT_PUBLIC_URL || '').replace(/\/$/, '');
+  const bookUrl = `${baseUrl}/pooja-details?poojaId=${spellId}`;
+
+  const spellTagName =
+    spell?.poojaTagId?.tagName ||
+    spell?.poojaTagId?.name ||
+    spell?.tag?.tagName ||
+    spell?.tag?.name ||
+    spell?.tagName ||
+    (typeof spell?.tag === 'string' ? spell.tag : '') ||
+    '';
 
   return (
     <main className="min-h-screen bg-[#FFFDF9] pt-28 pb-[80px] font-helvetica">
@@ -165,7 +179,7 @@ export default function SpellDetails() {
           <BsChevronRight className="text-[10px]" />
           <Link href="/spell" className="hover:text-[#F6971E] transition-colors">Spells</Link>
           <BsChevronRight className="text-[10px]" />
-          <span className="text-[#F6971E] line-clamp-1">{spell.name}</span>
+          <span className="text-[#F6971E] line-clamp-1">{spellName}</span>
         </div>
 
         {/* Unified Main Details Card */}
@@ -176,8 +190,8 @@ export default function SpellDetails() {
             <div className="w-full lg:w-[42%] max-w-full lg:max-w-[460px] flex-shrink-0 mx-auto lg:mx-0">
               <div className="relative aspect-[4/2.5] w-full rounded-[18px] sm:rounded-[22px] overflow-hidden shadow-md border border-orange-100/70 bg-[#FFFDF9] group">
                 <Image
-                  src={spell.image}
-                  alt={spell.name}
+                  src={spellImage}
+                  alt={spellName}
                   fill
                   className="object-cover transition-transform duration-700 group-hover:scale-105"
                   priority
@@ -189,31 +203,33 @@ export default function SpellDetails() {
             {/* Right: Details, Categories & Booking */}
             <div className="w-full lg:w-[58%] flex flex-col justify-center">
 
-              {/* Categories Badges (3 visible by default + View More / View Less toggle) */}
-              {spell.categoryId && spell.categoryId.length > 0 && (
+              {/* Badges row: Tag Badge & Category Badges */}
+              {(spellTagName || categories.length > 0) && (
                 <div className="flex flex-wrap items-center gap-2 mb-2.5">
-                  {visibleCategories.map((cat) => (
+                  {/* Highlighted Tag Badge */}
+                  {spellTagName && (
+                    <span className="inline-flex items-center px-3 py-0.5 rounded-full text-xs font-bold bg-gradient-to-r from-[#F6971E] to-[#E07A00] text-white shadow-2xs uppercase tracking-wider">
+                      <span>{spellTagName}</span>
+                    </span>
+                  )}
+
+                  {visibleCategories.map((cat: CategoryItem) => (
                     <span
                       key={cat._id}
-                      className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full text-xs font-semibold bg-orange-50 text-[#F6971E] border border-orange-200/60 shadow-2xs"
+                      className="inline-flex items-center px-3 py-0.5 rounded-full text-xs font-semibold bg-orange-50 text-[#F6971E] border border-orange-200/60 shadow-2xs"
                     >
-                      {cat.icon && (
-                        <span className="relative w-3.5 h-3.5 rounded-full overflow-hidden flex-shrink-0">
-                          <Image src={cat.icon} alt={cat.categoryName} fill className="object-cover" />
-                        </span>
-                      )}
                       <span>{cat.categoryName}</span>
                     </span>
                   ))}
 
                   {/* View More / View Less Button for Categories */}
-                  {spell.categoryId.length > 3 && (
+                  {categories.length > 3 && (
                     <button
                       type="button"
                       onClick={() => setShowAllCategories(!showAllCategories)}
                       className="inline-flex items-center gap-1 px-3 py-0.5 rounded-full text-xs font-bold bg-amber-50 hover:bg-amber-100 text-[#F6971E] border border-[#F6971E]/30 transition-colors cursor-pointer"
                     >
-                      <span>{showAllCategories ? 'View Less' : `+${spell.categoryId.length - 3} View More`}</span>
+                      <span>{showAllCategories ? 'View Less' : `+${categories.length - 3} View More`}</span>
                     </button>
                   )}
                 </div>
@@ -221,29 +237,31 @@ export default function SpellDetails() {
 
               {/* Spell Name */}
               <h1 className="text-xl sm:text-2xl md:text-3xl font-bold font-['Inria_Serif'] text-[#4A2B23] mb-2 leading-tight">
-                {spell.name}
+                {spellName}
               </h1>
 
               {/* Description Snippet (with View More / View Less) */}
-              <div className="mb-4">
-                <ExpandableText text={spell.description} limit={200} />
-              </div>
+              {spell.description && (
+                <div className="mb-4">
+                  <ExpandableText text={spell.description} limit={200} />
+                </div>
+              )}
 
               {/* Pricing & CTA */}
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-3.5 border-t border-gray-100">
                 <div className="flex flex-col">
                   <span className="text-gray-400 uppercase tracking-widest text-[10px] sm:text-[11px] font-bold mb-0.5">Base Price</span>
                   <span className="text-xl sm:text-2xl md:text-3xl font-bold text-[#4A2B23] font-['Inria_Serif'] tracking-tight">
-                    ₹{spell.basePrice.toLocaleString('en-IN')}
+                    ₹{formattedPrice}
                   </span>
                 </div>
 
-                <button
-                  onClick={openPopup}
-                  className="w-full sm:w-auto bg-gradient-to-r from-[#F6971E] to-[#FFA733] hover:from-[#FFA733] hover:to-[#F6971E] text-white font-bold text-xs sm:text-sm py-2.5 px-6 sm:px-8 rounded-xl shadow-[0_4px_15px_rgba(246,151,30,0.3)] hover:scale-105 active:scale-95 transition-all cursor-pointer"
+                <Link
+                  href={bookUrl}
+                  className="w-full sm:w-auto bg-gradient-to-r from-[#F6971E] to-[#FFA733] hover:from-[#FFA733] hover:to-[#F6971E] text-white font-bold text-xs sm:text-sm py-2.5 px-6 sm:px-8 rounded-xl shadow-[0_4px_15px_rgba(246,151,30,0.3)] hover:scale-105 active:scale-95 transition-all cursor-pointer flex items-center justify-center text-center"
                 >
                   Book Spell Now
-                </button>
+                </Link>
               </div>
 
             </div>
@@ -252,69 +270,79 @@ export default function SpellDetails() {
         </div>
 
         {/* 4 Full-Width Sections: Description, Benefits, Procedure, What Happens After Order */}
-        <div className="mt-7 flex flex-col gap-5 w-full">
+        {(spell.description || spell.benefits || spell.procedure || spell.whatHappensAfterOrder) && (
+          <div className="mt-7 flex flex-col gap-5 w-full">
 
-          {/* 1. Description Section */}
-          <div className="w-full bg-white rounded-[20px] shadow-[0_4px_25px_rgba(0,0,0,0.03)] border border-[#F6971E]/15 p-5 sm:p-7">
-            <div className="flex items-center gap-2 mb-2.5">
-              <span className="w-1.5 h-4 sm:h-5 rounded-full bg-[#F6971E]" />
-              <h2 className="text-base sm:text-lg md:text-xl font-bold font-['Inria_Serif'] text-[#4A2B23]">
-                Description
-              </h2>
-            </div>
-            <ExpandableText text={spell.description} limit={200} />
-          </div>
-
-          {/* 2. Benefits Section */}
-          <div className="w-full bg-white rounded-[20px] shadow-[0_4px_25px_rgba(0,0,0,0.03)] border border-[#F6971E]/15 p-5 sm:p-7">
-            <div className="flex items-center gap-2 mb-2.5">
-              <span className="w-1.5 h-4 sm:h-5 rounded-full bg-[#F6971E]" />
-              <h2 className="text-base sm:text-lg md:text-xl font-bold font-['Inria_Serif'] text-[#4A2B23]">
-                Benefits
-              </h2>
-            </div>
-            <ExpandableText text={spell.benefits} limit={200} />
-
-            {/* Preferred Days inside Benefits */}
-            {spell.preferredDays && spell.preferredDays.length > 0 && (
-              <div className="mt-4 pt-3.5 border-t border-gray-100">
-                <h4 className="text-[10px] sm:text-[11px] font-bold uppercase tracking-widest text-gray-400 mb-2">
-                  Auspicious / Preferred Days
-                </h4>
-                <div className="flex flex-wrap gap-1.5">
-                  {spell.preferredDays.map((day) => (
-                    <span key={day} className="px-2.5 py-0.5 rounded-md bg-orange-50 border border-orange-200 text-xs font-semibold text-[#F6971E]">
-                      {day}
-                    </span>
-                  ))}
+            {/* 1. Description Section */}
+            {spell.description && (
+              <div className="w-full bg-white rounded-[20px] shadow-[0_4px_25px_rgba(0,0,0,0.03)] border border-[#F6971E]/15 p-5 sm:p-7">
+                <div className="flex items-center gap-2 mb-2.5">
+                  <span className="w-1.5 h-4 sm:h-5 rounded-full bg-[#F6971E]" />
+                  <h2 className="text-base sm:text-lg md:text-xl font-bold font-['Inria_Serif'] text-[#4A2B23]">
+                    Description
+                  </h2>
                 </div>
+                <ExpandableText text={spell.description} limit={200} />
               </div>
             )}
-          </div>
 
-          {/* 3. Procedure Section */}
-          <div className="w-full bg-white rounded-[20px] shadow-[0_4px_25px_rgba(0,0,0,0.03)] border border-[#F6971E]/15 p-5 sm:p-7">
-            <div className="flex items-center gap-2 mb-2.5">
-              <span className="w-1.5 h-4 sm:h-5 rounded-full bg-[#F6971E]" />
-              <h2 className="text-base sm:text-lg md:text-xl font-bold font-['Inria_Serif'] text-[#4A2B23]">
-                Procedure
-              </h2>
-            </div>
-            <ExpandableText text={spell.procedure} limit={200} />
-          </div>
+            {/* 2. Benefits Section */}
+            {spell.benefits && (
+              <div className="w-full bg-white rounded-[20px] shadow-[0_4px_25px_rgba(0,0,0,0.03)] border border-[#F6971E]/15 p-5 sm:p-7">
+                <div className="flex items-center gap-2 mb-2.5">
+                  <span className="w-1.5 h-4 sm:h-5 rounded-full bg-[#F6971E]" />
+                  <h2 className="text-base sm:text-lg md:text-xl font-bold font-['Inria_Serif'] text-[#4A2B23]">
+                    Benefits
+                  </h2>
+                </div>
+                <ExpandableText text={spell.benefits} limit={200} />
 
-          {/* 4. What Happens After Order Section */}
-          <div className="w-full bg-white rounded-[20px] shadow-[0_4px_25px_rgba(0,0,0,0.03)] border border-[#F6971E]/15 p-5 sm:p-7">
-            <div className="flex items-center gap-2 mb-2.5">
-              <span className="w-1.5 h-4 sm:h-5 rounded-full bg-[#F6971E]" />
-              <h2 className="text-base sm:text-lg md:text-xl font-bold font-['Inria_Serif'] text-[#4A2B23]">
-                What Happens After Order
-              </h2>
-            </div>
-            <ExpandableText text={spell.whatHappensAfterOrder} limit={200} />
-          </div>
+                {/* Preferred Days inside Benefits */}
+                {spell.preferredDays && spell.preferredDays.length > 0 && (
+                  <div className="mt-4 pt-3.5 border-t border-gray-100">
+                    <h4 className="text-[10px] sm:text-[11px] font-bold uppercase tracking-widest text-gray-400 mb-2">
+                      Auspicious / Preferred Days
+                    </h4>
+                    <div className="flex flex-wrap gap-1.5">
+                      {spell.preferredDays.map((day: string) => (
+                        <span key={day} className="px-2.5 py-0.5 rounded-md bg-orange-50 border border-orange-200 text-xs font-semibold text-[#F6971E]">
+                          {day}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
 
-        </div>
+            {/* 3. Procedure Section */}
+            {spell.procedure && (
+              <div className="w-full bg-white rounded-[20px] shadow-[0_4px_25px_rgba(0,0,0,0.03)] border border-[#F6971E]/15 p-5 sm:p-7">
+                <div className="flex items-center gap-2 mb-2.5">
+                  <span className="w-1.5 h-4 sm:h-5 rounded-full bg-[#F6971E]" />
+                  <h2 className="text-base sm:text-lg md:text-xl font-bold font-['Inria_Serif'] text-[#4A2B23]">
+                    Procedure
+                  </h2>
+                </div>
+                <ExpandableText text={spell.procedure} limit={200} />
+              </div>
+            )}
+
+            {/* 4. What Happens After Order Section */}
+            {spell.whatHappensAfterOrder && (
+              <div className="w-full bg-white rounded-[20px] shadow-[0_4px_25px_rgba(0,0,0,0.03)] border border-[#F6971E]/15 p-5 sm:p-7">
+                <div className="flex items-center gap-2 mb-2.5">
+                  <span className="w-1.5 h-4 sm:h-5 rounded-full bg-[#F6971E]" />
+                  <h2 className="text-base sm:text-lg md:text-xl font-bold font-['Inria_Serif'] text-[#4A2B23]">
+                    What Happens After Order
+                  </h2>
+                </div>
+                <ExpandableText text={spell.whatHappensAfterOrder} limit={200} />
+              </div>
+            )}
+
+          </div>
+        )}
 
         {/* FAQs Section */}
         {spell.faqEntries && spell.faqEntries.length > 0 && (
@@ -324,12 +352,12 @@ export default function SpellDetails() {
                 Frequently Asked Questions
               </h2>
               <p className="text-gray-500 text-xs sm:text-sm">
-                Everything you need to know about {spell.name}
+                Everything you need to know about {spellName}
               </p>
             </div>
 
             <div className="flex flex-col gap-2.5">
-              {spell.faqEntries.map((faq, index) => (
+              {spell.faqEntries.map((faq: any, index: number) => (
                 <div
                   key={faq._id || index}
                   className={`bg-white rounded-xl p-3.5 sm:p-4 border transition-all duration-300 ${openFaq === index

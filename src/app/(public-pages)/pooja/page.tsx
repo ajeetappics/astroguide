@@ -4,7 +4,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import Image from 'next/image';
 import { BsSearch, BsX, BsChevronLeft, BsChevronRight } from 'react-icons/bs';
 import PoojaCard, { PujaData } from '../../components/Card/PoojaCard';
-import { fetchPoojaList } from '@/services/pooja/poojaService';
+import { fetchPoojaList, fetchPoojaCategories, PoojaCategory, PaginationDetail } from '@/services/pooja/poojaService';
 
 const LIMIT = 10;
 
@@ -32,22 +32,67 @@ export default function PujasPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
-  const [activeTab, setActiveTab] = useState('All');
+  const [pagination, setPagination] = useState<PaginationDetail>({
+    totalDocs: 0,
+    totalPages: 1,
+    page: 1,
+    limit: LIMIT,
+    hasPrevPage: false,
+    hasNextPage: false,
+  });
+  const [activeCategoryId, setActiveCategoryId] = useState<string>('All');
   const [searchQuery, setSearchQuery] = useState('');
+  const [categoriesList, setCategoriesList] = useState<PoojaCategory[]>([]);
 
-  // Fetch Pooja list from API: GET /user/pooja?page=X&limit=10
+  // Fetch categories dynamically: GET /user/category?page=1&limit=10
+  useEffect(() => {
+    let isMounted = true;
+    const loadCategories = async () => {
+      try {
+        const fetched = await fetchPoojaCategories(1, 10);
+        if (isMounted && fetched && fetched.length > 0) {
+          setCategoriesList(fetched);
+        }
+      } catch (err) {
+        console.error('Error fetching categories from /user/category:', err);
+      }
+    };
+
+    loadCategories();
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  // Merge "All" with categoriesList
+  const categories: PoojaCategory[] = useMemo(() => {
+    const allItem: PoojaCategory = {
+      _id: 'All',
+      categoryName: 'All',
+      icon: '',
+    };
+    return [allItem, ...categoriesList];
+  }, [categoriesList]);
+
+  // Fetch Pooja list from API:
+  // - All Poojas: GET /user/pooja?page=X&limit=10&poojaName=...
+  // - Category Poojas: GET /user/pooja/category/:id?page=X&limit=10&poojaName=...
   useEffect(() => {
     let isMounted = true;
 
     const loadPoojas = async () => {
       setIsLoading(true);
       try {
-        const response = await fetchPoojaList(currentPage, LIMIT);
+        const catParam = activeCategoryId !== 'All' ? activeCategoryId : undefined;
+        const response = await fetchPoojaList(currentPage, LIMIT, catParam, searchQuery);
         if (isMounted) {
           setPoojas(response.poojas);
           setRawList(response.rawList);
           setTotalCount(response.total);
           setTotalPages(Math.max(1, response.totalPages));
+          if (response.paginationDetail) {
+            setPagination(response.paginationDetail);
+          }
         }
       } catch (err) {
         console.error('Error fetching pooja list:', err);
@@ -58,67 +103,15 @@ export default function PujasPage() {
       }
     };
 
-    loadPoojas();
+    const timer = setTimeout(() => {
+      loadPoojas();
+    }, 300);
 
     return () => {
       isMounted = false;
+      clearTimeout(timer);
     };
-  }, [currentPage]);
-
-  // Dynamically extract categories from the API poojas, merged with default tabs
-  const categoryTabs = useMemo(() => {
-    const extracted = new Set<string>();
-    rawList.forEach((item: any) => {
-      if (Array.isArray(item.categoryId)) {
-        item.categoryId.forEach((c: any) => {
-          const name = typeof c === 'string' ? c : c?.categoryName;
-          if (name) extracted.add(name);
-        });
-      } else if (typeof item.category === 'string') {
-        extracted.add(item.category);
-      }
-    });
-
-    const uniqueTabs = ['All'];
-    extracted.forEach((c) => {
-      if (!uniqueTabs.includes(c)) uniqueTabs.push(c);
-    });
-
-    return uniqueTabs;
-  }, [rawList]);
-
-  // Client-side filtering by search query & category tab
-  const filteredPujas = useMemo(() => {
-    return poojas.filter((p) => {
-      // 1. Category Tab Filter
-      if (activeTab !== 'All') {
-        const raw = p.raw || {};
-        let matched = false;
-        if (Array.isArray(raw.categoryId)) {
-          matched = raw.categoryId.some((c: any) => {
-            const name = typeof c === 'string' ? c : c?.categoryName;
-            return name && name.toLowerCase() === activeTab.toLowerCase();
-          });
-        } else if (raw.category) {
-          matched = String(raw.category).toLowerCase() === activeTab.toLowerCase();
-        } else if (p.location) {
-          matched = p.location.toLowerCase().includes(activeTab.toLowerCase());
-        }
-        if (!matched) return false;
-      }
-
-      // 2. Search Query Filter
-      if (searchQuery.trim()) {
-        const q = searchQuery.toLowerCase();
-        const inTitle = p.title.toLowerCase().includes(q);
-        const inDesc = p.description.toLowerCase().includes(q);
-        const inLoc = p.location ? p.location.toLowerCase().includes(q) : false;
-        return inTitle || inDesc || inLoc;
-      }
-
-      return true;
-    });
-  }, [poojas, activeTab, searchQuery]);
+  }, [currentPage, activeCategoryId, searchQuery]);
 
   const handlePageChange = (newPage: number) => {
     if (newPage < 1 || newPage > totalPages || newPage === currentPage || isLoading) return;
@@ -127,6 +120,23 @@ export default function PujasPage() {
     if (listingSection) {
       listingSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
+  };
+
+  const getPageNumbers = () => {
+    if (totalPages <= 5) {
+      return Array.from({ length: totalPages }, (_, i) => i + 1);
+    }
+    const pages: (number | string)[] = [];
+    pages.push(1);
+    const start = Math.max(2, currentPage - 1);
+    const end = Math.min(totalPages - 1, currentPage + 1);
+    if (start > 2) pages.push('...');
+    for (let i = start; i <= end; i++) {
+      pages.push(i);
+    }
+    if (end < totalPages - 1) pages.push('...');
+    pages.push(totalPages);
+    return pages;
   };
 
   return (
@@ -216,13 +226,19 @@ export default function PujasPage() {
           <input
             type="text"
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            onChange={(e) => {
+              setSearchQuery(e.target.value);
+              setCurrentPage(1);
+            }}
             placeholder="Search pooja by name, deity or temple..."
             className="flex-grow bg-transparent border-none outline-none px-2 sm:px-3 py-1 sm:py-1.5 font-helvetica text-gray-700 placeholder:text-gray-400 text-xs sm:text-sm w-full min-w-0"
           />
           {searchQuery && (
             <button
-              onClick={() => setSearchQuery('')}
+              onClick={() => {
+                setSearchQuery('');
+                setCurrentPage(1);
+              }}
               className="p-1 text-gray-400 hover:text-gray-600 mr-1 cursor-pointer transition-colors"
               aria-label="Clear search"
             >
@@ -246,20 +262,26 @@ export default function PujasPage() {
           `
             }}
           />
-          <div className="flex items-center gap-2.5 sm:gap-3 w-max">
-            {categoryTabs.map((tab) => (
-              <button
-                key={tab}
-                onClick={() => setActiveTab(tab)}
-                className={`px-4 py-2 sm:px-6 sm:py-2.5 rounded-full text-xs sm:text-sm font-bold font-helvetica transition-all shadow-xs sm:shadow-sm flex-shrink-0 cursor-pointer ${
-                  activeTab === tab
-                    ? 'bg-[#F6971E] text-white border-none shadow-[0_4px_10px_rgba(246,151,30,0.3)]'
-                    : 'bg-white border border-gray-200 text-[#4A2B23] hover:border-[#F6971E]/50 hover:text-[#F6971E]'
-                }`}
-              >
-                {tab}
-              </button>
-            ))}
+          <div className="flex items-center gap-2.5 sm:gap-3 w-max py-1">
+            {categories.map((cat) => {
+              const isSelected = activeCategoryId === cat._id;
+              return (
+                <button
+                  key={cat._id}
+                  onClick={() => {
+                    setActiveCategoryId(cat._id);
+                    setCurrentPage(1);
+                  }}
+                  className={`inline-flex items-center px-4 py-2 sm:px-5 sm:py-2.5 rounded-full text-xs sm:text-sm font-bold font-helvetica transition-all shadow-xs sm:shadow-sm flex-shrink-0 cursor-pointer ${
+                    isSelected
+                      ? 'bg-[#F6971E] text-white border border-[#F6971E] shadow-[0_4px_12px_rgba(246,151,30,0.3)] scale-[1.02]'
+                      : 'bg-white border border-gray-200/90 text-[#4A2B23] hover:border-[#F6971E]/50 hover:text-[#F6971E]'
+                  }`}
+                >
+                  <span>{cat.categoryName}</span>
+                </button>
+              );
+            })}
           </div>
         </div>
 
@@ -301,10 +323,10 @@ export default function PujasPage() {
               </div>
             ))}
           </div>
-        ) : filteredPujas.length > 0 ? (
+        ) : poojas.length > 0 ? (
           <>
             <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2.5 sm:gap-3 md:gap-3.5">
-              {filteredPujas.map((pooja) => (
+              {poojas.map((pooja) => (
                 <PoojaCard key={`pooja-${pooja.id}`} pooja={pooja} />
               ))}
             </div>
@@ -320,7 +342,7 @@ export default function PujasPage() {
                 <div className="flex items-center gap-1.5 sm:gap-2 order-1 sm:order-2 flex-wrap justify-center">
                   <button
                     onClick={() => handlePageChange(currentPage - 1)}
-                    disabled={currentPage === 1 || isLoading}
+                    disabled={!pagination.hasPrevPage || currentPage <= 1 || isLoading}
                     className="flex items-center gap-1 px-3 py-1.5 rounded-full border border-gray-200 text-xs font-bold text-[#4A2B23] bg-white hover:border-[#F6971E] hover:text-[#F6971E] disabled:opacity-40 disabled:cursor-not-allowed transition-all shadow-2xs cursor-pointer"
                     aria-label="Previous Page"
                   >
@@ -329,25 +351,34 @@ export default function PujasPage() {
                   </button>
 
                   <div className="flex items-center gap-1">
-                    {Array.from({ length: totalPages }, (_, i) => i + 1).map((pageNum) => (
-                      <button
-                        key={pageNum}
-                        onClick={() => handlePageChange(pageNum)}
-                        disabled={isLoading}
-                        className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full text-xs font-bold flex items-center justify-center transition-all cursor-pointer ${
-                          pageNum === currentPage
-                            ? 'bg-[#F6971E] text-white shadow-[0_2px_8px_rgba(246,151,30,0.35)]'
-                            : 'bg-white border border-gray-200 text-[#4A2B23] hover:border-[#F6971E] hover:text-[#F6971E]'
-                        }`}
-                      >
-                        {pageNum}
-                      </button>
-                    ))}
+                    {getPageNumbers().map((item, idx) => {
+                      if (typeof item === 'string') {
+                        return (
+                          <span key={`dots-${idx}`} className="px-1 text-gray-400 font-bold text-xs">
+                            ...
+                          </span>
+                        );
+                      }
+                      return (
+                        <button
+                          key={item}
+                          onClick={() => handlePageChange(item)}
+                          disabled={isLoading}
+                          className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full text-xs font-bold flex items-center justify-center transition-all cursor-pointer ${
+                            item === currentPage
+                              ? 'bg-[#F6971E] text-white shadow-[0_2px_8px_rgba(246,151,30,0.35)]'
+                              : 'bg-white border border-gray-200 text-[#4A2B23] hover:border-[#F6971E] hover:text-[#F6971E]'
+                          }`}
+                        >
+                          {item}
+                        </button>
+                      );
+                    })}
                   </div>
 
                   <button
                     onClick={() => handlePageChange(currentPage + 1)}
-                    disabled={currentPage >= totalPages || isLoading}
+                    disabled={!pagination.hasNextPage || currentPage >= totalPages || isLoading}
                     className="flex items-center gap-1 px-3 py-1.5 rounded-full border border-gray-200 text-xs font-bold text-[#4A2B23] bg-white hover:border-[#F6971E] hover:text-[#F6971E] disabled:opacity-40 disabled:cursor-not-allowed transition-all shadow-2xs cursor-pointer"
                     aria-label="Next Page"
                   >
@@ -364,14 +395,15 @@ export default function PujasPage() {
             <p className="text-gray-500 text-sm font-helvetica mb-4">
               {searchQuery
                 ? `No pooja services match "${searchQuery}".`
-                : activeTab !== 'All'
-                ? `No poojas found under "${activeTab}".`
+                : activeCategoryId !== 'All'
+                ? `No poojas found under "${categories.find((c) => c._id === activeCategoryId)?.categoryName || activeCategoryId}".`
                 : 'No pooja services are currently available.'}
             </p>
             <button
               onClick={() => {
                 setSearchQuery('');
-                setActiveTab('All');
+                setActiveCategoryId('All');
+                setCurrentPage(1);
               }}
               className="bg-[#F6971E] text-white font-bold px-6 py-2 rounded-full text-sm hover:bg-[#e5850b] transition-all cursor-pointer"
             >

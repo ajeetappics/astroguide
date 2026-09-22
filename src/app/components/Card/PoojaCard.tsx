@@ -14,6 +14,8 @@ export interface PujaData {
   date?: string;
   price: string;
   image: string;
+  tagName?: string;
+  tag?: any;
   raw?: any;
 }
 
@@ -49,6 +51,15 @@ export default function PoojaCard({ pooja, basePath = "/pooja" }: PoojaCardProps
           className="object-cover transition-transform duration-700 group-hover:scale-105"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-[#4A1A14]/80 to-transparent"></div>
+
+        {/* Tag Badge if present */}
+        {pooja.tagName && (
+          <div className="absolute top-2 left-2 z-10">
+            <span className="inline-flex items-center text-[10px] sm:text-[11px] font-bold text-white bg-gradient-to-r from-[#F6971E] to-[#E07A00] px-2.5 py-0.5 rounded-full shadow-md backdrop-blur-xs uppercase tracking-wider">
+              <span className="truncate max-w-[120px]">{pooja.tagName}</span>
+            </span>
+          </div>
+        )}
       </div>
 
       {/* Content Section */}

@@ -134,12 +134,18 @@ export const mapAstroToCard = (raw: any): AstrologerData => {
 export const fetchAstroList = async (
   page = 1,
   limit = 20,
-  expertise?: string
+  expertise?: string,
+  search?: string
 ): Promise<{ astrologers: AstrologerData[]; total: number; totalPages: number; currentPage: number }> => {
   let url = `${API_URL}/user/astroList?page=${page}&limit=${limit}`;
 
   if (expertise && expertise.trim() !== '' && expertise.toLowerCase() !== 'all') {
     url += `&expertise=${encodeURIComponent(expertise.trim().toLowerCase())}`;
+  }
+
+  if (search && search.trim() !== '') {
+    const q = encodeURIComponent(search.trim());
+    url += `&fullName=${q}&search=${q}`;
   }
 
   try {

@@ -8,7 +8,7 @@ import {
   BsChevronRight,
   BsChevronDown
 } from 'react-icons/bs';
-import { fetchPoojaById } from '@/services/pooja/poojaService';
+import { fetchPoojaById, getCategoryByIdOrName } from '@/services/pooja/poojaService';
 
 export interface CategoryItem {
   _id?: string;
@@ -133,7 +133,23 @@ export default function PujaDetails() {
   }
 
   // Determine displayed categories (default 3, or all when expanded)
-  const categories: CategoryItem[] = Array.isArray(pooja?.categoryId) ? pooja.categoryId : [];
+  const rawCategories: any[] = Array.isArray(pooja?.categoryId) ? pooja.categoryId : [];
+  const categories: CategoryItem[] = rawCategories.map((c: any) => {
+    if (typeof c === 'string') {
+      const match = getCategoryByIdOrName(c);
+      return {
+        _id: c,
+        categoryName: match?.categoryName || c,
+        icon: match?.icon,
+      };
+    }
+    const match = getCategoryByIdOrName(c?._id || c?.categoryName);
+    return {
+      ...c,
+      categoryName: c?.categoryName || match?.categoryName || 'Sacred Category',
+      icon: c?.icon || match?.icon,
+    };
+  });
   const visibleCategories = showAllCategories
     ? categories
     : categories.slice(0, 3);
@@ -142,6 +158,15 @@ export default function PujaDetails() {
   const poojaImage = pooja?.image || pooja?.imageUrl || '/images/poojas/ganesha_pooja.jpg';
   const rawPrice = pooja?.basePrice ?? pooja?.price ?? 1100;
   const formattedPrice = (typeof rawPrice === 'number' ? rawPrice : Number(String(rawPrice).replace(/[^\d.]/g, '')) || 1100).toLocaleString('en-IN');
+
+  const poojaTagName =
+    pooja?.poojaTagId?.tagName ||
+    pooja?.poojaTagId?.name ||
+    pooja?.tag?.tagName ||
+    pooja?.tag?.name ||
+    pooja?.tagName ||
+    (typeof pooja?.tag === 'string' ? pooja.tag : '') ||
+    '';
 
   return (
     <main className="min-h-screen bg-[#FFFDF9] pt-28 pb-[80px] font-helvetica">
@@ -177,19 +202,21 @@ export default function PujaDetails() {
             {/* Right: Details, Categories & Booking */}
             <div className="w-full lg:w-[58%] flex flex-col justify-center">
 
-              {/* Categories Badges (3 visible by default + View More / View Less toggle) */}
-              {categories.length > 0 && (
+              {/* Badges row: Tag Badge & Category Badges */}
+              {(poojaTagName || categories.length > 0) && (
                 <div className="flex flex-wrap items-center gap-2 mb-2.5">
+                  {/* Highlighted Tag Badge */}
+                  {poojaTagName && (
+                    <span className="inline-flex items-center px-3 py-0.5 rounded-full text-xs font-bold bg-gradient-to-r from-[#F6971E] to-[#E07A00] text-white shadow-2xs uppercase tracking-wider">
+                      <span>{poojaTagName}</span>
+                    </span>
+                  )}
+
                   {visibleCategories.map((cat: CategoryItem) => (
                     <span
                       key={cat._id}
-                      className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full text-xs font-semibold bg-orange-50 text-[#F6971E] border border-orange-200/60 shadow-2xs"
+                      className="inline-flex items-center px-3 py-0.5 rounded-full text-xs font-semibold bg-orange-50 text-[#F6971E] border border-orange-200/60 shadow-2xs"
                     >
-                      {cat.icon && (
-                        <span className="relative w-3.5 h-3.5 rounded-full overflow-hidden flex-shrink-0">
-                          <Image src={cat.icon} alt={cat.categoryName} fill className="object-cover" />
-                        </span>
-                      )}
                       <span>{cat.categoryName}</span>
                     </span>
                   ))}

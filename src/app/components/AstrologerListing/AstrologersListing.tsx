@@ -162,6 +162,7 @@ export default function AstrologersListing({ initialCategory = "All" }: Astrolog
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
+  const [searchQuery, setSearchQuery] = useState("");
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
   const router = useRouter();
 
@@ -184,7 +185,8 @@ export default function AstrologersListing({ initialCategory = "All" }: Astrolog
         const { astrologers: apiList, total, totalPages: pages } = await fetchAstroList(
           currentPage,
           ITEMS_PER_PAGE,
-          expertiseParam
+          expertiseParam,
+          searchQuery
         );
         if (isMounted) {
           setAllAstrologers(apiList || []);
@@ -197,13 +199,17 @@ export default function AstrologersListing({ initialCategory = "All" }: Astrolog
         if (isMounted) setIsLoading(false);
       }
     };
-    loadAstrologers();
+
+    const timer = setTimeout(() => {
+      loadAstrologers();
+    }, 300);
+
     return () => {
       isMounted = false;
+      clearTimeout(timer);
     };
-  }, [activeTab, currentPage]);
+  }, [activeTab, currentPage, searchQuery]);
 
-  const [searchQuery, setSearchQuery] = useState("");
   const [isSortOpen, setIsSortOpen] = useState(false);
   const [selectedSort, setSelectedSort] = useState("Popularity");
 
@@ -227,19 +233,10 @@ export default function AstrologersListing({ initialCategory = "All" }: Astrolog
     }
   };
 
-  // Filter astrologers based on search and sort
+  // Sort astrologers based on selectedSort (Search is managed dynamically via API)
   const filteredAstrologers = useMemo(() => {
-    return allAstrologers?.filter((astro) => {
-      // Search query filter
-      if (searchQuery.trim()) {
-        const q = searchQuery.toLowerCase();
-        const matchName = astro.name.toLowerCase().includes(q);
-        const matchSkill = astro.skills.some(s => s.toLowerCase().includes(q));
-        const matchLang = astro.languages.toLowerCase().includes(q);
-        if (!matchName && !matchSkill && !matchLang) return false;
-      }
-      return true;
-    }).sort((a, b) => {
+    if (!allAstrologers || allAstrologers.length === 0) return [];
+    return [...allAstrologers].sort((a, b) => {
       if (selectedSort === 'Price: Low to High') {
         const priceA = parseInt(a.price.replace(/[^\d]/g, '') || '0');
         const priceB = parseInt(b.price.replace(/[^\d]/g, '') || '0');
@@ -262,7 +259,7 @@ export default function AstrologersListing({ initialCategory = "All" }: Astrolog
       }
       return 0;
     });
-  }, [allAstrologers, activeTab, searchQuery, selectedSort]);
+  }, [allAstrologers, selectedSort]);
 
   // Dynamic headings for category landing
   const categoryInfo = activeTab !== "All"
@@ -301,13 +298,19 @@ export default function AstrologersListing({ initialCategory = "All" }: Astrolog
           <input
             type="text"
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            onChange={(e) => {
+              setSearchQuery(e.target.value);
+              setCurrentPage(1);
+            }}
             placeholder={`Search ${activeTab === 'All' ? 'astrologers' : `${activeTab} astrologers`} by name or skill...`}
             className="flex-grow bg-transparent border-none outline-none px-2 sm:px-3 py-1 sm:py-1.5 font-helvetica text-gray-700 placeholder:text-gray-400 text-xs sm:text-sm w-full min-w-0"
           />
           {searchQuery && (
             <button
-              onClick={() => setSearchQuery("")}
+              onClick={() => {
+                setSearchQuery("");
+                setCurrentPage(1);
+              }}
               className="p-1 text-gray-400 hover:text-gray-600 mr-1 cursor-pointer transition-colors"
               aria-label="Clear search"
             >
