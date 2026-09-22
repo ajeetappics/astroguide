@@ -38,8 +38,10 @@ const ingridDarling = Ingrid_Darling({
   weight: "400",
 });
 
+const SITE_URL = process.env.NEXT_PUBLIC_URL || 'https://astroguide-three.vercel.app';
+
 export const metadata: Metadata = {
-  title: "Balaji Astro Guide",
+  title: "Online Astrology Consultation & Kundali | Balaji Astro Guide",
   description: "Balaji Astro Guide is India's premier online astrology platform for accurate Kundali predictions and expert consultation with verified Vedic astrologers.",
   keywords: [
     "Talk to astrologer online",
@@ -64,6 +66,9 @@ export const metadata: Metadata = {
     googleBot: {
       index: true,
       follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
     },
   },
   other: {
@@ -71,16 +76,17 @@ export const metadata: Metadata = {
     googlebot: "index,follow",
   },
   alternates: {
-    canonical: "https://balajiastroguide.com",
+    canonical: `${SITE_URL}`,
     languages: {
       "en-US": "en-US",
     },
   },
   openGraph: {
-    title: "Talk to Astrologer Online | Accurate Astrology Consultation | Balaji Astro Guide",
+    title: "Online Astrology Consultation & Kundali | Balaji Astro Guide",
     description: "Chat with certified astrologers online for love, marriage, career, and life guidance. Accurate predictions, instant responses, and affordable astrology consultations.",
-    url: "https://balajiastroguide.com",
+    url: `${SITE_URL}`,
     siteName: "Balaji Astro Guide",
+    locale: "en_IN",
     type: "website",
     images: [
       {
@@ -89,13 +95,13 @@ export const metadata: Metadata = {
         height: 630,
         alt: "Balaji Astro Guide",
       },
-      {
-        url: "https://storage.googleapis.com/astro-vani-storage/admin/1789712859319-asto_logo.png",
-        width: 1200,
-        height: 630,
-        alt: "Balaji Astro Guide",
-      },
     ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Online Astrology Consultation & Kundali | Balaji Astro Guide",
+    description: "Consult verified Vedic astrologers online on Balaji Astro Guide for accurate predictions and remedies 24/7.",
+    images: ["https://storage.googleapis.com/astro-vani-storage/admin/1789712859319-asto_logo.png"],
   },
 };
 
