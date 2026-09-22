@@ -145,7 +145,7 @@ export const fetchAstroList = async (
 
   if (search && search.trim() !== '') {
     const q = encodeURIComponent(search.trim());
-    url += `&fullName=${q}&search=${q}`;
+    url += `&fullName=${q}`;
   }
 
   try {

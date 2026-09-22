@@ -447,17 +447,23 @@ export default function AstrologersListing({ initialCategory = "All" }: Astrolog
         ) : (
           <div className="text-center py-16 bg-white rounded-3xl border border-[#F6971E]/20 p-8 shadow-xs max-w-lg mx-auto">
             <p className="text-gray-500 text-base font-helvetica mb-4">
-              No {activeTab !== "All" ? activeTab : ""} astrologers found matching your filters.
+              {searchQuery.trim()
+                ? `No astrologers found matching "${searchQuery}".`
+                : activeTab && activeTab.toLowerCase() !== "all"
+                ? `No ${activeTab} astrologers found matching your filters.`
+                : "No astrologers found."}
             </p>
-            <button
-              onClick={() => {
-                handleTabChange("All");
-                setSearchQuery("");
-              }}
-              className="bg-[#F6971E] text-white font-bold px-6 py-2 rounded-full text-sm hover:bg-[#e5850b] transition-all cursor-pointer"
-            >
-              Clear Filters
-            </button>
+            {Boolean((activeTab && activeTab.toLowerCase() !== "all") || searchQuery.trim()) && (
+              <button
+                onClick={() => {
+                  handleTabChange("All");
+                  setSearchQuery("");
+                }}
+                className="bg-[#F6971E] text-white font-bold px-6 py-2 rounded-full text-sm hover:bg-[#e5850b] transition-all cursor-pointer"
+              >
+                Clear Filters
+              </button>
+            )}
           </div>
         )}
 
@@ -498,11 +504,10 @@ export default function AstrologersListing({ initialCategory = "All" }: Astrolog
                       key={p}
                       onClick={() => handlePageChange(p)}
                       disabled={isLoading}
-                      className={`w-8 h-8 sm:w-9 sm:h-9 rounded-full text-xs sm:text-sm font-bold flex items-center justify-center transition-all cursor-pointer ${
-                        isCurrent
+                      className={`w-8 h-8 sm:w-9 sm:h-9 rounded-full text-xs sm:text-sm font-bold flex items-center justify-center transition-all cursor-pointer ${isCurrent
                           ? 'bg-[#F6971E] text-white shadow-[0_4px_10px_rgba(246,151,30,0.3)]'
                           : 'bg-white border border-gray-200 text-[#4A2B23] hover:border-[#F6971E] hover:text-[#F6971E]'
-                      }`}
+                        }`}
                     >
                       {p}
                     </button>
@@ -610,9 +615,8 @@ export default function AstrologersListing({ initialCategory = "All" }: Astrolog
                   aria-expanded={isOpen}
                 >
                   <span className="leading-snug">{faq.question}</span>
-                  <div className={`w-7 h-7 rounded-full flex items-center justify-center shrink-0 transition-colors ${
-                    isOpen ? 'bg-[#F6971E] text-white' : 'bg-gray-100 text-gray-500'
-                  }`}>
+                  <div className={`w-7 h-7 rounded-full flex items-center justify-center shrink-0 transition-colors ${isOpen ? 'bg-[#F6971E] text-white' : 'bg-gray-100 text-gray-500'
+                    }`}>
                     {isOpen ? <BsChevronUp className="w-3.5 h-3.5" /> : <BsChevronDown className="w-3.5 h-3.5" />}
                   </div>
                 </button>
