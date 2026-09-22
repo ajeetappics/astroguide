@@ -23,6 +23,11 @@ const nextConfig: NextConfig = {
         hostname: "atsro-vani-prod-v1.s3.ap-south-1.amazonaws.com",
         pathname: "/**",
       },
+      {
+        protocol: "https",
+        hostname: "balajiastroguide.com",
+        pathname: "/**",
+      },
     ],
   },
 
