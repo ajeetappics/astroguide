@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import rawHoroscopeData from '../../../../data/horoscopeData.json';
+import { ZODIAC_SIGNS_LIST } from '@/services/horoscopeService';
 
 // Midnight Cron Handler: Can be invoked by external cron service, Vercel cron, or GitHub action
 export async function GET(request: Request) {
@@ -25,7 +25,7 @@ export async function GET(request: Request) {
       message: 'Horoscope data verified and scheduled for midnight refresh',
       lastUpdated: new Date().toISOString(),
       displayDate: formattedDate,
-      totalSigns: Object.keys(rawHoroscopeData.signs).length
+      totalSigns: ZODIAC_SIGNS_LIST.length
     };
 
     return NextResponse.json(responsePayload, { status: 200 });

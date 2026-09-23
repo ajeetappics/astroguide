@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useParams, notFound } from 'next/navigation';
 import {
@@ -14,14 +14,13 @@ import {
   BsAwardFill,
   BsCompassFill,
   BsLightningChargeFill,
-  BsGem,
-  BsClockHistory,
   BsPaletteFill,
   Bs123,
-  BsEmojiSmileFill,
-  BsStars,
   BsChatDotsFill,
-  BsArrowLeft
+  BsArrowLeft,
+  BsSunFill,
+  BsMoonStarsFill,
+  BsCalendarEvent
 } from 'react-icons/bs';
 import {
   TbZodiacAries, TbZodiacTaurus, TbZodiacGemini, TbZodiacCancer,
@@ -33,7 +32,11 @@ import {
   TIMEFRAMES,
   getTimeframeConfig,
   getSignHoroscopeForTimeframe,
-  ZODIAC_SIGNS_LIST
+  ZODIAC_SIGNS_LIST,
+  fetchHoroscopePrediction,
+  parsePredictionResponse,
+  ParsedPredictionData,
+  ZODIAC_NUMBER_MAP
 } from '../../../../../services/horoscopeService';
 
 const ZODIAC_ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
@@ -57,26 +60,92 @@ export default function SignHoroscopeDetailPage() {
   const rawSign = (params?.sign as string) || 'aries';
   const { openPopup } = usePopup();
 
+  const [celestialType, setCelestialType] = useState<'sun' | 'moon'>('sun');
+  const [selectedPhaseIndex, setSelectedPhaseIndex] = useState<number>(0);
+  const [expandedAreas, setExpandedAreas] = useState<Record<string, boolean>>({});
+  const [parsedPrediction, setParsedPrediction] = useState<ParsedPredictionData | null>(null);
+  const [isLoadingPrediction, setIsLoadingPrediction] = useState<boolean>(true);
+
   const timeframe = getTimeframeConfig(rawTimeframe);
   const signData = getSignHoroscopeForTimeframe(rawSign, timeframe.slug);
+  const isYearly = timeframe.id === 'yearly' || timeframe.slug === 'yearly-horoscope';
 
   if (!signData) {
     notFound();
   }
 
+  // Fetch prediction from API: POST /vedicastro/getPrediction
+  useEffect(() => {
+    let isMounted = true;
+    setIsLoadingPrediction(true);
+
+    const zodiacNum = ZODIAC_NUMBER_MAP[signData.id] || '1';
+    const tfPrefix = timeframe.id || (timeframe.slug ? timeframe.slug.replace('-horoscope', '') : 'daily');
+    const subCategory = isYearly ? 'yearly' : `${tfPrefix}-${celestialType}`;
+
+    fetchHoroscopePrediction(subCategory, zodiacNum, 'en')
+      .then((data) => {
+        if (!isMounted) return;
+        const parsed = parsePredictionResponse(data);
+        setParsedPrediction(parsed);
+      })
+      .catch((err) => {
+        console.error('Failed to fetch prediction:', err);
+      })
+      .finally(() => {
+        if (isMounted) {
+          setIsLoadingPrediction(false);
+        }
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, [timeframe.slug, timeframe.id, celestialType, signData.id, isYearly]);
+
   const ActiveIcon = ZODIAC_ICONS[signData.id] || TbZodiacAries;
-  const { luckyToday, areaOfLife } = signData;
+
+  const getStatusFromScore = (score?: number) => {
+    if (score === undefined) return '';
+    if (score >= 75) return 'Highly Favorable';
+    if (score >= 50) return 'Moderate & Steady';
+    if (score >= 30) return 'Requires Focus';
+    return 'Exercise Caution';
+  };
+
+  useEffect(() => {
+    setExpandedAreas({});
+  }, [selectedPhaseIndex, rawSign, rawTimeframe, celestialType]);
+
+  const toggleExpandArea = (key: string) => {
+    setExpandedAreas((prev) => ({ ...prev, [key]: !prev[key] }));
+  };
+
+  const getPreviewText = (text: string, limit = 200) => {
+    if (text.length <= limit) return text;
+    const truncated = text.slice(0, limit);
+    const lastSpace = truncated.lastIndexOf(' ');
+    return (lastSpace > 140 ? truncated.slice(0, lastSpace) : truncated).trim();
+  };
+
+  const yearlyPhases = parsedPrediction?.yearlyPhases || [];
+  const activePhase = isYearly && yearlyPhases.length > 0
+    ? yearlyPhases[selectedPhaseIndex] || yearlyPhases[0]
+    : null;
+
+  const currentOverview = activePhase ? activePhase.prediction : parsedPrediction?.overviewText;
+  const currentAreas = activePhase ? activePhase.areas : parsedPrediction?.areas;
 
   const lifeAreaItems = [
-    { key: 'physique', label: 'Physique', icon: BsLightningChargeFill, color: 'text-amber-500', bg: 'bg-amber-50', data: areaOfLife.physique },
-    { key: 'status', label: 'Status & Respect', icon: BsAwardFill, color: 'text-purple-600', bg: 'bg-purple-50', data: areaOfLife.status },
-    { key: 'finance', label: 'Finance & Wealth', icon: BsCashStack, color: 'text-emerald-600', bg: 'bg-emerald-50', data: areaOfLife.finance },
-    { key: 'relationship', label: 'Relationship & Love', icon: BsHeartFill, color: 'text-rose-600', bg: 'bg-rose-50', data: areaOfLife.relationship },
-    { key: 'career', label: 'Career & Work', icon: BsBriefcaseFill, color: 'text-blue-600', bg: 'bg-blue-50', data: areaOfLife.career },
-    { key: 'travel', label: 'Travel & Movement', icon: BsCompassFill, color: 'text-cyan-600', bg: 'bg-cyan-50', data: areaOfLife.travel },
-    { key: 'family', label: 'Family & Home', icon: BsHouseDoorFill, color: 'text-orange-600', bg: 'bg-orange-50', data: areaOfLife.family },
-    { key: 'friends', label: 'Friends & Allies', icon: BsPeopleFill, color: 'text-indigo-600', bg: 'bg-indigo-50', data: areaOfLife.friends },
-    { key: 'health', label: 'Health & Vitality', icon: BsActivity, color: 'text-green-600', bg: 'bg-green-50', data: areaOfLife.health }
+    { key: 'physique', label: 'Physique & Vitality', icon: BsLightningChargeFill, color: 'text-amber-500', bg: 'bg-amber-50', data: currentAreas?.physique },
+    { key: 'status', label: 'Status & Respect', icon: BsAwardFill, color: 'text-purple-600', bg: 'bg-purple-50', data: currentAreas?.status },
+    { key: 'finance', label: 'Finance & Wealth', icon: BsCashStack, color: 'text-emerald-600', bg: 'bg-emerald-50', data: currentAreas?.finance },
+    { key: 'relationship', label: 'Relationship & Love', icon: BsHeartFill, color: 'text-rose-600', bg: 'bg-rose-50', data: currentAreas?.relationship },
+    { key: 'career', label: 'Career & Work', icon: BsBriefcaseFill, color: 'text-blue-600', bg: 'bg-blue-50', data: currentAreas?.career },
+    { key: 'travel', label: 'Travel & Movement', icon: BsCompassFill, color: 'text-cyan-600', bg: 'bg-cyan-50', data: currentAreas?.travel },
+    { key: 'family', label: 'Family & Home', icon: BsHouseDoorFill, color: 'text-orange-600', bg: 'bg-orange-50', data: currentAreas?.family },
+    { key: 'friends', label: 'Friends & Allies', icon: BsPeopleFill, color: 'text-indigo-600', bg: 'bg-indigo-50', data: currentAreas?.friends },
+    { key: 'health', label: 'Health & Well-being', icon: BsActivity, color: 'text-green-600', bg: 'bg-green-50', data: currentAreas?.health }
   ];
 
   return (
@@ -109,8 +178,9 @@ export default function SignHoroscopeDetailPage() {
           </span>
         </div>
 
-        {/* Timeframe Navigation Tabs (Preserves current sign) */}
-        <div className="flex justify-center mb-8">
+        {/* SubCategory Timeframes & Celestial Sun/Moon Tabs (Side-by-Side) */}
+        <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 mb-8">
+          {/* Timeframe Navigation Tabs (Preserves current sign) */}
           <div className="inline-flex flex-wrap items-center justify-center gap-1.5 sm:gap-2 bg-white p-1.5 sm:p-2 rounded-2xl sm:rounded-full border border-[#F6971E]/20 shadow-xs">
             {TIMEFRAMES.map((tf) => {
               const isActive = tf.slug === timeframe.slug;
@@ -128,6 +198,36 @@ export default function SignHoroscopeDetailPage() {
               );
             })}
           </div>
+
+          {/* Sun & Moon Celestial Tabs (Right Side of SubCategory, hidden if Yearly) */}
+          {!isYearly && (
+            <div className="inline-flex items-center gap-1.5 bg-white p-1.5 sm:p-2 rounded-2xl sm:rounded-full border border-[#F6971E]/25 shadow-xs">
+              <button
+                type="button"
+                onClick={() => setCelestialType('sun')}
+                className={`flex items-center gap-1.5 sm:gap-2 px-4 sm:px-5 py-1.5 sm:py-2 rounded-xl sm:rounded-full text-xs sm:text-sm font-bold transition-all cursor-pointer ${
+                  celestialType === 'sun'
+                    ? 'bg-gradient-to-r from-[#F6971E] to-[#FFA733] text-white shadow-xs'
+                    : 'text-[#4A2B23] hover:bg-orange-50 hover:text-[#F6971E]'
+                }`}
+              >
+                <BsSunFill className={`text-sm ${celestialType === 'sun' ? 'text-white' : 'text-[#F6971E]'}`} />
+                <span>Sun Sign</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setCelestialType('moon')}
+                className={`flex items-center gap-1.5 sm:gap-2 px-4 sm:px-5 py-1.5 sm:py-2 rounded-xl sm:rounded-full text-xs sm:text-sm font-bold transition-all cursor-pointer ${
+                  celestialType === 'moon'
+                    ? 'bg-gradient-to-r from-[#5B3A82] to-[#7851A9] text-white shadow-xs'
+                    : 'text-[#4A2B23] hover:bg-purple-50 hover:text-[#5B3A82]'
+                }`}
+              >
+                <BsMoonStarsFill className={`text-sm ${celestialType === 'moon' ? 'text-white' : 'text-[#5B3A82]'}`} />
+                <span>Moon Sign</span>
+              </button>
+            </div>
+          )}
         </div>
 
         {/* Main Detailed Reading Card */}
@@ -161,7 +261,7 @@ export default function SignHoroscopeDetailPage() {
             {/* Timeframe Tag & Astrologer Button */}
             <div className="flex items-center gap-3 w-full md:w-auto justify-between md:justify-end">
               <span className="px-3.5 py-1.5 rounded-full bg-orange-50 text-[#F6971E] text-xs font-bold border border-orange-200">
-                {timeframe.label}&apos;s Reading
+                {timeframe.label} {isYearly ? 'Forecast' : `(${celestialType === 'sun' ? 'Sun' : 'Moon'}) Reading`}
               </span>
               <button
                 onClick={openPopup}
@@ -173,102 +273,210 @@ export default function SignHoroscopeDetailPage() {
             </div>
           </div>
 
+          {/* Yearly 4 Transit Phases Switcher */}
+          {isYearly && yearlyPhases.length > 0 && (
+            <div className="py-6 border-b border-gray-100">
+              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 mb-4">
+                <div>
+                  <div className="flex items-center gap-2">
+                    <h2 className="text-base sm:text-lg font-bold font-['Inria_Serif'] text-[#4A2B23]">
+                      Annual 4 Transit Phases
+                    </h2>
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-orange-100 text-[#72271E]">
+                      Phase Breakdown
+                    </span>
+                  </div>
+                  <p className="text-xs text-gray-500">
+                    Click any phase below to view detailed forecast and 9 life pillars for that phase
+                  </p>
+                </div>
+                <div className="flex items-center gap-2 bg-orange-50 px-3.5 py-1.5 rounded-full border border-orange-200 text-xs font-bold text-[#F6971E]">
+                  <BsCalendarEvent className="text-sm" />
+                  <span>Annual Average:</span>
+                  <span className="text-[#4A2B23] font-black">{parsedPrediction?.totalScore}%</span>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
+                {yearlyPhases.map((phase, idx) => {
+                  const isSelected = selectedPhaseIndex === idx;
+                  return (
+                    <button
+                      key={phase.phaseKey}
+                      type="button"
+                      onClick={() => setSelectedPhaseIndex(idx)}
+                      className={`text-left p-3.5 sm:p-4 rounded-2xl border transition-all cursor-pointer flex flex-col justify-between ${
+                        isSelected
+                          ? 'bg-gradient-to-br from-[#FEF8E2] to-[#FFF3D6] border-[#F6971E] shadow-sm -translate-y-0.5'
+                          : 'bg-[#FFFDF9] border-orange-100/70 hover:border-[#F6971E]/40 hover:shadow-xs'
+                      }`}
+                    >
+                      <div className="flex items-center justify-between gap-1 mb-1.5">
+                        <span className={`text-xs sm:text-sm font-bold ${isSelected ? 'text-[#F6971E]' : 'text-[#4A2B23]'}`}>
+                          {phase.phaseTitle}
+                        </span>
+                        <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${
+                          isSelected ? 'bg-[#F6971E] text-white' : 'bg-orange-50 text-[#F6971E]'
+                        }`}>
+                          {phase.score}%
+                        </span>
+                      </div>
+                      <p className="text-[11px] text-gray-500 font-medium line-clamp-1">
+                        {phase.period}
+                      </p>
+                      <span className={`text-[10px] font-semibold mt-2 inline-block ${
+                        isSelected ? 'text-[#72271E]' : 'text-gray-400'
+                      }`}>
+                        {getStatusFromScore(phase.score)}
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
           {/* General Overview Summary */}
-          <div className="py-6 border-b border-gray-100 space-y-2">
-            <h2 className="text-base sm:text-lg font-bold font-['Inria_Serif'] text-[#4A2B23]">
-              {timeframe.label}&apos;s Planetary Overview
-            </h2>
-            <p className="text-gray-600 text-xs sm:text-sm md:text-[15px] leading-relaxed">
-              {signData.overview}
-            </p>
+          <div className="py-6 border-b border-gray-100 space-y-3">
+            <div className="flex items-center justify-between flex-wrap gap-2">
+              <h2 className="text-base sm:text-lg font-bold font-['Inria_Serif'] text-[#4A2B23]">
+                {isYearly && activePhase
+                  ? `${activePhase.phaseTitle} (${activePhase.period}) Forecast`
+                  : `${timeframe.label}'s ${celestialType === 'sun' ? 'Sun Sign' : 'Moon Sign'} Overview`}
+              </h2>
+              {isYearly && activePhase ? (
+                <span className="text-xs px-3 py-1 rounded-full bg-orange-50 text-[#F6971E] font-semibold border border-orange-200 flex items-center gap-1.5">
+                  <BsCalendarEvent className="text-xs" />
+                  <span>{activePhase.period}</span>
+                </span>
+              ) : (
+                !isYearly && (
+                  <span className="text-xs px-3 py-1 rounded-full bg-orange-50 text-[#F6971E] font-semibold border border-orange-200">
+                    {celestialType === 'sun' ? '☀️ Sun Sign Prediction' : '🌙 Moon Sign Prediction'}
+                  </span>
+                )
+              )}
+            </div>
+            {isLoadingPrediction ? (
+              <div className="py-4 flex items-center gap-3 text-gray-500 text-xs sm:text-sm">
+                <div className="w-4 h-4 rounded-full border-2 border-[#F6971E] border-t-transparent animate-spin" />
+                <span>Loading {timeframe.label} {isYearly ? '' : `(${celestialType})`} prediction...</span>
+              </div>
+            ) : (
+              <p className="text-gray-600 text-xs sm:text-sm md:text-[15px] leading-relaxed whitespace-pre-line">
+                {currentOverview || 'Prediction forecast is currently being calculated for this period.'}
+              </p>
+            )}
           </div>
 
-          {/* LUCKY TODAY (COLOR, NUMBER, MOOD, SYMBOL, STONE, AUSPICIOUS TIME) */}
+          {/* HIGHLIGHTS SECTION - DYNAMIC FOR YEARLY & DAILY/WEEKLY/MONTHLY */}
           <div className="py-7 border-b border-gray-100">
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-base sm:text-lg font-bold font-['Inria_Serif'] text-[#4A2B23]">
-                Lucky Highlights
+                {isYearly ? 'Annual Phase Metrics' : 'Lucky Highlights'}
               </h2>
               <span className="text-xs text-[#F6971E] font-semibold">
-                Astrological Talismans & Timings
+                {isYearly ? 'Phase Indicators (Live)' : 'Astrological Indicators (Live)'}
               </span>
             </div>
 
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4">
-
-              {/* 1. Color */}
-              <div className="bg-[#FFFDF9] rounded-2xl p-3.5 sm:p-4 border border-orange-100/80 shadow-2xs flex flex-col justify-between">
-                <div className="flex items-center justify-between text-gray-400 text-xs mb-2">
-                  <span className="font-bold uppercase tracking-wider text-[10px]">Color</span>
-                  <BsPaletteFill className="text-xs text-[#F6971E]" />
+            {isYearly && activePhase ? (
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
+                {/* 1. Active Phase */}
+                <div className="bg-[#FFFDF9] rounded-2xl p-4 border border-orange-100/80 shadow-2xs flex flex-col justify-between">
+                  <div className="flex items-center justify-between text-gray-400 text-xs mb-2">
+                    <span className="font-bold uppercase tracking-wider text-[10px]">Active Phase</span>
+                    <BsCalendarEvent className="text-xs text-[#F6971E]" />
+                  </div>
+                  <div>
+                    <h4 className="text-base font-bold text-[#4A2B23] mb-0.5">{activePhase.phaseTitle}</h4>
+                    <p className="text-xs text-gray-500 font-medium">{activePhase.period}</p>
+                  </div>
                 </div>
-                <div className="flex items-center gap-2">
-                  <span
-                    className="w-3.5 h-3.5 rounded-full flex-shrink-0 border border-black/15 shadow-xs"
-                    style={{ backgroundColor: luckyToday.colorCode || '#F6971E' }}
-                  />
-                  <span className="text-xs sm:text-[13px] font-bold text-[#4A2B23] line-clamp-1">
-                    {luckyToday.color}
+
+                {/* 2. Phase Score */}
+                <div className="bg-[#FFFDF9] rounded-2xl p-4 border border-orange-100/80 shadow-2xs flex flex-col justify-between">
+                  <div className="flex items-center justify-between text-gray-400 text-xs mb-2">
+                    <span className="font-bold uppercase tracking-wider text-[10px]">Phase Transit Score</span>
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-orange-50 text-[#F6971E]">
+                      {getStatusFromScore(activePhase.score)}
+                    </span>
+                  </div>
+                  <div className="flex items-baseline gap-2">
+                    <span className="text-lg sm:text-xl font-black font-['Inria_Serif'] text-[#72271E]">
+                      {activePhase.score}%
+                    </span>
+                    <span className="text-xs text-gray-500 font-medium">phase alignment</span>
+                  </div>
+                </div>
+
+                {/* 3. Annual Average Score */}
+                <div className="bg-[#FFFDF9] rounded-2xl p-4 border border-orange-100/80 shadow-2xs flex flex-col justify-between">
+                  <div className="flex items-center justify-between text-gray-400 text-xs mb-2">
+                    <span className="font-bold uppercase tracking-wider text-[10px]">Annual Year Average</span>
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-orange-50 text-[#F6971E]">
+                      {getStatusFromScore(parsedPrediction?.totalScore) || 'Dynamic'}
+                    </span>
+                  </div>
+                  <div className="flex items-baseline gap-2">
+                    <span className="text-lg sm:text-xl font-black font-['Inria_Serif'] text-[#F6971E]">
+                      {parsedPrediction?.totalScore !== undefined ? `${parsedPrediction.totalScore}%` : 'N/A'}
+                    </span>
+                    <span className="text-xs text-gray-500 font-medium">overall annual score</span>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
+                {/* 1. Color */}
+                <div className="bg-[#FFFDF9] rounded-2xl p-4 border border-orange-100/80 shadow-2xs flex flex-col justify-between">
+                  <div className="flex items-center justify-between text-gray-400 text-xs mb-2">
+                    <span className="font-bold uppercase tracking-wider text-[10px]">Lucky Color</span>
+                    <BsPaletteFill className="text-xs text-[#F6971E]" />
+                  </div>
+                  <div className="flex items-center gap-2.5">
+                    <span
+                      className="w-4 h-4 rounded-full flex-shrink-0 border border-black/15 shadow-xs"
+                      style={{ backgroundColor: parsedPrediction?.luckyColorCode || '#F6971E' }}
+                    />
+                    <span className="text-xs sm:text-sm font-bold text-[#4A2B23] capitalize">
+                      {parsedPrediction?.luckyColor || (isLoadingPrediction ? 'Loading...' : 'N/A')}
+                    </span>
+                  </div>
+                </div>
+
+                {/* 2. Number */}
+                <div className="bg-[#FFFDF9] rounded-2xl p-4 border border-orange-100/80 shadow-2xs flex flex-col justify-between">
+                  <div className="flex items-center justify-between text-gray-400 text-xs mb-2">
+                    <span className="font-bold uppercase tracking-wider text-[10px]">Lucky Number</span>
+                    <Bs123 className="text-base text-[#F6971E]" />
+                  </div>
+                  <span className="text-lg sm:text-xl font-black font-['Inria_Serif'] text-[#72271E]">
+                    {parsedPrediction?.luckyNumber || (isLoadingPrediction ? '...' : 'N/A')}
                   </span>
                 </div>
-              </div>
 
-              {/* 2. Number */}
-              <div className="bg-[#FFFDF9] rounded-2xl p-3.5 sm:p-4 border border-orange-100/80 shadow-2xs flex flex-col justify-between">
-                <div className="flex items-center justify-between text-gray-400 text-xs mb-2">
-                  <span className="font-bold uppercase tracking-wider text-[10px]">Number</span>
-                  <Bs123 className="text-base text-[#F6971E]" />
+                {/* 3. Overall Cosmic Score */}
+                <div className="bg-[#FFFDF9] rounded-2xl p-4 border border-orange-100/80 shadow-2xs flex flex-col justify-between">
+                  <div className="flex items-center justify-between text-gray-400 text-xs mb-2">
+                    <span className="font-bold uppercase tracking-wider text-[10px]">Cosmic Transit Score</span>
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-orange-50 text-[#F6971E]">
+                      {getStatusFromScore(parsedPrediction?.totalScore) || 'Dynamic'}
+                    </span>
+                  </div>
+                  <div className="flex items-baseline gap-2">
+                    <span className="text-lg sm:text-xl font-black font-['Inria_Serif'] text-[#F6971E]">
+                      {parsedPrediction?.totalScore !== undefined ? `${parsedPrediction.totalScore}%` : (isLoadingPrediction ? '...' : 'N/A')}
+                    </span>
+                    {parsedPrediction?.totalScore !== undefined && (
+                      <span className="text-xs text-gray-500 font-medium">
+                        overall alignment
+                      </span>
+                    )}
+                  </div>
                 </div>
-                <span className="text-lg sm:text-xl font-black font-['Inria_Serif'] text-[#72271E]">
-                  {luckyToday.number}
-                </span>
               </div>
-
-              {/* 3. Mood */}
-              <div className="bg-[#FFFDF9] rounded-2xl p-3.5 sm:p-4 border border-orange-100/80 shadow-2xs flex flex-col justify-between">
-                <div className="flex items-center justify-between text-gray-400 text-xs mb-2">
-                  <span className="font-bold uppercase tracking-wider text-[10px]">Mood</span>
-                  <BsEmojiSmileFill className="text-xs text-[#F6971E]" />
-                </div>
-                <span className="text-xs sm:text-[13px] font-bold text-[#4A2B23] line-clamp-1">
-                  {luckyToday.mood}
-                </span>
-              </div>
-
-              {/* 4. Symbol */}
-              <div className="bg-[#FFFDF9] rounded-2xl p-3.5 sm:p-4 border border-orange-100/80 shadow-2xs flex flex-col justify-between">
-                <div className="flex items-center justify-between text-gray-400 text-xs mb-2">
-                  <span className="font-bold uppercase tracking-wider text-[10px]">Symbol</span>
-                  <BsStars className="text-xs text-[#F6971E]" />
-                </div>
-                <span className="text-xs sm:text-[13px] font-bold text-[#4A2B23] line-clamp-1">
-                  {luckyToday.symbol}
-                </span>
-              </div>
-
-              {/* 5. Stone (Gemstone) */}
-              <div className="bg-[#FFFDF9] rounded-2xl p-3.5 sm:p-4 border border-orange-100/80 shadow-2xs flex flex-col justify-between">
-                <div className="flex items-center justify-between text-gray-400 text-xs mb-2">
-                  <span className="font-bold uppercase tracking-wider text-[10px]">Stone</span>
-                  <BsGem className="text-xs text-[#F6971E]" />
-                </div>
-                <span className="text-xs sm:text-[13px] font-bold text-[#F6971E] line-clamp-1">
-                  {luckyToday.stone}
-                </span>
-              </div>
-
-              {/* 6. Auspicious Time */}
-              <div className="bg-[#FFFDF9] rounded-2xl p-3.5 sm:p-4 border border-orange-100/80 shadow-2xs flex flex-col justify-between">
-                <div className="flex items-center justify-between text-gray-400 text-xs mb-2">
-                  <span className="font-bold uppercase tracking-wider text-[10px]">Auspicious Time</span>
-                  <BsClockHistory className="text-xs text-[#F6971E]" />
-                </div>
-                <span className="text-[11px] sm:text-xs font-bold text-[#4A2B23] line-clamp-1">
-                  {luckyToday.auspiciousTime}
-                </span>
-              </div>
-
-            </div>
+            )}
           </div>
 
           {/* AREA OF LIFE (9 CATEGORIES: PHYSIQUE, STATUS, FINANCE, RELATIONSHIP, CAREER, TRAVEL, FAMILY, FRIENDS, HEALTH) */}
@@ -276,10 +484,10 @@ export default function SignHoroscopeDetailPage() {
             <div className="flex items-center justify-between mb-5">
               <div>
                 <h2 className="text-base sm:text-lg font-bold font-['Inria_Serif'] text-[#4A2B23]">
-                  Area of Life
+                  Area of Life {isYearly && activePhase ? `— ${activePhase.phaseTitle}` : ''}
                 </h2>
                 <p className="text-xs text-gray-500">
-                  Detailed astrological metrics across your 9 essential life dimensions
+                  Detailed astrological metrics across your 9 essential life dimensions {isYearly && activePhase ? `for ${activePhase.period}` : ''}
                 </p>
               </div>
               <span className="text-xs font-semibold px-3 py-1 rounded-full bg-orange-50 text-[#F6971E] border border-orange-200">
@@ -287,52 +495,89 @@ export default function SignHoroscopeDetailPage() {
               </span>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
-              {lifeAreaItems.map((item) => {
-                const ItemIcon = item.icon;
-                return (
-                  <div
-                    key={item.key}
-                    className="bg-[#FFFDF9] rounded-2xl p-4 sm:p-5 border border-orange-100/80 shadow-2xs flex flex-col justify-between space-y-3 hover:border-[#F6971E]/40 transition-all"
-                  >
-                    {/* Header with Icon, Title & Status */}
-                    <div className="flex items-center justify-between gap-2">
-                      <div className="flex items-center gap-2.5">
-                        <div className={`w-8 h-8 rounded-xl ${item.bg} flex items-center justify-center flex-shrink-0`}>
-                          <ItemIcon className={`text-sm ${item.color}`} />
-                        </div>
-                        <h3 className="font-bold text-sm sm:text-[15px] text-[#4A2B23]">
-                          {item.label}
-                        </h3>
-                      </div>
-                      <span className="text-[11px] font-bold px-2 py-0.5 rounded-full bg-white border border-gray-200 text-[#72271E]">
-                        {item.data.status}
-                      </span>
+            {isLoadingPrediction ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
+                {[...Array(9)].map((_, idx) => (
+                  <div key={idx} className="bg-[#FFFDF9] rounded-2xl p-5 border border-orange-100/60 animate-pulse space-y-3">
+                    <div className="flex justify-between items-center">
+                      <div className="w-28 h-4 bg-orange-100/70 rounded" />
+                      <div className="w-16 h-4 bg-orange-100/50 rounded-full" />
                     </div>
-
-                    {/* Description */}
-                    <p className="text-gray-600 text-xs sm:text-[13px] leading-relaxed flex-grow">
-                      {item.data.description}
-                    </p>
-
-                    {/* Progress Bar & Score */}
-                    <div className="pt-2 border-t border-gray-100/80">
-                      <div className="flex justify-between items-center text-xs mb-1">
-                        <span className="text-[11px] font-semibold text-gray-400">Harmony Score</span>
-                        <span className="font-bold text-[#4A2B23]">{item.data.score}%</span>
-                      </div>
-                      <div className="w-full bg-gray-200/60 h-2 rounded-full overflow-hidden">
-                        <div
-                          className="bg-gradient-to-r from-[#F6971E] to-[#FFA733] h-full rounded-full transition-all duration-700"
-                          style={{ width: `${item.data.score}%` }}
-                        />
-                      </div>
-                    </div>
-
+                    <div className="w-full h-12 bg-gray-100/70 rounded" />
+                    <div className="w-full h-2 bg-gray-100 rounded-full" />
                   </div>
-                );
-              })}
-            </div>
+                ))}
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
+                {lifeAreaItems.map((item) => {
+                  const ItemIcon = item.icon;
+                  const itemData = item.data;
+                  return (
+                    <div
+                      key={item.key}
+                      className="bg-[#FFFDF9] rounded-2xl p-4 sm:p-5 border border-orange-100/80 shadow-2xs flex flex-col justify-between space-y-3 hover:border-[#F6971E]/40 transition-all"
+                    >
+                      {/* Header with Icon, Title & Status */}
+                      <div className="flex items-center justify-between gap-2">
+                        <div className="flex items-center gap-2.5">
+                          <div className={`w-8 h-8 rounded-xl ${item.bg} flex items-center justify-center flex-shrink-0`}>
+                            <ItemIcon className={`text-sm ${item.color}`} />
+                          </div>
+                          <h3 className="font-bold text-sm sm:text-[15px] text-[#4A2B23]">
+                            {item.label}
+                          </h3>
+                        </div>
+                        {itemData?.status && (
+                          <span className="text-[11px] font-bold px-2 py-0.5 rounded-full bg-white border border-gray-200 text-[#72271E]">
+                            {itemData.status}
+                          </span>
+                        )}
+                      </div>
+
+                      {/* Description with Read more toggle */}
+                      {(() => {
+                        const description = itemData?.description || 'Planetary positions indicate steady influences for this sphere.';
+                        const isExpanded = Boolean(expandedAreas[item.key]);
+                        const isLong = description.length > 200;
+
+                        return (
+                          <div className="text-gray-600 text-xs sm:text-[13px] leading-relaxed flex-grow">
+                            <span className={isExpanded ? 'whitespace-pre-line' : ''}>
+                              {isExpanded || !isLong ? description : `${getPreviewText(description, 200)}... `}
+                            </span>
+                            {isLong && (
+                              <button
+                                type="button"
+                                onClick={() => toggleExpandArea(item.key)}
+                                className="text-[#F6971E] hover:text-[#72271E] font-bold text-xs inline cursor-pointer hover:underline focus:outline-hidden"
+                              >
+                                {isExpanded ? ' Show less' : 'Read more'}
+                              </button>
+                            )}
+                          </div>
+                        );
+                      })()}
+
+                      {/* Progress Bar & Score */}
+                      <div className="pt-2 border-t border-gray-100/80">
+                        <div className="flex justify-between items-center text-xs mb-1">
+                          <span className="text-[11px] font-semibold text-gray-400">Harmony Score</span>
+                          <span className="font-bold text-[#4A2B23]">{itemData?.score ?? 0}%</span>
+                        </div>
+                        <div className="w-full bg-gray-200/60 h-2 rounded-full overflow-hidden">
+                          <div
+                            className="bg-gradient-to-r from-[#F6971E] to-[#FFA733] h-full rounded-full transition-all duration-700"
+                            style={{ width: `${itemData?.score ?? 0}%` }}
+                          />
+                        </div>
+                      </div>
+
+                    </div>
+                  );
+                })}
+              </div>
+            )}
           </div>
 
         </div>
