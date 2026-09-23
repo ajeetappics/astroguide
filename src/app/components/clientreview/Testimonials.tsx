@@ -13,14 +13,14 @@ const reviews = [
   },
   {
     id: 2,
-    text: "The detailed financial forecast I received from Astrovani allowed me to invest wisely and secure my family's future. It was incredibly accurate and changed my entire perspective.",
+    text: "The detailed financial forecast I received from Balaji AstroGuide allowed me to invest wisely and secure my family's future. It was incredibly accurate and changed my entire perspective.",
     name: "Rajiv Mehta",
     astrologer: "Priya",
     image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80"
   },
   {
     id: 3,
-    text: "Astrovani's advice on personal growth has transformed my perspective on life. The astrologer's guidance helped me make a life-changing decision with confidence.",
+    text: "Balaji AstroGuide's advice on personal growth has transformed my perspective on life. The astrologer's guidance helped me make a life-changing decision with confidence.",
     name: "Priya Sharma",
     astrologer: "Vikram",
     image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80"

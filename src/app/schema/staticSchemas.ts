@@ -13,7 +13,7 @@ export const organizationSchema = {
   '@context': 'https://schema.org',
   '@type': 'Organization',
   name: 'Balaji Astro Guide',
-  alternateName: 'Astrovani',
+  alternateName: 'Balaji AstroGuide',
   url: BASE_URL,
   logo: `${BASE_URL}/logo.png`, // Update with your actual logo URL
   description: 'Get expert astrological guidance and personalized horoscope readings from verified astrologers',

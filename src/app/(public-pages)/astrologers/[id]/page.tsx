@@ -23,8 +23,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   if (!astro) {
     return {
-      title: 'Astrologer Not Found | Astrovani',
-      description: 'The requested astrologer profile could not be found on Astrovani. Browse India’s top verified Vedic astrologers.',
+      title: 'Astrologer Not Found | Balaji AstroGuide',
+      description: 'The requested astrologer profile could not be found on Balaji AstroGuide. Browse India’s top verified Vedic astrologers.',
       robots: {
         index: false,
         follow: true
@@ -52,8 +52,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const canonicalUrl = `${SITE_URL}/astrologers/${astro.slug || astroId}`;
   const profileImage = sanitizeImageUrl(astro.profileImg);
 
-  const title = `Consult ${astroName} Online (${experience} Exp) - Top Astrologer | Astrovani`;
-  const description = `Consult ${astroName} on Astrovani. ${experience} of experience in ${expertise}. Languages: ${languages}. Verified client reviews. Instant consultation via Chat & Call at ₹${price}/min.`;
+  const title = `Consult ${astroName} Online (${experience} Exp) - Top Astrologer | Balaji AstroGuide`;
+  const description = `Consult ${astroName} on Balaji AstroGuide. ${experience} of experience in ${expertise}. Languages: ${languages}. Verified client reviews. Instant consultation via Chat & Call at ₹${price}/min.`;
 
   return {
     title,
@@ -62,7 +62,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       astroName,
       `consult ${astroName}`,
       `${astroName} astrologer`,
-      `${astroName} astrovani`,
+      `${astroName} Balaji AstroGuide`,
       `${astroName} reviews`,
       'online astrologer consultation',
       'vedic astrologer online',
@@ -76,7 +76,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       title,
       description,
       url: canonicalUrl,
-      siteName: 'Astrovani',
+      siteName: 'Balaji AstroGuide',
       locale: 'en_IN',
       type: 'profile',
       images: [
@@ -84,7 +84,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
           url: profileImage,
           width: 800,
           height: 800,
-          alt: `${astroName} - Verified Astrologer on Astrovani`
+          alt: `${astroName} - Verified Astrologer on Balaji AstroGuide`
         }
       ]
     },
@@ -161,7 +161,7 @@ export default async function AstrologerDetailPage({ params }: PageProps) {
       astro.profileBio ||
       astro.bio ||
       astro.about ||
-      `${astroName} is an accomplished Vedic Astrologer on Astrovani with ${astro.experience || 5} years of experience specializing in ${expertiseList.join(', ')}.`;
+      `${astroName} is an accomplished Vedic Astrologer on Balaji AstroGuide with ${astro.experience || 5} years of experience specializing in ${expertiseList.join(', ')}.`;
 
     // Multi-Layer Schema Graph optimized for Answer Engines (Google AI Overviews, Perplexity, Copilot, ChatGPT)
     schemaData = {
@@ -197,8 +197,8 @@ export default async function AstrologerDetailPage({ params }: PageProps) {
           '@type': 'ProfilePage',
           '@id': `${pageUrl}#profilepage`,
           url: pageUrl,
-          name: `Consult ${astroName} Online | Astrovani`,
-          description: `Verified profile of ${astroName}, expert Vedic Astrologer on Astrovani offering consultation for Love, Career, Marriage and Life.`,
+          name: `Consult ${astroName} Online | Balaji AstroGuide`,
+          description: `Verified profile of ${astroName}, expert Vedic Astrologer on Balaji AstroGuide offering consultation for Love, Career, Marriage and Life.`,
           breadcrumb: { '@id': `${pageUrl}#breadcrumb` },
           mainEntity: { '@id': `${pageUrl}#person` }
         },
@@ -215,7 +215,7 @@ export default async function AstrologerDetailPage({ params }: PageProps) {
           knowsLanguage: languagesList,
           worksFor: {
             '@type': 'Organization',
-            name: 'Astrovani',
+            name: 'Balaji AstroGuide',
             url: `${SITE_URL}/`,
             logo: `${SITE_URL}/logo.png`
           },
@@ -237,7 +237,7 @@ export default async function AstrologerDetailPage({ params }: PageProps) {
             priceValidUntil: '2028-12-31',
             seller: {
               '@type': 'Organization',
-              name: 'Astrovani'
+              name: 'Balaji AstroGuide'
             }
           }
         },
@@ -251,15 +251,15 @@ export default async function AstrologerDetailPage({ params }: PageProps) {
               name: `Who is ${astroName} and what are their astrological specializations?`,
               acceptedAnswer: {
                 '@type': 'Answer',
-                text: `${astroName} is a verified astrologer on Astrovani with ${astro.experience || 5} years of experience in ${expertiseList.join(', ')}. They specialize in horoscope analysis, birth chart reading, career guidance, love & marriage compatibility, and effective Vedic remedies.`
+                text: `${astroName} is a verified astrologer on Balaji AstroGuide with ${astro.experience || 5} years of experience in ${expertiseList.join(', ')}. They specialize in horoscope analysis, birth chart reading, career guidance, love & marriage compatibility, and effective Vedic remedies.`
               }
             },
             {
               '@type': 'Question',
-              name: `How can I consult ${astroName} online on Astrovani?`,
+              name: `How can I consult ${astroName} online on Balaji AstroGuide?`,
               acceptedAnswer: {
                 '@type': 'Answer',
-                text: `You can consult ${astroName} directly on Astrovani via Chat or Call. Click the "Connect Now" button on this page, choose your preferred consultation mode, and connect instantly for real-time guidance.`
+                text: `You can consult ${astroName} directly on Balaji AstroGuide via Chat or Call. Click the "Connect Now" button on this page, choose your preferred consultation mode, and connect instantly for real-time guidance.`
               }
             },
             {
@@ -275,7 +275,7 @@ export default async function AstrologerDetailPage({ params }: PageProps) {
               name: `What are the consultation fees for ${astroName}?`,
               acceptedAnswer: {
                 '@type': 'Answer',
-                text: `Consultations with ${astroName} start at ₹${consultationPrice}/minute. Astrovani offers transparent per-minute pricing with instant wallet recharge and no hidden charges.`
+                text: `Consultations with ${astroName} start at ₹${consultationPrice}/minute. Balaji AstroGuide offers transparent per-minute pricing with instant wallet recharge and no hidden charges.`
               }
             },
             {
@@ -291,7 +291,7 @@ export default async function AstrologerDetailPage({ params }: PageProps) {
               name: `Is my consultation with ${astroName} confidential?`,
               acceptedAnswer: {
                 '@type': 'Answer',
-                text: `Yes, 100%. All consultations with ${astroName} on Astrovani are strictly private, confidential, and protected with end-to-end encryption. Your personal details and birth data are never shared.`
+                text: `Yes, 100%. All consultations with ${astroName} on Balaji AstroGuide are strictly private, confidential, and protected with end-to-end encryption. Your personal details and birth data are never shared.`
               }
             }
           ]

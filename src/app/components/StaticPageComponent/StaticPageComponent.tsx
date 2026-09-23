@@ -82,7 +82,7 @@ export default function StaticPageComponent({ slug, defaultTitle }: StaticPageCo
                         <div className="flex justify-center mb-4">
                             <Image
                                 src={mainLogo} // <-- ¡IMPORTANTE! Reemplaza esto con la ruta a tu logo
-                                alt="AstroVani Logo"
+                                alt="Balaji AstroGuide Logo"
                                 width={60} // Ajusta el tamaño según sea necesario
                                 height={60} // Ajusta el tamaño según sea necesario
                                 className="rounded-lg"

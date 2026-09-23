@@ -4,10 +4,11 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { BsArrowRight } from 'react-icons/bs';
 import PoojaCard, { PujaData } from '../Card/PoojaCard';
-import { fetchPoojaList } from '@/services/pooja/poojaService';
+import { fetchTrendingPoojas } from '@/services/pooja/poojaService';
 
 export default function PoojaSection() {
   const [poojas, setPoojas] = useState<PujaData[]>([]);
+  const [title, setTitle] = useState<string>("Personalized Poojas");
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -15,9 +16,10 @@ export default function PoojaSection() {
     const loadPoojas = async () => {
       try {
         setIsLoading(true);
-        const res = await fetchPoojaList(1, 10);
+        const res = await fetchTrendingPoojas(1, 10);
         if (isMounted && res.poojas && res.poojas.length > 0) {
           setPoojas(res.poojas);
+          setTitle(res.title || "Personalized Poojas");
         }
       } catch (err) {
         console.error("Error loading poojas for home section:", err);
@@ -68,11 +70,8 @@ export default function PoojaSection() {
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-3.5 md:mb-5 gap-3 md:gap-4">
           <div className="max-w-3xl">
             <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-[32px] font-bold font-['Inria_Serif'] text-[#4A2B23] leading-tight mb-1 sm:mb-1.5">
-              Personalized Poojas
+              {title}
             </h2>
-            <p className="text-[#6b6b6b] font-helvetica text-xs sm:text-sm md:text-[15px]">
-              Experience Real Blessings with your Personal Sankalp
-            </p>
           </div>
           <Link href="/pooja" className="flex-shrink-0 flex items-center gap-1.5 bg-white border border-[#F6971E] text-[#F6971E] font-bold font-helvetica py-2 px-5 rounded-full hover:bg-[#F6971E] hover:text-white transition-all shadow-xs text-xs sm:text-sm">
             View all poojas <BsArrowRight className="text-sm" />

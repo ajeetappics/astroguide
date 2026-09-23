@@ -14,13 +14,13 @@ export async function generateMetadata({ params }: CategoryPageProps): Promise<M
   const formattedCategory = decodedCategory.charAt(0).toUpperCase() + decodedCategory.slice(1);
 
   return {
-    title: `Best ${formattedCategory} Astrologers Online | Astrovani`,
-    description: `Consult top verified ${formattedCategory} Astrologers on Astrovani. Instant consultations, accurate horoscope reading, and Vedic remedies.`,
+    title: `Best ${formattedCategory} Astrologers Online | Balaji AstroGuide`,
+    description: `Consult top verified ${formattedCategory} Astrologers on Balaji AstroGuide. Instant consultations, accurate horoscope reading, and Vedic remedies.`,
     alternates: {
       canonical: `/astrologers/category/${decodedCategory.toLowerCase()}`
     },
     openGraph: {
-      title: `Best ${formattedCategory} Astrologers Online | Astrovani`,
+      title: `Best ${formattedCategory} Astrologers Online | Balaji AstroGuide`,
       description: `Talk to verified ${formattedCategory} Astrologers for marriage, career, love, and life guidance.`
     }
   };

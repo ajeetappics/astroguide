@@ -3,13 +3,13 @@ import type { Metadata } from 'next';
 import AstrologerCategoriesHub from '@/app/components/AstrologerListing/AstrologerCategoriesHub';
 
 export const metadata: Metadata = {
-  title: "All Astrology Consultation Categories | Astrovani",
+  title: "All Astrology Consultation Categories | Balaji AstroGuide",
   description: "Browse all astrology categories including Marriage, Love, Career, Finance, Business, Health, and more. Consult India's top verified astrologers online.",
   alternates: {
     canonical: "/astrologers/category"
   },
   openGraph: {
-    title: "All Astrology Consultation Categories | Astrovani",
+    title: "All Astrology Consultation Categories | Balaji AstroGuide",
     description: "Find verified astrologers by specialization: Love, Marriage, Career, Business, Wealth, and Vedic remedies.",
     url: "/astrologers/category"
   }

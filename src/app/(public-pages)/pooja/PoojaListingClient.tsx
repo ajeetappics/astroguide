@@ -177,13 +177,12 @@ export default function PoojaListingClient() {
                   return (
                     <div
                       key={index}
-                      className={`absolute top-0 left-0 w-full h-full transition-all duration-700 ease-in-out cursor-pointer ${
-                        position === 0
-                          ? 'z-20 opacity-100 translate-x-0'
-                          : position === 1
+                      className={`absolute top-0 left-0 w-full h-full transition-all duration-700 ease-in-out cursor-pointer ${position === 0
+                        ? 'z-20 opacity-100 translate-x-0'
+                        : position === 1
                           ? 'z-10 opacity-0 translate-x-full'
                           : 'z-10 opacity-0 -translate-x-full'
-                      }`}
+                        }`}
                       onClick={() => setCurrentSlide(index)}
                     >
                       <Image
@@ -204,9 +203,8 @@ export default function PoojaListingClient() {
                   <button
                     key={idx}
                     onClick={() => setCurrentSlide(idx)}
-                    className={`w-2.5 h-2.5 rounded-full transition-all duration-300 cursor-pointer ${
-                      idx === currentSlide ? 'bg-[#F6971E] w-6' : 'bg-gray-300 hover:bg-[#F6971E]/50'
-                    }`}
+                    className={`w-2.5 h-2.5 rounded-full transition-all duration-300 cursor-pointer ${idx === currentSlide ? 'bg-[#F6971E] w-6' : 'bg-gray-300 hover:bg-[#F6971E]/50'
+                      }`}
                     aria-label={`Go to slide ${idx + 1}`}
                   />
                 ))}
@@ -272,13 +270,22 @@ export default function PoojaListingClient() {
                     setActiveCategoryId(cat._id);
                     setCurrentPage(1);
                   }}
-                  className={`inline-flex items-center px-4 py-2 sm:px-5 sm:py-2.5 rounded-full text-xs sm:text-sm font-bold font-helvetica transition-all shadow-xs sm:shadow-sm flex-shrink-0 cursor-pointer ${
-                    isSelected
-                      ? 'bg-[#F6971E] text-white border border-[#F6971E] shadow-[0_4px_12px_rgba(246,151,30,0.3)] scale-[1.02]'
-                      : 'bg-white border border-gray-200/90 text-[#4A2B23] hover:border-[#F6971E]/50 hover:text-[#F6971E]'
-                  }`}
+                  className={`inline-flex items-center gap-2 px-4 py-2 sm:px-5 sm:py-2.5 rounded-full text-xs sm:text-sm font-bold font-helvetica transition-all shadow-xs sm:shadow-sm flex-shrink-0 cursor-pointer ${isSelected
+                    ? 'bg-[#F6971E] text-white border border-[#F6971E] shadow-[0_4px_12px_rgba(246,151,30,0.3)] scale-[1.02]'
+                    : 'bg-white border border-gray-200/90 text-[#4A2B23] hover:border-[#F6971E]/50 hover:text-[#F6971E]'
+                    }`}
                 >
-                  <span>{cat.categoryName}</span>
+                  {cat.icon ? (
+                    <img
+                      src={cat.icon}
+                      alt={cat.categoryName}
+                      className="w-4 h-4 sm:w-5 sm:h-5 object-contain flex-shrink-0"
+                      onError={(e) => {
+                        (e.target as HTMLElement).style.display = 'none';
+                      }}
+                    />
+                  ) : null}
+                  <span className="text-xs sm:text-sm font-bold font-helvetica whitespace-nowrap">{cat.categoryName}</span>
                 </button>
               );
             })}
@@ -364,11 +371,10 @@ export default function PoojaListingClient() {
                           key={item}
                           onClick={() => handlePageChange(item)}
                           disabled={isLoading}
-                          className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full text-xs font-bold flex items-center justify-center transition-all cursor-pointer ${
-                            item === currentPage
-                              ? 'bg-[#F6971E] text-white shadow-[0_2px_8px_rgba(246,151,30,0.35)]'
-                              : 'bg-white border border-gray-200 text-[#4A2B23] hover:border-[#F6971E] hover:text-[#F6971E]'
-                          }`}
+                          className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full text-xs font-bold flex items-center justify-center transition-all cursor-pointer ${item === currentPage
+                            ? 'bg-[#F6971E] text-white shadow-[0_2px_8px_rgba(246,151,30,0.35)]'
+                            : 'bg-white border border-gray-200 text-[#4A2B23] hover:border-[#F6971E] hover:text-[#F6971E]'
+                            }`}
                         >
                           {item}
                         </button>
@@ -396,8 +402,8 @@ export default function PoojaListingClient() {
               {searchQuery
                 ? `No pooja services match "${searchQuery}".`
                 : activeCategoryId !== 'All'
-                ? `No poojas found under "${categories.find((c) => c._id === activeCategoryId)?.categoryName || activeCategoryId}".`
-                : 'No pooja services are currently available.'}
+                  ? `No poojas found under "${categories.find((c) => c._id === activeCategoryId)?.categoryName || activeCategoryId}".`
+                  : 'No pooja services are currently available.'}
             </p>
             <button
               onClick={() => {

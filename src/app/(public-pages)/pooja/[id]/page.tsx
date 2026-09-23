@@ -23,8 +23,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   if (!pooja) {
     return {
-      title: 'Pooja Not Found | Astrovani',
-      description: 'The requested Vedic pooja or ritual could not be found on Astrovani. Explore our catalog of sacred poojas performed by certified Vedic priests.',
+      title: 'Pooja Not Found | Balaji AstroGuide',
+      description: 'The requested Vedic pooja or ritual could not be found on Balaji AstroGuide. Explore our catalog of sacred poojas performed by certified Vedic priests.',
       robots: {
         index: false,
         follow: true,
@@ -61,8 +61,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const metaDescription = getSeoDescription(poojaName, formattedPrice);
 
   // Keep title around 50-60 characters for high SEO score
-  const fullTitle = `Book ${poojaName} Online | Vedic Puja - Astrovani`;
-  const title = fullTitle.length <= 60 ? fullTitle : `Book ${poojaName} Online | Astrovani`;
+  const fullTitle = `Book ${poojaName} Online | Vedic Puja - Balaji AstroGuide`;
+  const title = fullTitle.length <= 60 ? fullTitle : `Book ${poojaName} Online | Balaji AstroGuide`;
 
   return {
     title,
@@ -76,7 +76,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       `${poojaName} price`,
       'online puja booking',
       'vedic rituals online',
-      'astrovani pooja',
+      'balaji astroguide pooja',
     ],
     alternates: {
       canonical: canonicalUrl,
@@ -85,7 +85,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       title,
       description: metaDescription,
       url: canonicalUrl,
-      siteName: 'Astrovani',
+      siteName: 'Balaji AstroGuide',
       locale: 'en_IN',
       type: 'website',
       images: [
@@ -93,7 +93,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
           url: absoluteImageUrl,
           width: 800,
           height: 600,
-          alt: `${poojaName} - Authentic Online Vedic Puja on Astrovani`,
+          alt: `${poojaName} - Authentic Online Vedic Puja on Balaji AstroGuide`,
         },
       ],
     },
@@ -140,7 +140,7 @@ export default async function PujaDetailPage({ params }: PageProps) {
     const rawPrice = pooja?.basePrice ?? pooja?.price ?? 1100;
     const numericPrice = typeof rawPrice === 'number' ? rawPrice : Number(String(rawPrice).replace(/[^\d.]/g, '')) || 1100;
 
-    const description = pooja?.description || `${poojaName} performed by certified Vedic priests with customized Sankalp on Astrovani.`;
+    const description = pooja?.description || `${poojaName} performed by certified Vedic priests with customized Sankalp on Balaji AstroGuide.`;
 
     // Extract dynamic FAQs from pooja, or fallback to relevant Vedic pooja questions
     const dynamicFaqs =
@@ -221,7 +221,7 @@ export default async function PujaDetailPage({ params }: PageProps) {
           category: 'Vedic Puja & Spiritual Services',
           brand: {
             '@type': 'Brand',
-            name: 'Astrovani',
+            name: 'Balaji AstroGuide',
           },
           offers: {
             '@type': 'Offer',
@@ -232,7 +232,7 @@ export default async function PujaDetailPage({ params }: PageProps) {
             priceValidUntil: '2028-12-31',
             seller: {
               '@type': 'Organization',
-              name: 'Astrovani',
+              name: 'Balaji AstroGuide',
               url: `${SITE_URL}/`,
             },
           },

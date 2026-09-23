@@ -5,8 +5,8 @@ import AstrologersListing from '@/app/components/AstrologerListing/AstrologersLi
 const SITE_URL = process.env.NEXT_PUBLIC_URL || 'https://astroguide-three.vercel.app';
 
 export const metadata: Metadata = {
-  title: "Talk to Best Astrologers Online | Top Vedic Astrologers Consultation - Astrovani",
-  description: "Consult India's top verified astrologers online via call or chat on Astrovani. Get accurate predictions for Love, Marriage, Career & Finance 24/7.",
+  title: "Talk to Best Astrologers Online | Top Vedic Astrologers Consultation - Balaji AstroGuide",
+  description: "Consult India's top verified astrologers online via call or chat on Balaji AstroGuide. Get accurate predictions for Love, Marriage, Career & Finance 24/7.",
   keywords: [
     "astrologers online",
     "talk to astrologer",
@@ -19,16 +19,16 @@ export const metadata: Metadata = {
     "top astrologer consultation",
     "marriage astrology",
     "career astrologer",
-    "astrovani"
+    "Balaji AstroGuide"
   ],
   alternates: {
     canonical: `${SITE_URL}/astrologers`
   },
   openGraph: {
-    title: "Talk to Best Astrologers Online | Top Vedic Astrologers Consultation - Astrovani",
-    description: "Consult India's top verified astrologers online via call or chat on Astrovani. Instant consultations, accurate horoscope reading, and Vedic remedies.",
+    title: "Talk to Best Astrologers Online | Top Vedic Astrologers Consultation - Balaji AstroGuide",
+    description: "Consult India's top verified astrologers online via call or chat on Balaji AstroGuide. Instant consultations, accurate horoscope reading, and Vedic remedies.",
     url: `${SITE_URL}/astrologers`,
-    siteName: "Astrovani",
+    siteName: "Balaji AstroGuide",
     locale: "en_IN",
     type: "website",
     images: [
@@ -36,14 +36,14 @@ export const metadata: Metadata = {
         url: `${SITE_URL}/images/premium-astro-bg.jpg`,
         width: 1200,
         height: 630,
-        alt: "Talk to Best Astrologers Online - Astrovani"
+        alt: "Talk to Best Astrologers Online - Balaji AstroGuide"
       }
     ]
   },
   twitter: {
     card: "summary_large_image",
-    title: "Talk to Best Astrologers Online | Top Vedic Astrologers Consultation - Astrovani",
-    description: "Consult India's top verified astrologers online via call or chat on Astrovani. Get accurate predictions for Love, Marriage, Career, and Finance.",
+    title: "Talk to Best Astrologers Online | Top Vedic Astrologers Consultation - Balaji AstroGuide",
+    description: "Consult India's top verified astrologers online via call or chat on Balaji AstroGuide. Get accurate predictions for Love, Marriage, Career, and Finance.",
     images: [`${SITE_URL}/images/premium-astro-bg.jpg`]
   },
   robots: {
@@ -83,12 +83,12 @@ const astrologerPageSchema = {
       "@type": "CollectionPage",
       "@id": `${SITE_URL}/astrologers#webpage`,
       "url": `${SITE_URL}/astrologers`,
-      "name": "Talk to Best Astrologers Online | Top Vedic Astrologers Consultation - Astrovani",
-      "description": "Consult India's top verified astrologers online via call or chat on Astrovani. Get accurate predictions for Love, Marriage, Career & Finance 24/7.",
+      "name": "Talk to Best Astrologers Online | Top Vedic Astrologers Consultation - Balaji AstroGuide",
+      "description": "Consult India's top verified astrologers online via call or chat on Balaji AstroGuide. Get accurate predictions for Love, Marriage, Career & Finance 24/7.",
       "isPartOf": {
         "@type": "WebSite",
         "@id": `${SITE_URL}/#website`,
-        "name": "Astrovani",
+        "name": "Balaji AstroGuide",
         "url": `${SITE_URL}/`
       },
       "about": {
@@ -97,7 +97,7 @@ const astrologerPageSchema = {
         "serviceType": "Vedic Astrology, Tarot Reading, Numerology, Horoscope Analysis",
         "provider": {
           "@type": "Organization",
-          "name": "Astrovani",
+          "name": "Balaji AstroGuide",
           "url": `${SITE_URL}/`
         },
         "areaServed": "IN",
@@ -113,7 +113,7 @@ const astrologerPageSchema = {
       "mainEntity": [
         {
           "@type": "Question",
-          "name": "How can I consult an astrologer online on Astrovani?",
+          "name": "How can I consult an astrologer online on Balaji AstroGuide?",
           "acceptedAnswer": {
             "@type": "Answer",
             "text": "You can browse our directory of verified astrologers, view their specialization, experience, ratings, and language preferences, and connect with them instantly through chat or call consultation."
@@ -121,10 +121,10 @@ const astrologerPageSchema = {
         },
         {
           "@type": "Question",
-          "name": "Are the astrologers on Astrovani verified?",
+          "name": "Are the astrologers on Balaji AstroGuide verified?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Yes, every astrologer on Astrovani undergoes a rigorous verification and interview process by senior Vedic scholars before being onboarded."
+            "text": "Yes, every astrologer on Balaji AstroGuide undergoes a rigorous verification and interview process by senior Vedic scholars before being onboarded."
           }
         },
         {
@@ -148,7 +148,7 @@ const astrologerPageSchema = {
           "name": "Is my personal information and consultation confidential?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Absolutely. Astrovani ensures 100% privacy and confidentiality. Your personal details, birth chart, and chat history are never shared with third parties."
+            "text": "Absolutely. Balaji AstroGuide ensures 100% privacy and confidentiality. Your personal details, birth chart, and chat history are never shared with third parties."
           }
         }
       ]

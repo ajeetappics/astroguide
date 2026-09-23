@@ -199,6 +199,7 @@ export interface PaginationDetail {
 
 export interface FetchPoojaListResponse {
   poojas: PujaData[];
+  title?:string,
   total: number;
   totalPages: number;
   currentPage: number;
@@ -345,6 +346,101 @@ export const fetchPoojaList = async (
       },
       rawList: []
     };
+  }
+};
+
+/**
+ * Fetch trending poojas for homepage:
+ * GET /user/pooja/trending?page=1&limit=10
+ */
+export const fetchTrendingPoojas = async (
+  page = 1,
+  limit = 10
+): Promise<FetchPoojaListResponse> => {
+  try {
+    const url = `${API_URL}/user/pooja/trending?page=${page}&limit=${limit}`;
+    const response = await axios.get(url);
+    const resData = response?.data;
+
+    let rawList: any[] = [];
+    if (Array.isArray(resData?.data)) {
+      rawList = resData.data;
+    } else if (Array.isArray(resData?.data?.docs)) {
+      rawList = resData.data.docs;
+    } else if (Array.isArray(resData?.data?.poojas)) {
+      rawList = resData.data.poojas;
+    } else if (Array.isArray(resData?.data?.result)) {
+      rawList = resData.data.result;
+    } else if (Array.isArray(resData?.poojas)) {
+      rawList = resData.poojas;
+    } else if (Array.isArray(resData?.docs)) {
+      rawList = resData.docs;
+    } else if (Array.isArray(resData?.result)) {
+      rawList = resData.result;
+    } else if (Array.isArray(resData)) {
+      rawList = resData;
+    }
+
+    const poojas = rawList.map(mapPoojaToCard);
+    const title = resData?.title;
+    const total =
+      Number(resData?.paginationDetail?.totalDocs) ||
+      Number(resData?.pagination?.totalDocs) ||
+      Number(resData?.data?.totalDocs) ||
+      Number(resData?.data?.total) ||
+      Number(resData?.totalPoojaCount) ||
+      Number(resData?.totalCount) ||
+      Number(resData?.total) ||
+      poojas.length;
+
+    const totalPages =
+      Number(resData?.paginationDetail?.totalPages) ||
+      Number(resData?.pagination?.totalPages) ||
+      Number(resData?.data?.totalPages) ||
+      (limit > 0 ? Math.ceil(total / limit) : 1) ||
+      1;
+
+    const currentPage =
+      Number(resData?.paginationDetail?.page) ||
+      Number(resData?.paginationDetail?.currentPage) ||
+      Number(resData?.pagination?.page) ||
+      Number(resData?.data?.page) ||
+      Number(page) ||
+      1;
+
+    const hasPrevPage =
+      typeof resData?.paginationDetail?.hasPrevPage === 'boolean'
+        ? resData.paginationDetail.hasPrevPage
+        : currentPage > 1;
+
+    const hasNextPage =
+      typeof resData?.paginationDetail?.hasNextPage === 'boolean'
+        ? resData.paginationDetail.hasNextPage
+        : currentPage < totalPages;
+
+    const paginationDetail: PaginationDetail = {
+      totalDocs: total,
+      totalPages,
+      page: currentPage,
+      limit: Number(resData?.paginationDetail?.limit) || limit,
+      hasPrevPage,
+      hasNextPage,
+      prevPage: resData?.paginationDetail?.prevPage ?? (hasPrevPage ? currentPage - 1 : null),
+      nextPage: resData?.paginationDetail?.nextPage ?? (hasNextPage ? currentPage + 1 : null),
+    };
+
+    return {
+      poojas,
+      title,
+      total,
+      totalPages,
+      currentPage,
+      paginationDetail,
+      rawList,
+    };
+  } catch (error) {
+    console.error('Error fetching trending poojas from /user/pooja/trending, falling back to /user/pooja:', error);
+    return fetchPoojaList(page, limit);
   }
 };
 

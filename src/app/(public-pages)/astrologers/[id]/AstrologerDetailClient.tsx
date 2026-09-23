@@ -302,11 +302,11 @@ export default function AstrologerDetailClient({
   const faqList = [
     {
       question: `Who is ${astroName} and what are their astrological specializations?`,
-      answer: `${astroName} is a verified astrologer on Astrovani with ${currentAstro.experience || 5} years of experience in ${expertiseList.join(', ')}. They specialize in horoscope analysis, birth chart reading, career guidance, love & marriage compatibility, and effective Vedic remedies.`
+      answer: `${astroName} is a verified astrologer on Balaji AstroGuide with ${currentAstro.experience || 5} years of experience in ${expertiseList.join(', ')}. They specialize in horoscope analysis, birth chart reading, career guidance, love & marriage compatibility, and effective Vedic remedies.`
     },
     {
-      question: `How can I consult ${astroName} online on Astrovani?`,
-      answer: `You can consult ${astroName} directly on Astrovani via Chat or Call. Click the "Connect Now" button on this page, choose your preferred consultation mode, and connect instantly for real-time guidance.`
+      question: `How can I consult ${astroName} online on Balaji AstroGuide?`,
+      answer: `You can consult ${astroName} directly on Balaji AstroGuide via Chat or Call. Click the "Connect Now" button on this page, choose your preferred consultation mode, and connect instantly for real-time guidance.`
     },
     {
       question: `What languages does ${astroName} speak?`,
@@ -314,7 +314,7 @@ export default function AstrologerDetailClient({
     },
     {
       question: `What are the consultation fees for ${astroName}?`,
-      answer: `Consultations with ${astroName} start at ₹${consultationPrice}/minute. Astrovani offers transparent per-minute pricing with instant wallet recharge and no hidden charges.`
+      answer: `Consultations with ${astroName} start at ₹${consultationPrice}/minute. Balaji AstroGuide offers transparent per-minute pricing with instant wallet recharge and no hidden charges.`
     },
     {
       question: `What information is required for an accurate reading from ${astroName}?`,
@@ -322,7 +322,7 @@ export default function AstrologerDetailClient({
     },
     {
       question: `Is my consultation with ${astroName} confidential?`,
-      answer: `Yes, 100%. All consultations with ${astroName} on Astrovani are strictly private, confidential, and protected with end-to-end encryption. Your personal details and birth data are never shared.`
+      answer: `Yes, 100%. All consultations with ${astroName} on Balaji AstroGuide are strictly private, confidential, and protected with end-to-end encryption. Your personal details and birth data are never shared.`
     }
   ];
 
@@ -359,7 +359,7 @@ export default function AstrologerDetailClient({
               <div className="w-full h-full rounded-full border-[3px] border-[#F6971E]/30 overflow-hidden bg-white shadow-md relative">
                 <Image
                   src={sanitizeImageUrl(currentAstro.profileImg)}
-                  alt={`${astroName} - Vedic Astrologer on Astrovani`}
+                  alt={`${astroName} - Vedic Astrologer on Balaji AstroGuide`}
                   fill
                   className="object-cover"
                   priority
@@ -812,7 +812,7 @@ export default function AstrologerDetailClient({
                 Frequently Asked Questions about {astroName}
               </h2>
               <p className="text-xs sm:text-sm text-gray-500 mt-1 font-helvetica">
-                Direct answers to common questions about consulting {astroName} on Astrovani.
+                Direct answers to common questions about consulting {astroName} on Balaji AstroGuide.
               </p>
             </div>
 

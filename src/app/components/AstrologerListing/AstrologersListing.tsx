@@ -123,12 +123,12 @@ const CATEGORY_DESCRIPTIONS: Record<string, { title: string; subtitle: string }>
 
 const ASTROLOGER_FAQS = [
   {
-    question: "How can I consult an astrologer online on Astrovani?",
+    question: "How can I consult an astrologer online on Balaji AstroGuide?",
     answer: "Browse our directory of verified astrologers, view their specializations, experience, ratings, and language preferences. Once you choose the right astrologer, click 'Consult Now' to instantly start a chat or call session."
   },
   {
-    question: "Are the astrologers on Astrovani genuine and verified?",
-    answer: "Yes, 100%. Every astrologer on Astrovani goes through a rigorous multi-stage verification process by senior Vedic scholars to assess their subject mastery, experience, and prediction accuracy."
+    question: "Are the astrologers on Balaji AstroGuide genuine and verified?",
+    answer: "Yes, 100%. Every astrologer on Balaji AstroGuide goes through a rigorous multi-stage verification process by senior Vedic scholars to assess their subject mastery, experience, and prediction accuracy."
   },
   {
     question: "What details do I need to provide for an accurate horoscope reading?",
@@ -140,11 +140,11 @@ const ASTROLOGER_FAQS = [
   },
   {
     question: "Is my personal information and consultation confidential?",
-    answer: "Absolutely. Astrovani ensures complete end-to-end privacy and confidentiality. Your personal information, birth details, and chat conversations are completely secure and never shared with third parties."
+    answer: "Absolutely. Balaji AstroGuide ensures complete end-to-end privacy and confidentiality. Your personal information, birth details, and chat conversations are completely secure and never shared with third parties."
   },
   {
     question: "Which astrology systems and services are available?",
-    answer: "Astrovani hosts top experts across Vedic Astrology, KP System, Nadi Astrology, Tarot Card Reading, Numerology, Vastu Shastra, Gemstone Consultation, and Palmistry."
+    answer: "Balaji AstroGuide hosts top experts across Vedic Astrology, KP System, Nadi Astrology, Tarot Card Reading, Numerology, Vastu Shastra, Gemstone Consultation, and Palmistry."
   }
 ];
 
@@ -530,14 +530,14 @@ export default function AstrologersListing({ initialCategory = "All" }: Astrolog
         )}
       </section>
 
-      {/* 5. SEO Section: Why Consult Astrologers on Astrovani */}
+      {/* 5. SEO Section: Why Consult Astrologers on Balaji AstroGuide */}
       <section className="container mx-auto max-w-6xl px-4 mt-16 sm:mt-20">
         <div className="text-center max-w-2xl mx-auto mb-10 sm:mb-12">
           <span className="text-[#F6971E] text-xs sm:text-sm font-bold tracking-widest uppercase mb-1.5 block">
             Why Choose Us
           </span>
           <h2 className="text-2xl sm:text-3xl font-bold font-['Inria_Serif'] text-[#4A2B23] mb-3">
-            Why Consult Astrologers on Astrovani?
+            Why Consult Astrologers on Balaji AstroGuide?
           </h2>
           <p className="text-gray-600 text-xs sm:text-sm leading-relaxed">
             Experience authentic Vedic astrology guidance with complete privacy, verified experts, and accurate life solutions.

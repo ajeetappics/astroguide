@@ -72,9 +72,6 @@ export default function SpellSection() {
             <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-[32px] font-bold font-['Inria_Serif'] text-[#4A2B23] leading-tight mb-1 sm:mb-1.5">
               Personalized Spells
             </h2>
-            <p className="text-[#6b6b6b] font-helvetica text-xs sm:text-sm md:text-[15px]">
-              Ancient Sacred Rituals & Mystic Energy Cast by Certified Experts
-            </p>
           </div>
           <Link href="/spell" className="flex-shrink-0 flex items-center gap-1.5 bg-white border border-[#F6971E] text-[#F6971E] font-bold font-helvetica py-2 px-5 rounded-full hover:bg-[#F6971E] hover:text-white transition-all shadow-xs text-xs sm:text-sm">
             View all spells <BsArrowRight className="text-sm" />

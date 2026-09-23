@@ -4,7 +4,7 @@ import { robotsRules } from './staticRobots';
 export async function GET() {
   const { userAgent, allow, disallow, sitemap } = robotsRules;
 
-  let robotsContent = `# robots.txt for Balaji Astro Guide (Astrovani)\n\n`;
+  let robotsContent = `# robots.txt for Balaji Astro Guide (Balaji AstroGuide)\n\n`;
   robotsContent += `User-agent: ${userAgent}\n`;
 
   // Add Allow rules
