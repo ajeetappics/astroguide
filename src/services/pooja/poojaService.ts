@@ -214,7 +214,7 @@ export interface FetchPoojaListResponse {
  */
 export const fetchPoojaList = async (
   page = 1,
-  limit = 10,
+  limit = 15,
   categoryId?: string,
   search?: string
 ): Promise<FetchPoojaListResponse> => {
@@ -350,15 +350,16 @@ export const fetchPoojaList = async (
 };
 
 /**
- * Fetch trending poojas for homepage:
- * GET /user/pooja/trending?page=1&limit=10
+ * Generic helper to fetch custom pooja list endpoints (trending, recommended, negative-energy-removal, etc.)
  */
-export const fetchTrendingPoojas = async (
+const fetchPoojaCustomEndpoint = async (
+  endpoint: string,
   page = 1,
-  limit = 10
+  limit = 15,
+  defaultTitle = "trending"
 ): Promise<FetchPoojaListResponse> => {
   try {
-    const url = `${API_URL}/user/pooja/trending?page=${page}&limit=${limit}`;
+    const url = `${API_URL}/user/pooja/${endpoint}?page=${page}&limit=${limit}`;
     const response = await axios.get(url);
     const resData = response?.data;
 
@@ -382,7 +383,7 @@ export const fetchTrendingPoojas = async (
     }
 
     const poojas = rawList.map(mapPoojaToCard);
-    const title = resData?.title;
+    const title = resData?.title || defaultTitle;
     const total =
       Number(resData?.paginationDetail?.totalDocs) ||
       Number(resData?.pagination?.totalDocs) ||
@@ -439,10 +440,48 @@ export const fetchTrendingPoojas = async (
       rawList,
     };
   } catch (error) {
-    console.error('Error fetching trending poojas from /user/pooja/trending, falling back to /user/pooja:', error);
-    return fetchPoojaList(page, limit);
+    console.error(`Error fetching poojas from /user/pooja/${endpoint}:`, error);
+    return {
+      poojas: [],
+      title: defaultTitle,
+      total: 0,
+      totalPages: 1,
+      currentPage: page,
+      paginationDetail: {
+        totalDocs: 0,
+        totalPages: 1,
+        page: page,
+        limit: limit,
+        hasPrevPage: false,
+        hasNextPage: false,
+        prevPage: null,
+        nextPage: null,
+      },
+      rawList: []
+    };
   }
 };
+
+/**
+ * Fetch trending poojas:
+ * GET /user/pooja/trending?page=1&limit=15
+ */
+export const fetchTrendingPoojas = (page = 1, limit = 15): Promise<FetchPoojaListResponse> =>
+  fetchPoojaCustomEndpoint('trending', page, limit, 'Trending Poojas');
+
+/**
+ * Fetch recommended poojas:
+ * GET /user/pooja/recommended?page=1&limit=15
+ */
+export const fetchRecommendedPoojas = (page = 1, limit = 15): Promise<FetchPoojaListResponse> =>
+  fetchPoojaCustomEndpoint('recommended', page, limit, 'Recommended Poojas');
+
+/**
+ * Fetch negative energy removal poojas:
+ * GET /user/pooja/negative-energy-removal?page=1&limit=15
+ */
+export const fetchNegativeEnergyPoojas = (page = 1, limit = 15): Promise<FetchPoojaListResponse> =>
+  fetchPoojaCustomEndpoint('negative-energy-removal', page, limit, 'Negative Energy Removal');
 
 export let resolvedSpellCategoryId: string | null = null;
 
@@ -522,3 +561,60 @@ export const fetchPoojaBySlug = async (slugOrId: string): Promise<any> => {
 
 export const fetchPoojaById = fetchPoojaBySlug;
 
+/**
+ * Fetch Pooja Banners from API:
+ * GET https://preprod.api.astrovani-balaji.store/user/pooja-banner
+ */
+export const fetchPoojaBanners = async (): Promise<string[]> => {
+  const urls = [
+    `${API_URL}/user/pooja-banner`,
+    `https://preprod.api.astrovani-balaji.store/user/pooja-banner`,
+  ];
+
+  for (const url of urls) {
+    try {
+      const response = await axios.get(url);
+      const resData = response.data;
+      let rawList: any[] = [];
+
+      if (Array.isArray(resData?.data)) {
+        rawList = resData.data;
+      } else if (Array.isArray(resData?.banners)) {
+        rawList = resData.banners;
+      } else if (Array.isArray(resData?.data?.banners)) {
+        rawList = resData.data.banners;
+      } else if (Array.isArray(resData?.data?.docs)) {
+        rawList = resData.data.docs;
+      } else if (Array.isArray(resData?.result)) {
+        rawList = resData.result;
+      } else if (Array.isArray(resData)) {
+        rawList = resData;
+      }
+
+      if (rawList && rawList.length > 0) {
+        const images: string[] = rawList
+          .map((item: any) => {
+            if (typeof item === 'string') return sanitizeImageUrl(item);
+            const img =
+              item.image ||
+              item.imageUrl ||
+              item.bannerImage ||
+              item.banner ||
+              item.url ||
+              item.photo ||
+              '';
+            return img ? sanitizeImageUrl(img) : '';
+          })
+          .filter(Boolean);
+
+        if (images.length > 0) {
+          return images;
+        }
+      }
+    } catch (error) {
+      console.warn(`Error fetching pooja banners from ${url}:`, error);
+    }
+  }
+
+  return [];
+};

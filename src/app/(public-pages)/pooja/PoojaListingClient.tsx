@@ -4,21 +4,54 @@ import React, { useState, useEffect, useMemo } from 'react';
 import Image from 'next/image';
 import { BsSearch, BsX, BsChevronLeft, BsChevronRight } from 'react-icons/bs';
 import PoojaCard, { PujaData } from '../../components/Card/PoojaCard';
-import { fetchPoojaList, fetchPoojaCategories, PoojaCategory, PaginationDetail } from '@/services/pooja/poojaService';
+import {
+  fetchPoojaList,
+  fetchPoojaCategories,
+  fetchTrendingPoojas,
+  fetchRecommendedPoojas,
+  fetchNegativeEnergyPoojas,
+  fetchPoojaBanners,
+  PoojaCategory,
+} from '@/services/pooja/poojaService';
 
-const LIMIT = 10;
+const LIMIT = 15;
+
+interface SectionData {
+  poojas: PujaData[];
+  title: string;
+  currentPage: number;
+  totalPages: number;
+  totalCount: number;
+  isLoading: boolean;
+}
 
 export default function PoojaListingClient() {
-  const sliderImages = [
-    'https://storage.googleapis.com/astro-vani-storage/admin/1786718515037-Pooja_Home_page_savan_sepical.jpg',
-    '/images/pooja-hero-banner.jpg',
-    'https://storage.googleapis.com/astro-vani-storage/admin/1787392992312-test.jpg',
-    'https://storage.googleapis.com/astro-vani-storage/admin/1782760808425-recharge.jpg'
-  ];
+  const [sliderImages, setSliderImages] = useState<string[]>([]);
   const [currentSlide, setCurrentSlide] = useState(0);
+
+  // Fetch dynamic banners from /user/pooja-banner
+  useEffect(() => {
+    let isMounted = true;
+    const loadBanners = async () => {
+      try {
+        const banners = await fetchPoojaBanners();
+        if (isMounted && banners && banners.length > 0) {
+          setSliderImages(banners);
+        }
+      } catch (err) {
+        console.error('Error fetching pooja banners:', err);
+      }
+    };
+
+    loadBanners();
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   // Auto-play for the slider
   useEffect(() => {
+    if (sliderImages.length === 0) return;
     const timer = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % sliderImages.length);
     }, 4000);
@@ -27,22 +60,166 @@ export default function PoojaListingClient() {
 
   // State management for API integration
   const [poojas, setPoojas] = useState<PujaData[]>([]);
-  const [rawList, setRawList] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
-  const [pagination, setPagination] = useState<PaginationDetail>({
-    totalDocs: 0,
-    totalPages: 1,
-    page: 1,
-    limit: LIMIT,
-    hasPrevPage: false,
-    hasNextPage: false,
-  });
   const [activeCategoryId, setActiveCategoryId] = useState<string>('All');
   const [searchQuery, setSearchQuery] = useState('');
   const [categoriesList, setCategoriesList] = useState<PoojaCategory[]>([]);
+
+  // 3 home sections for default view (when no search / filter applied)
+  const [trendingData, setTrendingData] = useState<SectionData>({
+    poojas: [],
+    title: 'Trending Poojas',
+    currentPage: 1,
+    totalPages: 1,
+    totalCount: 0,
+    isLoading: false,
+  });
+  const [recommendedData, setRecommendedData] = useState<SectionData>({
+    poojas: [],
+    title: 'Recommended Poojas',
+    currentPage: 1,
+    totalPages: 1,
+    totalCount: 0,
+    isLoading: false,
+  });
+  const [negativeEnergyData, setNegativeEnergyData] = useState<SectionData>({
+    poojas: [],
+    title: 'Negative Energy Removal',
+    currentPage: 1,
+    totalPages: 1,
+    totalCount: 0,
+    isLoading: false,
+  });
+  const [isSectionsLoading, setIsSectionsLoading] = useState(true);
+
+  // Fetch the 3 default sections on mount (15 items each)
+  useEffect(() => {
+    let isMounted = true;
+    const loadDefaultSections = async () => {
+      try {
+        setIsSectionsLoading(true);
+        const [trendingRes, recommendedRes, negativeEnergyRes] = await Promise.all([
+          fetchTrendingPoojas(1, 15),
+          fetchRecommendedPoojas(1, 15),
+          fetchNegativeEnergyPoojas(1, 15),
+        ]);
+
+        if (isMounted) {
+          if (trendingRes?.poojas?.length) {
+            setTrendingData({
+              poojas: trendingRes.poojas,
+              title: trendingRes.title || 'Trending Poojas',
+              currentPage: trendingRes.currentPage || 1,
+              totalPages: Math.max(1, trendingRes.totalPages),
+              totalCount: trendingRes.total || trendingRes.poojas.length,
+              isLoading: false,
+            });
+          }
+          if (recommendedRes?.poojas?.length) {
+            setRecommendedData({
+              poojas: recommendedRes.poojas,
+              title: recommendedRes.title || 'Recommended Poojas',
+              currentPage: recommendedRes.currentPage || 1,
+              totalPages: Math.max(1, recommendedRes.totalPages),
+              totalCount: recommendedRes.total || recommendedRes.poojas.length,
+              isLoading: false,
+            });
+          }
+          if (negativeEnergyRes?.poojas?.length) {
+            setNegativeEnergyData({
+              poojas: negativeEnergyRes.poojas,
+              title: negativeEnergyRes.title || 'Negative Energy Removal',
+              currentPage: negativeEnergyRes.currentPage || 1,
+              totalPages: Math.max(1, negativeEnergyRes.totalPages),
+              totalCount: negativeEnergyRes.total || negativeEnergyRes.poojas.length,
+              isLoading: false,
+            });
+          }
+        }
+      } catch (err) {
+        console.error('Error fetching pooja sections:', err);
+      } finally {
+        if (isMounted) {
+          setIsSectionsLoading(false);
+        }
+      }
+    };
+
+    loadDefaultSections();
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  // Section-specific page handlers
+  const handleTrendingPageChange = async (newPage: number) => {
+    if (newPage < 1 || newPage > trendingData.totalPages || newPage === trendingData.currentPage || trendingData.isLoading) return;
+    setTrendingData((prev) => ({ ...prev, isLoading: true }));
+    try {
+      const res = await fetchTrendingPoojas(newPage, LIMIT);
+      setTrendingData((prev) => ({
+        ...prev,
+        poojas: res.poojas,
+        currentPage: res.currentPage || newPage,
+        totalPages: Math.max(1, res.totalPages),
+        totalCount: res.total,
+        title: res.title || prev.title,
+        isLoading: false,
+      }));
+      const el = document.getElementById('section-trending');
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } catch (err) {
+      console.error('Error changing trending page:', err);
+      setTrendingData((prev) => ({ ...prev, isLoading: false }));
+    }
+  };
+
+  const handleRecommendedPageChange = async (newPage: number) => {
+    if (newPage < 1 || newPage > recommendedData.totalPages || newPage === recommendedData.currentPage || recommendedData.isLoading) return;
+    setRecommendedData((prev) => ({ ...prev, isLoading: true }));
+    try {
+      const res = await fetchRecommendedPoojas(newPage, LIMIT);
+      setRecommendedData((prev) => ({
+        ...prev,
+        poojas: res.poojas,
+        currentPage: res.currentPage || newPage,
+        totalPages: Math.max(1, res.totalPages),
+        totalCount: res.total,
+        title: res.title || prev.title,
+        isLoading: false,
+      }));
+      const el = document.getElementById('section-recommended');
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } catch (err) {
+      console.error('Error changing recommended page:', err);
+      setRecommendedData((prev) => ({ ...prev, isLoading: false }));
+    }
+  };
+
+  const handleNegativeEnergyPageChange = async (newPage: number) => {
+    if (newPage < 1 || newPage > negativeEnergyData.totalPages || newPage === negativeEnergyData.currentPage || negativeEnergyData.isLoading) return;
+    setNegativeEnergyData((prev) => ({ ...prev, isLoading: true }));
+    try {
+      const res = await fetchNegativeEnergyPoojas(newPage, LIMIT);
+      setNegativeEnergyData((prev) => ({
+        ...prev,
+        poojas: res.poojas,
+        currentPage: res.currentPage || newPage,
+        totalPages: Math.max(1, res.totalPages),
+        totalCount: res.total,
+        title: res.title || prev.title,
+        isLoading: false,
+      }));
+      const el = document.getElementById('section-negative-energy');
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } catch (err) {
+      console.error('Error changing negative energy page:', err);
+      setNegativeEnergyData((prev) => ({ ...prev, isLoading: false }));
+    }
+  };
 
   // Fetch categories dynamically: GET /user/category?page=1&limit=10
   useEffect(() => {
@@ -74,10 +251,15 @@ export default function PoojaListingClient() {
     return [allItem, ...categoriesList];
   }, [categoriesList]);
 
-  // Fetch Pooja list from API:
-  // - All Poojas: GET /user/pooja?page=X&limit=10&poojaName=...
-  // - Category Poojas: GET /user/pooja/category/:id?page=X&limit=10&poojaName=...
+  // Fetch Pooja list for search or category filter:
+  // - Category filter: GET /user/pooja/category/:id?page=X&limit=15&poojaName=...
+  // - Search filter: GET /user/pooja?page=X&limit=15&poojaName=...
   useEffect(() => {
+    const isFilter = Boolean(searchQuery.trim() || activeCategoryId !== 'All');
+    if (!isFilter) {
+      return;
+    }
+
     let isMounted = true;
 
     const loadPoojas = async () => {
@@ -87,12 +269,8 @@ export default function PoojaListingClient() {
         const response = await fetchPoojaList(currentPage, LIMIT, catParam, searchQuery);
         if (isMounted) {
           setPoojas(response.poojas);
-          setRawList(response.rawList);
           setTotalCount(response.total);
           setTotalPages(Math.max(1, response.totalPages));
-          if (response.paginationDetail) {
-            setPagination(response.paginationDetail);
-          }
         }
       } catch (err) {
         console.error('Error fetching pooja list:', err);
@@ -122,21 +300,86 @@ export default function PoojaListingClient() {
     }
   };
 
-  const getPageNumbers = () => {
-    if (totalPages <= 5) {
-      return Array.from({ length: totalPages }, (_, i) => i + 1);
+  const renderPagination = (
+    cPage: number,
+    tPages: number,
+    tCount: number,
+    onPage: (page: number) => void,
+    loading?: boolean
+  ) => {
+    if (tPages <= 1) return null;
+
+    let pages: (number | string)[] = [];
+    if (tPages <= 5) {
+      pages = Array.from({ length: tPages }, (_, i) => i + 1);
+    } else {
+      pages.push(1);
+      const start = Math.max(2, cPage - 1);
+      const end = Math.min(tPages - 1, cPage + 1);
+      if (start > 2) pages.push('...');
+      for (let i = start; i <= end; i++) {
+        pages.push(i);
+      }
+      if (end < tPages - 1) pages.push('...');
+      pages.push(tPages);
     }
-    const pages: (number | string)[] = [];
-    pages.push(1);
-    const start = Math.max(2, currentPage - 1);
-    const end = Math.min(totalPages - 1, currentPage + 1);
-    if (start > 2) pages.push('...');
-    for (let i = start; i <= end; i++) {
-      pages.push(i);
-    }
-    if (end < totalPages - 1) pages.push('...');
-    pages.push(totalPages);
-    return pages;
+
+    return (
+      <div className="mt-8 pt-4 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <p className="text-xs sm:text-sm text-gray-500 font-helvetica order-2 sm:order-1">
+          Showing Page <span className="font-bold text-[#4A2B23]">{cPage}</span> of{' '}
+          <span className="font-bold text-[#4A2B23]">{tPages}</span> ({tCount} total poojas)
+        </p>
+
+        <div className="flex items-center gap-1.5 sm:gap-2 order-1 sm:order-2 flex-wrap justify-center">
+          <button
+            onClick={() => onPage(cPage - 1)}
+            disabled={cPage <= 1 || loading}
+            className="flex items-center gap-1 px-3 py-1.5 rounded-full border border-gray-200 text-xs font-bold text-[#4A2B23] bg-white hover:border-[#F6971E] hover:text-[#F6971E] disabled:opacity-40 disabled:cursor-not-allowed transition-all shadow-2xs cursor-pointer"
+            aria-label="Previous Page"
+          >
+            <BsChevronLeft className="text-xs" />
+            <span>Prev</span>
+          </button>
+
+          <div className="flex items-center gap-1">
+            {pages.map((item, idx) => {
+              if (typeof item === 'string') {
+                return (
+                  <span key={`dots-${idx}`} className="px-1 text-gray-400 font-bold text-xs">
+                    ...
+                  </span>
+                );
+              }
+              return (
+                <button
+                  key={item}
+                  onClick={() => onPage(item)}
+                  disabled={loading}
+                  className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full text-xs font-bold flex items-center justify-center transition-all cursor-pointer ${
+                    item === cPage
+                      ? 'bg-[#F6971E] text-white shadow-[0_2px_8px_rgba(246,151,30,0.35)]'
+                      : 'bg-white border border-gray-200 text-[#4A2B23] hover:border-[#F6971E] hover:text-[#F6971E]'
+                  }`}
+                >
+                  {item}
+                </button>
+              );
+            })}
+          </div>
+
+          <button
+            onClick={() => onPage(cPage + 1)}
+            disabled={cPage >= tPages || loading}
+            className="flex items-center gap-1 px-3 py-1.5 rounded-full border border-gray-200 text-xs font-bold text-[#4A2B23] bg-white hover:border-[#F6971E] hover:text-[#F6971E] disabled:opacity-40 disabled:cursor-not-allowed transition-all shadow-2xs cursor-pointer"
+            aria-label="Next Page"
+          >
+            <span>Next</span>
+            <BsChevronRight className="text-xs" />
+          </button>
+        </div>
+      </div>
+    );
   };
 
   return (
@@ -167,48 +410,57 @@ export default function PoojaListingClient() {
 
             {/* Right Banner Image Slider (Matching App Slider 2:1 Aspect Ratio) */}
             <div className="relative z-10 w-full lg:w-[52%] flex items-center justify-center">
-              <div className="relative w-full aspect-[2/1] overflow-hidden rounded-2xl md:rounded-3xl shadow-[0_15px_35px_rgba(0,0,0,0.12)] border border-orange-100/70">
-                {sliderImages.map((img, index) => {
-                  let position = 0;
-                  if (index === currentSlide) position = 0;
-                  else if (index === (currentSlide + 1) % sliderImages.length) position = 1;
-                  else position = -1;
+              {sliderImages.length > 0 ? (
+                <>
+                  <div className="relative w-full aspect-[2/1] overflow-hidden rounded-2xl md:rounded-3xl shadow-[0_15px_35px_rgba(0,0,0,0.12)] border border-orange-100/70">
+                    {sliderImages.map((img, index) => {
+                      let position = 0;
+                      if (index === currentSlide) position = 0;
+                      else if (index === (currentSlide + 1) % sliderImages.length) position = 1;
+                      else position = -1;
 
-                  return (
-                    <div
-                      key={index}
-                      className={`absolute top-0 left-0 w-full h-full transition-all duration-700 ease-in-out cursor-pointer ${position === 0
-                        ? 'z-20 opacity-100 translate-x-0'
-                        : position === 1
-                          ? 'z-10 opacity-0 translate-x-full'
-                          : 'z-10 opacity-0 -translate-x-full'
-                        }`}
-                      onClick={() => setCurrentSlide(index)}
-                    >
-                      <Image
-                        src={img}
-                        alt={`Pooja Slide ${index + 1}`}
-                        fill
-                        className="object-fill rounded-2xl md:rounded-3xl"
-                        priority={index === 0}
-                      />
+                      return (
+                        <div
+                          key={index}
+                          className={`absolute top-0 left-0 w-full h-full transition-all duration-700 ease-in-out cursor-pointer ${position === 0
+                            ? 'z-20 opacity-100 translate-x-0'
+                            : position === 1
+                              ? 'z-10 opacity-0 translate-x-full'
+                              : 'z-10 opacity-0 -translate-x-full'
+                            }`}
+                          onClick={() => setCurrentSlide(index)}
+                        >
+                          <Image
+                            src={img}
+                            alt={`Pooja Slide ${index + 1}`}
+                            fill
+                            unoptimized
+                            className="object-fill rounded-2xl md:rounded-3xl"
+                            priority={index === 0}
+                          />
+                        </div>
+                      );
+                    })}
+                  </div>
+
+                  {/* Navigation Dots */}
+                  {sliderImages.length > 1 && (
+                    <div className="absolute -bottom-[26px] left-1/2 -translate-x-1/2 flex gap-2 z-30">
+                      {sliderImages.map((_, idx) => (
+                        <button
+                          key={idx}
+                          onClick={() => setCurrentSlide(idx)}
+                          className={`w-2.5 h-2.5 rounded-full transition-all duration-300 cursor-pointer ${idx === currentSlide ? 'bg-[#F6971E] w-6' : 'bg-gray-300 hover:bg-[#F6971E]/50'
+                            }`}
+                          aria-label={`Go to slide ${idx + 1}`}
+                        />
+                      ))}
                     </div>
-                  );
-                })}
-              </div>
-
-              {/* Navigation Dots */}
-              <div className="absolute -bottom-[26px] left-1/2 -translate-x-1/2 flex gap-2 z-30">
-                {sliderImages.map((_, idx) => (
-                  <button
-                    key={idx}
-                    onClick={() => setCurrentSlide(idx)}
-                    className={`w-2.5 h-2.5 rounded-full transition-all duration-300 cursor-pointer ${idx === currentSlide ? 'bg-[#F6971E] w-6' : 'bg-gray-300 hover:bg-[#F6971E]/50'
-                      }`}
-                    aria-label={`Go to slide ${idx + 1}`}
-                  />
-                ))}
-              </div>
+                  )}
+                </>
+              ) : (
+                <div className="w-full aspect-[2/1] rounded-2xl md:rounded-3xl bg-gray-200/80 animate-pulse border border-orange-100/70 shadow-[0_15px_35px_rgba(0,0,0,0.05)]" />
+              )}
             </div>
           </div>
         </div>
@@ -292,129 +544,200 @@ export default function PoojaListingClient() {
           </div>
         </div>
 
-        {/* 3. Section Title & Subtitle */}
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-6 md:mb-8 gap-2">
-          <div>
-            <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-[32px] font-bold font-['Inria_Serif'] text-[#4A2B23] leading-tight mb-1 sm:mb-1.5">
-              Personalized Poojas
-            </h2>
-            <p className="text-[#6b6b6b] font-helvetica text-xs sm:text-sm md:text-[15px]">
-              Experience Real Blessings with your Personal Sankalp
-            </p>
-          </div>
-          {totalCount > 0 && !isLoading && (
-            <span className="text-xs sm:text-sm font-semibold text-[#F6971E] bg-[#FFF8EB] border border-[#F6971E]/20 px-3 py-1 rounded-full w-max">
-              {totalCount} Poojas Available
-            </span>
-          )}
-        </div>
-
-        {/* 4. Pooja Cards Grid or Loading Skeleton */}
-        {isLoading ? (
-          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2.5 sm:gap-3 md:gap-3.5">
-            {Array.from({ length: 8 }).map((_, idx) => (
-              <div
-                key={idx}
-                className="bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm p-0 animate-pulse flex flex-col h-full"
-              >
-                <div className="h-[110px] sm:h-[125px] md:h-[135px] w-full bg-gray-200" />
-                <div className="p-3 sm:p-3.5 space-y-2 flex-grow flex flex-col">
-                  <div className="h-4 bg-gray-200 rounded w-3/4" />
-                  <div className="h-3 bg-gray-100 rounded w-full" />
-                  <div className="h-3 bg-gray-100 rounded w-2/3" />
-                  <div className="mt-auto pt-3 border-t border-gray-100 flex items-center justify-between">
-                    <div className="h-4 bg-gray-200 rounded w-12" />
-                    <div className="h-6 bg-gray-200 rounded-full w-16" />
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        ) : poojas.length > 0 ? (
+        {/* Content Area: Either Filter/Search Results OR the 3 Default Sections */}
+        {searchQuery.trim() || activeCategoryId !== 'All' ? (
+          /* Filter/Search Results View */
           <>
-            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2.5 sm:gap-3 md:gap-3.5">
-              {poojas.map((pooja) => (
-                <PoojaCard key={`pooja-${pooja.id}`} pooja={pooja} />
-              ))}
+            <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-6 md:mb-8 gap-2">
+              <div>
+                <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-[32px] font-bold font-['Inria_Serif'] text-[#4A2B23] leading-tight mb-1 sm:mb-1.5">
+                  {searchQuery
+                    ? `Search Results for "${searchQuery}"`
+                    : `${categories.find((c) => c._id === activeCategoryId)?.categoryName || 'Category'} Poojas`}
+                </h2>
+                <p className="text-[#6b6b6b] font-helvetica text-xs sm:text-sm md:text-[15px]">
+                  {searchQuery ? 'Showing matching sacred poojas' : 'Browse poojas by selected category'}
+                </p>
+              </div>
+              {totalCount > 0 && !isLoading && (
+                <span className="text-xs sm:text-sm font-semibold text-[#F6971E] bg-[#FFF8EB] border border-[#F6971E]/20 px-3 py-1 rounded-full w-max">
+                  {totalCount} Poojas Available
+                </span>
+              )}
             </div>
 
-            {/* Pagination Controls */}
-            {totalPages > 1 && (
-              <div className="mt-10 pt-6 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-4">
-                <p className="text-xs sm:text-sm text-gray-500 font-helvetica order-2 sm:order-1">
-                  Showing Page <span className="font-bold text-[#4A2B23]">{currentPage}</span> of{' '}
-                  <span className="font-bold text-[#4A2B23]">{totalPages}</span> ({totalCount} total poojas)
-                </p>
-
-                <div className="flex items-center gap-1.5 sm:gap-2 order-1 sm:order-2 flex-wrap justify-center">
-                  <button
-                    onClick={() => handlePageChange(currentPage - 1)}
-                    disabled={!pagination.hasPrevPage || currentPage <= 1 || isLoading}
-                    className="flex items-center gap-1 px-3 py-1.5 rounded-full border border-gray-200 text-xs font-bold text-[#4A2B23] bg-white hover:border-[#F6971E] hover:text-[#F6971E] disabled:opacity-40 disabled:cursor-not-allowed transition-all shadow-2xs cursor-pointer"
-                    aria-label="Previous Page"
+            {isLoading ? (
+              <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2.5 sm:gap-3 md:gap-3.5">
+                {Array.from({ length: 8 }).map((_, idx) => (
+                  <div
+                    key={idx}
+                    className="bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm p-0 animate-pulse flex flex-col h-full"
                   >
-                    <BsChevronLeft className="text-xs" />
-                    <span>Prev</span>
-                  </button>
-
-                  <div className="flex items-center gap-1">
-                    {getPageNumbers().map((item, idx) => {
-                      if (typeof item === 'string') {
-                        return (
-                          <span key={`dots-${idx}`} className="px-1 text-gray-400 font-bold text-xs">
-                            ...
-                          </span>
-                        );
-                      }
-                      return (
-                        <button
-                          key={item}
-                          onClick={() => handlePageChange(item)}
-                          disabled={isLoading}
-                          className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full text-xs font-bold flex items-center justify-center transition-all cursor-pointer ${item === currentPage
-                            ? 'bg-[#F6971E] text-white shadow-[0_2px_8px_rgba(246,151,30,0.35)]'
-                            : 'bg-white border border-gray-200 text-[#4A2B23] hover:border-[#F6971E] hover:text-[#F6971E]'
-                            }`}
-                        >
-                          {item}
-                        </button>
-                      );
-                    })}
+                    <div className="h-[110px] sm:h-[125px] md:h-[135px] w-full bg-gray-200" />
+                    <div className="p-3 sm:p-3.5 space-y-2 flex-grow flex flex-col">
+                      <div className="h-4 bg-gray-200 rounded w-3/4" />
+                      <div className="h-3 bg-gray-100 rounded w-full" />
+                      <div className="h-3 bg-gray-100 rounded w-2/3" />
+                      <div className="mt-auto pt-3 border-t border-gray-100 flex items-center justify-between">
+                        <div className="h-4 bg-gray-200 rounded w-12" />
+                        <div className="h-6 bg-gray-200 rounded-full w-16" />
+                      </div>
+                    </div>
                   </div>
-
-                  <button
-                    onClick={() => handlePageChange(currentPage + 1)}
-                    disabled={!pagination.hasNextPage || currentPage >= totalPages || isLoading}
-                    className="flex items-center gap-1 px-3 py-1.5 rounded-full border border-gray-200 text-xs font-bold text-[#4A2B23] bg-white hover:border-[#F6971E] hover:text-[#F6971E] disabled:opacity-40 disabled:cursor-not-allowed transition-all shadow-2xs cursor-pointer"
-                    aria-label="Next Page"
-                  >
-                    <span>Next</span>
-                    <BsChevronRight className="text-xs" />
-                  </button>
+                ))}
+              </div>
+            ) : poojas.length > 0 ? (
+              <>
+                <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2.5 sm:gap-3 md:gap-3.5">
+                  {poojas.map((pooja) => (
+                    <PoojaCard key={`pooja-${pooja.id}`} pooja={pooja} />
+                  ))}
                 </div>
+
+                {/* Pagination Controls */}
+                {renderPagination(currentPage, totalPages, totalCount, handlePageChange, isLoading)}
+              </>
+            ) : (
+              <div className="text-center py-16 bg-white rounded-3xl border border-[#F6971E]/20 p-8 shadow-sm max-w-md mx-auto">
+                <p className="text-xl font-bold text-[#72271E] mb-2 font-['Inria_Serif']">No Poojas Found</p>
+                <p className="text-gray-500 text-sm font-helvetica mb-4">
+                  {searchQuery
+                    ? `No pooja services match "${searchQuery}".`
+                    : `No poojas found under "${categories.find((c) => c._id === activeCategoryId)?.categoryName || activeCategoryId}".`}
+                </p>
+                <button
+                  onClick={() => {
+                    setSearchQuery('');
+                    setActiveCategoryId('All');
+                    setCurrentPage(1);
+                  }}
+                  className="bg-[#F6971E] text-white font-bold px-6 py-2 rounded-full text-sm hover:bg-[#e5850b] transition-all cursor-pointer"
+                >
+                  Reset Filters
+                </button>
               </div>
             )}
           </>
         ) : (
-          <div className="text-center py-16 bg-white rounded-3xl border border-[#F6971E]/20 p-8 shadow-sm max-w-md mx-auto">
-            <p className="text-xl font-bold text-[#72271E] mb-2 font-['Inria_Serif']">No Poojas Found</p>
-            <p className="text-gray-500 text-sm font-helvetica mb-4">
-              {searchQuery
-                ? `No pooja services match "${searchQuery}".`
-                : activeCategoryId !== 'All'
-                  ? `No poojas found under "${categories.find((c) => c._id === activeCategoryId)?.categoryName || activeCategoryId}".`
-                  : 'No pooja services are currently available.'}
-            </p>
-            <button
-              onClick={() => {
-                setSearchQuery('');
-                setActiveCategoryId('All');
-                setCurrentPage(1);
-              }}
-              className="bg-[#F6971E] text-white font-bold px-6 py-2 rounded-full text-sm hover:bg-[#e5850b] transition-all cursor-pointer"
-            >
-              Reset Filters
-            </button>
+          /* Default View: 3 Custom Sections (Trending, Recommended, Negative Energy Removal) */
+          <div className="space-y-10 sm:space-y-14">
+            {isSectionsLoading ? (
+              /* Loading Skeletons for Sections */
+              <div className="space-y-12">
+                {[1, 2, 3].map((sec) => (
+                  <div key={sec} className="space-y-4">
+                    <div className="h-7 sm:h-8 bg-gray-200 rounded-lg w-52 animate-pulse mb-3" />
+                    <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2.5 sm:gap-3 md:gap-3.5">
+                      {Array.from({ length: 4 }).map((_, idx) => (
+                        <div
+                          key={idx}
+                          className="bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm p-0 animate-pulse flex flex-col h-[280px]"
+                        >
+                          <div className="h-[110px] sm:h-[125px] md:h-[135px] w-full bg-gray-200" />
+                          <div className="p-3 sm:p-3.5 space-y-2 flex-grow flex flex-col">
+                            <div className="h-4 bg-gray-200 rounded w-3/4" />
+                            <div className="h-3 bg-gray-100 rounded w-full" />
+                            <div className="h-3 bg-gray-100 rounded w-2/3" />
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <>
+                {/* 1. Trending Pooja Section */}
+                {trendingData.poojas.length > 0 && (
+                  <section id="section-trending">
+                    <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-4 sm:mb-6 gap-2">
+                      <div>
+                        <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-[30px] font-bold font-['Inria_Serif'] text-[#4A2B23] leading-tight">
+                          {trendingData.title}
+                        </h2>
+                      </div>
+                      {trendingData.totalCount > 0 && (
+                        <span className="text-xs sm:text-sm font-semibold text-[#F6971E] bg-[#FFF8EB] border border-[#F6971E]/20 px-3 py-1 rounded-full w-max">
+                          {trendingData.totalCount} Poojas Available
+                        </span>
+                      )}
+                    </div>
+                    <div className={`grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2.5 sm:gap-3 md:gap-3.5 transition-opacity ${trendingData.isLoading ? 'opacity-50 pointer-events-none' : ''}`}>
+                      {trendingData.poojas.map((pooja) => (
+                        <PoojaCard key={`trending-${pooja.id}`} pooja={pooja} />
+                      ))}
+                    </div>
+                    {renderPagination(
+                      trendingData.currentPage,
+                      trendingData.totalPages,
+                      trendingData.totalCount,
+                      handleTrendingPageChange,
+                      trendingData.isLoading
+                    )}
+                  </section>
+                )}
+
+                {/* 2. Recommended Pooja Section */}
+                {recommendedData.poojas.length > 0 && (
+                  <section id="section-recommended">
+                    <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-4 sm:mb-6 gap-2">
+                      <div>
+                        <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-[30px] font-bold font-['Inria_Serif'] text-[#4A2B23] leading-tight">
+                          {recommendedData.title}
+                        </h2>
+                      </div>
+                      {recommendedData.totalCount > 0 && (
+                        <span className="text-xs sm:text-sm font-semibold text-[#F6971E] bg-[#FFF8EB] border border-[#F6971E]/20 px-3 py-1 rounded-full w-max">
+                          {recommendedData.totalCount} Poojas Available
+                        </span>
+                      )}
+                    </div>
+                    <div className={`grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2.5 sm:gap-3 md:gap-3.5 transition-opacity ${recommendedData.isLoading ? 'opacity-50 pointer-events-none' : ''}`}>
+                      {recommendedData.poojas.map((pooja) => (
+                        <PoojaCard key={`recommended-${pooja.id}`} pooja={pooja} />
+                      ))}
+                    </div>
+                    {renderPagination(
+                      recommendedData.currentPage,
+                      recommendedData.totalPages,
+                      recommendedData.totalCount,
+                      handleRecommendedPageChange,
+                      recommendedData.isLoading
+                    )}
+                  </section>
+                )}
+
+                {/* 3. Negative Energy Removal Pooja Section */}
+                {negativeEnergyData.poojas.length > 0 && (
+                  <section id="section-negative-energy">
+                    <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-4 sm:mb-6 gap-2">
+                      <div>
+                        <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-[30px] font-bold font-['Inria_Serif'] text-[#4A2B23] leading-tight">
+                          {negativeEnergyData.title}
+                        </h2>
+                      </div>
+                      {negativeEnergyData.totalCount > 0 && (
+                        <span className="text-xs sm:text-sm font-semibold text-[#F6971E] bg-[#FFF8EB] border border-[#F6971E]/20 px-3 py-1 rounded-full w-max">
+                          {negativeEnergyData.totalCount} Poojas Available
+                        </span>
+                      )}
+                    </div>
+                    <div className={`grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2.5 sm:gap-3 md:gap-3.5 transition-opacity ${negativeEnergyData.isLoading ? 'opacity-50 pointer-events-none' : ''}`}>
+                      {negativeEnergyData.poojas.map((pooja) => (
+                        <PoojaCard key={`negative-${pooja.id}`} pooja={pooja} />
+                      ))}
+                    </div>
+                    {renderPagination(
+                      negativeEnergyData.currentPage,
+                      negativeEnergyData.totalPages,
+                      negativeEnergyData.totalCount,
+                      handleNegativeEnergyPageChange,
+                      negativeEnergyData.isLoading
+                    )}
+                  </section>
+                )}
+              </>
+            )}
           </div>
         )}
       </section>
