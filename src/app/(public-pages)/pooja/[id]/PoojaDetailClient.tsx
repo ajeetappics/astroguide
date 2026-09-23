@@ -59,6 +59,7 @@ export default function PoojaDetailClient({ slugOrId, initialPooja }: PoojaDetai
   const { isPoojaEnabled } = usePoojaConfig();
   // State to show all categories or only 3
   const [showAllCategories, setShowAllCategories] = useState(false);
+  const [imageLoaded, setImageLoaded] = useState(false);
   const [pooja, setPooja] = useState<any>(initialPooja || null);
   const [isLoading, setIsLoading] = useState(!initialPooja);
 
@@ -176,7 +177,7 @@ export default function PoojaDetailClient({ slugOrId, initialPooja }: PoojaDetai
     : categories.slice(0, 3);
 
   const poojaName = pooja?.name || pooja?.title || pooja?.poojaName || 'Sacred Pooja';
-  const poojaImage = pooja?.image || pooja?.imageUrl || '/images/poojas/ganesha_pooja.jpg';
+  const poojaImage = pooja?.image || pooja?.imageUrl || '';
   const rawPrice = pooja?.basePrice ?? pooja?.price ?? 1100;
   const formattedPrice = (typeof rawPrice === 'number' ? rawPrice : Number(String(rawPrice).replace(/[^\d.]/g, '')) || 1100).toLocaleString('en-IN');
 
@@ -208,14 +209,21 @@ export default function PoojaDetailClient({ slugOrId, initialPooja }: PoojaDetai
 
             {/* Left: Image with aspect 4:2.5 to match right-side details height */}
             <div className="w-full lg:w-[42%] max-w-full lg:max-w-[460px] flex-shrink-0 mx-auto lg:mx-0">
-              <div className="relative aspect-[4/2.5] w-full rounded-[18px] sm:rounded-[22px] overflow-hidden shadow-md border border-orange-100/70 bg-[#FFFDF9] group">
-                <Image
-                  src={poojaImage}
-                  alt={poojaName}
-                  fill
-                  className="object-cover transition-transform duration-700 group-hover:scale-105"
-                  priority
-                />
+              <div className={`relative aspect-[4/2.5] w-full rounded-[18px] sm:rounded-[22px] overflow-hidden shadow-md border border-orange-100/70 bg-gradient-to-r from-orange-100/70 via-amber-50 to-orange-100/70 group ${!imageLoaded ? 'animate-pulse' : ''}`}>
+                {poojaImage ? (
+                  <Image
+                    src={poojaImage}
+                    alt={poojaName}
+                    fill
+                    className={`object-cover transition-all duration-500 group-hover:scale-105 ${imageLoaded ? 'opacity-100' : 'opacity-0'}`}
+                    priority
+                    onLoad={() => setImageLoaded(true)}
+                  />
+                ) : (
+                  <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-orange-100/70 to-amber-100/40">
+                    <span className="text-4xl text-[#F6971E]/40 font-bold font-['Inria_Serif']">🕉️</span>
+                  </div>
+                )}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent pointer-events-none" />
               </div>
             </div>

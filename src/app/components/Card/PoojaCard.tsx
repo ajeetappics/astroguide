@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -26,6 +26,7 @@ interface PoojaCardProps {
 
 export default function PoojaCard({ pooja, basePath = "/pooja" }: PoojaCardProps) {
   const router = useRouter();
+  const [imageLoaded, setImageLoaded] = useState(false);
   const identifier = pooja.slug || pooja.id;
   const poojaId = pooja._id || pooja.id;
   const baseUrl = (process.env.NEXT_PUBLIC_URL || '').replace(/\/$/, '');
@@ -41,15 +42,22 @@ export default function PoojaCard({ pooja, basePath = "/pooja" }: PoojaCardProps
       className="bg-white rounded-2xl overflow-hidden shadow-[0_4px_16px_rgba(0,0,0,0.04)] hover:shadow-[0_12px_30px_rgba(246,151,30,0.12)] border border-[#F6971E]/15 hover:border-[#F6971E]/50 transition-all duration-500 hover:-translate-y-1 flex flex-col group h-full cursor-pointer"
     >
 
-      {/* Image Section - Compact height */}
-      <div className="relative h-[110px] sm:h-[125px] md:h-[135px] w-full overflow-hidden">
-        <Image
-          src={pooja.image}
-          alt={pooja.title}
-          fill
-          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 350px"
-          className="object-cover transition-transform duration-700 group-hover:scale-105"
-        />
+      {/* Image Section - Shimmer effect while loading or fallback */}
+      <div className={`relative h-[110px] sm:h-[125px] md:h-[135px] w-full overflow-hidden bg-gradient-to-r from-orange-100/70 via-amber-50 to-orange-100/70 ${!imageLoaded ? 'animate-pulse' : ''}`}>
+        {pooja.image ? (
+          <Image
+            src={pooja.image}
+            alt={pooja.title}
+            fill
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 350px"
+            className={`object-cover transition-all duration-500 group-hover:scale-105 ${imageLoaded ? 'opacity-100' : 'opacity-0'}`}
+            onLoad={() => setImageLoaded(true)}
+          />
+        ) : (
+          <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-orange-100/70 to-amber-100/40">
+            <span className="text-2xl text-[#F6971E]/40 font-bold font-['Inria_Serif']">🕉️</span>
+          </div>
+        )}
         <div className="absolute inset-0 bg-gradient-to-t from-[#4A1A14]/80 to-transparent"></div>
 
         {/* Tag Badge if present */}

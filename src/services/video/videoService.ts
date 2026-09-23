@@ -76,7 +76,7 @@ export const mapVideoItem = (item: any, index = 0): CelebrityVideoItem => {
     rawThumbnail = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
   }
 
-  const thumbnail = sanitizeImageUrl(rawThumbnail, `/images/astro-${(index % 4) + 1}.jpg`);
+  const thumbnail = rawThumbnail ? sanitizeImageUrl(rawThumbnail, '') : '';
 
   return {
     id,

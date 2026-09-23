@@ -48,7 +48,7 @@ export async function generateMetadata(): Promise<Metadata> {
       type: "website",
       images: [
         {
-          url: `${SITE_URL}/images/pooja-hero-banner.jpg`,
+          url: `${SITE_URL}/logo_new.png`,
           width: 1200,
           height: 630,
           alt: "Book Online Puja & Sacred Vedic Havans - Balaji AstroGuide"
@@ -59,7 +59,7 @@ export async function generateMetadata(): Promise<Metadata> {
       card: "summary_large_image",
       title: "Online Puja Booking | Sacred Vedic Pujas & Havans - Balaji AstroGuide",
       description: "Book authentic online Vedic pujas, havans, and rituals performed by certified expert priests.",
-      images: [`${SITE_URL}/images/pooja-hero-banner.jpg`]
+      images: [`${SITE_URL}/logo_new.png`]
     },
     robots: {
       index: true,

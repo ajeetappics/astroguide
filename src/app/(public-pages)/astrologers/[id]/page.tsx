@@ -59,7 +59,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     astro.avatar ||
     (Array.isArray(astro.photos) && astro.photos[0]) ||
     '';
-  const profileImage = sanitizeImageUrl(rawProfileImg, `${SITE_URL}/images/astro-1.jpg`);
+  const profileImage = rawProfileImg
+    ? sanitizeImageUrl(rawProfileImg, '')
+    : `${SITE_URL}/logo_new.png`;
 
   const title = `Consult ${astroName} Online (${experience} Exp) - Top Astrologer | Balaji AstroGuide`;
   const description = `Consult ${astroName} on Balaji AstroGuide. ${experience} of experience in ${expertise}. Languages: ${languages}. Verified client reviews. Instant consultation via Chat & Call at ₹${price}/min.`;
@@ -143,7 +145,9 @@ export default async function AstrologerDetailPage({ params }: PageProps) {
       astro.avatar ||
       (Array.isArray(astro.photos) && astro.photos[0]) ||
       '';
-    const imageUrl = sanitizeImageUrl(rawProfileImg, `${SITE_URL}/images/astro-1.jpg`);
+    const imageUrl = rawProfileImg
+      ? sanitizeImageUrl(rawProfileImg, '')
+      : `${SITE_URL}/logo_new.png`;
 
     const expertiseList = Array.isArray(astro.expertise)
       ? astro.expertise.map((e: any) => (typeof e === 'string' ? e : e?.expertiseName)).filter(Boolean)

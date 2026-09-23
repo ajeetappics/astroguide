@@ -50,11 +50,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const numericPrice = typeof rawPrice === 'number' ? rawPrice : Number(String(rawPrice).replace(/[^\d.]/g, '')) || 1100;
   const formattedPrice = numericPrice.toLocaleString('en-IN');
 
-  const rawImg = pooja?.image || pooja?.imageUrl || pooja?.bannerImage || '/images/poojas/ganesha_pooja.jpg';
-  const sanitizedImg = sanitizeImageUrl(rawImg, '/images/poojas/ganesha_pooja.jpg');
-  const absoluteImageUrl = sanitizedImg.startsWith('http')
-    ? sanitizedImg
-    : `${SITE_URL}${sanitizedImg.startsWith('/') ? '' : '/'}${sanitizedImg}`;
+  const rawImg = pooja?.image || pooja?.imageUrl || pooja?.bannerImage || '';
+  const sanitizedImg = rawImg ? sanitizeImageUrl(rawImg, '') : '';
+  const absoluteImageUrl = sanitizedImg
+    ? (sanitizedImg.startsWith('http') ? sanitizedImg : `${SITE_URL}${sanitizedImg.startsWith('/') ? '' : '/'}${sanitizedImg}`)
+    : `${SITE_URL}/logo_new.png`;
 
   const canonicalUrl = `${SITE_URL}/pooja/${pooja.slug || slugOrId}`;
 
@@ -149,11 +149,11 @@ export default async function PujaDetailPage({ params }: PageProps) {
   if (pooja) {
     const poojaName = pooja?.name || pooja?.title || pooja?.poojaName || 'Sacred Vedic Pooja';
     const canonicalUrl = `${SITE_URL}/pooja/${pooja.slug || slugOrId}`;
-    const rawImg = pooja?.image || pooja?.imageUrl || pooja?.bannerImage || '/images/poojas/ganesha_pooja.jpg';
-    const sanitizedImg = sanitizeImageUrl(rawImg, '/images/poojas/ganesha_pooja.jpg');
-    const absoluteImageUrl = sanitizedImg.startsWith('http')
-      ? sanitizedImg
-      : `${SITE_URL}${sanitizedImg.startsWith('/') ? '' : '/'}${sanitizedImg}`;
+    const rawImg = pooja?.image || pooja?.imageUrl || pooja?.bannerImage || '';
+    const sanitizedImg = rawImg ? sanitizeImageUrl(rawImg, '') : '';
+    const absoluteImageUrl = sanitizedImg
+      ? (sanitizedImg.startsWith('http') ? sanitizedImg : `${SITE_URL}${sanitizedImg.startsWith('/') ? '' : '/'}${sanitizedImg}`)
+      : `${SITE_URL}/logo_new.png`;
 
     const rawPrice = pooja?.basePrice ?? pooja?.price ?? 1100;
     const numericPrice = typeof rawPrice === 'number' ? rawPrice : Number(String(rawPrice).replace(/[^\d.]/g, '')) || 1100;

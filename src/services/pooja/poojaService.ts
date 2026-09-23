@@ -23,8 +23,8 @@ export const mapPoojaToCard = (raw: any): PujaData => {
     'Experience authentic Vedic rituals performed by certified expert priests.';
 
   // Safe image formatting
-  const rawImg = raw.image || raw.imageUrl || raw.bannerImage || raw.thumbnail || '/images/poojas/ganesha_pooja.jpg';
-  const image = sanitizeImageUrl(rawImg);
+  const rawImg = raw.image || raw.imageUrl || raw.bannerImage || raw.thumbnail || '';
+  const image = rawImg ? sanitizeImageUrl(rawImg) : '';
 
   // Price formatting
   let priceVal = raw.basePrice ?? raw.price ?? raw.offerPrice ?? 1100;
