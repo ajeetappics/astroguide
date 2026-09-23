@@ -72,7 +72,7 @@ export default function AstrologerCard({ astro: astroProp, astrologer: astrologe
               alt={astro.name}
               fill
               sizes="110px"
-              className="object-cover"
+              className="object-cover object-top"
               onError={() => setImgSrc(defaultAstroImg)}
             />
 
@@ -155,13 +155,13 @@ export default function AstrologerCard({ astro: astroProp, astrologer: astrologe
         className="hidden lg:flex bg-white rounded-2xl shadow-[0_4px_16px_rgba(0,0,0,0.05)] border border-[#F6971E]/20 hover:border-[#F6971E]/50 hover:shadow-[0_8px_24px_rgba(246,151,30,0.12)] transition-all duration-300 hover:-translate-y-1 flex-col relative overflow-hidden h-full cursor-pointer group"
       >
         {/* Top Image Section */}
-        <div className="block relative w-full aspect-[4/3] overflow-hidden bg-gray-100">
+        <div className="block relative w-full aspect-[4/4.6] overflow-hidden bg-gray-50">
           <Image
             src={imgSrc}
             alt={astro.name}
             fill
             sizes="(max-width: 1200px) 25vw, 280px"
-            className="object-cover transition-transform duration-500 group-hover:scale-105"
+            className="object-cover object-top transition-transform duration-500 group-hover:scale-105"
             onError={() => setImgSrc(defaultAstroImg)}
           />
 
