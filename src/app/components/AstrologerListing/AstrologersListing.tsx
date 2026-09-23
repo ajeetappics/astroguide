@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useState, useEffect, useMemo } from 'react';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import {
   BsX,
@@ -15,7 +16,11 @@ import {
 } from 'react-icons/bs';
 import AstrologerCard, { AstrologerData } from '../Card/AstrologerCard';
 import AstrologerHeroBanner from './AstrologerHeroBanner';
-import { fetchAstroList } from '@/services/astrologer/astrologerService';
+import {
+  fetchAstroList,
+  fetchExpertiseList,
+  ExpertiseCategory,
+} from '@/services/astrologer/astrologerService';
 
 export interface AstrologersListingProps {
   initialCategory?: string;
@@ -50,21 +55,7 @@ const getPageNumbers = (current: number, total: number): (number | string)[] => 
   return pages;
 };
 
-const TABS = [
-  "All",
-  "Business",
-  "Career",
-  "Wealth",
-  "Education",
-  "Finance",
-  "Legal",
-  "Child",
-  "Marriage",
-  "Love",
-  "Tarot",
-  "Palm Read",
-  "Health"
-];
+
 
 const CATEGORY_DESCRIPTIONS: Record<string, { title: string; subtitle: string }> = {
   business: {
@@ -149,12 +140,43 @@ const ASTROLOGER_FAQS = [
 ];
 
 export default function AstrologersListing({ initialCategory = "All" }: AstrologersListingProps) {
+  const [categories, setCategories] = useState<ExpertiseCategory[]>([]);
+
+  // Fetch categories dynamically from /user/expertise API
+  useEffect(() => {
+    let isMounted = true;
+    fetchExpertiseList().then((data) => {
+      if (isMounted && data && data.length > 0) {
+        setCategories(data);
+      }
+    }).catch((err) => console.warn("Error fetching categories:", err));
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  const tabItems = useMemo(() => {
+    return [
+      { name: "All", slug: "all", icon: "" },
+      ...categories.map((c) => ({
+        name: c.name,
+        slug: c.slug,
+        icon: c.icon,
+      })),
+    ];
+  }, [categories]);
+
   // Find matching tab case-insensitively
   const resolvedCategory = useMemo(() => {
     if (!initialCategory || initialCategory.toLowerCase() === "all") return "All";
-    const match = TABS.find(t => t.toLowerCase() === initialCategory.toLowerCase());
-    return match || initialCategory;
-  }, [initialCategory]);
+    const catMatch = categories.find(
+      c => c.slug.toLowerCase() === initialCategory.toLowerCase() ||
+           c.name.toLowerCase() === initialCategory.toLowerCase()
+    );
+    if (catMatch) return catMatch.name;
+
+    return initialCategory;
+  }, [initialCategory, categories]);
 
   const [activeTab, setActiveTab] = useState<string>(resolvedCategory);
   const [allAstrologers, setAllAstrologers] = useState<AstrologerData[]>([]);
@@ -229,7 +251,9 @@ export default function AstrologersListing({ initialCategory = "All" }: Astrolog
     if (tab.toLowerCase() === "all") {
       router.push('/astrologers');
     } else {
-      router.push(`/astrologers/category/${tab.toLowerCase()}`);
+      const match = categories.find(c => c.name.toLowerCase() === tab.toLowerCase());
+      const slug = match?.slug || tab.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+      router.push(`/astrologers/category/${slug}`);
     }
   };
 
@@ -335,18 +359,36 @@ export default function AstrologersListing({ initialCategory = "All" }: Astrolog
               .overflow-x-auto::-webkit-scrollbar { display: none; }
             `}} />
             <div className="flex items-center gap-2 sm:gap-2.5 md:gap-3 w-max">
-              {TABS.map((tab) => {
-                const isActive = activeTab.toLowerCase() === tab.toLowerCase();
+              {tabItems.map((tab) => {
+                const isActive = activeTab.toLowerCase() === tab.name.toLowerCase();
                 return (
                   <button
-                    key={tab}
-                    onClick={() => handleTabChange(tab)}
-                    className={`px-3.5 py-1.5 sm:px-5 sm:py-2 md:px-6 md:py-2.5 rounded-full text-xs sm:text-sm font-bold font-helvetica transition-all shadow-xs sm:shadow-sm flex-shrink-0 cursor-pointer ${isActive
+                    key={tab.slug || tab.name}
+                    onClick={() => handleTabChange(tab.name)}
+                    className={`inline-flex items-center gap-2 px-3.5 py-0.5 sm:px-4 sm:py-2 md:px-5 md:py-2 rounded-full text-xs sm:text-sm font-bold font-helvetica transition-all shadow-xs sm:shadow-sm flex-shrink-0 cursor-pointer ${isActive
                       ? 'bg-[#F6971E] text-white border-none shadow-[0_4px_10px_rgba(246,151,30,0.3)]'
                       : 'bg-white border border-gray-200 text-[#4A2B23] hover:border-[#F6971E]/50 hover:text-[#F6971E]'
                       }`}
                   >
-                    {tab}
+                    {tab.icon ? (
+                      <div className={`w-5 h-5 sm:w-6 sm:h-6 rounded-full flex items-center justify-center flex-shrink-0 overflow-hidden bg-white`}>
+                        <Image
+                          src={tab.icon}
+                          alt={tab.name}
+                          width={20}
+                          height={20}
+                          unoptimized
+                          className="w-3.5 h-3.5 sm:w-4 sm:h-4 object-contain"
+                        />
+                      </div>
+                    ) : tab.name === 'All' ? (
+                      <span className={`w-4 h-4 sm:w-5 sm:h-5 rounded-full flex items-center justify-center flex-shrink-0 text-[10px] ${
+                        isActive ? 'bg-white/25 text-white' : 'bg-[#FFF9F0] text-[#F6971E]'
+                      }`}>
+                        ★
+                      </span>
+                    ) : null}
+                    <span className="whitespace-nowrap">{tab.name}</span>
                   </button>
                 );
               })}

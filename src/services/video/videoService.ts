@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { sanitizeImageUrl } from '@/utils/imageUtils';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://preprod.api.astrovani-balaji.store';
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export interface CelebrityVideoItem {
   id: string;
@@ -105,49 +105,42 @@ export const fetchCelebrityVideos = async (
   page = 1,
   limit = 10
 ): Promise<FetchCelebrityVideosResponse> => {
-  const urls = [
-    `${API_URL}/admin/video?page=${page}&limit=${limit}`,
-    `https://preprod.api.astrovani-balaji.store/admin/video?page=${page}&limit=${limit}`,
-  ];
+  try {
+    const response = await axios.get(`${API_URL}/admin/video?page=${page}&limit=${limit}`);
+    const resData = response.data;
+    let rawList: any[] = [];
 
-  for (const url of urls) {
-    try {
-      const response = await axios.get(url);
-      const resData = response.data;
-      let rawList: any[] = [];
-
-      if (Array.isArray(resData?.data)) {
-        rawList = resData.data;
-      } else if (Array.isArray(resData?.data?.docs)) {
-        rawList = resData.data.docs;
-      } else if (Array.isArray(resData?.data?.videos)) {
-        rawList = resData.data.videos;
-      } else if (Array.isArray(resData?.videos)) {
-        rawList = resData.videos;
-      } else if (Array.isArray(resData?.docs)) {
-        rawList = resData.docs;
-      } else if (Array.isArray(resData?.result)) {
-        rawList = resData.result;
-      } else if (Array.isArray(resData)) {
-        rawList = resData;
-      }
-
-      if (rawList && rawList.length > 0) {
-        // Filter out soft-deleted items
-        const activeList = rawList.filter((item: any) => !item.isVideoDeleted && item.status !== false);
-        const listToMap = activeList.length > 0 ? activeList : rawList;
-        const videos = listToMap.map((item, index) => mapVideoItem(item, index));
-
-        return {
-          videos,
-          mainTitle: resData?.mainTitle,
-          totalDocs: resData?.paginationDetail?.totalDocs || videos.length,
-          totalPages: resData?.paginationDetail?.totalPages || 1,
-        };
-      }
-    } catch (error) {
-      console.warn(`Error fetching videos from ${url}:`, error);
+    if (Array.isArray(resData?.data)) {
+      rawList = resData.data;
+    } else if (Array.isArray(resData?.data?.docs)) {
+      rawList = resData.data.docs;
+    } else if (Array.isArray(resData?.data?.videos)) {
+      rawList = resData.data.videos;
+    } else if (Array.isArray(resData?.videos)) {
+      rawList = resData.videos;
+    } else if (Array.isArray(resData?.docs)) {
+      rawList = resData.docs;
+    } else if (Array.isArray(resData?.result)) {
+      rawList = resData.result;
+    } else if (Array.isArray(resData)) {
+      rawList = resData;
     }
+
+    if (rawList && rawList.length > 0) {
+      // Filter out soft-deleted items
+      const activeList = rawList.filter((item: any) => !item.isVideoDeleted && item.status !== false);
+      const listToMap = activeList.length > 0 ? activeList : rawList;
+      const videos = listToMap.map((item, index) => mapVideoItem(item, index));
+
+      return {
+        videos,
+        mainTitle: resData?.mainTitle,
+        totalDocs: resData?.paginationDetail?.totalDocs || videos.length,
+        totalPages: resData?.paginationDetail?.totalPages || 1,
+      };
+    }
+  } catch (error) {
+    console.warn(`Error fetching videos from ${API_URL}/admin/video:`, error);
   }
 
   return {

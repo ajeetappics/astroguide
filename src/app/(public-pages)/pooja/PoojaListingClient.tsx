@@ -2,8 +2,10 @@
 
 import React, { useState, useEffect, useMemo } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { BsSearch, BsX, BsChevronLeft, BsChevronRight } from 'react-icons/bs';
 import PoojaCard, { PujaData } from '../../components/Card/PoojaCard';
+import { BannerSlide } from '@/services/banner/bannerService';
 import {
   fetchPoojaList,
   fetchPoojaCategories,
@@ -26,17 +28,40 @@ interface SectionData {
 }
 
 export default function PoojaListingClient() {
-  const [sliderImages, setSliderImages] = useState<string[]>([]);
+  const [webSlides, setWebSlides] = useState<BannerSlide[]>([]);
+  const [mobileSlides, setMobileSlides] = useState<BannerSlide[]>([]);
+  const [isMobileOrTablet, setIsMobileOrTablet] = useState(false);
   const [currentSlide, setCurrentSlide] = useState(0);
+
+  // Detect mobile & tablet view (< 1024px)
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobileOrTablet(window.innerWidth < 1024);
+    };
+
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   // Fetch dynamic banners from /user/pooja-banner
   useEffect(() => {
     let isMounted = true;
     const loadBanners = async () => {
       try {
-        const banners = await fetchPoojaBanners();
-        if (isMounted && banners && banners.length > 0) {
-          setSliderImages(banners);
+        const bannersData = await fetchPoojaBanners();
+        if (isMounted) {
+          if (bannersData.webHeroSlides && bannersData.webHeroSlides.length > 0) {
+            setWebSlides(bannersData.webHeroSlides);
+          } else if (bannersData.heroSlides && bannersData.heroSlides.length > 0) {
+            setWebSlides(bannersData.heroSlides);
+          }
+
+          if (bannersData.mobileHeroSlides && bannersData.mobileHeroSlides.length > 0) {
+            setMobileSlides(bannersData.mobileHeroSlides);
+          } else if (bannersData.heroSlides && bannersData.heroSlides.length > 0) {
+            setMobileSlides(bannersData.heroSlides);
+          }
         }
       } catch (err) {
         console.error('Error fetching pooja banners:', err);
@@ -49,14 +74,26 @@ export default function PoojaListingClient() {
     };
   }, []);
 
+  // Select active slides based on screen: forMobile on Mobile/Tab, forWeb on Web/Desktop
+  const currentSlides = isMobileOrTablet
+    ? (mobileSlides.length > 0 ? mobileSlides : webSlides)
+    : (webSlides.length > 0 ? webSlides : mobileSlides);
+
+  // Reset index if out of bounds
+  useEffect(() => {
+    if (currentSlide >= currentSlides.length) {
+      setCurrentSlide(0);
+    }
+  }, [currentSlides.length, currentSlide]);
+
   // Auto-play for the slider
   useEffect(() => {
-    if (sliderImages.length === 0) return;
+    if (currentSlides.length <= 1) return;
     const timer = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % sliderImages.length);
+      setCurrentSlide((prev) => (prev + 1) % currentSlides.length);
     }, 4000);
     return () => clearInterval(timer);
-  }, [sliderImages.length]);
+  }, [currentSlides.length]);
 
   // State management for API integration
   const [poojas, setPoojas] = useState<PujaData[]>([]);
@@ -410,28 +447,31 @@ export default function PoojaListingClient() {
 
             {/* Right Banner Image Slider (Matching App Slider 2:1 Aspect Ratio) */}
             <div className="relative z-10 w-full lg:w-[52%] flex items-center justify-center">
-              {sliderImages.length > 0 ? (
+              {currentSlides.length > 0 ? (
                 <>
                   <div className="relative w-full aspect-[2/1] overflow-hidden rounded-2xl md:rounded-3xl shadow-[0_15px_35px_rgba(0,0,0,0.12)] border border-orange-100/70">
-                    {sliderImages.map((img, index) => {
+                    {currentSlides.map((slide, index) => {
                       let position = 0;
                       if (index === currentSlide) position = 0;
-                      else if (index === (currentSlide + 1) % sliderImages.length) position = 1;
+                      else if (index === (currentSlide + 1) % currentSlides.length) position = 1;
                       else position = -1;
 
-                      return (
+                      const hasLink = Boolean(slide.href && slide.href !== '#');
+
+                      const slideContent = (
                         <div
-                          key={index}
-                          className={`absolute top-0 left-0 w-full h-full transition-all duration-700 ease-in-out cursor-pointer ${position === 0
-                            ? 'z-20 opacity-100 translate-x-0'
-                            : position === 1
-                              ? 'z-10 opacity-0 translate-x-full'
-                              : 'z-10 opacity-0 -translate-x-full'
-                            }`}
-                          onClick={() => setCurrentSlide(index)}
+                          className={`absolute top-0 left-0 w-full h-full transition-all duration-700 ease-in-out ${
+                            hasLink ? 'cursor-pointer' : ''
+                          } ${
+                            position === 0
+                              ? 'z-20 opacity-100 translate-x-0'
+                              : position === 1
+                                ? 'z-10 opacity-0 translate-x-full'
+                                : 'z-10 opacity-0 -translate-x-full'
+                          }`}
                         >
                           <Image
-                            src={img}
+                            src={slide.imageUrl}
                             alt={`Pooja Slide ${index + 1}`}
                             fill
                             unoptimized
@@ -440,18 +480,29 @@ export default function PoojaListingClient() {
                           />
                         </div>
                       );
+
+                      return hasLink ? (
+                        <Link key={index} href={slide.href!}>
+                          {slideContent}
+                        </Link>
+                      ) : (
+                        <div key={index} onClick={() => setCurrentSlide(index)}>
+                          {slideContent}
+                        </div>
+                      );
                     })}
                   </div>
 
                   {/* Navigation Dots */}
-                  {sliderImages.length > 1 && (
+                  {currentSlides.length > 1 && (
                     <div className="absolute -bottom-[26px] left-1/2 -translate-x-1/2 flex gap-2 z-30">
-                      {sliderImages.map((_, idx) => (
+                      {currentSlides.map((_, idx) => (
                         <button
                           key={idx}
                           onClick={() => setCurrentSlide(idx)}
-                          className={`w-2.5 h-2.5 rounded-full transition-all duration-300 cursor-pointer ${idx === currentSlide ? 'bg-[#F6971E] w-6' : 'bg-gray-300 hover:bg-[#F6971E]/50'
-                            }`}
+                          className={`w-2.5 h-2.5 rounded-full transition-all duration-300 cursor-pointer ${
+                            idx === currentSlide ? 'bg-[#F6971E] w-6' : 'bg-gray-300 hover:bg-[#F6971E]/50'
+                          }`}
                           aria-label={`Go to slide ${idx + 1}`}
                         />
                       ))}

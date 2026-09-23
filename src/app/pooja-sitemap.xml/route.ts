@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 
 const SITE_URL = process.env.NEXT_PUBLIC_URL || 'http://localhost:3000';
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://preprod.api.astrovani-balaji.store';
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export async function GET() {
   const currentDate = new Date().toISOString().split('T')[0];

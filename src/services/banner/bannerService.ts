@@ -1,14 +1,21 @@
 import axios from 'axios';
 import { sanitizeImageUrl } from '@/utils/imageUtils';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://preprod.api.astrovani-balaji.store';
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export interface BannerRedirectionItem {
-  imageUrl: string;
+  imageUrl?: string;
+  image?: string;
   redirectFor?: string;
   _id?: string;
   poojaId?: string | null;
   redirectionUrl?: string;
+  slug?: string;
+  shastrijiSlug?: string;
+  shastriSlug?: string;
+  astroSlug?: string;
+  astrologerSlug?: string;
+  shastriji?: any;
 }
 
 export interface ConsultationBannerItem {
@@ -28,7 +35,11 @@ export interface HomeHeroSlide {
   href?: string;
   redirectFor?: string;
   poojaId?: string | null;
+  _id?: string;
+  slug?: string;
 }
+
+export type BannerSlide = HomeHeroSlide;
 
 export interface HomeBannerResponse {
   heroSlides: HomeHeroSlide[];
@@ -40,93 +51,100 @@ export interface HomeBannerResponse {
 }
 
 /**
- * Normalizes backend banner redirect URLs to internal Next.js application routes
+ * Normalizes backend banner redirect URLs to internal Next.js application routes:
+ * 1: "shastriji" -> astrologer detail page using shastriji slug (fallback to _id) (/astrologers/:slugOrId)
+ * 2: "connect_page" -> astrologer listing page (/astrologers)
+ * 3: "pooja_listing" -> pooja listing page (/pooja)
+ * 4: "pooja_details" -> pooja detail page with poojaId (/pooja/:poojaId)
+ * Baki ke liye kuch nahi krna h -> '#'
  */
 export const normalizeBannerRedirectUrl = (
   rawUrl?: string,
   redirectFor?: string,
-  poojaId?: string | null
+  poojaId?: string | null,
+  id?: string | null,
+  slug?: string | null
 ): string => {
-  if (!rawUrl && !redirectFor) return '#';
+  const rf = (redirectFor || '').trim().toLowerCase();
 
-  let clean = (rawUrl || '').trim();
-
-  // Strip markdown link format: [url](url)
-  const mdMatch = clean.match(/\[.*?\]\((.*?)\)/);
-  if (mdMatch && mdMatch[1]) {
-    clean = mdMatch[1].trim();
+  // 1: "redirectFor": "shastriji" -> astrologer detail page using shastriji slug (or fallback to _id)
+  if (rf === 'shastriji') {
+    return `/astrologers/shashtriji`;
   }
 
-  // Strip external backend host if present
-  try {
-    if (clean.startsWith('http://') || clean.startsWith('https://')) {
-      const parsed = new URL(clean);
-      if (
-        parsed.hostname.includes('astrovani') ||
-        parsed.hostname.includes('balaji') ||
-        parsed.hostname.includes('preprod.api')
-      ) {
-        clean = parsed.pathname + parsed.search;
-      }
-    }
-  } catch {}
+  // 2: "redirectFor": "connect_page" -> astrologer listing page
+  if (rf === 'connect_page') {
+    return '/astrologers';
+  }
 
-  // Map known backend redirects to frontend routes
-  if (clean.includes('/pooja-listing') || redirectFor === 'pooja_listing') {
+  // 3: "redirectFor": "pooja_listing" -> pooja listing page
+  if (rf === 'pooja_listing') {
     return '/pooja';
   }
-  if (clean.includes('/pooja-details/') || redirectFor === 'pooja_details') {
-    const id = poojaId || clean.split('/pooja-details/')[1]?.replace(/[^\w-]/g, '');
-    return id ? `/pooja/${id}` : '/pooja';
-  }
-  if (clean.includes('/shastriji') || redirectFor === 'shastriji') {
-    return '/astrologers';
-  }
-  if (clean.includes('/connect') || redirectFor === 'connect_page') {
-    return '/astrologers';
-  }
-  if (clean.includes('/add-money') || redirectFor === 'recharge_pack') {
-    return '/astrologers';
-  }
-  if (clean.includes('/services') || redirectFor === 'services') {
-    return '/services';
+
+  // 4: "redirectFor": "pooja_details" -> pooja detail page with poojaId
+  if (rf === 'pooja_details') {
+    let pId = (poojaId || '').trim();
+    if (!pId && rawUrl && rawUrl.includes('/pooja-details/')) {
+      pId = rawUrl.split('/pooja-details/')[1]?.split('?')[0]?.replace(/[^\w-]/g, '');
+    }
+    return pId ? `/pooja/${pId}` : '/pooja';
   }
 
-  return clean || '#';
+  // Baki ke liye kuch nahi krna h
+  return '#';
 };
 
 /**
  * Helper to extract hero slides from banner group
  */
-const extractHeroSlidesFromGroup = (group: any): HomeHeroSlide[] => {
+export const extractHeroSlidesFromGroup = (group: any): HomeHeroSlide[] => {
   if (!group) return [];
   const heroSlides: HomeHeroSlide[] = [];
   const redirections: BannerRedirectionItem[] = Array.isArray(group.heroBannersRedirection)
     ? group.heroBannersRedirection
     : [];
-  const heroBanners: string[] = Array.isArray(group.heroBanners)
+  const heroBanners: any[] = Array.isArray(group.heroBanners)
     ? group.heroBanners
     : [];
 
   if (redirections.length > 0) {
     redirections.forEach((item) => {
-      let img = (item.imageUrl || '').trim();
+      let img = (item.imageUrl || item.image || '').trim();
       const mdMatch = img.match(/\[.*?\]\((.*?)\)/);
       if (mdMatch && mdMatch[1]) {
         img = mdMatch[1].trim();
       }
       const sanitizedImg = sanitizeImageUrl(img);
-      const href = normalizeBannerRedirectUrl(item.redirectionUrl, item.redirectFor, item.poojaId);
+
+      const shastriSlug =
+        item.shastrijiSlug ||
+        item.slug ||
+        item.shastriSlug ||
+        item.astroSlug ||
+        item.astrologerSlug ||
+        (typeof item.shastriji === 'string' ? item.shastriji : item.shastriji?.slug) ||
+        '';
+
+      const href = normalizeBannerRedirectUrl(
+        item.redirectionUrl,
+        item.redirectFor,
+        item.poojaId,
+        item._id,
+        shastriSlug
+      );
       heroSlides.push({
         imageUrl: sanitizedImg,
         href,
         redirectFor: item.redirectFor,
         poojaId: item.poojaId,
+        _id: item._id,
+        slug: shastriSlug || undefined,
       });
     });
   } else if (heroBanners.length > 0) {
-    heroBanners.forEach((raw) => {
-      let img = (raw || '').trim();
+    heroBanners.forEach((raw: any) => {
+      let img = (typeof raw === 'string' ? raw : raw?.imageUrl || raw?.image || '').trim();
       const mdMatch = img.match(/\[.*?\]\((.*?)\)/);
       if (mdMatch && mdMatch[1]) {
         img = mdMatch[1].trim();
@@ -145,14 +163,8 @@ const extractHeroSlidesFromGroup = (group: any): HomeHeroSlide[] => {
  * GET https://preprod.api.astrovani-balaji.store/user/banner
  */
 export const fetchHomeBanners = async (): Promise<HomeBannerResponse> => {
-  const urls = [
-    `${API_URL}/user/banner`,
-    `https://preprod.api.astrovani-balaji.store/user/banner`,
-  ];
-
-  for (const url of urls) {
-    try {
-      const response = await axios.get(url);
+  try {
+    const response = await axios.get(`${API_URL}/user/banner`);
       const resData = response.data;
       let dataList: any[] = [];
 
@@ -168,8 +180,8 @@ export const fetchHomeBanners = async (): Promise<HomeBannerResponse> => {
           dataList[0];
 
         const mobileGroup =
-          dataList.find((b: any) => b.bannerType === 'forMobile') ||
-          dataList.find((b: any) => b.bannerType === 'forMobileView');
+          dataList.find((b: any) => b.bannerType === 'forMobileView') ||
+          dataList.find((b: any) => b.bannerType === 'forMobile');
 
         const webHeroSlides = extractHeroSlidesFromGroup(webGroup);
         const mobileHeroSlides = extractHeroSlidesFromGroup(mobileGroup);
@@ -200,10 +212,9 @@ export const fetchHomeBanners = async (): Promise<HomeBannerResponse> => {
           serviceBanners,
           topBanners,
         };
-      }
-    } catch (error) {
-      console.warn(`Error fetching banners from ${url}:`, error);
     }
+  } catch (error) {
+    console.warn(`Error fetching banners from ${API_URL}/user/banner:`, error);
   }
 
   return {

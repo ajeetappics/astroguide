@@ -1,8 +1,13 @@
 import axios from 'axios';
 import { PujaData } from '@/app/components/Card/PoojaCard';
 import { sanitizeImageUrl } from '@/utils/imageUtils';
+import {
+  BannerSlide,
+  extractHeroSlidesFromGroup,
+  normalizeBannerRedirectUrl,
+} from '@/services/banner/bannerService';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://preprod.api.astrovani-balaji.store';
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 /**
  * Maps raw backend Pooja object from /user/pooja to the PujaData UI structure
@@ -102,50 +107,41 @@ export const fetchPoojaCategories = async (
   page = 1,
   limit = 10
 ): Promise<PoojaCategory[]> => {
-  const urls = [
-    `${API_URL}/user/category?page=${page}&limit=${limit}`,
-  ];
-  if (!API_URL.includes('localhost:8000')) {
-    urls.push(`http://localhost:8000/user/category?page=${page}&limit=${limit}`);
-  }
-
-  for (const url of urls) {
-    try {
-      const response = await axios.get(url);
-      const resData = response.data;
-      let rawList: any[] = [];
-      if (Array.isArray(resData?.data)) {
-        rawList = resData.data;
-      } else if (Array.isArray(resData?.data?.docs)) {
-        rawList = resData.data.docs;
-      } else if (Array.isArray(resData?.data?.categories)) {
-        rawList = resData.data.categories;
-      } else if (Array.isArray(resData?.categories)) {
-        rawList = resData.categories;
-      } else if (Array.isArray(resData?.docs)) {
-        rawList = resData.docs;
-      } else if (Array.isArray(resData?.result)) {
-        rawList = resData.result;
-      } else if (Array.isArray(resData)) {
-        rawList = resData;
-      }
-
-      if (rawList && rawList.length > 0) {
-        const mapped = rawList.map((item: any) => ({
-          _id: item._id || item.id || '',
-          categoryName: item.categoryName || item.name || item.title || 'Category',
-          icon: item.icon || item.image || '',
-          isSpell: Boolean(item.isSpell),
-          isActive: item.isActive !== undefined ? item.isActive : true,
-          createdAt: item.createdAt,
-          updatedAt: item.updatedAt,
-        }));
-        poojaCategories = mapped;
-        return mapped;
-      }
-    } catch (error) {
-      // Continue to next URL or fallback
+  try {
+    const response = await axios.get(`${API_URL}/user/category?page=${page}&limit=${limit}`);
+    const resData = response.data;
+    let rawList: any[] = [];
+    if (Array.isArray(resData?.data)) {
+      rawList = resData.data;
+    } else if (Array.isArray(resData?.data?.docs)) {
+      rawList = resData.data.docs;
+    } else if (Array.isArray(resData?.data?.categories)) {
+      rawList = resData.data.categories;
+    } else if (Array.isArray(resData?.categories)) {
+      rawList = resData.categories;
+    } else if (Array.isArray(resData?.docs)) {
+      rawList = resData.docs;
+    } else if (Array.isArray(resData?.result)) {
+      rawList = resData.result;
+    } else if (Array.isArray(resData)) {
+      rawList = resData;
     }
+
+    if (rawList && rawList.length > 0) {
+      const mapped = rawList.map((item: any) => ({
+        _id: item._id || item.id || '',
+        categoryName: item.categoryName || item.name || item.title || 'Category',
+        icon: item.icon || item.image || '',
+        isSpell: Boolean(item.isSpell),
+        isActive: item.isActive !== undefined ? item.isActive : true,
+        createdAt: item.createdAt,
+        updatedAt: item.updatedAt,
+      }));
+      poojaCategories = mapped;
+      return mapped;
+    }
+  } catch (error) {
+    console.warn(`Error fetching pooja categories from ${API_URL}/user/category:`, error);
   }
 
   return poojaCategories;
@@ -199,7 +195,7 @@ export interface PaginationDetail {
 
 export interface FetchPoojaListResponse {
   poojas: PujaData[];
-  title?:string,
+  title?: string,
   total: number;
   totalPages: number;
   currentPage: number;
@@ -561,19 +557,24 @@ export const fetchPoojaBySlug = async (slugOrId: string): Promise<any> => {
 
 export const fetchPoojaById = fetchPoojaBySlug;
 
+export interface PoojaBannerResponse {
+  heroSlides: BannerSlide[];
+  webHeroSlides: BannerSlide[];
+  mobileHeroSlides: BannerSlide[];
+}
+
 /**
  * Fetch Pooja Banners from API:
  * GET https://preprod.api.astrovani-balaji.store/user/pooja-banner
+ * Supports heroBannersRedirection with 4 rules:
+ * 1: "shastriji" -> /astrologers/:id
+ * 2: "connect_page" -> /astrologers
+ * 3: "pooja_listing" -> /pooja
+ * 4: "pooja_details" -> /pooja/:poojaId
  */
-export const fetchPoojaBanners = async (): Promise<string[]> => {
-  const urls = [
-    `${API_URL}/user/pooja-banner`,
-    `https://preprod.api.astrovani-balaji.store/user/pooja-banner`,
-  ];
-
-  for (const url of urls) {
-    try {
-      const response = await axios.get(url);
+export const fetchPoojaBanners = async (): Promise<PoojaBannerResponse> => {
+  try {
+    const response = await axios.get(`${API_URL}/user/pooja-banner`);
       const resData = response.data;
       let rawList: any[] = [];
 
@@ -592,29 +593,67 @@ export const fetchPoojaBanners = async (): Promise<string[]> => {
       }
 
       if (rawList && rawList.length > 0) {
-        const images: string[] = rawList
-          .map((item: any) => {
-            if (typeof item === 'string') return sanitizeImageUrl(item);
-            const img =
-              item.image ||
-              item.imageUrl ||
-              item.bannerImage ||
-              item.banner ||
-              item.url ||
-              item.photo ||
-              '';
-            return img ? sanitizeImageUrl(img) : '';
-          })
-          .filter(Boolean);
+        const webGroup =
+          rawList.find((b: any) => b.bannerType === 'forWeb') ||
+          rawList[0];
 
-        if (images.length > 0) {
-          return images;
+        const mobileGroup =
+          rawList.find((b: any) => b.bannerType === 'forMobileView') ||
+          rawList.find((b: any) => b.bannerType === 'forMobile');
+
+        const webHeroSlides = extractHeroSlidesFromGroup(webGroup);
+        const mobileHeroSlides = extractHeroSlidesFromGroup(mobileGroup);
+
+        if (webHeroSlides.length === 0 && mobileHeroSlides.length === 0) {
+          const directSlides: BannerSlide[] = rawList
+            .map((item: any) => {
+              if (typeof item === 'string') {
+                return { imageUrl: sanitizeImageUrl(item), href: '#' };
+              }
+              const img =
+                item.imageUrl ||
+                item.image ||
+                item.bannerImage ||
+                item.banner ||
+                item.url ||
+                '';
+              const href = normalizeBannerRedirectUrl(
+                item.redirectionUrl,
+                item.redirectFor,
+                item.poojaId,
+                item._id
+              );
+              return {
+                imageUrl: sanitizeImageUrl(img),
+                href,
+                redirectFor: item.redirectFor,
+                poojaId: item.poojaId,
+                _id: item._id,
+                slug: item.redirectFor === 'shastriji' ? 'shastriji' : undefined,
+              };
+            })
+            .filter((s) => Boolean(s.imageUrl));
+
+          return {
+            heroSlides: directSlides,
+            webHeroSlides: directSlides,
+            mobileHeroSlides: directSlides,
+          };
         }
-      }
-    } catch (error) {
-      console.warn(`Error fetching pooja banners from ${url}:`, error);
+
+      return {
+        heroSlides: webHeroSlides.length > 0 ? webHeroSlides : mobileHeroSlides,
+        webHeroSlides,
+        mobileHeroSlides,
+      };
     }
+  } catch (error) {
+    console.warn(`Error fetching pooja banners from ${API_URL}/user/pooja-banner:`, error);
   }
 
-  return [];
+  return {
+    heroSlides: [],
+    webHeroSlides: [],
+    mobileHeroSlides: [],
+  };
 };

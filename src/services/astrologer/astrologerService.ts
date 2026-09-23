@@ -4,7 +4,7 @@ import { sanitizeImageUrl } from '@/utils/imageUtils';
 
 export { sanitizeImageUrl };
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://preprod.api.astrovani-balaji.store';
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 /**
  * Formats name in Title Case (e.g., "soumya singh" -> "Soumya Singh")
@@ -276,6 +276,83 @@ export const fetchAstrologerFeedbacks = async (
   } catch (error) {
     console.error(`Error fetching feedbacks for astrologer id ${id}:`, error);
     return null;
+  }
+};
+
+export interface ExpertiseItem {
+  _id: string;
+  expertiseName: string;
+  expertiseIcon?: string;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface FetchExpertiseResponse {
+  statusCode: number;
+  success: boolean;
+  message: string;
+  data: ExpertiseItem[];
+  paginationDetail?: {
+    totalDocs: number;
+    totalPages: number;
+    page: number;
+    limit: number;
+  };
+}
+
+export interface ExpertiseCategory {
+  _id: string;
+  name: string;
+  slug: string;
+  icon: string;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+const DEFAULT_EXPERTISE_ICON = "https://storage.googleapis.com/astro-vani-storage/admin/1772532058726-career-path%20(2).png";
+
+/**
+ * Fetch astrologer expertise / categories from GET API:
+ * GET ${API_URL}/user/expertise
+ */
+export const fetchExpertiseList = async (): Promise<ExpertiseCategory[]> => {
+  try {
+    const response = await axios.get<FetchExpertiseResponse>(`${API_URL}/user/expertise`);
+    const resData = response.data;
+    const rawList: ExpertiseItem[] = Array.isArray(resData?.data) ? resData.data : [];
+
+    const categories: ExpertiseCategory[] = rawList
+      .filter((item) => Boolean(item?.expertiseName?.trim()))
+      .map((item) => {
+        const name = item.expertiseName.trim();
+
+        let icon = (item.expertiseIcon || '').trim();
+        const mdMatch = icon.match(/\[.*?\]\((.*?)\)/);
+        if (mdMatch && mdMatch[1]) {
+          icon = mdMatch[1].trim();
+        } else if (icon.startsWith('[') && icon.endsWith(']')) {
+          icon = icon.slice(1, -1).trim();
+        }
+
+        const isValidUrl = icon.startsWith('http://') || icon.startsWith('https://') || icon.startsWith('/');
+        const sanitizedIcon = isValidUrl ? sanitizeImageUrl(icon, DEFAULT_EXPERTISE_ICON) : DEFAULT_EXPERTISE_ICON;
+
+        const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+
+        return {
+          _id: item._id,
+          name,
+          slug,
+          icon: sanitizedIcon,
+          createdAt: item.createdAt,
+          updatedAt: item.updatedAt,
+        };
+      });
+
+    return categories;
+  } catch (error) {
+    console.warn(`Error fetching expertise from ${API_URL}/user/expertise:`, error);
+    return [];
   }
 };
 

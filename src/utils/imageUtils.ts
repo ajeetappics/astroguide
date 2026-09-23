@@ -9,6 +9,14 @@ export const sanitizeImageUrl = (url: any, fallback = "/images/astro-1.jpg"): st
 
   let clean = url.trim();
 
+  // Strip markdown link format [label](url) or [url]
+  const mdMatch = clean.match(/\[.*?\]\((.*?)\)/);
+  if (mdMatch && mdMatch[1]) {
+    clean = mdMatch[1].trim();
+  } else if (clean.startsWith('[') && clean.endsWith(']')) {
+    clean = clean.slice(1, -1).trim();
+  }
+
   // If it's a relative S3 or storage path like "vedic-images/...", "admin/...", "astrologers/..."
   if (!clean.startsWith('http://') && !clean.startsWith('https://') && !clean.startsWith('/')) {
     if (clean.startsWith('vedic-images/')) {
