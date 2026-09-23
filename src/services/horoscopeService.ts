@@ -387,14 +387,14 @@ export const TIMEFRAMES: TimeframeConfig[] = [
     subTitle: 'Comprehensive 7-day planetary forecast and transit cycles',
     periodDescription: 'Cosmic outlook for this week.'
   },
-  {
-    id: 'monthly',
-    slug: 'monthly-horoscope',
-    label: 'Monthly',
-    title: 'Monthly Horoscope',
-    subTitle: 'Major planetary shifts, retrogrades and 30-day forecast',
-    periodDescription: 'Cosmic overview for this month.'
-  },
+  // {
+  //   id: 'monthly',
+  //   slug: 'monthly-horoscope',
+  //   label: 'Monthly',
+  //   title: 'Monthly Horoscope',
+  //   subTitle: 'Major planetary shifts, retrogrades and 30-day forecast',
+  //   periodDescription: 'Cosmic overview for this month.'
+  // },
   {
     id: 'yearly',
     slug: 'yearly-horoscope',

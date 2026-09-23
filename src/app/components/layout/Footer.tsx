@@ -146,11 +146,11 @@ export default function Footer() {
                   Weekly Horoscope
                 </Link>
               </li>
-              <li>
+              {/* <li>
                 <Link href="/horoscope/monthly-horoscope" className="hover:text-[#F6971E] hover:underline text-left block transition-colors">
                   Monthly Horoscope
                 </Link>
-              </li>
+              </li> */}
               <li>
                 <Link href="/horoscope/yearly-horoscope" className="hover:text-[#F6971E] hover:underline text-left block transition-colors">
                   Yearly Horoscope
