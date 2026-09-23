@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { BsPlayFill, BsX } from 'react-icons/bs';
 import { fetchCelebrityVideos, CelebrityVideoItem } from '@/services/video/videoService';
+import defaultAstroImg from '@/assets/images/astro-image.jpg';
 
 export default function CelebritySpotlight() {
   const [videos, setVideos] = useState<CelebrityVideoItem[]>([]);
@@ -159,7 +160,7 @@ export default function CelebritySpotlight() {
                     className="object-cover group-hover:scale-105 transition-transform duration-500"
                     onError={(e) => {
                       const target = e.target as HTMLImageElement;
-                      target.src = '/images/astro-1.jpg';
+                      target.src = defaultAstroImg.src;
                     }}
                   />
                   <div className="absolute inset-0 bg-black/15 group-hover:bg-black/25 transition-colors duration-300" />

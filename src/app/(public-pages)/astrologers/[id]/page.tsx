@@ -50,7 +50,16 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     20;
 
   const canonicalUrl = `${SITE_URL}/astrologers/${astro.slug || astroId}`;
-  const profileImage = sanitizeImageUrl(astro.profileImg);
+  const rawProfileImg =
+    astro.profileImg ||
+    astro.profileImage ||
+    astro.astroProfileImg ||
+    astro.imageUrl ||
+    astro.image ||
+    astro.avatar ||
+    (Array.isArray(astro.photos) && astro.photos[0]) ||
+    '';
+  const profileImage = sanitizeImageUrl(rawProfileImg, `${SITE_URL}/images/astro-1.jpg`);
 
   const title = `Consult ${astroName} Online (${experience} Exp) - Top Astrologer | Balaji AstroGuide`;
   const description = `Consult ${astroName} on Balaji AstroGuide. ${experience} of experience in ${expertise}. Languages: ${languages}. Verified client reviews. Instant consultation via Chat & Call at ₹${price}/min.`;
@@ -125,7 +134,16 @@ export default async function AstrologerDetailPage({ params }: PageProps) {
     const astroName = astro.fullName || 'Astrologer';
     const slug = astro.slug || astroId;
     const pageUrl = `${SITE_URL}/astrologers/${slug}`;
-    const imageUrl = sanitizeImageUrl(astro.profileImg);
+    const rawProfileImg =
+      astro.profileImg ||
+      astro.profileImage ||
+      astro.astroProfileImg ||
+      astro.imageUrl ||
+      astro.image ||
+      astro.avatar ||
+      (Array.isArray(astro.photos) && astro.photos[0]) ||
+      '';
+    const imageUrl = sanitizeImageUrl(rawProfileImg, `${SITE_URL}/images/astro-1.jpg`);
 
     const expertiseList = Array.isArray(astro.expertise)
       ? astro.expertise.map((e: any) => (typeof e === 'string' ? e : e?.expertiseName)).filter(Boolean)

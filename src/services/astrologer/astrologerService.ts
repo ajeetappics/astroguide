@@ -106,9 +106,20 @@ export const mapAstroToCard = (raw: any): AstrologerData => {
     }
   }
 
-  // Safe image URL handling
-  const rawImg = raw.profileImg || raw.imageUrl || raw.avatar;
-  const imageUrl = sanitizeImageUrl(rawImg);
+  // Safe image URL handling: check all potential backend fields
+  const rawImg =
+    raw.profileImg ||
+    raw.profileImage ||
+    raw.astroProfileImg ||
+    raw.imageUrl ||
+    raw.image ||
+    raw.avatar ||
+    raw.photo ||
+    raw.basicInfo?.profileImg ||
+    (Array.isArray(raw.photos) && raw.photos[0]) ||
+    (Array.isArray(raw.basicInfo?.photos) && raw.basicInfo.photos[0]) ||
+    '';
+  const imageUrl = sanitizeImageUrl(rawImg, '');
 
   return {
     id: raw._id || raw.id || String(Math.random()),

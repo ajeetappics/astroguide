@@ -22,6 +22,7 @@ import {
 } from 'react-icons/bs';
 import { fetchAstrologerById, fetchAstrologerFeedbacks } from '@/services/astrologer/astrologerService';
 import { sanitizeImageUrl } from '@/utils/imageUtils';
+import defaultAstroImg from '@/assets/images/astro-image.jpg';
 
 const REVIEWS_PER_PAGE = 10;
 
@@ -64,6 +65,22 @@ export default function AstrologerDetailClient({
   initialFeedbacks
 }: AstrologerDetailClientProps) {
   const [astro, setAstro] = useState<any>(initialAstro || null);
+
+  const getRawAstroImg = (a: any) =>
+    a?.profileImg ||
+    a?.profileImage ||
+    a?.astroProfileImg ||
+    a?.imageUrl ||
+    a?.image ||
+    a?.avatar ||
+    a?.photo ||
+    (Array.isArray(a?.photos) && a.photos[0]) ||
+    '';
+
+  const [profileImgSrc, setProfileImgSrc] = useState<any>(() => {
+    const raw = getRawAstroImg(initialAstro);
+    return raw ? sanitizeImageUrl(raw, defaultAstroImg.src) : defaultAstroImg;
+  });
   const [feedbacksData, setFeedbacksData] = useState<any>(initialFeedbacks || null);
   const [reviewPage, setReviewPage] = useState(1);
   const [isReviewsLoading, setIsReviewsLoading] = useState(false);
@@ -72,6 +89,15 @@ export default function AstrologerDetailClient({
   const [previewImage, setPreviewImage] = useState<string | null>(null);
   const [activeVideo, setActiveVideo] = useState<string | null>(null);
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
+
+  useEffect(() => {
+    const raw = getRawAstroImg(astro);
+    if (raw) {
+      setProfileImgSrc(sanitizeImageUrl(raw, defaultAstroImg.src));
+    } else {
+      setProfileImgSrc(defaultAstroImg);
+    }
+  }, [astro]);
 
   useEffect(() => {
     let isMounted = true;
@@ -358,11 +384,12 @@ export default function AstrologerDetailClient({
             <div className="relative w-24 h-24 sm:w-28 sm:h-28 md:w-32 md:h-32 flex-shrink-0 mx-auto md:mx-0">
               <div className="w-full h-full rounded-full border-[3px] border-[#F6971E]/30 overflow-hidden bg-white shadow-md relative">
                 <Image
-                  src={sanitizeImageUrl(currentAstro.profileImg)}
+                  src={profileImgSrc}
                   alt={`${astroName} - Vedic Astrologer on Balaji AstroGuide`}
                   fill
                   className="object-cover"
                   priority
+                  onError={() => setProfileImgSrc(defaultAstroImg)}
                 />
               </div>
             </div>

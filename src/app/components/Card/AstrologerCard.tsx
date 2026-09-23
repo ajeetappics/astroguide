@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { BsStarFill, BsPatchCheckFill, BsCurrencyRupee } from 'react-icons/bs';
 import { sanitizeImageUrl } from '@/utils/imageUtils';
+import defaultAstroImg from '@/assets/images/astro-image.jpg';
 
 export interface AstrologerData {
   id: string;
@@ -32,10 +33,16 @@ export default function AstrologerCard({ astro: astroProp, astrologer: astrologe
   const astro = (astroProp || astrologerProp)!;
   const router = useRouter();
 
-  const [imgSrc, setImgSrc] = useState(() => sanitizeImageUrl(astro?.imageUrl));
+  const [imgSrc, setImgSrc] = useState<any>(() =>
+    astro?.imageUrl ? sanitizeImageUrl(astro.imageUrl, defaultAstroImg.src) : defaultAstroImg
+  );
 
   useEffect(() => {
-    setImgSrc(sanitizeImageUrl(astro?.imageUrl));
+    if (astro?.imageUrl) {
+      setImgSrc(sanitizeImageUrl(astro.imageUrl, defaultAstroImg.src));
+    } else {
+      setImgSrc(defaultAstroImg);
+    }
   }, [astro?.imageUrl]);
 
   if (!astro) return null;
@@ -66,7 +73,7 @@ export default function AstrologerCard({ astro: astroProp, astrologer: astrologe
               fill
               sizes="110px"
               className="object-cover"
-              onError={() => setImgSrc("/images/astro-1.jpg")}
+              onError={() => setImgSrc(defaultAstroImg)}
             />
 
             {/* Trending Badge Overlay */}
@@ -155,7 +162,7 @@ export default function AstrologerCard({ astro: astroProp, astrologer: astrologe
             fill
             sizes="(max-width: 1200px) 25vw, 280px"
             className="object-cover transition-transform duration-500 group-hover:scale-105"
-            onError={() => setImgSrc("/images/astro-1.jpg")}
+            onError={() => setImgSrc(defaultAstroImg)}
           />
 
           {/* Trending Badge Overlay on Desktop Web */}
