@@ -3,12 +3,13 @@
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import {
   BsChevronRight,
   BsChevronDown
 } from 'react-icons/bs';
 import { fetchPoojaById, getCategoryByIdOrName } from '@/services/pooja/poojaService';
+import { usePoojaConfig } from '@/app/context/PoojaConfigContext';
 
 export interface CategoryItem {
   _id?: string;
@@ -49,6 +50,8 @@ function ExpandableText({ text, limit = 200 }: { text: string; limit?: number })
 }
 
 export default function SpellDetails() {
+  const router = useRouter();
+  const { isPoojaEnabled } = usePoojaConfig();
   const params = useParams();
   const slugOrId = (params?.id as string) || '';
 
@@ -58,6 +61,16 @@ export default function SpellDetails() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    if (!isPoojaEnabled) {
+      router.replace('/');
+    }
+  }, [isPoojaEnabled, router]);
+
+  useEffect(() => {
+    if (!isPoojaEnabled) {
+      setIsLoading(false);
+      return;
+    }
     if (!slugOrId) return;
     let isMounted = true;
 
@@ -88,6 +101,10 @@ export default function SpellDetails() {
 
   // FAQ State (default first open)
   const [openFaq, setOpenFaq] = useState<number | null>(0);
+
+  if (!isPoojaEnabled) {
+    return null;
+  }
 
   // Loading skeleton state
   if (isLoading && !spell) {

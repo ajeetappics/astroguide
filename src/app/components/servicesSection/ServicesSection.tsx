@@ -2,6 +2,7 @@
 
 import React from 'react';
 import ServiceCard from '../Card/ServiceCard';
+import { usePoojaConfig } from '@/app/context/PoojaConfigContext';
 const servicesData = [
   {
     icon: "/images/panchang.svg",
@@ -69,6 +70,17 @@ const servicesData = [
 ];
 
 export default function ServicesSection() {
+  const { isPoojaEnabled } = usePoojaConfig();
+  const displayServices = isPoojaEnabled
+    ? servicesData
+    : servicesData.filter(
+        (s) =>
+          s.title !== "Pooja" &&
+          s.href !== "/pooja" &&
+          s.title !== "Spell" &&
+          s.href !== "/spell"
+      );
+
   return (
     <section className="bg-white py-5 md:py-8 overflow-hidden relative">
       <style>{`
@@ -119,7 +131,7 @@ export default function ServicesSection() {
           <div
             className="services-scroll flex items-start justify-start lg:justify-between gap-3 sm:gap-4 md:gap-5 overflow-x-auto pb-4 pt-1"
           >
-            {servicesData.map((service, index) => (
+            {displayServices.map((service, index) => (
               <div key={index} className="flex-none w-20 sm:w-24 md:w-28 lg:w-auto">
                 <ServiceCard
                   icon={service.icon}

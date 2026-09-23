@@ -13,6 +13,7 @@ import HowItWorks from './components/worksection/HowItWorks';
 import Testimonials from './components/clientreview/Testimonials';
 import PersonalizedServices from './components/personalizedservices/PersonalizedServices';
 import TrustSection from './components/TrustSection/TrustSection';
+import { fetchPoojaToggle } from '@/services/appConfig/appConfigService';
 
 const SITE_URL = process.env.NEXT_PUBLIC_URL || 'https://astroguide-three.vercel.app';
 
@@ -74,7 +75,9 @@ export const metadata: Metadata = {
   }
 };
 
-function page() {
+async function page() {
+  const isPoojaEnabled = await fetchPoojaToggle();
+
   return (
     <main>
       <MainBanner />
@@ -82,8 +85,8 @@ function page() {
       <AstrologerSection />
       <CelebritySpotlight />
       <BrowseCategory />
-      <PoojaSection />
-      <SpellSection />
+      {isPoojaEnabled && <PoojaSection />}
+      {isPoojaEnabled && <SpellSection />}
       <DailyHoroscope />
       <HowItWorks />
       <PersonalizedServices />
@@ -91,7 +94,7 @@ function page() {
       <BlogSection />
       <TrustSection />
     </main>
-  )
+  );
 }
 
-export default page
+export default page;

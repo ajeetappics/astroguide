@@ -1,10 +1,16 @@
 import { NextResponse } from 'next/server';
 import { staticUrls } from '../sitemap.xml/staticSitemaps';
+import { fetchPoojaToggle } from '@/services/appConfig/appConfigService';
 
 const SITE_URL = process.env.NEXT_PUBLIC_URL || 'http://localhost:3000';
 
 export async function GET() {
-  const staticUrlsXml = staticUrls.map(({ loc, lastmod, changefreq, priority }) => {
+  const isPoojaEnabled = await fetchPoojaToggle();
+  const effectiveUrls = isPoojaEnabled
+    ? staticUrls
+    : staticUrls.filter(({ loc }) => !loc.includes('/pooja') && !loc.includes('/spell'));
+
+  const staticUrlsXml = effectiveUrls.map(({ loc, lastmod, changefreq, priority }) => {
     // Make sure we append SITE_URL if loc is a relative path
     const absoluteLoc = loc.startsWith('http') ? loc : `${SITE_URL}${loc}`;
     return `

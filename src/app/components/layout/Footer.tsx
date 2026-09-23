@@ -10,14 +10,17 @@ import { usePopup } from '../popup/PopupContext';
 import Image from 'next/image';
 import { fetchPoojaList } from '@/services/pooja/poojaService';
 import { PujaData } from '../Card/PoojaCard';
+import { usePoojaConfig } from '@/app/context/PoojaConfigContext';
 
 export default function Footer() {
   const { openPopup } = usePopup();
+  const { isPoojaEnabled } = usePoojaConfig();
   const [topPoojas, setTopPoojas] = useState<PujaData[]>([]);
 
   useEffect(() => {
     let isMounted = true;
     const loadFooterPoojas = async () => {
+      if (!isPoojaEnabled) return;
       try {
         const res = await fetchPoojaList(1, 10);
         if (isMounted && res.poojas && res.poojas.length > 0) {
@@ -125,7 +128,7 @@ export default function Footer() {
         </div>
 
         {/* 5 Title-Wise Columns */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-6 sm:gap-8 pt-8">
+        <div className={`grid grid-cols-2 sm:grid-cols-3 ${isPoojaEnabled ? 'lg:grid-cols-5' : 'lg:grid-cols-4'} gap-6 sm:gap-8 pt-8`}>
 
           {/* 1. Horoscope */}
           <div>
@@ -250,29 +253,31 @@ export default function Footer() {
           </div>
 
           {/* 4. Top Poojas */}
-          <div>
-            <h2 className="mb-3.5 sm:mb-4 text-sm sm:text-md font-bold font-['Inria_Serif'] text-[#72271E] uppercase tracking-wider text-left">
-              Top Poojas
-            </h2>
-            <ul className="space-y-2.5 sm:space-y-3 font-helvetica text-[#5C5C5C] text-left text-xs sm:text-sm">
-              {topPoojas.length > 0 ? (
-                topPoojas.map((pooja) => (
-                  <li key={pooja.id}>
-                    <Link
-                      href={`/pooja/${pooja.slug || pooja.id}`}
-                      className="hover:text-[#F6971E] hover:underline text-left block transition-colors line-clamp-1"
-                    >
-                      {pooja.title}
-                    </Link>
-                  </li>
-                ))
-              ) : (
-                [...Array(5)].map((_, i) => (
-                  <li key={i} className="h-4 bg-[#e2d5c8] rounded w-3/4 animate-pulse" />
-                ))
-              )}
-            </ul>
-          </div>
+          {isPoojaEnabled && (
+            <div>
+              <h2 className="mb-3.5 sm:mb-4 text-sm sm:text-md font-bold font-['Inria_Serif'] text-[#72271E] uppercase tracking-wider text-left">
+                Top Poojas
+              </h2>
+              <ul className="space-y-2.5 sm:space-y-3 font-helvetica text-[#5C5C5C] text-left text-xs sm:text-sm">
+                {topPoojas.length > 0 ? (
+                  topPoojas.map((pooja) => (
+                    <li key={pooja.id}>
+                      <Link
+                        href={`/pooja/${pooja.slug || pooja.id}`}
+                        className="hover:text-[#F6971E] hover:underline text-left block transition-colors line-clamp-1"
+                      >
+                        {pooja.title}
+                      </Link>
+                    </li>
+                  ))
+                ) : (
+                  [...Array(5)].map((_, i) => (
+                    <li key={i} className="h-4 bg-[#e2d5c8] rounded w-3/4 animate-pulse" />
+                  ))
+                )}
+              </ul>
+            </div>
+          )}
 
           {/* 5. Company Information */}
           <div>
@@ -319,8 +324,12 @@ export default function Footer() {
           </p>
           <div className="flex flex-wrap justify-center md:justify-end gap-x-4 sm:gap-x-6 gap-y-2 text-xs">
             <Link href="/astrologers" className="hover:text-[#F6971E] hover:underline transition-colors">Astrologers</Link>
-            <Link href="/pooja" className="hover:text-[#F6971E] hover:underline transition-colors">Pooja</Link>
-            <Link href="/spell" className="hover:text-[#F6971E] hover:underline transition-colors">Spells</Link>
+            {isPoojaEnabled && (
+              <Link href="/pooja" className="hover:text-[#F6971E] hover:underline transition-colors">Pooja</Link>
+            )}
+            {isPoojaEnabled && (
+              <Link href="/spell" className="hover:text-[#F6971E] hover:underline transition-colors">Spells</Link>
+            )}
             <Link href="/blog" className="hover:text-[#F6971E] hover:underline transition-colors">Blog</Link>
             {/* <Link href="/privacy-policy" target="_blank" className="hover:text-[#F6971E] hover:underline transition-colors">Privacy Policy</Link>
             <Link href="/terms-of-service" target="_blank" className="hover:text-[#F6971E] hover:underline transition-colors">Terms of Service</Link>

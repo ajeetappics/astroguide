@@ -657,3 +657,6 @@ export const fetchPoojaBanners = async (): Promise<PoojaBannerResponse> => {
     mobileHeroSlides: [],
   };
 };
+
+export { fetchPoojaToggle, type PoojaToggleResponse } from '@/services/appConfig/appConfigService';
+

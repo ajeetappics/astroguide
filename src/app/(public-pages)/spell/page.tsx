@@ -1,13 +1,17 @@
 'use client'
 
 import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { BsSearch, BsX, BsChevronLeft, BsChevronRight } from 'react-icons/bs';
 import PoojaCard, { PujaData } from '../../components/Card/PoojaCard';
 import { fetchSpellList, PaginationDetail } from '@/services/pooja/poojaService';
+import { usePoojaConfig } from '@/app/context/PoojaConfigContext';
 
 const LIMIT = 12;
 
 export default function SpellsPage() {
+  const router = useRouter();
+  const { isPoojaEnabled } = usePoojaConfig();
   const [spells, setSpells] = useState<PujaData[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
@@ -23,8 +27,18 @@ export default function SpellsPage() {
   });
   const [searchQuery, setSearchQuery] = useState('');
 
+  useEffect(() => {
+    if (!isPoojaEnabled) {
+      router.replace('/');
+    }
+  }, [isPoojaEnabled, router]);
+
   // Fetch spell list from API: GET /user/pooja/category/:id?page=X&limit=12
   useEffect(() => {
+    if (!isPoojaEnabled) {
+      setIsLoading(false);
+      return;
+    }
     let isMounted = true;
     const loadSpells = async () => {
       try {
@@ -93,6 +107,10 @@ export default function SpellsPage() {
     pages.push(totalPages);
     return pages;
   };
+
+  if (!isPoojaEnabled) {
+    return null;
+  }
 
   return (
     <main className="min-h-screen bg-[#FFFDF9] pt-24 pb-[60px]">

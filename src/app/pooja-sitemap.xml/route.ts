@@ -1,9 +1,15 @@
 import { NextResponse } from 'next/server';
+import { fetchPoojaToggle } from '@/services/appConfig/appConfigService';
 
 const SITE_URL = process.env.NEXT_PUBLIC_URL || 'http://localhost:3000';
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export async function GET() {
+  const isPoojaEnabled = await fetchPoojaToggle();
+  if (!isPoojaEnabled) {
+    return new NextResponse('Not Found', { status: 404 });
+  }
+
   const currentDate = new Date().toISOString().split('T')[0];
   let dynamicUrlsXml = '';
 

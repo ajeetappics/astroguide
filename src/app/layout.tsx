@@ -10,6 +10,8 @@ import Popup from "./components/popup/Popup";
 import ScrollToTop from "./components/ScrollToTop/ScrollToTop";
 import SchemaScript from "./schema/SchemaScript";
 import { organizationSchema, websiteSchema, serviceSchema } from "./schema/staticSchemas";
+import { fetchPoojaToggle } from "@/services/appConfig/appConfigService";
+import { PoojaConfigProvider } from "./context/PoojaConfigContext";
 
 const helvetica = {
   variable: "--font-helvetica",
@@ -110,11 +112,13 @@ export const viewport: Viewport = {
   themeColor: "#F0DF20",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const isPoojaEnabled = await fetchPoojaToggle();
+
   return (
     <html lang="en">
       <body
@@ -123,6 +127,7 @@ export default function RootLayout({
       >
         <SchemaScript schema={[organizationSchema, websiteSchema, serviceSchema]} />
         <StoreProvider>
+          <PoojaConfigProvider initialEnabled={isPoojaEnabled}>
             <PopupProvider>
               <Header />
               {children}
@@ -147,6 +152,7 @@ export default function RootLayout({
               <Popup />
               <ScrollToTop />
             </PopupProvider>
+          </PoojaConfigProvider>
         </StoreProvider >
       </body>
     </html>

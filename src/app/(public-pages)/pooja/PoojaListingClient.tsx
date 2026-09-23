@@ -3,8 +3,10 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { BsSearch, BsX, BsChevronLeft, BsChevronRight } from 'react-icons/bs';
 import PoojaCard, { PujaData } from '../../components/Card/PoojaCard';
+import { usePoojaConfig } from '@/app/context/PoojaConfigContext';
 import { BannerSlide } from '@/services/banner/bannerService';
 import {
   fetchPoojaList,
@@ -28,10 +30,18 @@ interface SectionData {
 }
 
 export default function PoojaListingClient() {
+  const router = useRouter();
+  const { isPoojaEnabled } = usePoojaConfig();
   const [webSlides, setWebSlides] = useState<BannerSlide[]>([]);
   const [mobileSlides, setMobileSlides] = useState<BannerSlide[]>([]);
   const [isMobileOrTablet, setIsMobileOrTablet] = useState(false);
   const [currentSlide, setCurrentSlide] = useState(0);
+
+  useEffect(() => {
+    if (!isPoojaEnabled) {
+      router.replace('/');
+    }
+  }, [isPoojaEnabled, router]);
 
   // Detect mobile & tablet view (< 1024px)
   useEffect(() => {
@@ -46,6 +56,7 @@ export default function PoojaListingClient() {
 
   // Fetch dynamic banners from /user/pooja-banner
   useEffect(() => {
+    if (!isPoojaEnabled) return;
     let isMounted = true;
     const loadBanners = async () => {
       try {
@@ -134,6 +145,10 @@ export default function PoojaListingClient() {
 
   // Fetch the 3 default sections on mount (15 items each)
   useEffect(() => {
+    if (!isPoojaEnabled) {
+      setIsSectionsLoading(false);
+      return;
+    }
     let isMounted = true;
     const loadDefaultSections = async () => {
       try {

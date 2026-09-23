@@ -4,8 +4,10 @@ import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { fetchHomeBanners, HomeHeroSlide } from "@/services/banner/bannerService";
+import { usePoojaConfig } from "@/app/context/PoojaConfigContext";
 
 export default function MainBanner() {
+  const { isPoojaEnabled } = usePoojaConfig();
   const [webSlides, setWebSlides] = useState<HomeHeroSlide[]>([]);
   const [mobileSlides, setMobileSlides] = useState<HomeHeroSlide[]>([]);
   const [isMobileOrTablet, setIsMobileOrTablet] = useState(false);
@@ -134,7 +136,16 @@ export default function MainBanner() {
                     else if (index === (currentIndex + 1) % currentSlides.length) position = 1;
                     else position = -1;
 
-                    const hasLink = Boolean(slide.href && slide.href !== '#');
+                    const isPoojaOrSpellLink = Boolean(
+                      slide.href &&
+                        (slide.href === '/pooja' ||
+                          slide.href.startsWith('/pooja/') ||
+                          slide.href === '/spell' ||
+                          slide.href.startsWith('/spell/') ||
+                          slide.href === '/spells' ||
+                          slide.href.startsWith('/spells/'))
+                    );
+                    const hasLink = Boolean(slide.href && slide.href !== '#' && (isPoojaEnabled || !isPoojaOrSpellLink));
 
                     const slideContent = (
                       <div

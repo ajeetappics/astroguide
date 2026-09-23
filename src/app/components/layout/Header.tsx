@@ -6,6 +6,7 @@ import { astrovaniLogo, mainLogo } from '@/assets/images';
 import Image from 'next/image';
 import { BsChevronDown } from 'react-icons/bs';
 import { usePopup } from '../popup/PopupContext';
+import { usePoojaConfig } from '@/app/context/PoojaConfigContext';
 
 // Astrologer URL - hardcoded to prevent undefined issues in production
 const ASTROLOGER_URL = (process.env.NEXT_PUBLIC_ASTROLOGER_URL && process.env.NEXT_PUBLIC_ASTROLOGER_URL !== 'undefined') 
@@ -37,6 +38,7 @@ export default function Header() {
     const [isHoroscopeOpen, setIsHoroscopeOpen] = useState(false);
     const [isMobileHoroscopeOpen, setIsMobileHoroscopeOpen] = useState(false);
     const { openPopup } = usePopup();
+    const { isPoojaEnabled } = usePoojaConfig();
 
     return (
         <header className="fixed bg-white/90 backdrop-blur-sm top-0 z-50 w-full shadow-[0_2px_15px_rgba(0,0,0,0.05)] transition-all duration-300">
@@ -173,12 +175,16 @@ export default function Header() {
                             )}
                         </div>
 
-                        <Link href="/pooja" className="text-[#4A2B23] hover:text-[#F6971E] font-helvetica font-semibold text-[14px] xl:text-[15px] transition-colors tracking-wide">
-                            Pooja
-                        </Link>
-                        <Link href="/spell" className="text-[#4A2B23] hover:text-[#F6971E] font-helvetica font-semibold text-[14px] xl:text-[15px] transition-colors tracking-wide">
-                            Spells
-                        </Link>
+                        {isPoojaEnabled && (
+                            <Link href="/pooja" className="text-[#4A2B23] hover:text-[#F6971E] font-helvetica font-semibold text-[14px] xl:text-[15px] transition-colors tracking-wide">
+                                Pooja
+                            </Link>
+                        )}
+                        {isPoojaEnabled && (
+                            <Link href="/spell" className="text-[#4A2B23] hover:text-[#F6971E] font-helvetica font-semibold text-[14px] xl:text-[15px] transition-colors tracking-wide">
+                                Spells
+                            </Link>
+                        )}
                         <Link href={`${process.env.NEXT_PUBLIC_URL}/blog`} className="text-[#4A2B23] hover:text-[#F6971E] font-helvetica font-semibold text-[14px] xl:text-[15px] transition-colors tracking-wide">
                             Blog
                         </Link>
@@ -299,20 +305,24 @@ export default function Header() {
                         )}
                     </div>
 
-                    <Link
-                        href="/pooja"
-                        onClick={() => setIsMobileMenuOpen(false)}
-                        className="block py-2 text-[#4A2B23] hover:text-[#F6971E] hover:bg-white/50 rounded-lg px-4 text-base font-semibold font-helvetica transition-all"
-                    >
-                        Pooja
-                    </Link>
-                    <Link
-                        href="/spell"
-                        onClick={() => setIsMobileMenuOpen(false)}
-                        className="block py-2 text-[#4A2B23] hover:text-[#F6971E] hover:bg-white/50 rounded-lg px-4 text-base font-semibold font-helvetica transition-all"
-                    >
-                        Spells
-                    </Link>
+                    {isPoojaEnabled && (
+                        <Link
+                            href="/pooja"
+                            onClick={() => setIsMobileMenuOpen(false)}
+                            className="block py-2 text-[#4A2B23] hover:text-[#F6971E] hover:bg-white/50 rounded-lg px-4 text-base font-semibold font-helvetica transition-all"
+                        >
+                            Pooja
+                        </Link>
+                    )}
+                    {isPoojaEnabled && (
+                        <Link
+                            href="/spell"
+                            onClick={() => setIsMobileMenuOpen(false)}
+                            className="block py-2 text-[#4A2B23] hover:text-[#F6971E] hover:bg-white/50 rounded-lg px-4 text-base font-semibold font-helvetica transition-all"
+                        >
+                            Spells
+                        </Link>
+                    )}
                     <Link
                         href={`${process.env.NEXT_PUBLIC_URL}/blog`}
                         onClick={() => setIsMobileMenuOpen(false)}

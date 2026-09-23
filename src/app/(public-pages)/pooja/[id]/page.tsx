@@ -1,6 +1,8 @@
 import React from 'react';
 import type { Metadata } from 'next';
+import { notFound } from 'next/navigation';
 import { fetchPoojaById } from '@/services/pooja/poojaService';
+import { fetchPoojaToggle } from '@/services/appConfig/appConfigService';
 import { sanitizeImageUrl } from '@/utils/imageUtils';
 import PoojaDetailClient from './PoojaDetailClient';
 
@@ -16,6 +18,17 @@ interface PageProps {
  * Dynamic Server-Side Metadata for SEO, OpenGraph & Social Sharing
  */
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const isEnabled = await fetchPoojaToggle();
+  if (!isEnabled) {
+    return {
+      title: 'Page Not Found | Balaji AstroGuide',
+      robots: {
+        index: false,
+        follow: false,
+      },
+    };
+  }
+
   const resolvedParams = await params;
   const slugOrId = resolvedParams?.id || '';
 
@@ -121,6 +134,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
  * Server Component with Comprehensive Schema (BreadcrumbList, Product, FAQPage)
  */
 export default async function PujaDetailPage({ params }: PageProps) {
+  const isEnabled = await fetchPoojaToggle();
+  if (!isEnabled) {
+    notFound();
+  }
+
   const resolvedParams = await params;
   const slugOrId = resolvedParams?.id || '';
 

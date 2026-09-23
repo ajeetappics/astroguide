@@ -5,12 +5,19 @@ import Link from 'next/link';
 import { BsArrowRight } from 'react-icons/bs';
 import PoojaCard, { PujaData } from '../Card/PoojaCard';
 import { fetchSpellList } from '@/services/pooja/poojaService';
+import { usePoojaConfig } from '@/app/context/PoojaConfigContext';
 
 export default function SpellSection() {
+  const { isPoojaEnabled } = usePoojaConfig();
   const [spells, setSpells] = useState<PujaData[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    if (!isPoojaEnabled) {
+      setIsLoading(false);
+      return;
+    }
+
     let isMounted = true;
     const loadSpells = async () => {
       try {
@@ -29,9 +36,9 @@ export default function SpellSection() {
     return () => {
       isMounted = false;
     };
-  }, []);
+  }, [isPoojaEnabled]);
 
-  if (!isLoading && spells.length === 0) {
+  if (!isPoojaEnabled || (!isLoading && spells.length === 0)) {
     return null;
   }
 

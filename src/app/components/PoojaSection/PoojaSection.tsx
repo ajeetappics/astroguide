@@ -5,13 +5,20 @@ import Link from 'next/link';
 import { BsArrowRight } from 'react-icons/bs';
 import PoojaCard, { PujaData } from '../Card/PoojaCard';
 import { fetchTrendingPoojas } from '@/services/pooja/poojaService';
+import { usePoojaConfig } from '@/app/context/PoojaConfigContext';
 
 export default function PoojaSection() {
+  const { isPoojaEnabled } = usePoojaConfig();
   const [poojas, setPoojas] = useState<PujaData[]>([]);
   const [title, setTitle] = useState<string>("Personalized Poojas");
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    if (!isPoojaEnabled) {
+      setIsLoading(false);
+      return;
+    }
+
     let isMounted = true;
     const loadPoojas = async () => {
       try {
@@ -33,7 +40,11 @@ export default function PoojaSection() {
     return () => {
       isMounted = false;
     };
-  }, []);
+  }, [isPoojaEnabled]);
+
+  if (!isPoojaEnabled) {
+    return null;
+  }
 
   return (
     <section className="bg-white py-5 md:py-8 px-4 md:px-8 relative overflow-hidden">

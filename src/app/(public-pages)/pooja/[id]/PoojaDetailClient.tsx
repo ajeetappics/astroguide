@@ -7,7 +7,9 @@ import {
   BsChevronRight,
   BsChevronDown
 } from 'react-icons/bs';
+import { useRouter } from 'next/navigation';
 import { fetchPoojaById, getCategoryByIdOrName } from '@/services/pooja/poojaService';
+import { usePoojaConfig } from '@/app/context/PoojaConfigContext';
 
 export interface CategoryItem {
   _id?: string;
@@ -53,12 +55,21 @@ interface PoojaDetailClientProps {
 }
 
 export default function PoojaDetailClient({ slugOrId, initialPooja }: PoojaDetailClientProps) {
+  const router = useRouter();
+  const { isPoojaEnabled } = usePoojaConfig();
   // State to show all categories or only 3
   const [showAllCategories, setShowAllCategories] = useState(false);
   const [pooja, setPooja] = useState<any>(initialPooja || null);
   const [isLoading, setIsLoading] = useState(!initialPooja);
 
   useEffect(() => {
+    if (!isPoojaEnabled) {
+      router.replace('/');
+    }
+  }, [isPoojaEnabled, router]);
+
+  useEffect(() => {
+    if (!isPoojaEnabled) return;
     if (initialPooja) {
       setPooja(initialPooja);
       setIsLoading(false);

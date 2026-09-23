@@ -1,15 +1,22 @@
 "use client";
 import { useEffect } from "react";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import Image from "next/image";
 import { mainLogo } from '@/assets/images';
 import { BsStars } from "react-icons/bs";
+import { usePoojaConfig } from "@/app/context/PoojaConfigContext";
 
 export default function PoojaDetailsRedirect() {
+    const router = useRouter();
+    const { isPoojaEnabled } = usePoojaConfig();
     const searchParams = useSearchParams();
     const poojaId = searchParams.get("poojaId");
 
     useEffect(() => {
+        if (!isPoojaEnabled) {
+            router.replace("/");
+            return;
+        }
         const ANDROID_PACKAGE = "com.astrovani.balaji.app";
         const PLAY_STORE =
             `https://play.google.com/store/apps/details?id=${ANDROID_PACKAGE}`;
