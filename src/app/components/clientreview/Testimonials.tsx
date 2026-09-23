@@ -14,6 +14,7 @@ interface DisplayReview {
   userName: string;
   astroImage: string;
   rating: number;
+  astrologerId?: string;
 }
 
 function ReviewCard({ review }: { review: DisplayReview }) {
@@ -29,13 +30,18 @@ function ReviewCard({ review }: { review: DisplayReview }) {
     }
   }, [review.astroImage]);
 
+  const profileUrl = review.astrologerId ? `/astrologers/${review.astrologerId}` : '/astrologers';
+
   return (
-    <div className="min-w-[280px] sm:min-w-[320px] md:min-w-[340px] max-w-[360px] snap-start bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-5 border border-gray-100 shadow-[0_2px_14px_rgba(0,0,0,0.04)] hover:shadow-[0_6px_20px_rgba(246,151,30,0.08)] transition-all duration-300 flex flex-col justify-between shrink-0">
+    <Link
+      href={profileUrl}
+      className="min-w-[280px] sm:min-w-[320px] md:min-w-[340px] max-w-[360px] snap-start bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-5 border border-gray-100 shadow-[0_2px_14px_rgba(0,0,0,0.04)] hover:border-[#F6971E]/40 hover:shadow-[0_8px_24px_rgba(246,151,30,0.12)] transition-all duration-300 flex flex-col justify-between shrink-0 cursor-pointer group"
+    >
       <div>
         {/* Top: Astrologer Photo + Info */}
         <div className="flex items-center gap-3.5">
           {/* Astrologer Circular Profile Image */}
-          <div className="relative w-14 h-14 sm:w-16 sm:h-16 rounded-full overflow-hidden shrink-0 border-2 border-[#F6971E]/30 bg-gray-50 shadow-xs">
+          <div className="relative w-14 h-14 sm:w-16 sm:h-16 rounded-full overflow-hidden shrink-0 border-2 border-[#F6971E]/30 group-hover:border-[#F6971E] bg-gray-50 shadow-xs transition-colors">
             <Image
               src={imgSrc}
               alt={review.astroName}
@@ -49,7 +55,7 @@ function ReviewCard({ review }: { review: DisplayReview }) {
 
           {/* Astrologer Name + Given By + Stars */}
           <div className="min-w-0 flex-1">
-            <h3 className="font-bold text-[#1f1f1f] text-sm sm:text-base font-helvetica truncate leading-snug">
+            <h3 className="font-bold text-[#1f1f1f] group-hover:text-[#F6971E] text-sm sm:text-base font-helvetica truncate leading-snug transition-colors">
               {review.astroName}
             </h3>
 
@@ -78,7 +84,7 @@ function ReviewCard({ review }: { review: DisplayReview }) {
           </div>
         )}
       </div>
-    </div>
+    </Link>
   );
 }
 
@@ -118,6 +124,7 @@ export default function Testimonials() {
                 userName: (item.userFullName || '').trim() || 'Verified User',
                 astroImage: rawImg,
                 rating: typeof item.rating === 'number' && item.rating > 0 ? item.rating : 5,
+                astrologerId: item.astrologerId || (item as any).astroId || (item as any).astrologerSlug || '',
               };
             });
             setReviewsList(mapped);

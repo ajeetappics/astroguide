@@ -75,8 +75,8 @@ export default function PoojaCard({ pooja, basePath = "/pooja" }: PoojaCardProps
         {/* Footer: Price & Button */}
         <div className="mt-auto flex items-center justify-between pt-2.5 border-t border-gray-100">
           <div className="flex flex-col">
-            <span className="text-gray-400 text-[9px] sm:text-[10px] font-bold uppercase tracking-widest mb-0.5">Starts At</span>
-            <span className="text-base sm:text-lg font-bold text-[#4A2B23] flex items-center">
+            <span className="text-[#742A21] text-[9px] sm:text-[10px] font-bold uppercase tracking-widest">Starts At</span>
+            <span className="text-base sm:text-lg font-bold text-[#742A21] flex items-center">
               <span className="font-sans">₹</span>
               {pooja.price.replace('₹', '')}
             </span>
@@ -84,7 +84,7 @@ export default function PoojaCard({ pooja, basePath = "/pooja" }: PoojaCardProps
           <Link
             href={connectUrl}
             onClick={(e) => e.stopPropagation()}
-            className="bg-[#4A2B23] whitespace-nowrap text-white hover:bg-[#F6971E] font-bold text-xs sm:text-[13px] px-3 py-1.5 rounded-full transition-colors flex items-center gap-1 shadow-2xs cursor-pointer z-10"
+            className="bg-[#FDA42F] whitespace-nowrap text-white hover:bg-[#F6971E] font-bold text-xs sm:text-[13px] px-3 py-1.5 rounded-full transition-colors flex items-center gap-1 shadow-2xs cursor-pointer z-10"
           >
             Connect <BsArrowRight className="text-xs" />
           </Link>
