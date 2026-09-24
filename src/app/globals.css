@@ -81,17 +81,74 @@ body {
 .custom-x-scroll::-webkit-scrollbar-thumb:hover {
   background: #f6971e;
 }
-/* 
-.header_shape::before{
+/* Astrotalk-Style Smooth Dropdown Animation */
+@keyframes dropdownSlideFade {
+  0% {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.97);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.animate-dropdown {
+  animation: dropdownSlideFade 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  will-change: transform, opacity;
+  transform-origin: top center;
+}
+
+/* Spotlight + Smooth Shimmer Menu Item Effect */
+.spotlight-menu-item {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.25s ease;
+}
+
+/* 1. Cursor Follow Spotlight Effect */
+.spotlight-menu-item::before {
   content: '';
   position: absolute;
   top: 0;
-  right: 0;
-  width: 90vw;
+  left: 0;
+  width: 100%;
   height: 100%;
-  background: #F9B04E;
-  z-index: -1;
-  border-radius: 0px 0px 20px 20px;
-  box-shadow: 0px 3px 3.9px 0px #00000040;
+  background: radial-gradient(
+    circle 100px at var(--mouse-x, 50%) var(--mouse-y, 50%),
+    rgba(246, 151, 30, 0.22),
+    transparent 80%
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  z-index: 1;
+}
 
-} */
+/* 2. Shimmer Effect (Enter par left-to-right, Out par right-to-left) */
+.spotlight-menu-item::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(246, 151, 30, 0.25),
+    rgba(255, 255, 255, 0.6),
+    transparent
+  );
+  transition: left 0.6s ease-in-out;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.spotlight-menu-item:hover::before {
+  opacity: 1;
+}
+
+.spotlight-menu-item:hover::after {
+  left: 100%;
+}

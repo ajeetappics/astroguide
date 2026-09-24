@@ -40,6 +40,24 @@ export default function Header() {
     const { openPopup } = usePopup();
     const { isPoojaEnabled } = usePoojaConfig();
 
+    const handleSpotlightMouseMove = (e: React.MouseEvent<HTMLElement>) => {
+        const rect = e.currentTarget.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        e.currentTarget.style.setProperty('--mouse-x', `${x}px`);
+        e.currentTarget.style.setProperty('--mouse-y', `${y}px`);
+    };
+
+    const handleTouchMove = (e: React.TouchEvent<HTMLElement>) => {
+        if (e.touches && e.touches[0]) {
+            const rect = e.currentTarget.getBoundingClientRect();
+            const x = e.touches[0].clientX - rect.left;
+            const y = e.touches[0].clientY - rect.top;
+            e.currentTarget.style.setProperty('--mouse-x', `${x}px`);
+            e.currentTarget.style.setProperty('--mouse-y', `${y}px`);
+        }
+    };
+
     return (
         <header className="fixed bg-white/90 backdrop-blur-sm top-0 z-50 w-full shadow-[0_2px_15px_rgba(0,0,0,0.05)] transition-all duration-300">
             <div className="container mx-auto max-w-7xl px-4">
@@ -69,9 +87,13 @@ export default function Header() {
                     </div>
 
                     {/* Desktop Navigation */}
-                    <div className="hidden lg:flex items-center space-x-4 xl:space-x-6">
-                        <Link href="/astrologers" className="text-[#4A2B23] hover:text-[#F6971E] font-helvetica font-semibold text-[14px] xl:text-[15px] transition-colors tracking-wide">
-                            Astrologers
+                    <div className="hidden lg:flex items-center gap-1 xl:gap-2">
+                        <Link
+                            href="/astrologers"
+                            onMouseMove={handleSpotlightMouseMove}
+                            className="spotlight-menu-item relative flex items-center px-3 py-1.5 rounded-full text-[#4A2B23] hover:text-[#72271E] hover:bg-orange-50/70 border border-transparent hover:border-[#F6971E]/20 font-helvetica font-semibold text-[14px] xl:text-[15px] transition-all tracking-wide"
+                        >
+                            <span className="relative z-10">Astrologers</span>
                         </Link>
 
                         {/* Categories Dropdown */}
@@ -82,50 +104,59 @@ export default function Header() {
                         >
                             <button
                                 onClick={() => setIsCategoryOpen(!isCategoryOpen)}
-                                className="flex items-center gap-1.5 text-[#4A2B23] hover:text-[#F6971E] font-helvetica font-semibold text-[14px] xl:text-[15px] transition-colors tracking-wide cursor-pointer py-2"
+                                onMouseMove={handleSpotlightMouseMove}
+                                className={`spotlight-menu-item relative flex items-center gap-1.5 px-3 py-1.5 rounded-full font-helvetica font-semibold text-[14px] xl:text-[15px] transition-all duration-200 tracking-wide cursor-pointer border border-transparent hover:border-[#F6971E]/20 ${
+                                    isCategoryOpen 
+                                        ? 'text-[#72271E] bg-orange-50 border-[#F6971E]/20' 
+                                        : 'text-[#4A2B23] hover:text-[#72271E] hover:bg-orange-50/70'
+                                }`}
                             >
-                                <span className={isCategoryOpen ? 'text-[#F6971E]' : ''}>Categories</span>
-                                <BsChevronDown className={`text-[10px] transition-transform duration-200 ${
+                                <span className="relative z-10">Categories</span>
+                                <BsChevronDown className={`text-[10px] relative z-10 transition-transform duration-300 ease-out ${
                                     isCategoryOpen ? 'text-[#F6971E] rotate-180' : 'text-[#4A2B23] group-hover:text-[#F6971E]'
                                 }`} />
                             </button>
 
                             {/* Categories Dropdown Card */}
                             {isCategoryOpen && (
-                                <div className="absolute top-full left-1/2 -translate-x-1/2 pt-1.5 w-[250px] z-50">
-                                    <div className="bg-white border border-[#F6971E]/25 rounded-[20px] shadow-[0_12px_40px_rgba(74,43,35,0.12)] p-2.5">
-                                        <ul className="space-y-1">
+                                <div className="absolute top-full left-1/2 -translate-x-1/2 pt-2.5 w-[260px] z-50 animate-dropdown before:content-[''] before:absolute before:-top-3 before:left-0 before:right-0 before:h-3">
+                                    <div className="bg-white/95 backdrop-blur-md border border-[#F6971E]/25 rounded-[22px] shadow-[0_16px_40px_rgba(74,43,35,0.14)] p-2">
+                                        <ul className="space-y-0.5">
                                             {categoryMenuItems.map((item) => (
                                                 <li key={item.href}>
                                                     <Link
                                                         href={item.href}
                                                         onClick={() => setIsCategoryOpen(false)}
-                                                        className="group/item flex items-center justify-between py-2.5 px-3 rounded-xl text-[#4A2B23] hover:text-[#F6971E] hover:bg-orange-50/80 transition-all text-[13.5px] font-semibold font-helvetica"
+                                                        onMouseMove={handleSpotlightMouseMove}
+                                                        className="spotlight-menu-item group/item flex items-center justify-between py-2.5 px-3 rounded-xl text-[#4A2B23] hover:text-[#72271E] hover:bg-gradient-to-r hover:from-orange-50 hover:to-amber-50/70 border border-transparent hover:border-[#F6971E]/20 text-[13.5px] font-semibold font-helvetica"
                                                     >
-                                                        <div className="flex items-center gap-2.5">
-                                                            <Image
-                                                                src={item.icon}
-                                                                alt={item.label}
-                                                                width={20}
-                                                                height={20}
-                                                                className="w-4 h-4 object-contain"
-                                                            />
+                                                        <div className="flex items-center gap-2.5 relative z-10">
+                                                            <div className="w-6 h-6 rounded-lg bg-orange-50/80 group-hover/item:bg-white flex items-center justify-center transition-colors">
+                                                                <Image
+                                                                    src={item.icon}
+                                                                    alt={item.label}
+                                                                    width={16}
+                                                                    height={16}
+                                                                    className="w-4 h-4 object-contain group-hover/item:scale-110 transition-transform duration-200"
+                                                                />
+                                                            </div>
                                                             <span>{item.label}</span>
                                                         </div>
-                                                        <span className="text-[#F6971E] group-hover/item:translate-x-1 transition-all text-sm">
+                                                        <span className="arrow relative z-10 text-[#F6971E] group-hover/item:translate-x-1.5 transition-transform duration-300 text-sm">
                                                             &rarr;
                                                         </span>
                                                     </Link>
                                                 </li>
                                             ))}
-                                            <li className="pt-1.5 mt-1 border-t border-gray-100">
+                                            <li className="pt-1.5 mt-1 border-t border-gray-100/80">
                                                 <Link
                                                     href="/astrologers/category"
                                                     onClick={() => setIsCategoryOpen(false)}
-                                                    className="flex items-center justify-between py-2 px-3 rounded-xl text-xs font-bold text-[#F6971E] hover:bg-orange-50 transition-all font-helvetica"
+                                                    onMouseMove={handleSpotlightMouseMove}
+                                                    className="spotlight-menu-item group/item flex items-center justify-between py-2 px-3 rounded-xl text-xs font-bold text-[#F6971E] hover:bg-orange-50 border border-transparent hover:border-[#F6971E]/20 font-helvetica"
                                                 >
-                                                    <span>View All Categories</span>
-                                                    <span>&rarr;</span>
+                                                    <span className="relative z-10">View All Categories</span>
+                                                    <span className="arrow relative z-10 group-hover/item:translate-x-1.5 transition-transform duration-300">&rarr;</span>
                                                 </Link>
                                             </li>
                                         </ul>
@@ -134,7 +165,7 @@ export default function Header() {
                             )}
                         </div>
 
-                        {/* Horoscope Dropdown (Simple text link matching other nav links) */}
+                        {/* Horoscope Dropdown */}
                         <div
                             className="relative group flex items-center h-full"
                             onMouseEnter={() => setIsHoroscopeOpen(true)}
@@ -142,28 +173,34 @@ export default function Header() {
                         >
                             <button
                                 onClick={() => setIsHoroscopeOpen(!isHoroscopeOpen)}
-                                className="flex items-center gap-1.5 text-[#4A2B23] hover:text-[#F6971E] font-helvetica font-semibold text-[14px] xl:text-[15px] transition-colors tracking-wide cursor-pointer py-2"
+                                onMouseMove={handleSpotlightMouseMove}
+                                className={`spotlight-menu-item relative flex items-center gap-1.5 px-3 py-1.5 rounded-full font-helvetica font-semibold text-[14px] xl:text-[15px] transition-all duration-200 tracking-wide cursor-pointer border border-transparent hover:border-[#F6971E]/20 ${
+                                    isHoroscopeOpen 
+                                        ? 'text-[#72271E] bg-orange-50 border-[#F6971E]/20' 
+                                        : 'text-[#4A2B23] hover:text-[#72271E] hover:bg-orange-50/70'
+                                }`}
                             >
-                                <span className={isHoroscopeOpen ? 'text-[#F6971E]' : ''}>Horoscope</span>
-                                <BsChevronDown className={`text-[10px] transition-transform duration-200 ${
+                                <span className="relative z-10">Horoscope</span>
+                                <BsChevronDown className={`text-[10px] relative z-10 transition-transform duration-300 ease-out ${
                                     isHoroscopeOpen ? 'text-[#F6971E] rotate-180' : 'text-[#4A2B23] group-hover:text-[#F6971E]'
                                 }`} />
                             </button>
 
-                            {/* Dropdown Card - seamless hover zone without empty gap */}
+                            {/* Dropdown Card */}
                             {isHoroscopeOpen && (
-                                <div className="absolute top-full left-1/2 -translate-x-1/2 pt-1.5 w-[250px] z-50">
-                                    <div className="bg-white border border-[#F6971E]/25 rounded-[20px] shadow-[0_12px_40px_rgba(74,43,35,0.12)] p-2.5">
-                                        <ul className="space-y-1">
+                                <div className="absolute top-full left-1/2 -translate-x-1/2 pt-2.5 w-[240px] z-50 animate-dropdown before:content-[''] before:absolute before:-top-3 before:left-0 before:right-0 before:h-3">
+                                    <div className="bg-white/95 backdrop-blur-md border border-[#F6971E]/25 rounded-[22px] shadow-[0_16px_40px_rgba(74,43,35,0.14)] p-2">
+                                        <ul className="space-y-0.5">
                                             {horoscopeMenuItems.map((item) => (
                                                 <li key={item.href}>
                                                     <Link
                                                         href={item.href}
                                                         onClick={() => setIsHoroscopeOpen(false)}
-                                                        className="group/item flex items-center justify-between py-2.5 px-3 rounded-xl text-[#4A2B23] hover:text-[#F6971E] hover:bg-orange-50/80 transition-all text-[13.5px] font-semibold font-helvetica"
+                                                        onMouseMove={handleSpotlightMouseMove}
+                                                        className="spotlight-menu-item group/item flex items-center justify-between py-2.5 px-3.5 rounded-xl text-[#4A2B23] hover:text-[#72271E] hover:bg-gradient-to-r hover:from-orange-50 hover:to-amber-50/70 border border-transparent hover:border-[#F6971E]/20 text-[13.5px] font-semibold font-helvetica"
                                                     >
-                                                        <span>{item.label}</span>
-                                                        <span className="text-[#F6971E] group-hover/item:translate-x-1 transition-all text-sm">
+                                                        <span className="relative z-10">{item.label}</span>
+                                                        <span className="arrow relative z-10 text-[#F6971E] group-hover/item:translate-x-1.5 transition-transform duration-300 text-sm">
                                                             &rarr;
                                                         </span>
                                                     </Link>
@@ -176,23 +213,44 @@ export default function Header() {
                         </div>
 
                         {isPoojaEnabled && (
-                            <Link href="/pooja" className="text-[#4A2B23] hover:text-[#F6971E] font-helvetica font-semibold text-[14px] xl:text-[15px] transition-colors tracking-wide">
-                                Pooja
+                            <Link
+                                href="/pooja"
+                                onMouseMove={handleSpotlightMouseMove}
+                                className="spotlight-menu-item relative flex items-center px-3 py-1.5 rounded-full text-[#4A2B23] hover:text-[#72271E] hover:bg-orange-50/70 border border-transparent hover:border-[#F6971E]/20 font-helvetica font-semibold text-[14px] xl:text-[15px] transition-all tracking-wide"
+                            >
+                                <span className="relative z-10">Pooja</span>
                             </Link>
                         )}
                         {isPoojaEnabled && (
-                            <Link href="/spell" className="text-[#4A2B23] hover:text-[#F6971E] font-helvetica font-semibold text-[14px] xl:text-[15px] transition-colors tracking-wide">
-                                Spells
+                            <Link
+                                href="/spell"
+                                onMouseMove={handleSpotlightMouseMove}
+                                className="spotlight-menu-item relative flex items-center px-3 py-1.5 rounded-full text-[#4A2B23] hover:text-[#72271E] hover:bg-orange-50/70 border border-transparent hover:border-[#F6971E]/20 font-helvetica font-semibold text-[14px] xl:text-[15px] transition-all tracking-wide"
+                            >
+                                <span className="relative z-10">Spells</span>
                             </Link>
                         )}
-                        <Link href={`${process.env.NEXT_PUBLIC_URL}/blog`} className="text-[#4A2B23] hover:text-[#F6971E] font-helvetica font-semibold text-[14px] xl:text-[15px] transition-colors tracking-wide">
-                            Blog
+                        <Link
+                            href={`${process.env.NEXT_PUBLIC_URL}/blog`}
+                            onMouseMove={handleSpotlightMouseMove}
+                            className="spotlight-menu-item relative flex items-center px-3 py-1.5 rounded-full text-[#4A2B23] hover:text-[#72271E] hover:bg-orange-50/70 border border-transparent hover:border-[#F6971E]/20 font-helvetica font-semibold text-[14px] xl:text-[15px] transition-all tracking-wide"
+                        >
+                            <span className="relative z-10">Blog</span>
                         </Link>
-                        <button onClick={openPopup} className="text-[#4A2B23] hover:text-[#F6971E] font-helvetica font-semibold text-[14px] xl:text-[15px] transition-colors tracking-wide cursor-pointer">
-                            Free Kundli
+                        <button
+                            onClick={openPopup}
+                            onMouseMove={handleSpotlightMouseMove}
+                            className="spotlight-menu-item relative flex items-center px-3 py-1.5 rounded-full text-[#4A2B23] hover:text-[#72271E] hover:bg-orange-50/70 border border-transparent hover:border-[#F6971E]/20 font-helvetica font-semibold text-[14px] xl:text-[15px] transition-all tracking-wide cursor-pointer"
+                        >
+                            <span className="relative z-10">Free Kundli</span>
                         </button>
-                        <Link href={ASTROLOGER_URL} target='_blank' className="text-[#4A2B23] hover:text-[#F6971E] font-helvetica font-semibold text-[14px] xl:text-[15px] transition-colors tracking-wide">
-                            Astrologer Registration
+                        <Link
+                            href={ASTROLOGER_URL}
+                            target="_blank"
+                            onMouseMove={handleSpotlightMouseMove}
+                            className="spotlight-menu-item relative flex items-center px-3 py-1.5 rounded-full text-[#4A2B23] hover:text-[#72271E] hover:bg-orange-50/70 border border-transparent hover:border-[#F6971E]/20 font-helvetica font-semibold text-[14px] xl:text-[15px] transition-all tracking-wide"
+                        >
+                            <span className="relative z-10">Astrologer Registration</span>
                         </Link>
                     </div>
 
@@ -216,23 +274,28 @@ export default function Header() {
 
             {/* Mobile Menu */}
             {isMobileMenuOpen && (
-                <div className="lg:hidden absolute top-[70px] left-0 w-full bg-[#FEF8E2]/95 backdrop-blur-md border-t border-[#F6971E]/10 shadow-lg px-4 py-4 flex flex-col space-y-2 pb-6 max-h-[85vh] overflow-y-auto">
+                <div className="lg:hidden absolute top-[70px] left-0 w-full bg-[#FEF8E2]/95 backdrop-blur-md border-t border-[#F6971E]/10 shadow-lg px-4 py-4 flex flex-col space-y-2 pb-6 max-h-[85vh] overflow-y-auto animate-dropdown">
                     <Link
                         href="/astrologers"
                         onClick={() => setIsMobileMenuOpen(false)}
-                        className="block py-2 text-[#4A2B23] hover:text-[#F6971E] hover:bg-white/50 rounded-lg px-4 text-base font-semibold font-helvetica transition-all"
+                        onMouseMove={handleSpotlightMouseMove}
+                        onTouchMove={handleTouchMove}
+                        className="spotlight-menu-item relative flex items-center justify-between py-2.5 px-4 rounded-xl text-[#4A2B23] hover:text-[#72271E] hover:bg-white/80 border border-transparent hover:border-[#F6971E]/20 text-base font-semibold font-helvetica transition-all"
                     >
-                        Astrologers
+                        <span className="relative z-10">Astrologers</span>
+                        <span className="arrow relative z-10 text-[#F6971E] text-sm">&rarr;</span>
                     </Link>
 
                     {/* Mobile Categories Accordion */}
                     <div className="rounded-xl overflow-hidden bg-white border border-[#F6971E]/20 shadow-2xs">
                         <button
                             onClick={() => setIsMobileCategoryOpen(!isMobileCategoryOpen)}
-                            className="w-full flex items-center justify-between py-2.5 px-4 text-[#4A2B23] font-semibold font-helvetica text-base transition-all hover:bg-orange-50/50"
+                            onMouseMove={handleSpotlightMouseMove}
+                            onTouchMove={handleTouchMove}
+                            className="spotlight-menu-item relative w-full flex items-center justify-between py-2.5 px-4 text-[#4A2B23] font-semibold font-helvetica text-base transition-all hover:bg-orange-50/50"
                         >
-                            <span>Categories</span>
-                            <BsChevronDown className={`text-xs text-[#F6971E] transition-transform duration-200 ${isMobileCategoryOpen ? 'rotate-180' : ''}`} />
+                            <span className="relative z-10">Categories</span>
+                            <BsChevronDown className={`relative z-10 text-xs text-[#F6971E] transition-transform duration-200 ${isMobileCategoryOpen ? 'rotate-180' : ''}`} />
                         </button>
                         {isMobileCategoryOpen && (
                             <div className="bg-orange-50/40 p-2 space-y-1 border-t border-[#F6971E]/15">
@@ -244,9 +307,11 @@ export default function Header() {
                                             setIsMobileCategoryOpen(false);
                                             setIsMobileMenuOpen(false);
                                         }}
-                                        className="flex items-center justify-between py-2 px-3 rounded-lg text-[#4A2B23] hover:text-[#F6971E] hover:bg-white text-sm transition-all font-medium"
+                                        onMouseMove={handleSpotlightMouseMove}
+                                        onTouchMove={handleTouchMove}
+                                        className="spotlight-menu-item group/item relative flex items-center justify-between py-2 px-3 rounded-lg text-[#4A2B23] hover:text-[#72271E] hover:bg-white border border-transparent hover:border-[#F6971E]/20 text-sm transition-all font-medium"
                                     >
-                                        <div className="flex items-center gap-2.5">
+                                        <div className="flex items-center gap-2.5 relative z-10">
                                             <Image
                                                 src={item.icon}
                                                 alt={item.label}
@@ -256,7 +321,7 @@ export default function Header() {
                                             />
                                             <span>{item.label}</span>
                                         </div>
-                                        <span className="text-[#F6971E] text-sm">&rarr;</span>
+                                        <span className="arrow relative z-10 text-[#F6971E] text-sm">&rarr;</span>
                                     </Link>
                                 ))}
                                 <div className="pt-1 mt-1 border-t border-orange-200/50">
@@ -266,10 +331,12 @@ export default function Header() {
                                             setIsMobileCategoryOpen(false);
                                             setIsMobileMenuOpen(false);
                                         }}
-                                        className="flex items-center justify-between py-2 px-3 rounded-lg text-xs font-bold text-[#F6971E] hover:bg-white transition-all"
+                                        onMouseMove={handleSpotlightMouseMove}
+                                        onTouchMove={handleTouchMove}
+                                        className="spotlight-menu-item group/item relative flex items-center justify-between py-2 px-3 rounded-lg text-xs font-bold text-[#F6971E] hover:bg-white border border-transparent hover:border-[#F6971E]/20 transition-all font-helvetica"
                                     >
-                                        <span>View All Categories</span>
-                                        <span>&rarr;</span>
+                                        <span className="relative z-10">View All Categories</span>
+                                        <span className="arrow relative z-10">&rarr;</span>
                                     </Link>
                                 </div>
                             </div>
@@ -280,10 +347,12 @@ export default function Header() {
                     <div className="rounded-xl overflow-hidden bg-white border border-[#F6971E]/20 shadow-2xs">
                         <button
                             onClick={() => setIsMobileHoroscopeOpen(!isMobileHoroscopeOpen)}
-                            className="w-full flex items-center justify-between py-2.5 px-4 text-[#4A2B23] font-semibold font-helvetica text-base transition-all hover:bg-orange-50/50"
+                            onMouseMove={handleSpotlightMouseMove}
+                            onTouchMove={handleTouchMove}
+                            className="spotlight-menu-item relative w-full flex items-center justify-between py-2.5 px-4 text-[#4A2B23] font-semibold font-helvetica text-base transition-all hover:bg-orange-50/50"
                         >
-                            <span>Horoscope</span>
-                            <BsChevronDown className={`text-xs text-[#F6971E] transition-transform duration-200 ${isMobileHoroscopeOpen ? 'rotate-180' : ''}`} />
+                            <span className="relative z-10">Horoscope</span>
+                            <BsChevronDown className={`relative z-10 text-xs text-[#F6971E] transition-transform duration-200 ${isMobileHoroscopeOpen ? 'rotate-180' : ''}`} />
                         </button>
                         {isMobileHoroscopeOpen && (
                             <div className="bg-orange-50/40 p-2 space-y-1 border-t border-[#F6971E]/15">
@@ -295,10 +364,12 @@ export default function Header() {
                                             setIsMobileHoroscopeOpen(false);
                                             setIsMobileMenuOpen(false);
                                         }}
-                                        className="flex items-center justify-between py-2 px-3 rounded-lg text-[#4A2B23] hover:text-[#F6971E] hover:bg-white text-sm transition-all font-medium"
+                                        onMouseMove={handleSpotlightMouseMove}
+                                        onTouchMove={handleTouchMove}
+                                        className="spotlight-menu-item group/item relative flex items-center justify-between py-2 px-3 rounded-lg text-[#4A2B23] hover:text-[#72271E] hover:bg-white border border-transparent hover:border-[#F6971E]/20 text-sm transition-all font-medium"
                                     >
-                                        <span>{item.label}</span>
-                                        <span className="text-[#F6971E] text-sm">&rarr;</span>
+                                        <span className="relative z-10">{item.label}</span>
+                                        <span className="arrow relative z-10 text-[#F6971E] text-sm">&rarr;</span>
                                     </Link>
                                 ))}
                             </div>
@@ -309,43 +380,58 @@ export default function Header() {
                         <Link
                             href="/pooja"
                             onClick={() => setIsMobileMenuOpen(false)}
-                            className="block py-2 text-[#4A2B23] hover:text-[#F6971E] hover:bg-white/50 rounded-lg px-4 text-base font-semibold font-helvetica transition-all"
+                            onMouseMove={handleSpotlightMouseMove}
+                            onTouchMove={handleTouchMove}
+                            className="spotlight-menu-item relative flex items-center justify-between py-2.5 px-4 rounded-xl text-[#4A2B23] hover:text-[#72271E] hover:bg-white/80 border border-transparent hover:border-[#F6971E]/20 text-base font-semibold font-helvetica transition-all"
                         >
-                            Pooja
+                            <span className="relative z-10">Pooja</span>
+                            <span className="arrow relative z-10 text-[#F6971E] text-sm">&rarr;</span>
                         </Link>
                     )}
                     {isPoojaEnabled && (
                         <Link
                             href="/spell"
                             onClick={() => setIsMobileMenuOpen(false)}
-                            className="block py-2 text-[#4A2B23] hover:text-[#F6971E] hover:bg-white/50 rounded-lg px-4 text-base font-semibold font-helvetica transition-all"
+                            onMouseMove={handleSpotlightMouseMove}
+                            onTouchMove={handleTouchMove}
+                            className="spotlight-menu-item relative flex items-center justify-between py-2.5 px-4 rounded-xl text-[#4A2B23] hover:text-[#72271E] hover:bg-white/80 border border-transparent hover:border-[#F6971E]/20 text-base font-semibold font-helvetica transition-all"
                         >
-                            Spells
+                            <span className="relative z-10">Spells</span>
+                            <span className="arrow relative z-10 text-[#F6971E] text-sm">&rarr;</span>
                         </Link>
                     )}
                     <Link
                         href={`${process.env.NEXT_PUBLIC_URL}/blog`}
                         onClick={() => setIsMobileMenuOpen(false)}
-                        className="block py-2 text-[#4A2B23] hover:text-[#F6971E] hover:bg-white/50 rounded-lg px-4 text-base font-semibold font-helvetica transition-all"
+                        onMouseMove={handleSpotlightMouseMove}
+                        onTouchMove={handleTouchMove}
+                        className="spotlight-menu-item relative flex items-center justify-between py-2.5 px-4 rounded-xl text-[#4A2B23] hover:text-[#72271E] hover:bg-white/80 border border-transparent hover:border-[#F6971E]/20 text-base font-semibold font-helvetica transition-all"
                     >
-                        Blog
+                        <span className="relative z-10">Blog</span>
+                        <span className="arrow relative z-10 text-[#F6971E] text-sm">&rarr;</span>
                     </Link>
                     <button
                         onClick={() => {
                             setIsMobileMenuOpen(false);
                             openPopup();
                         }}
-                        className="block w-full text-left py-2 text-[#4A2B23] hover:text-[#F6971E] hover:bg-white/50 rounded-lg px-4 text-base font-semibold font-helvetica transition-all cursor-pointer"
+                        onMouseMove={handleSpotlightMouseMove}
+                        onTouchMove={handleTouchMove}
+                        className="spotlight-menu-item relative flex items-center justify-between w-full py-2.5 px-4 rounded-xl text-[#4A2B23] hover:text-[#72271E] hover:bg-white/80 border border-transparent hover:border-[#F6971E]/20 text-base font-semibold font-helvetica transition-all cursor-pointer"
                     >
-                        Free Kundli
+                        <span className="relative z-10">Free Kundli</span>
+                        <span className="arrow relative z-10 text-[#F6971E] text-sm">&rarr;</span>
                     </button>
                     <Link
                         href={ASTROLOGER_URL}
                         target='_blank'
                         onClick={() => setIsMobileMenuOpen(false)}
-                        className="block py-2 text-[#4A2B23] hover:text-[#F6971E] hover:bg-white/50 rounded-lg px-4 text-base font-semibold font-helvetica transition-all"
+                        onMouseMove={handleSpotlightMouseMove}
+                        onTouchMove={handleTouchMove}
+                        className="spotlight-menu-item relative flex items-center justify-between py-2.5 px-4 rounded-xl text-[#4A2B23] hover:text-[#72271E] hover:bg-white/80 border border-transparent hover:border-[#F6971E]/20 text-base font-semibold font-helvetica transition-all"
                     >
-                        Astrologer Registration
+                        <span className="relative z-10">Astrologer Registration</span>
+                        <span className="arrow relative z-10 text-[#F6971E] text-sm">&rarr;</span>
                     </Link>
                 </div>
             )}
