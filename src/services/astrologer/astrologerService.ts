@@ -140,7 +140,6 @@ export const mapAstroToCard = (raw: any): AstrologerData => {
 
 /**
  * Fetch astrologer list from GET API:
- * https://preprod.api.astrovani-balaji.store/user/astroList?page=1&limit=...&expertise=...
  */
 export const fetchAstroList = async (
   page = 1,
@@ -207,7 +206,6 @@ export const fetchAstroList = async (
 
 /**
  * Fetch top astrologers from GET API:
- * https://preprod.api.astrovani-balaji.store/user/topAstrologers
  */
 export const fetchTopAstrologers = async (): Promise<{ astrologers: AstrologerData[]; total: number }> => {
   const url = `${API_URL}/user/topAstrologers`;
@@ -250,7 +248,6 @@ export const fetchTopAstrologers = async (): Promise<{ astrologers: AstrologerDa
 
 /**
  * Fetch astrologer details by ID or Slug:
- * GET https://preprod.api.astrovani-balaji.store/user/astro/:idOrSlug
  */
 export const fetchAstrologerById = async (idOrSlug: string): Promise<any> => {
   if (!idOrSlug) return null;
@@ -270,7 +267,6 @@ export const fetchAstrologerBySlug = fetchAstrologerById;
 
 /**
  * Fetch astrologer reviews / session feedbacks:
- * GET https://preprod.api.astrovani-balaji.store/user/sessionfeedbacks/:id?page=1&limit=10
  */
 export const fetchAstrologerFeedbacks = async (
   id: string,

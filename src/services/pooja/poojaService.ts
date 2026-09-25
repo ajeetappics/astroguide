@@ -527,7 +527,6 @@ export const fetchSpellList = async (
 
 /**
  * Fetch single pooja details by Slug:
- * GET https://preprod.api.astrovani-balaji.store/user/pooja/details/:slug
  */
 export const fetchPoojaBySlug = async (slugOrId: string): Promise<any> => {
   if (!slugOrId) return null;
@@ -565,12 +564,6 @@ export interface PoojaBannerResponse {
 
 /**
  * Fetch Pooja Banners from API:
- * GET https://preprod.api.astrovani-balaji.store/user/pooja-banner
- * Supports heroBannersRedirection with 4 rules:
- * 1: "shastriji" -> /astrologers/:id
- * 2: "connect_page" -> /astrologers
- * 3: "pooja_listing" -> /pooja
- * 4: "pooja_details" -> /pooja/:poojaId
  */
 export const fetchPoojaBanners = async (): Promise<PoojaBannerResponse> => {
   try {

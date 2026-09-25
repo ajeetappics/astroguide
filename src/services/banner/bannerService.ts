@@ -160,7 +160,6 @@ export const extractHeroSlidesFromGroup = (group: any): HomeHeroSlide[] => {
 
 /**
  * Fetch Home Banners from API:
- * GET https://preprod.api.astrovani-balaji.store/user/banner
  */
 export const fetchHomeBanners = async (): Promise<HomeBannerResponse> => {
   try {

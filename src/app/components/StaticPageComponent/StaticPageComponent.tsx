@@ -39,7 +39,16 @@ export default function StaticPageComponent({ slug, defaultTitle }: StaticPageCo
 
     const renderContent = () => {
         if (isLoading) {
-            return <div className="text-center text-[#5C5C5C]">Loading...</div>;
+            return (
+                <div className="space-y-4 py-6">
+                    <div className="h-6 w-1/3 rounded-lg shimmer-dark mb-4" />
+                    <div className="h-4 w-full rounded-full shimmer-wave" />
+                    <div className="h-4 w-5/6 rounded-full shimmer-wave" />
+                    <div className="h-4 w-4/5 rounded-full shimmer-wave" />
+                    <div className="h-4 w-full rounded-full shimmer-wave" />
+                    <div className="h-4 w-3/4 rounded-full shimmer-wave" />
+                </div>
+            );
         }
 
         if (error) {

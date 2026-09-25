@@ -154,7 +154,7 @@ export default function AstrologerCard({ astro: astroProp, astrologer: astrologe
         </div>
       </div>
 
-      {/* 🖥️ Desktop Web Card (Clean 4-column layout) */}
+      {/* 🖥️ Desktop Web Card (Clean 5-column layout) */}
       <div
         onClick={handleCardClick}
         className="hidden lg:flex bg-white rounded-2xl shadow-[0_4px_16px_rgba(0,0,0,0.05)] border border-[#F6971E]/20 hover:border-[#F6971E]/50 hover:shadow-[0_8px_24px_rgba(246,151,30,0.12)] transition-all duration-300 hover:-translate-y-1 flex-col relative overflow-hidden h-full cursor-pointer group"
@@ -165,7 +165,7 @@ export default function AstrologerCard({ astro: astroProp, astrologer: astrologe
             src={imgSrc}
             alt={astro.name}
             fill
-            sizes="(max-width: 1200px) 25vw, 280px"
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 33vw, 20vw"
             className="object-cover object-top transition-transform duration-500 group-hover:scale-105"
             onError={() => setImgSrc(defaultAstroImg)}
           />
@@ -180,11 +180,11 @@ export default function AstrologerCard({ astro: astroProp, astrologer: astrologe
         </div>
 
         {/* Content Section */}
-        <div className="p-3.5 sm:p-4 flex flex-col flex-grow">
+        <div className="p-3 sm:p-3.5 xl:p-4 flex flex-col flex-grow">
           {/* Name & Rating */}
-          <div className="flex justify-between items-center gap-2.5 mb-1.5">
+          <div className="flex justify-between items-center gap-2 mb-1.5">
             <div className="flex items-center gap-1.5 min-w-0 flex-1">
-              <h3 className="text-base sm:text-lg font-bold text-[#72271E] font-['Inria_Serif'] truncate group-hover:text-[#F6971E] transition-colors">
+              <h3 className="text-[15px] sm:text-base xl:text-lg font-bold text-[#72271E] font-['Inria_Serif'] truncate group-hover:text-[#F6971E] transition-colors">
                 {astro.name}
               </h3>
               {astro.isVerified && (
@@ -215,7 +215,7 @@ export default function AstrologerCard({ astro: astroProp, astrologer: astrologe
                 <BsCurrencyRupee className="text-[10px] sm:text-[11px] -mr-0.5" />
                 {originalPrice}
               </span>
-              <span className="text-base sm:text-lg font-bold text-[#72271E] leading-none flex items-center">
+              <span className="text-[15px] sm:text-base xl:text-lg font-bold text-[#72271E] leading-none flex items-center">
                 <BsCurrencyRupee className="text-base -mr-0.5" />
                 {astro.price.replace('₹', '')}
                 <span className="text-xs font-bold text-[#72271E] ml-0.5">/min</span>

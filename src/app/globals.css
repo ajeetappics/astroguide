@@ -162,3 +162,39 @@ body {
 .spotlight-menu-item:hover::after {
   left: 100%;
 }
+
+/* 3. Global Page Shimmer Wave Effect */
+@keyframes shimmerWave {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.shimmer-wave {
+  background: linear-gradient(
+    90deg,
+    rgba(243, 244, 246, 0.8) 0%,
+    rgba(255, 237, 213, 0.5) 30%,
+    rgba(255, 255, 255, 0.9) 50%,
+    rgba(255, 237, 213, 0.5) 70%,
+    rgba(243, 244, 246, 0.8) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmerWave 1.8s ease-in-out infinite;
+}
+
+.shimmer-dark {
+  background: linear-gradient(
+    90deg,
+    rgba(229, 231, 235, 0.9) 0%,
+    rgba(254, 215, 170, 0.6) 30%,
+    rgba(255, 255, 255, 0.95) 50%,
+    rgba(254, 215, 170, 0.6) 70%,
+    rgba(229, 231, 235, 0.9) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmerWave 1.8s ease-in-out infinite;
+}

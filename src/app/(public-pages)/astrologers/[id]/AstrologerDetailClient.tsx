@@ -161,35 +161,35 @@ export default function AstrologerDetailClient({
     return (
       <div className="min-h-screen bg-[#FFFDF9] pb-20 font-helvetica">
         {/* Banner Skeleton */}
-        <div className="relative w-full bg-[#fdf7e1] pt-[70px] lg:pt-[80px] pb-10 md:pb-12 animate-pulse">
+        <div className="relative w-full bg-[#fdf7e1] pt-[70px] lg:pt-[80px] pb-10 md:pb-12">
           <div className="container mx-auto max-w-6xl px-4 py-4 md:py-5">
-            <div className="h-4 bg-[#F6971E]/20 rounded w-48 mb-2"></div>
+            <div className="h-4 shimmer-wave rounded-full w-48 mb-2" />
           </div>
         </div>
         {/* Profile Card Skeleton */}
         <div className="container mx-auto max-w-6xl px-4 relative -mt-10 md:-mt-12 z-20">
-          <div className="bg-white rounded-[28px] p-6 sm:p-8 shadow-sm border border-[#F6971E]/10 mb-8 animate-pulse">
+          <div className="bg-white rounded-[28px] p-6 sm:p-8 shadow-sm border border-[#F6971E]/15 mb-8">
             <div className="flex flex-col md:flex-row gap-6 items-center md:items-start border-b border-gray-100 pb-6">
-              <div className="w-28 h-28 md:w-32 md:h-32 rounded-full bg-gray-200 shrink-0"></div>
+              <div className="w-28 h-28 md:w-32 md:h-32 rounded-full shimmer-dark shrink-0" />
               <div className="flex-1 w-full space-y-3 pt-2 text-center md:text-left">
-                <div className="h-7 bg-gray-200 rounded w-1/3 mx-auto md:mx-0"></div>
-                <div className="h-4 bg-gray-100 rounded w-1/2 mx-auto md:mx-0"></div>
-                <div className="h-4 bg-gray-100 rounded w-1/4 mx-auto md:mx-0"></div>
+                <div className="h-7 shimmer-dark rounded-xl w-1/3 mx-auto md:mx-0" />
+                <div className="h-4 shimmer-wave rounded-full w-1/2 mx-auto md:mx-0" />
+                <div className="h-4 shimmer-wave rounded-full w-1/4 mx-auto md:mx-0" />
               </div>
             </div>
             <div className="pt-6 grid grid-cols-2 md:grid-cols-4 gap-4">
-              <div className="h-12 bg-gray-100 rounded-xl"></div>
-              <div className="h-12 bg-gray-100 rounded-xl"></div>
-              <div className="h-12 bg-gray-100 rounded-xl"></div>
-              <div className="h-12 bg-gray-100 rounded-xl"></div>
+              <div className="h-12 shimmer-wave rounded-xl" />
+              <div className="h-12 shimmer-wave rounded-xl" />
+              <div className="h-12 shimmer-wave rounded-xl" />
+              <div className="h-12 shimmer-wave rounded-xl" />
             </div>
           </div>
           {/* About Skeleton */}
-          <div className="bg-white rounded-3xl p-6 shadow-sm border border-[#F6971E]/15 animate-pulse space-y-3">
-            <div className="h-5 bg-gray-200 rounded w-40 mb-4"></div>
-            <div className="h-4 bg-gray-100 rounded w-full"></div>
-            <div className="h-4 bg-gray-100 rounded w-5/6"></div>
-            <div className="h-4 bg-gray-100 rounded w-3/4"></div>
+          <div className="bg-white rounded-3xl p-6 shadow-sm border border-[#F6971E]/15 space-y-3">
+            <div className="h-5 shimmer-dark rounded-lg w-40 mb-4" />
+            <div className="h-4 shimmer-wave rounded-full w-full" />
+            <div className="h-4 shimmer-wave rounded-full w-5/6" />
+            <div className="h-4 shimmer-wave rounded-full w-3/4" />
           </div>
         </div>
       </div>

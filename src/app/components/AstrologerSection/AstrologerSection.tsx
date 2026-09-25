@@ -39,7 +39,7 @@ export default function AstrologerSection() {
       {/* Background Accent */}
       <div className="absolute top-0 left-0 w-full h-[300px] bg-gradient-to-b from-[#FEF8E2]/50 to-transparent pointer-events-none"></div>
 
-      <div className="container mx-auto max-w-6xl relative z-10">
+      <div className="container mx-auto max-w-7xl relative z-10">
         
         {/* Header Area */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 md:mb-6 gap-3 md:gap-4">
@@ -53,15 +53,32 @@ export default function AstrologerSection() {
           </Link>
         </div>
 
-        {/* Astrologers Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-3.5 md:gap-4">
+        {/* Astrologers Grid (5 columns on desktop) */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-3.5 md:gap-4">
           {isLoading && astrologers.length === 0 ? (
-            [...Array(4)].map((_, i) => (
-              <div key={i} className="bg-white rounded-2xl h-[300px] border border-gray-100 p-4 flex flex-col justify-between shadow-xs animate-pulse">
-                <div className="w-full h-36 bg-gray-200 rounded-xl mb-3"></div>
-                <div className="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
-                <div className="h-3 bg-gray-100 rounded w-1/2 mb-3"></div>
-                <div className="h-8 bg-gray-200 rounded-xl w-full mt-auto"></div>
+            [...Array(5)].map((_, i) => (
+              <div
+                key={i}
+                className="bg-white rounded-2xl border border-[#F6971E]/15 overflow-hidden shadow-xs flex flex-col h-[340px]"
+              >
+                <div className="w-full aspect-[4/4.6] shimmer-dark" />
+                <div className="p-3 sm:p-3.5 flex flex-col flex-grow justify-between">
+                  <div>
+                    <div className="flex justify-between items-center mb-2">
+                      <div className="h-4 w-28 rounded-full shimmer-wave" />
+                      <div className="h-3 w-8 rounded shimmer-wave" />
+                    </div>
+                    <div className="h-3 w-20 rounded-full shimmer-wave mb-1.5" />
+                    <div className="h-3 w-32 rounded-full shimmer-wave" />
+                  </div>
+                  <div>
+                    <div className="pt-2 border-t border-gray-100 flex justify-between items-center mb-2">
+                      <div className="h-3 w-12 rounded shimmer-wave" />
+                      <div className="h-4 w-16 rounded shimmer-dark" />
+                    </div>
+                    <div className="h-8 w-full rounded-xl shimmer-wave" />
+                  </div>
+                </div>
               </div>
             ))
           ) : astrologers && astrologers.length > 0 ? (
@@ -69,7 +86,7 @@ export default function AstrologerSection() {
               <AstrologerCard key={astro.id} astro={astro} />
             ))
           ) : (
-            <div className="text-center col-span-4 text-gray-500 py-8">
+            <div className="text-center col-span-full text-gray-500 py-8">
               No Astrologers Available
             </div>
           )}

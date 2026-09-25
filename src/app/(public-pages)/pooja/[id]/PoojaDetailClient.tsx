@@ -115,21 +115,27 @@ export default function PoojaDetailClient({ slugOrId, initialPooja }: PoojaDetai
   if (isLoading && !pooja) {
     return (
       <main className="min-h-screen bg-[#FFFDF9] pt-28 pb-[80px] font-helvetica">
-        <div className="container mx-auto max-w-6xl px-4 animate-pulse">
-          <div className="h-4 bg-gray-200 rounded w-48 mb-6 mt-4" />
-          <div className="bg-white rounded-[24px] sm:rounded-[28px] p-6 sm:p-8 border border-orange-100 flex flex-col lg:flex-row gap-8 items-center">
-            <div className="w-full lg:w-[42%] aspect-[4/2.5] bg-gray-200 rounded-2xl" />
+        <div className="container mx-auto max-w-6xl px-4">
+          <div className="h-4 shimmer-wave rounded-full w-48 mb-6 mt-4" />
+          <div className="bg-white rounded-[24px] sm:rounded-[28px] p-6 sm:p-8 border border-orange-100 flex flex-col lg:flex-row gap-8 items-center shadow-xs">
+            <div className="w-full lg:w-[42%] aspect-[4/2.5] shimmer-dark rounded-2xl" />
             <div className="w-full lg:w-[58%] flex flex-col justify-center gap-3">
-              <div className="h-6 bg-gray-200 rounded-full w-28" />
-              <div className="h-8 bg-gray-200 rounded w-3/4" />
-              <div className="h-4 bg-gray-100 rounded w-full" />
-              <div className="h-4 bg-gray-100 rounded w-5/6" />
-              <div className="h-10 bg-gray-200 rounded-xl w-44 mt-4" />
+              <div className="h-6 shimmer-wave rounded-full w-28" />
+              <div className="h-8 shimmer-dark rounded-xl w-3/4" />
+              <div className="h-4 shimmer-wave rounded-full w-full" />
+              <div className="h-4 shimmer-wave rounded-full w-5/6" />
+              <div className="h-10 shimmer-wave rounded-xl w-44 mt-4" />
             </div>
           </div>
           <div className="mt-7 flex flex-col gap-5">
-            <div className="h-28 bg-white rounded-2xl border border-orange-100" />
-            <div className="h-28 bg-white rounded-2xl border border-orange-100" />
+            <div className="h-28 bg-white rounded-2xl border border-orange-100 p-5 space-y-3">
+              <div className="h-5 w-36 shimmer-dark rounded" />
+              <div className="h-3.5 w-full shimmer-wave rounded-full" />
+            </div>
+            <div className="h-28 bg-white rounded-2xl border border-orange-100 p-5 space-y-3">
+              <div className="h-5 w-40 shimmer-dark rounded" />
+              <div className="h-3.5 w-full shimmer-wave rounded-full" />
+            </div>
           </div>
         </div>
       </main>

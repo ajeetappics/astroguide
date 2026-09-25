@@ -99,7 +99,6 @@ export const mapVideoItem = (item: any, index = 0): CelebrityVideoItem => {
 
 /**
  * Fetch Celebrity Videos from API:
- * GET https://preprod.api.astrovani-balaji.store/admin/video?page=1&limit=10
  */
 export const fetchCelebrityVideos = async (
   page = 1,
