@@ -40,7 +40,7 @@ export default function BlogSection() {
   }
 
   return (
-    <section className="bg-[#FEF8E2] py-5 md:py-8 px-4 md:px-8 relative overflow-hidden">
+    <section className="bg-[#FEF8E2] py-5 md:py-8 relative overflow-hidden">
       <style jsx>{`
         .blog-scroll::-webkit-scrollbar {
           height: 4px;

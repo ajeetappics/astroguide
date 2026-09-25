@@ -43,7 +43,7 @@ export default function SpellSection() {
   }
 
   return (
-    <section className="bg-white py-5 md:py-8 px-4 md:px-8 relative overflow-hidden">
+    <section className="bg-white py-5 md:py-8 relative overflow-hidden">
       <style jsx>{`
         .spell-scroll::-webkit-scrollbar {
           height: 4px;

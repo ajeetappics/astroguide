@@ -74,7 +74,7 @@ export default function CelebritySpotlight() {
   }
 
   return (
-    <section className="bg-[#FFFDF9] py-5 md:py-8 px-4 md:px-8 relative overflow-hidden">
+    <section className="bg-[#FFFDF9] py-5 md:py-8 relative overflow-hidden">
       <style jsx>{`
         .celebrity-rail::-webkit-scrollbar {
           height: 4px;
@@ -126,7 +126,7 @@ export default function CelebritySpotlight() {
             {Array.from({ length: 5 }).map((_, idx) => (
               <div
                 key={idx}
-                className="w-[125px] sm:w-[145px] md:w-[160px] lg:w-full lg:max-w-[190px] mx-auto flex-shrink-0 bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden flex flex-col animate-pulse"
+                className="w-[125px] sm:w-[145px] md:w-[160px] lg:w-full flex-shrink-0 bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden flex flex-col animate-pulse"
               >
                 <div className="w-full aspect-[3/4] bg-gray-200" />
                 <div className="p-2 sm:p-2.5 space-y-1.5 flex-grow">
@@ -141,7 +141,7 @@ export default function CelebritySpotlight() {
             {videos.map((item) => (
               <div
                 key={item.id}
-                className="w-[125px] sm:w-[145px] md:w-[160px] lg:w-full lg:max-w-[190px] mx-auto flex-shrink-0 snap-start group cursor-pointer bg-white rounded-xl border border-gray-200/80 shadow-[0_2px_8px_rgba(0,0,0,0.04)] hover:border-[#F6971E]/40 hover:shadow-[0_6px_20px_rgba(246,151,30,0.12)] transition-all duration-300 hover:-translate-y-0.5 overflow-hidden flex flex-col"
+                className="w-[125px] sm:w-[145px] md:w-[160px] lg:w-full flex-shrink-0 snap-start group cursor-pointer bg-white rounded-xl border border-gray-200/80 shadow-[0_2px_8px_rgba(0,0,0,0.04)] hover:border-[#F6971E]/40 hover:shadow-[0_6px_20px_rgba(246,151,30,0.12)] transition-all duration-300 hover:-translate-y-0.5 overflow-hidden flex flex-col"
                 onClick={() => {
                   const targetVideo = item.embedUrl || item.videoUrl;
                   if (targetVideo) {
