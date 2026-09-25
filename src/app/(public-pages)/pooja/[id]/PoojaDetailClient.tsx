@@ -284,7 +284,7 @@ export default function PoojaDetailClient({ slugOrId, initialPooja }: PoojaDetai
               {/* Pricing & CTA - directly attached below description */}
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-3.5 border-t border-gray-100">
                 <div className="flex flex-col">
-                  <span className="text-gray-400 uppercase tracking-widest text-[10px] sm:text-[11px] font-bold mb-0.5">Base Price</span>
+                  <span className="text-gray-400 uppercase tracking-widest text-[10px] sm:text-[11px] font-bold mb-0.5">Start At</span>
                   <span className="text-xl sm:text-2xl md:text-3xl font-bold text-[#4A2B23] font-['Inria_Serif'] tracking-tight">
                     ₹{formattedPrice}
                   </span>
@@ -295,7 +295,7 @@ export default function PoojaDetailClient({ slugOrId, initialPooja }: PoojaDetai
                   onClick={() => {
                     try {
                       sessionStorage.setItem('deep_link_source', window.location.href);
-                    } catch {}
+                    } catch { }
                   }}
                   className="w-full sm:w-auto bg-gradient-to-r from-[#F6971E] to-[#FFA733] hover:from-[#FFA733] hover:to-[#F6971E] text-white font-bold text-xs sm:text-sm py-2.5 px-6 sm:px-8 rounded-xl shadow-[0_4px_15px_rgba(246,151,30,0.3)] hover:scale-105 active:scale-95 transition-all cursor-pointer flex items-center justify-center text-center"
                 >

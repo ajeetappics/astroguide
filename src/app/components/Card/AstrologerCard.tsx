@@ -185,102 +185,107 @@ export default function AstrologerCard({ astro: astroProp, astrologer: astrologe
         </div>
       </div>
 
-      {/* 🖥️ Desktop Web Card (Clean 5-column layout) */}
+      {/* 🖥️ Desktop Web Card (Astrotalk Skeleton + Balaji Theme) */}
       <div
         onClick={handleCardClick}
-        className="hidden lg:flex bg-white rounded-2xl shadow-[0_4px_16px_rgba(0,0,0,0.05)] border border-[#F6971E]/20 hover:border-[#F6971E]/50 hover:shadow-[0_8px_24px_rgba(246,151,30,0.12)] transition-all duration-300 hover:-translate-y-1 flex-col relative overflow-hidden h-full cursor-pointer group"
+        className="hidden lg:flex bg-white rounded-2xl p-4 shadow-[0_4px_16px_rgba(0,0,0,0.05)] border border-[#F6971E]/20 hover:border-[#F6971E]/50 hover:shadow-[0_8px_24px_rgba(246,151,30,0.12)] transition-all duration-300 hover:-translate-y-1 flex-col justify-between h-full cursor-pointer group"
       >
-        {/* Top Image Section */}
-        <div className="block relative w-full aspect-[4/4.6] overflow-hidden bg-gray-50">
-          <Image
-            src={imgSrc}
-            alt={astro.name}
-            fill
-            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 33vw, 20vw"
-            className="object-cover object-top transition-transform duration-500 group-hover:scale-105"
-            onError={() => setImgSrc(defaultAstroImg)}
-          />
+        <div>
+          {/* Top Row: Circular Avatar + Top-right Tag */}
+          <div className="flex justify-between items-start mb-3">
+            {/* Circular Profile Avatar */}
+            <div className="relative w-16 h-16 sm:w-[68px] sm:h-[68px] rounded-full border-2 border-[#F6971E] p-0.5 overflow-hidden bg-gray-50 flex-shrink-0 shadow-xs">
+              <Image
+                src={imgSrc}
+                alt={astro.name}
+                fill
+                sizes="68px"
+                className="rounded-full object-cover object-top transition-transform duration-300 group-hover:scale-105"
+                onError={() => setImgSrc(defaultAstroImg)}
+              />
+            </div>
 
-          {/* Status Indicator (Online = Green, Busy = Red) on Desktop Web */}
-          {/* {astro.status === 'online' && (
-            <div className="absolute top-2 right-2 z-20 flex items-center gap-1 bg-white/90 backdrop-blur-xs px-2 py-0.5 rounded-full shadow-xs border border-emerald-100">
-              <span className="w-2.5 h-2.5 rounded-full bg-[#00C853] animate-pulse" />
-              <span className="text-[11px] font-semibold text-[#00C853]">Online</span>
-            </div>
-          )}
-          {astro.status === 'busy' && (
-            <div className="absolute top-2 right-2 z-20 flex items-center gap-1 bg-white/90 backdrop-blur-xs px-2 py-0.5 rounded-full shadow-xs border border-red-100">
-              <span className="w-2.5 h-2.5 rounded-full bg-[#E53935]" />
-              <span className="text-[11px] font-semibold text-[#E53935]">Busy</span>
-            </div>
-          )} */}
+            {/* Top-Right Tag Pill (e.g. Top Choice / Trending) */}
+            {astro.tag?.tagName ? (
+              <span className="text-[11px] font-bold text-[#F6971E] bg-[#FFF8EB] border border-[#F6971E]/30 px-3 py-1 rounded-full shadow-2xs tracking-wide">
+                {astro.tag.tagName}
+              </span>
+            ) : <span />}
+          </div>
 
-          {/* Tag Badge Overlay on Desktop Web */}
-          {astro.tag?.tagName && (
-            <div className="absolute bottom-0 inset-x-0 bg-gradient-to-r from-[#F6971E] to-[#FF7A00] text-white text-[11px] font-bold text-center py-1 z-10 flex items-center justify-center gap-1 shadow-xs">
-              <span>{astro.tag.tagName}</span>
-              <span>🔥</span>
-            </div>
-          )}
-        </div>
-
-        {/* Content Section */}
-        <div className="p-3 sm:p-3.5 xl:p-4 flex flex-col flex-grow">
-          {/* Name & Rating */}
-          <div className="flex justify-between items-center gap-2 mb-1.5">
-            <div className="flex items-center gap-1.5 min-w-0 flex-1">
-              <h3 className="text-[15px] sm:text-base xl:text-lg font-bold text-[#72271E] font-['Inria_Serif'] truncate group-hover:text-[#F6971E] transition-colors">
-                {astro.name}
-              </h3>
-              {astro.isVerified && (
-                <BsPatchCheckFill className="text-[#00C853] text-base sm:text-lg flex-shrink-0" />
-              )}
-            </div>
-            {astro.rating && (
-              <div className="flex items-center gap-1 text-xs sm:text-sm font-bold text-[#4A2B23] flex-shrink-0">
-                <BsStarFill className="text-[#F6971E] text-xs" />
-                <span>{astro.rating}</span>
-              </div>
+          {/* Name & Verified Badge */}
+          <div className="flex items-center gap-1.5 mb-2 min-w-0">
+            <h3 className="text-base sm:text-lg font-bold text-[#1f1f1f] font-['Inria_Serif'] truncate group-hover:text-[#F6971E] transition-colors">
+              {astro.name}
+            </h3>
+            {astro.isVerified && (
+              <BsPatchCheckFill className="text-[#00C853] text-base flex-shrink-0" />
             )}
           </div>
 
-          {/* Info Text */}
-          {astro.languages && (
-            <p className="text-xs sm:text-[13px] text-gray-500 font-helvetica mb-0.5 line-clamp-1">
-              {astro.languages}
-            </p>
-          )}
+          {/* Skill Pills (Chips) */}
           {astro.skills && astro.skills.length > 0 && (
-            <p className="text-xs sm:text-[13px] text-gray-600 font-helvetica mb-3 line-clamp-1">
-              {astro.skills.join(", ")}
-            </p>
+            <div className="flex flex-wrap items-center gap-1.5 mb-2.5">
+              {astro.skills.slice(0, 3).map((skill, idx) => (
+                <span
+                  key={idx}
+                  className="rounded-full border border-gray-200 px-2.5 py-0.5 text-[11px] text-[#555555] bg-gray-50 font-helvetica"
+                >
+                  {skill}
+                </span>
+              ))}
+            </div>
           )}
 
-          {/* Experience & Price (Both Del and Real Price) */}
-          <div className="flex justify-between items-end mb-3 mt-auto pt-2 border-t border-gray-100">
-            {astro.experience ? (
-              <span className="text-xs sm:text-[13px] text-gray-500 font-helvetica">
+          {/* Languages & Experience */}
+          <div className="mb-3 space-y-0.5">
+            {astro.languages && (
+              <p className="text-xs text-[#666666] font-helvetica truncate">
+                {astro.languages}
+              </p>
+            )}
+            {astro.experience && (
+              <p className="text-xs text-[#888888] font-helvetica truncate">
                 {astro.experience}
-              </span>
-            ) : <span />}
+              </p>
+            )}
+          </div>
+        </div>
+
+        <div>
+          {/* Rating & Pricing Row */}
+          <div className="flex justify-between items-center mb-3 pt-2.5 border-t border-gray-100">
+            {/* Left: Star Rating & Total Orders/Calls */}
+            <div className="flex items-center gap-1.5 text-xs text-[#555555] font-helvetica">
+              {astro.rating && (
+                <span className="flex items-center gap-1 font-bold text-[#1f1f1f]">
+                  <BsStarFill className="text-[#F6971E] text-xs" />
+                  {astro.rating}
+                </span>
+              )}
+              {astro.rating && astro.totalCalls && <span className="text-gray-300">•</span>}
+              {astro.totalCalls && <span className="text-gray-500">{astro.totalCalls}</span>}
+            </div>
+
+            {/* Right: Pricing (del + actual price) */}
             {astro.price && (
-              <div className="flex flex-col items-end gap-0.5">
+              <div className="flex items-baseline gap-1.5">
                 {originalPrice && (
-                  <span className="text-[10px] sm:text-[11px] text-gray-400 line-through flex items-center">
-                    <BsCurrencyRupee className="text-[10px] sm:text-[11px] -mr-0.5" />
+                  <span className="text-[11px] text-gray-400 line-through flex items-center">
+                    <BsCurrencyRupee className="text-[11px] -mr-0.5" />
                     {originalPrice}
                   </span>
                 )}
-                <span className="text-[15px] sm:text-base xl:text-lg font-bold text-[#72271E] leading-none flex items-center">
-                  <BsCurrencyRupee className="text-base -mr-0.5" />
+                <span className="text-base font-bold text-[#1f1f1f] leading-none flex items-center">
+                  <BsCurrencyRupee className="text-sm -mr-0.5" />
                   {astro.price.replace('₹', '')}
-                  <span className="text-xs font-bold text-[#72271E] ml-0.5">/min</span>
+                  <span className="text-[11px] font-normal text-gray-500 ml-0.5">/min</span>
                 </span>
               </div>
             )}
           </div>
 
-          {/* Connect Button */}
+          {/* Connect Button (Our theme button) */}
           <Link
             href={connectUrl}
             onClick={(e) => {
@@ -289,7 +294,7 @@ export default function AstrologerCard({ astro: astroProp, astrologer: astrologe
                 sessionStorage.setItem('deep_link_source', window.location.href);
               } catch {}
             }}
-            className="w-full bg-gradient-to-r from-[#F6971E] to-[#FFA733] text-white font-bold font-helvetica py-2 sm:py-2.5 rounded-xl hover:shadow-[0_4px_15px_rgba(246,151,30,0.3)] transition-all flex items-center justify-center gap-1.5 text-xs sm:text-[13px] relative z-20 cursor-pointer"
+            className="w-full bg-gradient-to-r from-[#F6971E] to-[#FFA733] text-white font-bold font-helvetica py-2 sm:py-2.5 rounded-xl shadow-[0_2px_8px_rgba(246,151,30,0.25)] hover:shadow-[0_4px_15px_rgba(246,151,30,0.35)] active:scale-95 transition-all flex items-center justify-center gap-1.5 text-xs sm:text-sm cursor-pointer"
           >
             Connect Now
           </Link>

@@ -54,11 +54,11 @@ export const mapAstroToCard = (raw: any): AstrologerData => {
   }
 
   if (skills.length === 0) {
-    skills = ["Vedic", "Astrology"];
+    skills = [];
   }
 
   // Extract languages
-  let languages = "Hindi • English";
+  let languages = "";
   if (Array.isArray(raw.languages)) {
     const langs = raw.languages
       .map((l: any) => (typeof l === 'string' ? l : l?.languageName))
@@ -364,6 +364,7 @@ export const fetchAstrologerFeedbacks = async (
   try {
     const response = await axios.get(url);
     const resData = response.data;
+    console.log(`[fetchAstrologerFeedbacks] API response for id ${id}:`, JSON.stringify(resData, null, 2));
     return resData?.data || resData;
   } catch (error) {
     console.error(`Error fetching feedbacks for astrologer id ${id}:`, error);

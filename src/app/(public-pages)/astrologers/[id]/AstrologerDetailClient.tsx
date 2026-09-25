@@ -222,13 +222,33 @@ export default function AstrologerDetailClient({
 
   const rawFeedbacks: any[] = Array.isArray(feedbacksData)
     ? feedbacksData
-    : feedbacksData?.sessionFeedbacks || feedbacksData?.feedbacks || feedbacksData?.data?.sessionFeedbacks || [];
+    : Array.isArray(feedbacksData?.data)
+    ? feedbacksData.data
+    : Array.isArray(feedbacksData?.sessionFeedbacks)
+    ? feedbacksData.sessionFeedbacks
+    : Array.isArray(feedbacksData?.feedbacks)
+    ? feedbacksData.feedbacks
+    : Array.isArray(feedbacksData?.data?.sessionFeedbacks)
+    ? feedbacksData.data.sessionFeedbacks
+    : Array.isArray(feedbacksData?.data?.feedbacks)
+    ? feedbacksData.data.feedbacks
+    : Array.isArray(feedbacksData?.data?.docs)
+    ? feedbacksData.data.docs
+    : Array.isArray(feedbacksData?.docs)
+    ? feedbacksData.docs
+    : [];
 
   const totalReviewsCount =
-    feedbacksData?.pagination?.totalDocs ?? feedbacksData?.data?.pagination?.totalDocs ?? rawFeedbacks.length;
+    feedbacksData?.pagination?.totalDocs ??
+    feedbacksData?.data?.pagination?.totalDocs ??
+    feedbacksData?.totalDocs ??
+    feedbacksData?.data?.totalDocs ??
+    rawFeedbacks.length;
   const totalReviewPages =
     feedbacksData?.pagination?.totalPages ??
     feedbacksData?.data?.pagination?.totalPages ??
+    feedbacksData?.totalPages ??
+    feedbacksData?.data?.totalPages ??
     Math.max(1, Math.ceil(totalReviewsCount / REVIEWS_PER_PAGE));
 
   const handleReviewPageChange = async (newPage: number) => {
@@ -257,41 +277,55 @@ export default function AstrologerDetailClient({
   const displayRating =
     apiAverageRating !== undefined && Number(apiAverageRating) > 0
       ? Number(apiAverageRating).toFixed(1)
-      : currentAstro.averageRating !== undefined && Number(currentAstro.averageRating) > 0
+      : currentAstro?.averageRating !== undefined && Number(currentAstro.averageRating) > 0
         ? Number(currentAstro.averageRating).toFixed(1)
         : rawFeedbacks.length > 0
-          ? (rawFeedbacks.reduce((acc: number, curr: any) => acc + (Number(curr.rating) || 5), 0) / rawFeedbacks.length).toFixed(1)
+          ? (rawFeedbacks.reduce((acc: number, curr: any) => acc + (Number(curr.rating ?? curr.stars ?? curr.starRating) || 5), 0) / rawFeedbacks.length).toFixed(1)
           : '5.0';
 
-  const defaultCompliments: Record<number, string> = {
-    5: 'Very accurate predictions and very helpful remedies. Truly grateful for the guidance!',
-    4: 'Good consultation and clear explanation of all planetary positions and queries.',
-    3: 'Helpful session with decent insights.',
-    2: 'Average session.',
-    1: 'Needs improvement.'
-  };
-
   const reviewsList = rawFeedbacks.map((item: any, index: number) => {
-    const rawName = item.userFullName?.trim();
-    const name = rawName && rawName !== '' ? rawName : `Client ${index + 1}`;
-    const stars = Number(item.rating) || 5;
+    console.log(`=== [REVIEW ITEM #${index + 1}] ===`, item);
+
+    const rawName = (
+      item.userFullName ||
+      item.userName ||
+      item.user?.fullName ||
+      item.user?.name ||
+      item.fullName ||
+      item.name ||
+      ''
+    ).trim();
+    const name = rawName !== '' ? rawName : `Client ${index + 1}`;
+    const stars = Number(item.rating ?? item.stars ?? item.starRating ?? item.userRating ?? item.score) || 5;
     const dateFormatted = item.createdAt
       ? new Date(item.createdAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })
       : '';
 
-    const text =
-      item.comment ||
+    // Check all potential backend review text fields (avoiding hardcoded fake repetitions)
+    const text = (
+      item.feedBack ||
       item.feedback ||
+      item.comment ||
+      item.userComment ||
       item.review ||
+      item.reviewText ||
       item.text ||
       item.message ||
-      defaultCompliments[stars] ||
-      defaultCompliments[5];
+      item.userFeedback ||
+      item.sessionFeedback ||
+      item.description ||
+      item.remarks ||
+      item.remark ||
+      item.notes ||
+      ''
+    ).trim();
+
+    const rawUserImg = item.userProfileImg || item.user?.profileImg || item.user?.image || item.userImage;
 
     return {
       id: item._id || index,
       name,
-      userProfileImg: item.userProfileImg ? sanitizeImageUrl(item.userProfileImg, '') : null,
+      userProfileImg: rawUserImg ? sanitizeImageUrl(rawUserImg, '') : null,
       stars,
       date: dateFormatted,
       text
@@ -318,10 +352,10 @@ export default function AstrologerDetailClient({
     true;
   const expertiseList = currentAstro?.expertise
     ?.map((exp: any) => (typeof exp === 'string' ? exp : exp?.expertiseName))
-    .filter(Boolean) || ['Vedic Astrology', 'Kundali Matching', 'Relationship Advice'];
+    .filter(Boolean) || [];
   const languagesList = currentAstro?.languages
     ?.map((lang: any) => (typeof lang === 'string' ? lang : lang?.languageName))
-    .filter(Boolean) || ['Hindi', 'English'];
+    .filter(Boolean) || [];
   const consultationPrice =
     currentAstro.chat?.offerPricePerMinute ||
     currentAstro.call?.offerPricePerMinute ||
@@ -819,9 +853,11 @@ export default function AstrologerDetailClient({
                             )}
                           </div>
                         </div>
-                        <p className="text-[#4A2B23]/80 font-medium text-xs sm:text-sm leading-relaxed">
-                          &quot;{review.text}&quot;
-                        </p>
+                        {review.text && (
+                          <p className="text-[#4A2B23]/80 font-medium text-xs sm:text-sm leading-relaxed">
+                            &quot;{review.text}&quot;
+                          </p>
+                        )}
                       </div>
                     </div>
                   ))}
