@@ -258,10 +258,10 @@ export default function AstrologerDetailClient({
     apiAverageRating !== undefined && Number(apiAverageRating) > 0
       ? Number(apiAverageRating).toFixed(1)
       : currentAstro.averageRating !== undefined && Number(currentAstro.averageRating) > 0
-      ? Number(currentAstro.averageRating).toFixed(1)
-      : rawFeedbacks.length > 0
-      ? (rawFeedbacks.reduce((acc: number, curr: any) => acc + (Number(curr.rating) || 5), 0) / rawFeedbacks.length).toFixed(1)
-      : '5.0';
+        ? Number(currentAstro.averageRating).toFixed(1)
+        : rawFeedbacks.length > 0
+          ? (rawFeedbacks.reduce((acc: number, curr: any) => acc + (Number(curr.rating) || 5), 0) / rawFeedbacks.length).toFixed(1)
+          : '5.0';
 
   const defaultCompliments: Record<number, string> = {
     5: 'Very accurate predictions and very helpful remedies. Truly grateful for the guidance!',
@@ -311,6 +311,11 @@ export default function AstrologerDetailClient({
   ).map((p: any) => sanitizeImageUrl(p));
 
   const astroName = currentAstro.fullName || 'Astrologer';
+  const isVerified =
+    currentAstro?.isVerified ??
+    currentAstro?.isOtpVerified ??
+    currentAstro?.isProfileCompleted ??
+    true;
   const expertiseList = currentAstro?.expertise
     ?.map((exp: any) => (typeof exp === 'string' ? exp : exp?.expertiseName))
     .filter(Boolean) || ['Vedic Astrology', 'Kundali Matching', 'Relationship Advice'];
@@ -413,7 +418,7 @@ export default function AstrologerDetailClient({
                     <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-[#4A2B23] font-['Inria_Serif'] leading-tight">
                       {astroName}
                     </h1>
-                    {currentAstro.isOtpVerified && (
+                    {isVerified && (
                       <BsPatchCheckFill className="text-[#00C853] text-lg sm:text-xl shrink-0" title="Verified Astrologer" />
                     )}
                   </div>
@@ -460,7 +465,7 @@ export default function AstrologerDetailClient({
                     onClick={() => {
                       try {
                         sessionStorage.setItem('deep_link_source', window.location.href);
-                      } catch {}
+                      } catch { }
                     }}
                     className="w-full sm:w-56 md:w-44 bg-gradient-to-r from-[#F6971E] to-[#FFA733] text-white font-bold py-2.5 sm:py-3 rounded-xl shadow-[0_4px_15px_rgba(246,151,30,0.25)] flex items-center justify-center gap-1.5 hover:shadow-[0_8px_20px_rgba(246,151,30,0.35)] hover:-translate-y-0.5 transition-all text-xs sm:text-sm cursor-pointer"
                   >
@@ -676,7 +681,7 @@ export default function AstrologerDetailClient({
           <section id="reviews-section" className="bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-7 shadow-sm border border-gray-100">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-5 sm:mb-6 gap-3 sm:gap-4 border-b border-gray-100 pb-3 sm:pb-4">
               <h2 className="text-base sm:text-lg md:text-xl lg:text-2xl font-bold text-[#4A2B23] font-['Inria_Serif'] flex items-center gap-2 sm:gap-2.5">
-                <span className="w-1 sm:w-1.5 h-4 sm:h-5 md:h-6 bg-[#F6971E] rounded-full inline-block shrink-0"></span> Client Reviews
+                <span className="w-1 sm:w-1.5 h-4 sm:h-5 md:h-6 bg-[#F6971E] rounded-full inline-block shrink-0"></span> User Reviews
               </h2>
               <div className="flex items-center gap-2 sm:gap-2.5 bg-[#FFFDF9] border border-[#F6971E]/20 px-3 sm:px-3.5 py-1 sm:py-1.5 rounded-full">
                 <span className="font-bold text-base sm:text-lg text-[#4A2B23]">{displayRating}</span>
@@ -703,9 +708,8 @@ export default function AstrologerDetailClient({
             {reviewsList && reviewsList.length > 0 ? (
               <>
                 <div
-                  className={`custom-x-scroll flex flex-row md:flex-col overflow-x-auto md:overflow-visible gap-3 sm:gap-4 pb-4 pt-1 md:pb-0 md:pt-0 scroll-smooth transition-opacity duration-200 ${
-                    isReviewsLoading ? 'opacity-50 pointer-events-none' : 'opacity-100'
-                  }`}
+                  className={`custom-x-scroll flex flex-row md:flex-col overflow-x-auto md:overflow-visible gap-3 sm:gap-4 pb-4 pt-1 md:pb-0 md:pt-0 scroll-smooth transition-opacity duration-200 ${isReviewsLoading ? 'opacity-50 pointer-events-none' : 'opacity-100'
+                    }`}
                 >
                   {reviewsList.map((review: any, i: number) => (
                     <div
@@ -799,11 +803,10 @@ export default function AstrologerDetailClient({
                               key={p}
                               onClick={() => handleReviewPageChange(p)}
                               disabled={isReviewsLoading}
-                              className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full text-xs font-bold flex items-center justify-center transition-all cursor-pointer ${
-                                isCurrent
-                                  ? 'bg-[#F6971E] text-white shadow-[0_2px_8px_rgba(246,151,30,0.35)]'
-                                  : 'bg-white border border-gray-200 text-[#4A2B23] hover:border-[#F6971E] hover:text-[#F6971E]'
-                              }`}
+                              className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full text-xs font-bold flex items-center justify-center transition-all cursor-pointer ${isCurrent
+                                ? 'bg-[#F6971E] text-white shadow-[0_2px_8px_rgba(246,151,30,0.35)]'
+                                : 'bg-white border border-gray-200 text-[#4A2B23] hover:border-[#F6971E] hover:text-[#F6971E]'
+                                }`}
                             >
                               {p}
                             </button>
@@ -826,7 +829,7 @@ export default function AstrologerDetailClient({
               </>
             ) : (
               <div className="text-center py-10 bg-[#FFFDF9] rounded-2xl border border-dashed border-[#F6971E]/30 p-6">
-                <p className="text-[#4A2B23] font-medium text-sm">No client reviews yet for this astrologer.</p>
+                <p className="text-[#4A2B23] font-medium text-sm">No user reviews yet for this astrologer.</p>
                 <p className="text-gray-400 text-xs mt-1">Be the first to consult and share your feedback!</p>
               </div>
             )}
@@ -857,11 +860,10 @@ export default function AstrologerDetailClient({
                 return (
                   <div
                     key={idx}
-                    className={`rounded-2xl border transition-all ${
-                      isOpen
-                        ? 'border-[#F6971E] bg-[#FFFDF9] shadow-xs'
-                        : 'border-gray-200 bg-white hover:border-[#F6971E]/40'
-                    }`}
+                    className={`rounded-2xl border transition-all ${isOpen
+                      ? 'border-[#F6971E] bg-[#FFFDF9] shadow-xs'
+                      : 'border-gray-200 bg-white hover:border-[#F6971E]/40'
+                      }`}
                   >
                     <button
                       type="button"
@@ -874,9 +876,8 @@ export default function AstrologerDetailClient({
                         <span className="leading-snug">{faq.question}</span>
                       </span>
                       <BsChevronDown
-                        className={`text-xs sm:text-sm text-[#F6971E] shrink-0 transition-transform duration-200 ${
-                          isOpen ? 'rotate-180' : ''
-                        }`}
+                        className={`text-xs sm:text-sm text-[#F6971E] shrink-0 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''
+                          }`}
                       />
                     </button>
 

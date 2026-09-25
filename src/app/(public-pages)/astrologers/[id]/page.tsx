@@ -64,7 +64,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     : `${SITE_URL}/logo_new.png`;
 
   const title = `Consult ${astroName} Online (${experience} Exp) - Top Astrologer | Balaji AstroGuide`;
-  const description = `Consult ${astroName} on Balaji AstroGuide. ${experience} of experience in ${expertise}. Languages: ${languages}. Verified client reviews. Instant consultation via Chat & Call at ₹${price}/min.`;
+  const description = `Consult ${astroName} on Balaji AstroGuide. ${experience} of experience in ${expertise}. Languages: ${languages}. Verified user reviews. Instant consultation via Chat & Call at ₹${price}/min.`;
 
   return {
     title,

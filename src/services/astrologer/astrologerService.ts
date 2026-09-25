@@ -256,7 +256,11 @@ export const fetchAstrologerById = async (idOrSlug: string): Promise<any> => {
   try {
     const response = await axios.get(url);
     const resData = response.data;
-    return resData?.data || resData?.astrologer || resData;
+    const astro = resData?.data || resData?.astrologer || resData;
+    if (astro && typeof astro === 'object') {
+      astro.isVerified = astro.isOtpVerified ?? astro.isProfileCompleted ?? true;
+    }
+    return astro;
   } catch (error) {
     console.error(`Error fetching astrologer details for ${idOrSlug}:`, error);
     return null;
