@@ -164,9 +164,6 @@ export default function DailyHoroscope() {
         {/* Header & CTA Link */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-4 md:mb-6 gap-3 md:gap-4">
           <div>
-            <span className="text-[#F6971E] font-bold font-helvetica tracking-wider uppercase text-[10px] sm:text-xs mb-1 block">
-              YOUR DAILY HOROSCOPE
-            </span>
             <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-[32px] font-bold font-['Inria_Serif'] text-[#4A2B23] leading-tight mb-1">
               Your daily <span className="text-[#F6971E]">horoscope</span> reading
             </h2>
@@ -218,7 +215,7 @@ export default function DailyHoroscope() {
           <div className="flex flex-col lg:flex-row gap-5 lg:gap-8 items-stretch justify-between">
 
             {/* Left: Sign Info, Prediction Text & Lucky Matrix */}
-            <div className="w-full lg:w-[58%] flex flex-col justify-between space-y-3.5">
+            <div className="w-full lg:w-[58%] flex flex-col justify-start gap-2.5 sm:gap-3">
               {/* Header Badge & Title */}
               <div className="flex items-center gap-3">
                 <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-gradient-to-br from-[#FEF8E2] to-[#FFF3D6] border border-[#F6971E]/30 flex items-center justify-center text-[#F6971E] shadow-xs flex-shrink-0">
@@ -244,28 +241,32 @@ export default function DailyHoroscope() {
                 </div>
               </div>
 
-              {/* Prediction Text */}
+              {/* Prediction Text (Max 3 lines with ellipsis & fixed height) */}
               {isPredictionLoading ? (
-                <div className="py-4 flex items-center gap-2.5 text-gray-400 text-xs sm:text-sm animate-pulse">
-                  <div className="w-4 h-4 rounded-full border-2 border-[#F6971E] border-t-transparent animate-spin" />
-                  <span>Loading today&apos;s celestial prediction...</span>
+                <div className="space-y-2 py-1 min-h-[4.5rem] sm:min-h-[4.75rem] flex flex-col justify-center">
+                  <div className="h-4 w-full rounded-full shimmer-wave" />
+                  <div className="h-4 w-5/6 rounded-full shimmer-wave" />
+                  <div className="h-4 w-3/4 rounded-full shimmer-wave" />
                 </div>
               ) : (
-                <p className="text-gray-600 font-helvetica text-xs sm:text-sm md:text-[14px] leading-relaxed">
+                <p
+                  title={horoscopeData.text}
+                  className="text-gray-700 font-helvetica text-sm sm:text-[15px] md:text-base leading-relaxed line-clamp-3 min-h-[4.5rem] sm:min-h-[4.75rem]"
+                >
                   {horoscopeData.text || 'Daily celestial prediction will appear once loaded.'}
                 </p>
               )}
 
               {/* Lucky Matrix Pills */}
-              <div className="flex flex-wrap items-center gap-2 pt-1 border-t border-gray-100">
+              <div className="flex flex-wrap items-center gap-2 pt-2 sm:pt-2.5 border-t border-gray-100 mt-0.5">
                 {horoscopeData.luckyNumber ? (
-                  <div className="px-3 py-1 rounded-full bg-orange-50/70 border border-orange-200/50 text-xs font-semibold text-[#72271E] flex items-center gap-1.5">
+                  <div className="px-3 py-1 rounded-full bg-orange-50/70 border border-orange-200/50 text-xs font-semibold text-[#72271E] flex items-center gap-1.5 shadow-2xs">
                     <span className="text-gray-400">Lucky Number:</span>
                     <span className="text-[#F6971E] font-bold">{horoscopeData.luckyNumber}</span>
                   </div>
                 ) : null}
                 {horoscopeData.color ? (
-                  <div className="px-3 py-1 rounded-full bg-orange-50/70 border border-orange-200/50 text-xs font-semibold text-[#72271E] flex items-center gap-1.5">
+                  <div className="px-3 py-1 rounded-full bg-orange-50/70 border border-orange-200/50 text-xs font-semibold text-[#72271E] flex items-center gap-1.5 shadow-2xs">
                     <span className="text-gray-400">Lucky Color:</span>
                     <span
                       className="w-2.5 h-2.5 rounded-full inline-block border border-black/15 shadow-xs flex-shrink-0"
@@ -275,16 +276,33 @@ export default function DailyHoroscope() {
                   </div>
                 ) : null}
                 {horoscopeData.overallScore !== undefined ? (
-                  <div className="px-3 py-1 rounded-full bg-orange-50/70 border border-orange-200/50 text-xs font-semibold text-[#72271E] flex items-center gap-1.5">
+                  <div className="px-3 py-1 rounded-full bg-orange-50/70 border border-orange-200/50 text-xs font-semibold text-[#72271E] flex items-center gap-1.5 shadow-2xs">
                     <span className="text-gray-400">Cosmic Score:</span>
                     <span className="text-[#F6971E] font-bold">{horoscopeData.overallScore}%</span>
                   </div>
                 ) : null}
               </div>
+
+              {/* Action Buttons (Moved below lucky matrix pills as requested) */}
+              <div className="pt-2 flex flex-col sm:flex-row gap-2.5 sm:gap-3 max-w-md">
+                <button
+                  onClick={openPopup}
+                  className="flex-1 bg-gradient-to-r from-[#F6971E] to-[#FFA733] hover:from-[#FFA733] hover:to-[#F6971E] text-white font-bold text-xs sm:text-sm py-2.5 px-5 rounded-xl shadow-xs hover:shadow-md transition-all text-center cursor-pointer flex items-center justify-center"
+                >
+                  Consult Astrologer
+                </button>
+                <Link
+                  href={`/horoscope/daily-horoscope/${activeSign.id}`}
+                  className="flex-1 bg-white border border-[#F6971E] text-[#F6971E] hover:bg-[#F6971E] hover:text-white font-bold text-xs sm:text-sm py-2.5 px-5 rounded-xl transition-all text-center flex items-center justify-center gap-1.5 shadow-2xs"
+                >
+                  <span>View in detail</span>
+                  <BsArrowRight className="text-xs" />
+                </Link>
+              </div>
             </div>
 
-            {/* Right: 4 Life Pillars & Action CTAs */}
-            <div className="w-full lg:w-[42%] flex flex-col justify-between bg-[#FFFDF9] rounded-2xl border border-orange-100/80 p-4 sm:p-5 space-y-3.5">
+            {/* Right: 4 Life Pillars */}
+            <div className="w-full lg:w-[42%] flex flex-col justify-center bg-[#FFFDF9] rounded-2xl border border-orange-100/80 p-4 sm:p-5 gap-3">
               <div className="flex items-center justify-between border-b border-gray-100 pb-2">
                 <h4 className="text-xs sm:text-sm font-bold uppercase tracking-wider text-[#4A2B23] font-['Inria_Serif']">
                   Today&apos;s Life Pillars
@@ -313,23 +331,6 @@ export default function DailyHoroscope() {
                     </div>
                   </div>
                 ))}
-              </div>
-
-              {/* Action Buttons */}
-              <div className="pt-2 flex flex-col sm:flex-row gap-2">
-                <button
-                  onClick={openPopup}
-                  className="flex-1 bg-gradient-to-r from-[#F6971E] to-[#FFA733] hover:from-[#FFA733] hover:to-[#F6971E] text-white font-bold text-xs sm:text-sm py-2 px-3.5 rounded-xl shadow-xs transition-all text-center cursor-pointer"
-                >
-                  Consult Astrologer
-                </button>
-                <Link
-                  href={`/horoscope/daily-horoscope/${activeSign.id}`}
-                  className="flex-1 bg-white border border-[#F6971E] text-[#F6971E] hover:bg-[#F6971E] hover:text-white font-bold text-xs sm:text-sm py-2 px-3.5 rounded-xl transition-all text-center flex items-center justify-center gap-1 shadow-2xs"
-                >
-                  <span>View in detail</span>
-                  <BsArrowRight className="text-xs" />
-                </Link>
               </div>
             </div>
 
