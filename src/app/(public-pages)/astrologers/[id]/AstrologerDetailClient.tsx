@@ -329,6 +329,40 @@ export default function AstrologerDetailClient({
     currentAstro.call?.ratePerMinute ||
     20;
 
+  const rawStatus = String(
+    currentAstro?.status ||
+    currentAstro?.onlineStatus ||
+    currentAstro?.currentStatus ||
+    currentAstro?.chatStatus ||
+    currentAstro?.callStatus ||
+    currentAstro?.chat?.status ||
+    currentAstro?.call?.status ||
+    ''
+  ).toLowerCase();
+
+  const isBusy = Boolean(
+    currentAstro?.isBusy ||
+    currentAstro?.busy ||
+    currentAstro?.isChatBusy ||
+    currentAstro?.isCallBusy ||
+    currentAstro?.chat?.isBusy ||
+    currentAstro?.call?.isBusy ||
+    rawStatus === 'busy' ||
+    rawStatus.includes('busy')
+  );
+
+  const isOnline = Boolean(
+    currentAstro?.isOnline ||
+    currentAstro?.online ||
+    currentAstro?.isChatOnline ||
+    currentAstro?.isCallOnline ||
+    currentAstro?.chat?.isOnline ||
+    currentAstro?.call?.isOnline ||
+    rawStatus === 'online' ||
+    rawStatus.includes('online') ||
+    rawStatus === 'available'
+  );
+
   // AEO Structured Questions & Answers
   const faqList = [
     {
@@ -397,21 +431,48 @@ export default function AstrologerDetailClient({
                   onError={() => setProfileImgSrc(defaultAstroImg)}
                 />
               </div>
+
+              {/* Status Indicator (Online = Green, Busy = Red) */}
+              {/* {isBusy ? (
+                <span
+                  title="Busy"
+                  className="absolute bottom-1 right-1 w-4 h-4 sm:w-5 sm:h-5 rounded-full bg-[#E53935] border-[3px] border-white shadow-md z-10"
+                />
+              ) : isOnline ? (
+                <span
+                  title="Online"
+                  className="absolute bottom-1 right-1 w-4 h-4 sm:w-5 sm:h-5 rounded-full bg-[#00C853] border-[3px] border-white shadow-md z-10 animate-pulse"
+                />
+              ) : null} */}
             </div>
 
             {/* Profile Info */}
             <div className="flex-1 min-w-0 w-full pt-1">
               <div className="flex flex-col md:flex-row md:items-start justify-between gap-4 w-full">
                 <div className="min-w-0">
-                  {/* Tag if present */}
-                  {currentAstro.tag?.tagName && (
-                    <div className="mb-1.5 flex justify-center md:justify-start">
+                  {/* Status & Tag Row (Online/Busy Tag + Trending Tag) */}
+                  <div className="mb-2 flex items-center justify-center md:justify-start gap-2 flex-wrap">
+                    {/* Online / Busy Tag Badge */}
+                    {isBusy ? (
+                      <span className="inline-flex items-center gap-1.5 text-[10px] sm:text-xs font-bold text-[#E53935] bg-red-50 border border-red-200/80 px-2.5 py-0.5 rounded-full uppercase tracking-wider shadow-2xs">
+                        <span className="w-2 h-2 rounded-full bg-[#E53935]" />
+                        <span>Busy</span>
+                      </span>
+                    ) : isOnline ? (
+                      <span className="inline-flex items-center gap-1.5 text-[10px] sm:text-xs font-bold text-[#00C853] bg-emerald-50 border border-emerald-200/80 px-2.5 py-0.5 rounded-full uppercase tracking-wider shadow-2xs">
+                        <span className="w-2 h-2 rounded-full bg-[#00C853] animate-pulse" />
+                        <span>Online</span>
+                      </span>
+                    ) : null}
+
+                    {/* Tag if present (e.g., Trending) */}
+                    {currentAstro.tag?.tagName && (
                       <span className="inline-flex items-center gap-1 text-[10px] sm:text-xs font-bold text-[#F6971E] bg-[#FFF8EB] border border-[#F6971E]/30 px-2.5 py-0.5 rounded-full uppercase tracking-wider shadow-2xs text-center max-w-full truncate">
                         <span className="shrink-0">🔥</span>
                         <span className="truncate">{currentAstro.tag.tagName}</span>
                       </span>
-                    </div>
-                  )}
+                    )}
+                  </div>
 
                   {/* Astrologer Name & Verified Tick */}
                   <div className="flex items-center justify-center md:justify-start gap-1.5 sm:gap-2 mb-1.5 flex-wrap">

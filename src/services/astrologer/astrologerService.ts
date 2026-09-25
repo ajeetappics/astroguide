@@ -68,33 +68,56 @@ export const mapAstroToCard = (raw: any): AstrologerData => {
     languages = raw.languages;
   }
 
-  // Extract experience
-  const rawExp = String(raw.experience || '5').replace(/[^\d]/g, '');
-  const experience = rawExp ? `${rawExp} yrs exp` : "5 yrs exp";
+  // Extract experience - only from API
+  let experience = '';
+  if (raw.experience !== undefined && raw.experience !== null && String(raw.experience).trim()) {
+    const rawExp = String(raw.experience).replace(/[^\d]/g, '');
+    experience = rawExp ? `${rawExp} yrs exp` : String(raw.experience).trim();
+  }
 
-  // Extract price (prefer offer rate, fallback to actual rate)
-  let priceVal = 25;
-  const priceCandidates = [
+  // Extract current price (consultation fee - prefer offer rate, fallback to regular rate)
+  let priceVal = 0;
+  const currentPriceCandidates = [
     raw.chat?.offerPricePerMinute,
     raw.call?.offerPricePerMinute,
+    raw.videoCall?.offerPricePerMinute,
     raw.chat?.ratePerMinute,
     raw.call?.ratePerMinute,
-    raw.videoCall?.offerPricePerMinute,
     raw.videoCall?.ratePerMinute,
     raw.price,
   ];
-
-  for (const c of priceCandidates) {
+  for (const c of currentPriceCandidates) {
     const n = Number(c);
     if (!isNaN(n) && n > 0) {
       priceVal = n;
       break;
     }
   }
-  const price = `₹${priceVal}`;
+  const price = priceVal > 0 ? `₹${priceVal}` : '';
 
-  // Extract rating (API returns averageRating e.g. 5, 4.05, 0)
-  let rating = "5.0";
+  // Extract scratch price (actual rate per minute from API before offer)
+  // Exactly matching the logic on Astrologer Profile page
+  let scratchVal = 0;
+  const scratchCandidates = [
+    raw.chat?.ratePerMinute,
+    raw.call?.ratePerMinute,
+    raw.videoCall?.ratePerMinute,
+    raw.actualPrice,
+    raw.originalPrice,
+    raw.scratchPrice,
+  ];
+  for (const c of scratchCandidates) {
+    const n = Number(c);
+    if (!isNaN(n) && n > 0) {
+      scratchVal = n;
+      break;
+    }
+  }
+  // Only set originalPrice if scratchVal is strictly greater than the discounted priceVal
+  const originalPrice = scratchVal > priceVal ? scratchVal : undefined;
+
+  // Extract rating (only if provided by API)
+  let rating = '';
   if (raw.averageRating !== undefined && raw.averageRating !== null) {
     const avg = Number(raw.averageRating);
     if (!isNaN(avg) && avg > 0) {
@@ -104,8 +127,8 @@ export const mapAstroToCard = (raw: any): AstrologerData => {
     rating = String(raw.rating);
   }
 
-  // Extract total orders / calls from profileVisitCount or totalCalls
-  let totalCalls = "1k+";
+  // Extract total orders / calls (only if provided by API)
+  let totalCalls = '';
   if (raw.totalCalls) {
     totalCalls = String(raw.totalCalls);
   } else if (raw.profileVisitCount !== undefined && raw.profileVisitCount !== null) {
@@ -115,6 +138,50 @@ export const mapAstroToCard = (raw: any): AstrologerData => {
     } else if (!isNaN(count) && count > 0) {
       totalCalls = `${count}+`;
     }
+  }
+
+  // Status determination (Online = Green, Busy = Red, Offline = none)
+  let status: 'online' | 'busy' | 'offline' = 'offline';
+  const rawStatus = String(
+    raw.status ||
+    raw.onlineStatus ||
+    raw.currentStatus ||
+    raw.chatStatus ||
+    raw.callStatus ||
+    raw.chat?.status ||
+    raw.call?.status ||
+    ''
+  ).toLowerCase();
+
+  const isBusy = Boolean(
+    raw.isBusy ||
+    raw.busy ||
+    raw.isChatBusy ||
+    raw.isCallBusy ||
+    raw.chat?.isBusy ||
+    raw.call?.isBusy ||
+    rawStatus === 'busy' ||
+    rawStatus.includes('busy')
+  );
+
+  const isOnline = Boolean(
+    raw.isOnline ||
+    raw.online ||
+    raw.isChatOnline ||
+    raw.isCallOnline ||
+    raw.chat?.isOnline ||
+    raw.call?.isOnline ||
+    rawStatus === 'online' ||
+    rawStatus.includes('online') ||
+    rawStatus === 'available'
+  );
+
+  if (isBusy) {
+    status = 'busy';
+  } else if (isOnline) {
+    status = 'online';
+  } else {
+    status = 'offline';
   }
 
   // Safe image URL handling: check all potential backend fields
@@ -140,12 +207,14 @@ export const mapAstroToCard = (raw: any): AstrologerData => {
     isVerified: raw.isOtpVerified ?? raw.isProfileCompleted ?? true,
     isCelebrity: Boolean(raw.isFeatured),
     tag,
+    status,
     skills,
     languages,
     experience,
     rating,
     totalCalls,
     price,
+    originalPrice,
     imageUrl,
   };
 };

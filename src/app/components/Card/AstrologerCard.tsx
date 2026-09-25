@@ -21,12 +21,14 @@ export interface AstrologerData {
   isVerified: boolean;
   isCelebrity?: boolean;
   tag?: AstrologerTag;
+  status?: 'online' | 'busy' | 'offline';
   skills: string[];
   languages: string;
   experience: string;
   rating: string;
   totalCalls: string;
   price: string;
+  originalPrice?: number;
   imageUrl: string;
 }
 
@@ -61,7 +63,8 @@ export default function AstrologerCard({ astro: astroProp, astrologer: astrologe
   const astroId = astro?._id || astro?.id;
   const connectUrl = `${process.env.NEXT_PUBLIC_URL}/astrologer-profile?astroId=${astroId}`;
 
-  const originalPrice = Math.round(parseInt(astro.price.replace(/[^\d]/g, '') || '25') * 1.35);
+  // Only use scratch / original price if provided directly by the API (matching Astrologer Profile page)
+  const originalPrice = astro.originalPrice;
 
   return (
     <>
@@ -70,7 +73,7 @@ export default function AstrologerCard({ astro: astroProp, astrologer: astrologe
         onClick={handleCardClick}
         className="lg:hidden bg-white rounded-2xl shadow-[0_2px_12px_rgba(0,0,0,0.05)] border border-[#F6971E]/30 p-3 sm:p-3.5 flex gap-3 sm:gap-3.5 relative overflow-hidden cursor-pointer active:scale-[0.99] transition-all"
       >
-        {/* Left: Avatar + Trending Badge + 5 Stars */}
+        {/* Left: Avatar + Status Indicator + Tag Badge + Stars */}
         <div className="flex flex-col items-center flex-shrink-0">
           <div className="relative w-[95px] h-[130px] sm:w-[105px] sm:h-[140px] rounded-2xl border-2 border-[#F6971E] overflow-hidden bg-gray-50">
             <Image
@@ -82,7 +85,21 @@ export default function AstrologerCard({ astro: astroProp, astrologer: astrologe
               onError={() => setImgSrc(defaultAstroImg)}
             />
 
-            {/* Tag Badge Overlay */}
+            {/* Online / Busy Status Indicator (Green for Online, Red for Busy) */}
+            {/* {astro.status === 'online' && (
+              <span
+                title="Online"
+                className="absolute top-1.5 right-1.5 w-3 h-3 rounded-full bg-[#00C853] border-2 border-white shadow-xs z-20 animate-pulse"
+              />
+            )}
+            {astro.status === 'busy' && (
+              <span
+                title="Busy"
+                className="absolute top-1.5 right-1.5 w-3 h-3 rounded-full bg-[#E53935] border-2 border-white shadow-xs z-20"
+              />
+            )} */}
+
+            {/* Tag Badge Overlay (Trending etc.) */}
             {astro.tag?.tagName && (
               <div className="absolute bottom-0 inset-x-0 bg-gradient-to-r from-[#F6971E] to-[#FF7A00] text-white text-[10px] font-bold text-center py-0.5 z-10 flex items-center justify-center gap-0.5">
                 <span>{astro.tag.tagName}</span>
@@ -91,7 +108,7 @@ export default function AstrologerCard({ astro: astroProp, astrologer: astrologe
             )}
           </div>
 
-          {/* 5 Golden Stars */}
+          {/* 5 Golden Stars (Rating) */}
           <div className="flex items-center gap-0.5 mt-2">
             {[...Array(5)].map((_, i) => (
               <BsStarFill key={i} className="text-[#F6971E] text-xs" />
@@ -99,7 +116,7 @@ export default function AstrologerCard({ astro: astroProp, astrologer: astrologe
           </div>
         </div>
 
-        {/* Right: Info + Skills + Call & Chat Buttons */}
+        {/* Right: Info + Skills + Connect Button */}
         <div className="flex flex-col justify-between flex-grow min-w-0">
           <div>
             {/* Row 1: Name & Verified Badge */}
@@ -112,34 +129,42 @@ export default function AstrologerCard({ astro: astroProp, astrologer: astrologe
               )}
             </div>
 
-            {/* Row 2: Pricing */}
-            <div className="flex items-center gap-2 mb-1">
-              <span className="text-xs text-gray-400 line-through flex items-center">
-                <BsCurrencyRupee className="text-xs -mr-0.5" />
-                {originalPrice}
-              </span>
-              <span className="text-sm font-bold text-[#F6971E] font-helvetica flex items-center">
-                <BsCurrencyRupee className="text-sm -mr-0.5" />
-                {astro.price.replace('₹', '')}/min
-              </span>
-            </div>
-
-            {/* Row 3: Experience & Languages */}
-            <p className="text-xs text-[#666666] font-helvetica truncate mb-2">
-              Exp: {astro.experience} | {astro.languages}
-            </p>
-
-            {/* Row 4: Skill Pills */}
-            <div className="flex items-center gap-1.5 overflow-hidden flex-nowrap mb-2.5">
-              {astro.skills.slice(0, 4).map((skill, idx) => (
-                <span
-                  key={idx}
-                  className="flex-shrink-0 rounded-full border border-gray-200 px-2 py-0.5 text-[11px] text-[#555555] bg-white font-helvetica"
-                >
-                  {skill}
+            {/* Row 2: Pricing (Only strictly from API) */}
+            {astro.price && (
+              <div className="flex items-center gap-2 mb-1">
+                {originalPrice && (
+                  <span className="text-xs text-gray-400 line-through flex items-center">
+                    <BsCurrencyRupee className="text-xs -mr-0.5" />
+                    {originalPrice}
+                  </span>
+                )}
+                <span className="text-sm font-bold text-[#F6971E] font-helvetica flex items-center">
+                  <BsCurrencyRupee className="text-sm -mr-0.5" />
+                  {astro.price.replace('₹', '')}/min
                 </span>
-              ))}
-            </div>
+              </div>
+            )}
+
+            {/* Row 3: Experience & Languages (Only if in API) */}
+            {(astro.experience || astro.languages) && (
+              <p className="text-xs text-[#666666] font-helvetica truncate mb-2">
+                {[astro.experience && `Exp: ${astro.experience}`, astro.languages].filter(Boolean).join(' | ')}
+              </p>
+            )}
+
+            {/* Row 4: Skill Pills (Only if in API) */}
+            {astro.skills && astro.skills.length > 0 && (
+              <div className="flex items-center gap-1.5 overflow-hidden flex-nowrap mb-2.5">
+                {astro.skills.slice(0, 4).map((skill, idx) => (
+                  <span
+                    key={idx}
+                    className="flex-shrink-0 rounded-full border border-gray-200 px-2 py-0.5 text-[11px] text-[#555555] bg-white font-helvetica"
+                  >
+                    {skill}
+                  </span>
+                ))}
+              </div>
+            )}
           </div>
 
           {/* Row 5: Connect Button */}
@@ -176,6 +201,20 @@ export default function AstrologerCard({ astro: astroProp, astrologer: astrologe
             onError={() => setImgSrc(defaultAstroImg)}
           />
 
+          {/* Status Indicator (Online = Green, Busy = Red) on Desktop Web */}
+          {/* {astro.status === 'online' && (
+            <div className="absolute top-2 right-2 z-20 flex items-center gap-1 bg-white/90 backdrop-blur-xs px-2 py-0.5 rounded-full shadow-xs border border-emerald-100">
+              <span className="w-2.5 h-2.5 rounded-full bg-[#00C853] animate-pulse" />
+              <span className="text-[11px] font-semibold text-[#00C853]">Online</span>
+            </div>
+          )}
+          {astro.status === 'busy' && (
+            <div className="absolute top-2 right-2 z-20 flex items-center gap-1 bg-white/90 backdrop-blur-xs px-2 py-0.5 rounded-full shadow-xs border border-red-100">
+              <span className="w-2.5 h-2.5 rounded-full bg-[#E53935]" />
+              <span className="text-[11px] font-semibold text-[#E53935]">Busy</span>
+            </div>
+          )} */}
+
           {/* Tag Badge Overlay on Desktop Web */}
           {astro.tag?.tagName && (
             <div className="absolute bottom-0 inset-x-0 bg-gradient-to-r from-[#F6971E] to-[#FF7A00] text-white text-[11px] font-bold text-center py-1 z-10 flex items-center justify-center gap-1 shadow-xs">
@@ -197,36 +236,48 @@ export default function AstrologerCard({ astro: astroProp, astrologer: astrologe
                 <BsPatchCheckFill className="text-[#00C853] text-base sm:text-lg flex-shrink-0" />
               )}
             </div>
-            <div className="flex items-center gap-1 text-xs sm:text-sm font-bold text-[#4A2B23] flex-shrink-0">
-              <BsStarFill className="text-[#F6971E] text-xs" />
-              <span>{astro.rating}</span>
-            </div>
+            {astro.rating && (
+              <div className="flex items-center gap-1 text-xs sm:text-sm font-bold text-[#4A2B23] flex-shrink-0">
+                <BsStarFill className="text-[#F6971E] text-xs" />
+                <span>{astro.rating}</span>
+              </div>
+            )}
           </div>
 
           {/* Info Text */}
-          <p className="text-xs sm:text-[13px] text-gray-500 font-helvetica mb-0.5 line-clamp-1">
-            {astro.languages}
-          </p>
-          <p className="text-xs sm:text-[13px] text-gray-600 font-helvetica mb-3 line-clamp-1">
-            {astro.skills.join(", ")}
-          </p>
+          {astro.languages && (
+            <p className="text-xs sm:text-[13px] text-gray-500 font-helvetica mb-0.5 line-clamp-1">
+              {astro.languages}
+            </p>
+          )}
+          {astro.skills && astro.skills.length > 0 && (
+            <p className="text-xs sm:text-[13px] text-gray-600 font-helvetica mb-3 line-clamp-1">
+              {astro.skills.join(", ")}
+            </p>
+          )}
 
           {/* Experience & Price (Both Del and Real Price) */}
           <div className="flex justify-between items-end mb-3 mt-auto pt-2 border-t border-gray-100">
-            <span className="text-xs sm:text-[13px] text-gray-500 font-helvetica">
-              {astro.experience}
-            </span>
-            <div className="flex flex-col items-end gap-0.5">
-              <span className="text-[10px] sm:text-[11px] text-gray-400 line-through flex items-center">
-                <BsCurrencyRupee className="text-[10px] sm:text-[11px] -mr-0.5" />
-                {originalPrice}
+            {astro.experience ? (
+              <span className="text-xs sm:text-[13px] text-gray-500 font-helvetica">
+                {astro.experience}
               </span>
-              <span className="text-[15px] sm:text-base xl:text-lg font-bold text-[#72271E] leading-none flex items-center">
-                <BsCurrencyRupee className="text-base -mr-0.5" />
-                {astro.price.replace('₹', '')}
-                <span className="text-xs font-bold text-[#72271E] ml-0.5">/min</span>
-              </span>
-            </div>
+            ) : <span />}
+            {astro.price && (
+              <div className="flex flex-col items-end gap-0.5">
+                {originalPrice && (
+                  <span className="text-[10px] sm:text-[11px] text-gray-400 line-through flex items-center">
+                    <BsCurrencyRupee className="text-[10px] sm:text-[11px] -mr-0.5" />
+                    {originalPrice}
+                  </span>
+                )}
+                <span className="text-[15px] sm:text-base xl:text-lg font-bold text-[#72271E] leading-none flex items-center">
+                  <BsCurrencyRupee className="text-base -mr-0.5" />
+                  {astro.price.replace('₹', '')}
+                  <span className="text-xs font-bold text-[#72271E] ml-0.5">/min</span>
+                </span>
+              </div>
+            )}
           </div>
 
           {/* Connect Button */}
