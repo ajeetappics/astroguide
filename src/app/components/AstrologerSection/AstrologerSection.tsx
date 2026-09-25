@@ -17,7 +17,7 @@ export default function AstrologerSection() {
         setIsLoading(true);
         const { astrologers: apiList } = await fetchTopAstrologers();
         if (isMounted && apiList && apiList.length > 0) {
-          setAstrologers(apiList);
+          setAstrologers(apiList.slice(0, 5));
         }
       } catch (err) {
         console.error("Error loading top astrologers:", err);
@@ -82,7 +82,7 @@ export default function AstrologerSection() {
               </div>
             ))
           ) : astrologers && astrologers.length > 0 ? (
-            astrologers.map((astro) => (
+            astrologers.slice(0, 5).map((astro) => (
               <AstrologerCard key={astro.id} astro={astro} />
             ))
           ) : (

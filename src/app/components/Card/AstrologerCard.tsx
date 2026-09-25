@@ -8,13 +8,19 @@ import { BsStarFill, BsPatchCheckFill, BsCurrencyRupee } from 'react-icons/bs';
 import { sanitizeImageUrl } from '@/utils/imageUtils';
 import defaultAstroImg from '@/assets/images/astro-image.jpg';
 
+export interface AstrologerTag {
+  _id?: string;
+  tagName: string;
+}
+
 export interface AstrologerData {
   id: string;
   _id?: string;
   slug?: string;
   name: string;
   isVerified: boolean;
-  isCelebrity: boolean;
+  isCelebrity?: boolean;
+  tag?: AstrologerTag;
   skills: string[];
   languages: string;
   experience: string;
@@ -76,10 +82,10 @@ export default function AstrologerCard({ astro: astroProp, astrologer: astrologe
               onError={() => setImgSrc(defaultAstroImg)}
             />
 
-            {/* Trending Badge Overlay */}
-            {astro.isCelebrity && (
+            {/* Tag Badge Overlay */}
+            {astro.tag?.tagName && (
               <div className="absolute bottom-0 inset-x-0 bg-gradient-to-r from-[#F6971E] to-[#FF7A00] text-white text-[10px] font-bold text-center py-0.5 z-10 flex items-center justify-center gap-0.5">
-                <span>Trending</span>
+                <span>{astro.tag.tagName}</span>
                 <span>🔥</span>
               </div>
             )}
@@ -170,10 +176,10 @@ export default function AstrologerCard({ astro: astroProp, astrologer: astrologe
             onError={() => setImgSrc(defaultAstroImg)}
           />
 
-          {/* Trending Badge Overlay on Desktop Web */}
-          {astro.isCelebrity && (
+          {/* Tag Badge Overlay on Desktop Web */}
+          {astro.tag?.tagName && (
             <div className="absolute bottom-0 inset-x-0 bg-gradient-to-r from-[#F6971E] to-[#FF7A00] text-white text-[11px] font-bold text-center py-1 z-10 flex items-center justify-center gap-1 shadow-xs">
-              <span>Trending</span>
+              <span>{astro.tag.tagName}</span>
               <span>🔥</span>
             </div>
           )}

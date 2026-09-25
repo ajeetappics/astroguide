@@ -34,12 +34,23 @@ export const mapAstroToCard = (raw: any): AstrologerData => {
     skills = raw.skills.filter(Boolean);
   }
 
-  // Include tag name if present and not already in skills
-  if (raw.tag?.tagName && typeof raw.tag.tagName === 'string') {
-    const tagName = raw.tag.tagName.trim();
-    if (tagName && !skills.some((s) => s.toLowerCase() === tagName.toLowerCase())) {
-      skills.unshift(tagName);
-    }
+  // Extract tag object
+  let tag: { _id?: string; tagName: string } | undefined;
+  if (raw.tag && typeof raw.tag === 'object' && raw.tag.tagName) {
+    tag = {
+      _id: raw.tag._id,
+      tagName: String(raw.tag.tagName).trim(),
+    };
+  } else if (typeof raw.tag === 'string' && raw.tag.trim()) {
+    tag = {
+      tagName: raw.tag.trim(),
+    };
+  }
+
+  // Filter out tag name from skills if already present
+  if (tag?.tagName) {
+    const tagLower = tag.tagName.toLowerCase();
+    skills = skills.filter((s) => s.toLowerCase() !== tagLower);
   }
 
   if (skills.length === 0) {
@@ -128,6 +139,7 @@ export const mapAstroToCard = (raw: any): AstrologerData => {
     name: formatName(raw.fullName || raw.name),
     isVerified: raw.isOtpVerified ?? raw.isProfileCompleted ?? true,
     isCelebrity: Boolean(raw.isFeatured),
+    tag,
     skills,
     languages,
     experience,
@@ -242,7 +254,7 @@ export const fetchTopAstrologers = async (): Promise<{ astrologers: AstrologerDa
   } catch (error) {
     console.error("Error fetching topAstrologers:", error);
     // Fallback to fetchAstroList if topAstrologers fails
-    return fetchAstroList(1, 10);
+    return fetchAstroList(1, 5);
   }
 };
 
