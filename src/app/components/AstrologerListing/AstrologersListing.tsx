@@ -194,6 +194,9 @@ export default function AstrologersListing({ initialCategory = "All" }: Astrolog
     setCurrentPage(1);
   }, [resolvedCategory]);
 
+  const trimmedSearch = searchQuery.trim();
+  const effectiveSearch = trimmedSearch.length >= 3 ? trimmedSearch : "";
+
   useEffect(() => {
     let isMounted = true;
     const loadAstrologers = async () => {
@@ -208,7 +211,7 @@ export default function AstrologersListing({ initialCategory = "All" }: Astrolog
           currentPage,
           ITEMS_PER_PAGE,
           expertiseParam,
-          searchQuery
+          effectiveSearch
         );
         if (isMounted) {
           setAllAstrologers(apiList || []);
@@ -230,7 +233,7 @@ export default function AstrologersListing({ initialCategory = "All" }: Astrolog
       isMounted = false;
       clearTimeout(timer);
     };
-  }, [activeTab, currentPage, searchQuery]);
+  }, [activeTab, currentPage, effectiveSearch]);
 
   const [isSortOpen, setIsSortOpen] = useState(false);
   const [selectedSort, setSelectedSort] = useState("Popularity");
@@ -323,14 +326,26 @@ export default function AstrologersListing({ initialCategory = "All" }: Astrolog
             type="text"
             value={searchQuery}
             onChange={(e) => {
-              setSearchQuery(e.target.value);
-              setCurrentPage(1);
+              const val = e.target.value;
+              setSearchQuery(val);
+              if (val.trim().length >= 3 || val.trim().length === 0) {
+                setCurrentPage(1);
+              }
+            }}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                e.preventDefault();
+                if (searchQuery.trim().length >= 3) {
+                  setCurrentPage(1);
+                }
+              }
             }}
             placeholder={`Search ${activeTab === 'All' ? 'astrologers' : `${activeTab} astrologers`} by name or skill...`}
             className="flex-grow bg-transparent border-none outline-none px-2 sm:px-3 py-1 sm:py-1.5 font-helvetica text-gray-700 placeholder:text-gray-400 text-xs sm:text-sm w-full min-w-0"
           />
           {searchQuery && (
             <button
+              type="button"
               onClick={() => {
                 setSearchQuery("");
                 setCurrentPage(1);
@@ -341,10 +356,23 @@ export default function AstrologersListing({ initialCategory = "All" }: Astrolog
               <BsX className="w-4 h-4" />
             </button>
           )}
-          <button className="bg-[#F6971E] text-white font-bold font-helvetica px-4 sm:px-6 py-1.5 sm:py-2 rounded-full hover:bg-[#e5850b] transition-all whitespace-nowrap shadow-xs text-xs sm:text-sm cursor-pointer">
+          <button
+            type="button"
+            onClick={() => {
+              if (searchQuery.trim().length >= 3) {
+                setCurrentPage(1);
+              }
+            }}
+            className="bg-[#F6971E] text-white font-bold font-helvetica px-4 sm:px-6 py-1.5 sm:py-2 rounded-full hover:bg-[#e5850b] transition-all whitespace-nowrap shadow-xs text-xs sm:text-sm cursor-pointer"
+          >
             Search
           </button>
         </div>
+        {searchQuery.trim().length > 0 && searchQuery.trim().length < 3 && (
+          <p className="text-[11px] sm:text-xs text-[#F6971E] text-center -mt-3 sm:-mt-4 mb-4 font-medium animate-in fade-in">
+            Type at least 3 characters to search...
+          </p>
+        )}
 
         {/* 2. Tabs and Sort Row */}
         <div className="flex items-center justify-between gap-3 sm:gap-4 md:gap-8 w-full mb-6 sm:mb-8 md:mb-10">
@@ -429,7 +457,7 @@ export default function AstrologersListing({ initialCategory = "All" }: Astrolog
         </div>
 
         {/* Active Filter Tags */}
-        {(activeTab !== "All" || searchQuery) && (
+        {(activeTab !== "All" || effectiveSearch) && (
           <div className="flex items-center gap-2 mb-6 flex-wrap">
             <span className="text-xs text-gray-500 font-medium">Active filters:</span>
             {activeTab !== "All" && (
@@ -444,11 +472,14 @@ export default function AstrologersListing({ initialCategory = "All" }: Astrolog
                 </button>
               </span>
             )}
-            {searchQuery && (
+            {effectiveSearch && (
               <span className="inline-flex items-center gap-1.5 bg-gray-100 text-gray-700 text-xs px-3 py-1 rounded-full font-medium">
-                Search: &quot;{searchQuery}&quot;
+                Search: &quot;{effectiveSearch}&quot;
                 <button
-                  onClick={() => setSearchQuery("")}
+                  onClick={() => {
+                    setSearchQuery("");
+                    setCurrentPage(1);
+                  }}
                   className="hover:text-red-500 cursor-pointer"
                   title="Remove search filter"
                 >
@@ -460,6 +491,7 @@ export default function AstrologersListing({ initialCategory = "All" }: Astrolog
               onClick={() => {
                 handleTabChange("All");
                 setSearchQuery("");
+                setCurrentPage(1);
               }}
               className="text-xs text-[#72271E] hover:underline font-bold ml-1 cursor-pointer"
             >
@@ -506,17 +538,18 @@ export default function AstrologersListing({ initialCategory = "All" }: Astrolog
         ) : (
           <div className="text-center py-16 bg-white rounded-3xl border border-[#F6971E]/20 p-8 shadow-xs max-w-lg mx-auto">
             <p className="text-gray-500 text-base font-helvetica mb-4">
-              {searchQuery.trim()
-                ? `No astrologers found matching "${searchQuery}".`
+              {effectiveSearch
+                ? `No astrologers found matching "${effectiveSearch}".`
                 : activeTab && activeTab.toLowerCase() !== "all"
                 ? `No ${activeTab} astrologers found matching your filters.`
                 : "No astrologers found."}
             </p>
-            {Boolean((activeTab && activeTab.toLowerCase() !== "all") || searchQuery.trim()) && (
+            {Boolean((activeTab && activeTab.toLowerCase() !== "all") || effectiveSearch) && (
               <button
                 onClick={() => {
                   handleTabChange("All");
                   setSearchQuery("");
+                  setCurrentPage(1);
                 }}
                 className="bg-[#F6971E] text-white font-bold px-6 py-2 rounded-full text-sm hover:bg-[#e5850b] transition-all cursor-pointer"
               >

@@ -71,11 +71,11 @@ export default function BlogSection() {
         {/* Header Area */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-4 md:mb-6 gap-3 md:gap-4">
           <div className="max-w-2xl">
-            {/* <span className="text-[#F6971E] font-bold font-helvetica tracking-wider uppercase text-[10px] sm:text-xs mb-1 block">
-              Balaji AstroGuide Updates
-            </span> */}
+            <span className="text-[#F6971E] font-bold font-helvetica tracking-wider uppercase text-[10px] sm:text-xs mb-1 block">
+              Insights from Balaji Astro Guide
+            </span>
             <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-[32px] font-bold font-['Inria_Serif'] text-[#4A2B23] leading-tight">
-              Latest From Blog
+              Read Our Blogs
             </h2>
           </div>
           <a

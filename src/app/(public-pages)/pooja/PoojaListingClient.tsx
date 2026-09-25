@@ -303,11 +303,14 @@ export default function PoojaListingClient() {
     return [allItem, ...categoriesList];
   }, [categoriesList]);
 
+  const trimmedSearch = searchQuery.trim();
+  const effectiveSearch = trimmedSearch.length >= 3 ? trimmedSearch : '';
+
   // Fetch Pooja list for search or category filter:
   // - Category filter: GET /user/pooja/category/:id?page=X&limit=15&poojaName=...
   // - Search filter: GET /user/pooja?page=X&limit=15&poojaName=...
   useEffect(() => {
-    const isFilter = Boolean(searchQuery.trim() || activeCategoryId !== 'All');
+    const isFilter = Boolean(effectiveSearch || activeCategoryId !== 'All');
     if (!isFilter) {
       return;
     }
@@ -318,7 +321,7 @@ export default function PoojaListingClient() {
       setIsLoading(true);
       try {
         const catParam = activeCategoryId !== 'All' ? activeCategoryId : undefined;
-        const response = await fetchPoojaList(currentPage, LIMIT, catParam, searchQuery);
+        const response = await fetchPoojaList(currentPage, LIMIT, catParam, effectiveSearch);
         if (isMounted) {
           setPoojas(response.poojas);
           setTotalCount(response.total);
@@ -341,7 +344,7 @@ export default function PoojaListingClient() {
       isMounted = false;
       clearTimeout(timer);
     };
-  }, [currentPage, activeCategoryId, searchQuery]);
+  }, [currentPage, activeCategoryId, effectiveSearch]);
 
   const handlePageChange = (newPage: number) => {
     if (newPage < 1 || newPage > totalPages || newPage === currentPage || isLoading) return;
@@ -543,14 +546,26 @@ export default function PoojaListingClient() {
             type="text"
             value={searchQuery}
             onChange={(e) => {
-              setSearchQuery(e.target.value);
-              setCurrentPage(1);
+              const val = e.target.value;
+              setSearchQuery(val);
+              if (val.trim().length >= 3 || val.trim().length === 0) {
+                setCurrentPage(1);
+              }
+            }}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                e.preventDefault();
+                if (searchQuery.trim().length >= 3) {
+                  setCurrentPage(1);
+                }
+              }
             }}
             placeholder="Search pooja by name, deity or temple..."
             className="flex-grow bg-transparent border-none outline-none px-2 sm:px-3 py-1 sm:py-1.5 font-helvetica text-gray-700 placeholder:text-gray-400 text-xs sm:text-sm w-full min-w-0"
           />
           {searchQuery && (
             <button
+              type="button"
               onClick={() => {
                 setSearchQuery('');
                 setCurrentPage(1);
@@ -561,10 +576,23 @@ export default function PoojaListingClient() {
               <BsX className="w-4 h-4" />
             </button>
           )}
-          <button className="bg-[#F6971E] text-white font-bold font-helvetica px-4 sm:px-6 py-1.5 sm:py-2 rounded-full hover:bg-[#e5850b] transition-all whitespace-nowrap shadow-xs text-xs sm:text-sm cursor-pointer">
+          <button
+            type="button"
+            onClick={() => {
+              if (searchQuery.trim().length >= 3) {
+                setCurrentPage(1);
+              }
+            }}
+            className="bg-[#F6971E] text-white font-bold font-helvetica px-4 sm:px-6 py-1.5 sm:py-2 rounded-full hover:bg-[#e5850b] transition-all whitespace-nowrap shadow-xs text-xs sm:text-sm cursor-pointer"
+          >
             Search
           </button>
         </div>
+        {searchQuery.trim().length > 0 && searchQuery.trim().length < 3 && (
+          <p className="text-[11px] sm:text-xs text-[#F6971E] text-center -mt-3 sm:-mt-4 mb-4 font-medium animate-in fade-in">
+            Type at least 3 characters to search...
+          </p>
+        )}
 
         {/* 2. Scrollable Category Tabs */}
         <div
@@ -611,18 +639,18 @@ export default function PoojaListingClient() {
         </div>
 
         {/* Content Area: Either Filter/Search Results OR the 3 Default Sections */}
-        {searchQuery.trim() || activeCategoryId !== 'All' ? (
+        {effectiveSearch || activeCategoryId !== 'All' ? (
           /* Filter/Search Results View */
           <>
             <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-6 md:mb-8 gap-2">
               <div>
                 <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-[32px] font-bold font-['Inria_Serif'] text-[#4A2B23] leading-tight mb-1 sm:mb-1.5">
-                  {searchQuery
-                    ? `Search Results for "${searchQuery}"`
+                  {effectiveSearch
+                    ? `Search Results for "${effectiveSearch}"`
                     : `${categories.find((c) => c._id === activeCategoryId)?.categoryName || 'Category'} Poojas`}
                 </h2>
                 <p className="text-[#6b6b6b] font-helvetica text-xs sm:text-sm md:text-[15px]">
-                  {searchQuery ? 'Showing matching sacred poojas' : 'Browse poojas by selected category'}
+                  {effectiveSearch ? 'Showing matching sacred poojas' : 'Browse poojas by selected category'}
                 </p>
               </div>
               {totalCount > 0 && !isLoading && (
@@ -667,8 +695,8 @@ export default function PoojaListingClient() {
               <div className="text-center py-16 bg-white rounded-3xl border border-[#F6971E]/20 p-8 shadow-sm max-w-md mx-auto">
                 <p className="text-xl font-bold text-[#72271E] mb-2 font-['Inria_Serif']">No Poojas Found</p>
                 <p className="text-gray-500 text-sm font-helvetica mb-4">
-                  {searchQuery
-                    ? `No pooja services match "${searchQuery}".`
+                  {effectiveSearch
+                    ? `No pooja services match "${effectiveSearch}".`
                     : `No poojas found under "${categories.find((c) => c._id === activeCategoryId)?.categoryName || activeCategoryId}".`}
                 </p>
                 <button

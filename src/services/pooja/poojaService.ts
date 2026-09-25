@@ -224,7 +224,7 @@ export const fetchPoojaList = async (
       url = `${API_URL}/user/pooja?page=${page}&limit=${limit}`;
     }
 
-    if (search && search.trim() !== '') {
+    if (search && search.trim().length >= 3) {
       const q = encodeURIComponent(search.trim());
       url += `&poojaName=${q}&search=${q}`;
     }
@@ -236,7 +236,7 @@ export const fetchPoojaList = async (
       // If /user/pooja/category/${categoryId} failed, fallback to /user/pooja?categoryId=...
       if (hasCategory) {
         let fallbackUrl = `${API_URL}/user/pooja?page=${page}&limit=${limit}&categoryId=${encodeURIComponent(categoryId)}`;
-        if (search && search.trim() !== '') {
+        if (search && search.trim().length >= 3) {
           const q = encodeURIComponent(search.trim());
           fallbackUrl += `&poojaName=${q}&search=${q}`;
         }

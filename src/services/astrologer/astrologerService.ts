@@ -153,7 +153,7 @@ export const fetchAstroList = async (
     url += `&expertise=${encodeURIComponent(expertise.trim().toLowerCase())}`;
   }
 
-  if (search && search.trim() !== '') {
+  if (search && search.trim().length >= 3) {
     const q = encodeURIComponent(search.trim());
     url += `&fullName=${q}`;
   }
