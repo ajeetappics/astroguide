@@ -121,6 +121,32 @@ export default async function RootLayout({
 
   return (
     <html lang="en">
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              try {
+                var nav = performance.getEntriesByType && performance.getEntriesByType('navigation')[0];
+                var isReload = (nav && nav.type === 'reload') || (window.performance && window.performance.navigation && window.performance.navigation.type === 1);
+                if (isReload) {
+                  if ('scrollRestoration' in history) {
+                    history.scrollRestoration = 'manual';
+                  }
+                  window.scrollTo(0, 0);
+                  window.addEventListener('load', function() {
+                    window.scrollTo(0, 0);
+                    setTimeout(function() {
+                      if ('scrollRestoration' in history) {
+                        history.scrollRestoration = 'auto';
+                      }
+                    }, 100);
+                  });
+                }
+              } catch (e) {}
+            `,
+          }}
+        />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${inriaSerif.variable} ${ingridDarling.variable} ${helvetica.variable} antialiased`}
         suppressHydrationWarning
