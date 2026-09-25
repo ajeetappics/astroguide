@@ -5,16 +5,88 @@ import { mainLogo } from '@/assets/images';
 import Image from "next/image";
 import { BsStars } from "react-icons/bs";
 
-export default function AddMoneyRedirect() {
+export default function AstrologerProfileRedirect() {
     const searchParams = useSearchParams();
     const astroId = searchParams.get("astroId");
 
+    const returnToSource = () => {
+        if (typeof window === "undefined") return;
+        try {
+            const savedSource = sessionStorage.getItem("deep_link_source");
+            const referrer = document.referrer;
+            const origin = window.location.origin;
+
+            // Clear session flags so subsequent clicks work cleanly
+            sessionStorage.removeItem("redirect_in_progress_astro");
+            sessionStorage.removeItem("deep_link_source");
+
+            if (savedSource && !savedSource.includes("/astrologer-profile")) {
+                window.location.replace(savedSource);
+                return;
+            }
+
+            if (referrer && referrer.startsWith(origin) && !referrer.includes("/astrologer-profile")) {
+                window.location.replace(referrer);
+                return;
+            }
+
+            if (window.history.length > 1) {
+                window.history.back();
+                setTimeout(() => {
+                    window.location.replace("/");
+                }, 200);
+                return;
+            }
+
+            window.location.replace("/");
+        } catch {
+            window.location.replace("/");
+        }
+    };
+
     useEffect(() => {
+        // 1. Detect if user reached this page via browser Back / Forward navigation
+        const isBackNav = () => {
+            try {
+                const nav = performance.getEntriesByType("navigation");
+                if (nav && nav[0] && nav[0].type === "back_forward") return true;
+                if (performance.navigation && performance.navigation.type === 2) return true;
+            } catch {}
+            return false;
+        };
+
+        // 2. If user already redirected in this tab session or backed into this page, immediately navigate back
+        if (isBackNav() || sessionStorage.getItem("redirect_in_progress_astro")) {
+            returnToSource();
+            return;
+        }
+
+        // Mark that redirect has been initiated in this tab session
+        sessionStorage.setItem("redirect_in_progress_astro", "true");
+
+        // 3. Listen for back-forward cache restoration (bfcache)
+        const onPageShow = (event) => {
+            if (event.persisted) {
+                returnToSource();
+            }
+        };
+        window.addEventListener("pageshow", onPageShow);
+
+        // 4. Listen for tab visibility change (user leaving to App/Play Store and coming back)
+        let hasLeftTab = false;
+        const onVisibilityChange = () => {
+            if (document.hidden) {
+                hasLeftTab = true;
+            } else if (hasLeftTab) {
+                returnToSource();
+            }
+        };
+        document.addEventListener("visibilitychange", onVisibilityChange);
+
+        // 5. Initiate app / store redirect using location.replace to avoid clogging history
         const ANDROID_PACKAGE = "com.astrovani.balaji.app";
-        const PLAY_STORE =
-            `https://play.google.com/store/apps/details?id=${ANDROID_PACKAGE}`;
-        const APP_STORE =
-            "https://apps.apple.com/us/app/balaji-astro-guide/id6753894953";
+        const PLAY_STORE = `https://play.google.com/store/apps/details?id=${ANDROID_PACKAGE}`;
+        const APP_STORE = "https://apps.apple.com/us/app/balaji-astro-guide/id6753894953";
 
         const ua = navigator.userAgent || navigator.vendor || window.opera;
         const isAndroid = /android/i.test(ua);
@@ -22,32 +94,33 @@ export default function AddMoneyRedirect() {
         const isMac = /Macintosh|Mac OS X/.test(ua) && !isIOS;
         const isWindows = /Windows/.test(ua);
         const isLinux = /Linux/.test(ua) && !isAndroid;
-        const path = `/astrologer-profile?astroId=${astroId}`;
+        const path = `/astrologer-profile?astroId=${astroId || ""}`;
+
+        let timer = null;
 
         if (isAndroid) {
-            const intentUrl = `intent://balajiastroguide.com${path}#Intent;scheme=https;package=${ANDROID_PACKAGE};end;`;
-            window.location.href = intentUrl;
-            setTimeout(() => {
-                window.location.href = PLAY_STORE;
+            const fallbackUrl = encodeURIComponent(PLAY_STORE);
+            const intentUrl = `intent://balajiastroguide.com${path}#Intent;scheme=https;package=${ANDROID_PACKAGE};S.browser_fallback_url=${fallbackUrl};end;`;
+            window.location.replace(intentUrl);
+            timer = setTimeout(() => {
+                if (!document.hidden && !hasLeftTab) {
+                    window.location.replace(PLAY_STORE);
+                }
             }, 2000);
-            return;
+        } else if (isIOS) {
+            window.location.replace(APP_STORE);
+        } else if (isMac) {
+            window.location.replace(APP_STORE);
+        } else if (isWindows || isLinux) {
+            window.location.replace(PLAY_STORE);
         }
 
-        if (isIOS) {
-            // Let Universal Links handle it
-            return;
-        }
-
-        if (isMac) {
-            window.location.href = APP_STORE;
-            return;
-        }
-
-        if (isWindows || isLinux) {
-            window.location.href = PLAY_STORE;
-            return;
-        }
-    }, []);
+        return () => {
+            if (timer) clearTimeout(timer);
+            window.removeEventListener("pageshow", onPageShow);
+            document.removeEventListener("visibilitychange", onVisibilityChange);
+        };
+    }, [astroId]);
 
     return (
         <div className="min-h-screen bg-gradient-to-b from-[#FFFDF9] via-[#FFF8EE] to-[#FFF3E0] flex flex-col items-center justify-center p-4 sm:p-6 font-helvetica relative overflow-hidden">
@@ -86,13 +159,21 @@ export default function AddMoneyRedirect() {
                     <div className="h-full bg-gradient-to-r from-[#F6971E] via-[#FFA733] to-[#F6971E] w-2/3 rounded-full animate-pulse mx-auto" />
                 </div>
                 {/* Loading Redirection */}
-                <div className="flex items-center gap-3 my-4">
+                <div className="flex items-center gap-3 my-3">
                     <div className="flex-1 h-px bg-gray-200" />
                     <span className="text-[11px] uppercase tracking-wider text-gray-400 font-bold">
                         Redirecting...
                     </span>
                     <div className="flex-1 h-px bg-gray-200" />
                 </div>
+
+                {/* Go back option */}
+                <button
+                    onClick={returnToSource}
+                    className="inline-flex items-center justify-center text-xs font-semibold text-[#F6971E] hover:text-[#72271E] transition-colors hover:underline cursor-pointer mt-2"
+                >
+                    &larr; Return to previous page
+                </button>
             </div>
         </div>
     );

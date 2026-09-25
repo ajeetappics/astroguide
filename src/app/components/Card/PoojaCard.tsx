@@ -91,7 +91,12 @@ export default function PoojaCard({ pooja, basePath = "/pooja" }: PoojaCardProps
           </div>
           <Link
             href={connectUrl}
-            onClick={(e) => e.stopPropagation()}
+            onClick={(e) => {
+              e.stopPropagation();
+              try {
+                sessionStorage.setItem('deep_link_source', window.location.href);
+              } catch {}
+            }}
             className="bg-[#FDA42F] whitespace-nowrap text-white hover:bg-[#F6971E] font-bold text-xs sm:text-[13px] px-3 py-1.5 rounded-full transition-colors flex items-center gap-1 shadow-2xs cursor-pointer z-10"
           >
             Connect <BsArrowRight className="text-xs" />

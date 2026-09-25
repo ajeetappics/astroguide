@@ -283,6 +283,11 @@ export default function SpellDetails() {
 
                 <Link
                   href={bookUrl}
+                  onClick={() => {
+                    try {
+                      sessionStorage.setItem('deep_link_source', window.location.href);
+                    } catch {}
+                  }}
                   className="w-full sm:w-auto bg-gradient-to-r from-[#F6971E] to-[#FFA733] hover:from-[#FFA733] hover:to-[#F6971E] text-white font-bold text-xs sm:text-sm py-2.5 px-6 sm:px-8 rounded-xl shadow-[0_4px_15px_rgba(246,151,30,0.3)] hover:scale-105 active:scale-95 transition-all cursor-pointer flex items-center justify-center text-center"
                 >
                   Book Spell Now

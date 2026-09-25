@@ -140,7 +140,12 @@ export default function AstrologerCard({ astro: astroProp, astrologer: astrologe
           <div className="mt-auto pt-1">
             <Link
               href={connectUrl}
-              onClick={(e) => e.stopPropagation()}
+              onClick={(e) => {
+                e.stopPropagation();
+                try {
+                  sessionStorage.setItem('deep_link_source', window.location.href);
+                } catch {}
+              }}
               className="w-full bg-gradient-to-r from-[#F6971E] to-[#FFA733] text-white font-bold font-helvetica py-2 px-4 rounded-xl shadow-[0_2px_8px_rgba(246,151,30,0.25)] hover:opacity-95 active:scale-95 transition-all flex items-center justify-center text-xs sm:text-sm cursor-pointer"
             >
               Connect Now
@@ -221,7 +226,12 @@ export default function AstrologerCard({ astro: astroProp, astrologer: astrologe
           {/* Connect Button */}
           <Link
             href={connectUrl}
-            onClick={(e) => e.stopPropagation()}
+            onClick={(e) => {
+              e.stopPropagation();
+              try {
+                sessionStorage.setItem('deep_link_source', window.location.href);
+              } catch {}
+            }}
             className="w-full bg-gradient-to-r from-[#F6971E] to-[#FFA733] text-white font-bold font-helvetica py-2 sm:py-2.5 rounded-xl hover:shadow-[0_4px_15px_rgba(246,151,30,0.3)] transition-all flex items-center justify-center gap-1.5 text-xs sm:text-[13px] relative z-20 cursor-pointer"
           >
             Connect Now

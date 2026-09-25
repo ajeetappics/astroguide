@@ -455,7 +455,15 @@ export default function AstrologerDetailClient({
                     </span>
                   </div>
 
-                  <Link href={`${process.env.NEXT_PUBLIC_URL}/astrologer-profile?astroId=${currentAstro?._id}`} className="w-full sm:w-56 md:w-44 bg-gradient-to-r from-[#F6971E] to-[#FFA733] text-white font-bold py-2.5 sm:py-3 rounded-xl shadow-[0_4px_15px_rgba(246,151,30,0.25)] flex items-center justify-center gap-1.5 hover:shadow-[0_8px_20px_rgba(246,151,30,0.35)] hover:-translate-y-0.5 transition-all text-xs sm:text-sm cursor-pointer">
+                  <Link
+                    href={`${process.env.NEXT_PUBLIC_URL}/astrologer-profile?astroId=${currentAstro?._id}`}
+                    onClick={() => {
+                      try {
+                        sessionStorage.setItem('deep_link_source', window.location.href);
+                      } catch {}
+                    }}
+                    className="w-full sm:w-56 md:w-44 bg-gradient-to-r from-[#F6971E] to-[#FFA733] text-white font-bold py-2.5 sm:py-3 rounded-xl shadow-[0_4px_15px_rgba(246,151,30,0.25)] flex items-center justify-center gap-1.5 hover:shadow-[0_8px_20px_rgba(246,151,30,0.35)] hover:-translate-y-0.5 transition-all text-xs sm:text-sm cursor-pointer"
+                  >
                     <BsLightningChargeFill /> Connect Now
                   </Link>
                 </div>
