@@ -50,7 +50,7 @@ export default function PersonalizedServices() {
               </div>
         </div>
 
-        <div className="relative z-10 container mx-auto max-w-6xl">
+        <div className="relative z-10 container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 items-center">
                 <div className="flex flex-col gap-3 sm:gap-4">
                     <div className="relative self-start">

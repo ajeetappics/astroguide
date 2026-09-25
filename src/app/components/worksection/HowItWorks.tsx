@@ -27,10 +27,10 @@ const stepsData = [
 export default function HowItWorks() {
     return (
         <section
-            className="py-6 sm:py-8 md:py-12 px-4 md:px-8 relative overflow-hidden"
+            className="py-6 sm:py-8 md:py-12 relative overflow-hidden"
             style={{ background: 'linear-gradient(0deg, rgba(250, 169, 69, 1) 26%, rgb(255 255 255) 100%)' }}
         >
-            <div className="container mx-auto max-w-6xl relative z-10">
+            <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
 
                 {/* Header Section */}
                 <div className="text-center mb-4 md:mb-6">

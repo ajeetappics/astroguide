@@ -120,14 +120,14 @@ export default function ServicesSection() {
       <div className="relative z-10 w-full">
 
         {/* Header Section */}
-        <div className="container mx-auto max-w-6xl mb-3.5 md:mb-5 text-center md:text-left">
+        <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 mb-3.5 md:mb-5 text-center md:text-left">
           <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-[32px] font-bold font-['Inria_Serif'] text-[#4A2B23] leading-tight">
             Astrology Services
           </h2>
         </div>
 
         {/* Services Row - Static on Web, Touch-Scroll with Visible Indicator on Mobile */}
-        <div className="container mx-auto max-w-6xl">
+        <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div
             className="services-scroll flex items-start justify-start lg:justify-between gap-3 sm:gap-4 md:gap-5 overflow-x-auto pb-4 pt-1"
           >

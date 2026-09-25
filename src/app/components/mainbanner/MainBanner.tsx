@@ -101,7 +101,7 @@ export default function MainBanner() {
         <div className="absolute top-[12%] -right-[42vw] w-[74vw] lg:top-[-5%] lg:right-[-5%] lg:w-[60vw] lg:max-w-[600px] aspect-square border-[1.5px] border-solid border-[#F6971E]/20 rounded-full animate-[spin_80s_linear_infinite_reverse]"></div>
       </div>
 
-      <div className="container mx-auto max-w-7xl px-8">
+      <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col lg:flex-row items-center justify-between gap-12 lg:gap-8">
           {/* Left Content */}
           <div className="relative z-10 flex flex-col items-center lg:items-start text-center lg:text-left w-full lg:w-1/2 space-y-4">

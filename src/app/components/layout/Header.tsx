@@ -60,7 +60,7 @@ export default function Header() {
 
     return (
         <header className="fixed bg-white/90 backdrop-blur-sm top-0 z-50 w-full shadow-[0_2px_15px_rgba(0,0,0,0.05)] transition-all duration-300">
-            <div className="container mx-auto max-w-7xl px-4">
+            <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 <nav className="flex justify-between items-center h-[70px] lg:h-[80px]">
                     {/* Logo */}
                     <div className="flex-shrink-0">

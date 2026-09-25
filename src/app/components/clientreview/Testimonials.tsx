@@ -163,8 +163,8 @@ export default function Testimonials() {
   }
 
   return (
-    <section className="bg-transparent py-4 md:py-6 px-4 lg:px-12 relative overflow-hidden">
-      <div className="container mx-auto max-w-6xl relative z-10">
+    <section className="bg-transparent py-4 md:py-6 relative overflow-hidden">
+      <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Header Section matching Screenshot */}
         <div className="flex justify-between items-center mb-3 sm:mb-4 gap-3">
           <h2 className="text-xl sm:text-2xl md:text-[26px] font-bold text-[#1f1f1f] font-helvetica leading-tight">

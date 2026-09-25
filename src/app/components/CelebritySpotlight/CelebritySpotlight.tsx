@@ -112,7 +112,7 @@ export default function CelebritySpotlight() {
       <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-[#F6971E]/5 rounded-full blur-[120px] pointer-events-none"></div>
       <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-[#F6971E]/5 rounded-full blur-[120px] pointer-events-none"></div>
 
-      <div className="container mx-auto max-w-6xl relative z-10">
+      <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Header - Dynamic Title */}
         <div className="mb-3.5 sm:mb-5 text-center md:text-left">
           <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-[32px] font-bold font-['Inria_Serif'] text-[#4A2B23] leading-tight">

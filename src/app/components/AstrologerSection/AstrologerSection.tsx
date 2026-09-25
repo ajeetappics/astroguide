@@ -34,12 +34,12 @@ export default function AstrologerSection() {
   }, []);
 
   return (
-    <section className="bg-white py-6 md:py-10 px-4 md:px-8 relative overflow-hidden">
+    <section className="bg-white py-6 md:py-10 relative overflow-hidden">
       
       {/* Background Accent */}
       <div className="absolute top-0 left-0 w-full h-[300px] bg-gradient-to-b from-[#FEF8E2]/50 to-transparent pointer-events-none"></div>
 
-      <div className="container mx-auto max-w-7xl relative z-10">
+      <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
         
         {/* Header Area */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 md:mb-6 gap-3 md:gap-4">

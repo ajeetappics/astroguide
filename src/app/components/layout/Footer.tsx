@@ -38,7 +38,7 @@ export default function Footer() {
 
   return (
     <footer className="bg-[#EEE3D9]">
-      <div className="mx-auto w-full max-w-screen-xl p-6 sm:p-8 md:p-12">
+      <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8 sm:py-10 md:py-12">
 
         {/* Top Branding Section */}
         <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 pb-8 border-b border-[#72271E]/15">

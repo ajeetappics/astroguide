@@ -153,13 +153,13 @@ export default function DailyHoroscope() {
   const ActiveIcon = activeSign.icon;
 
   return (
-    <section className="bg-[#FFFDF9] py-5 md:py-8 px-4 md:px-8 relative overflow-hidden">
+    <section className="bg-[#FFFDF9] py-5 md:py-8 relative overflow-hidden">
 
       {/* Background Decor */}
       <div className="absolute -left-40 top-20 w-96 h-96 bg-[#F6971E]/5 rounded-full blur-[80px] pointer-events-none"></div>
       <div className="absolute -right-40 bottom-20 w-96 h-96 bg-[#4A2B23]/5 rounded-full blur-[80px] pointer-events-none"></div>
 
-      <div className="container mx-auto relative z-10 max-w-6xl">
+      <div className="container mx-auto relative z-10 max-w-7xl px-4 sm:px-6 lg:px-8">
 
         {/* Header & CTA Link */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-4 md:mb-6 gap-3 md:gap-4">
