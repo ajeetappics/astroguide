@@ -467,26 +467,6 @@ export default function AstrologersListing({ initialCategory = "All" }: Astrolog
               })}
             </div>
           </div>
-
-          {/* Filter Button on right */}
-          <div className="flex-shrink-0">
-            <button
-              onClick={() => setIsFilterModalOpen(true)}
-              className={`flex items-center gap-1.5 sm:gap-2 bg-white border px-3.5 py-1.5 sm:px-5 sm:py-2 rounded-full font-bold text-xs sm:text-sm transition-all shadow-xs sm:shadow-sm cursor-pointer ${
-                activeFiltersCount > 0
-                  ? 'border-[#F6971E] text-[#C47D14] bg-[#FFF9E6]'
-                  : 'border-[#F6971E]/30 text-[#4A2B23] hover:border-[#F6971E]'
-              }`}
-            >
-              <BsFunnel className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#F6971E]" />
-              <span>Filter</span>
-              {activeFiltersCount > 0 && (
-                <span className="w-4 h-4 rounded-full bg-[#F6971E] text-white text-[10px] font-bold flex items-center justify-center">
-                  {activeFiltersCount}
-                </span>
-              )}
-            </button>
-          </div>
         </div>
 
         {/* Active Filter Tags */}
@@ -608,7 +588,7 @@ export default function AstrologersListing({ initialCategory = "All" }: Astrolog
             ))}
           </div>
         ) : filteredAstrologers?.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-4 md:gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-3.5 sm:gap-4 md:gap-5">
             {filteredAstrologers.map((astro) => (
               <AstrologerCard key={astro.id} astro={astro} />
             ))}

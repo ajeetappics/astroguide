@@ -114,7 +114,7 @@ export default function TopAstrologerCard({ astro: astroProp, astrologer: astrol
                         {/* Tag Badge Overlay (Trending etc.) */}
                         {astro.tag?.tagName && (
                             <div className="absolute bottom-0 inset-x-0 bg-gradient-to-r from-[#F6971E] to-[#FF7A00] text-white text-[14px] font-bold text-center py-0.5 z-10 flex items-center justify-center gap-0.5">
-                                <span>{astro.tag.tagName}</span>
+                                <span title={astro.tag.tagName}>{astro.tag.tagName.length > 8 ? astro.tag.tagName.slice(0, 8) + '...' : astro.tag.tagName}</span>
                                 <span>🔥</span>
                             </div>
                         )}

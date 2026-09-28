@@ -363,19 +363,8 @@ export default function AstrologerDetailClient({
     currentAstro.call?.ratePerMinute ||
     20;
 
-  const rawStatus = String(
-    currentAstro?.status ||
-    currentAstro?.onlineStatus ||
-    currentAstro?.currentStatus ||
-    currentAstro?.chatStatus ||
-    currentAstro?.callStatus ||
-    currentAstro?.chat?.status ||
-    currentAstro?.call?.status ||
-    ''
-  ).toLowerCase();
-
-  const isBusy = Boolean(currentAstro?.isBusy);
-  const isOnline = Boolean(currentAstro?.isOnline);
+  const isBusy = Boolean(currentAstro?.isBusy || currentAstro?.isManuallyBusy);
+  const isOnline = !isBusy && Boolean(!currentAstro?.isManuallyBusy);
 
   // AEO Structured Questions & Answers
   const faqList = [
@@ -450,12 +439,12 @@ export default function AstrologerDetailClient({
               {isBusy ? (
                 <span
                   title="Busy"
-                  className="absolute bottom-1 right-1 w-4 h-4 sm:w-5 sm:h-5 rounded-full bg-[#E53935] border-[3px] border-white shadow-md z-10"
+                  className="absolute bottom-3 right-3 w-4 h-4 sm:w-5 sm:h-5 rounded-full bg-[#E53935] border-[3px] border-white shadow-md z-10"
                 />
               ) : isOnline ? (
                 <span
                   title="Online"
-                  className="absolute bottom-1 right-1 w-4 h-4 sm:w-5 sm:h-5 rounded-full bg-[#00C853] border-[3px] border-white shadow-md z-10 animate-pulse"
+                  className="absolute bottom-3 right-3 w-4 h-4 sm:w-5 sm:h-5 rounded-full bg-[#00C853] border-[3px] border-white shadow-md z-10 animate-pulse"
                 />
               ) : null}
             </div>
@@ -466,18 +455,6 @@ export default function AstrologerDetailClient({
                 <div className="min-w-0">
                   {/* Status & Tag Row (Online/Busy Tag + Trending Tag) */}
                   <div className="mb-2 flex items-center justify-center md:justify-start gap-2 flex-wrap">
-                    {/* Online / Busy Tag Badge */}
-                    {isBusy ? (
-                      <span className="inline-flex items-center gap-1.5 text-[10px] sm:text-xs font-bold text-[#E53935] bg-red-50 border border-red-200/80 px-2.5 py-0.5 rounded-full uppercase tracking-wider shadow-2xs">
-                        <span className="w-2 h-2 rounded-full bg-[#E53935]" />
-                        <span>Busy</span>
-                      </span>
-                    ) : isOnline ? (
-                      <span className="inline-flex items-center gap-1.5 text-[10px] sm:text-xs font-bold text-[#00C853] bg-emerald-50 border border-emerald-200/80 px-2.5 py-0.5 rounded-full uppercase tracking-wider shadow-2xs">
-                        <span className="w-2 h-2 rounded-full bg-[#00C853] animate-pulse" />
-                        <span>Online</span>
-                      </span>
-                    ) : null}
 
                     {/* Tag if present (e.g., Trending) */}
                     {currentAstro.tag?.tagName && (
