@@ -8,19 +8,19 @@ import { BsStarFill, BsStarHalf, BsStar, BsPatchCheckFill, BsCurrencyRupee } fro
 import { sanitizeImageUrl } from '@/utils/imageUtils';
 import defaultAstroImg from '@/assets/images/astro-image.jpg';
 
-export interface AstrologerTag {
+export interface TopAstrologerTag {
     _id?: string;
     tagName: string;
 }
 
-export interface AstrologerData {
+export interface TopAstrologerData {
     id: string;
     _id?: string;
     slug?: string;
     name: string;
     isVerified: boolean;
     isCelebrity?: boolean;
-    tag?: AstrologerTag;
+    tag?: TopAstrologerTag;
     status?: 'online' | 'busy' | 'offline';
     isOnline?: boolean;
     isBusy?: boolean;
@@ -34,16 +34,12 @@ export interface AstrologerData {
     imageUrl: string;
 }
 
-// Backward compatibility aliases
-export type TopAstrologerTag = AstrologerTag;
-export type TopAstrologerData = AstrologerData;
-
-export interface AstrologerCardProps {
-    astro?: AstrologerData;
-    astrologer?: AstrologerData;
+interface TopAstrologerCardProps {
+    astro?: TopAstrologerData;
+    astrologer?: TopAstrologerData;
 }
 
-export default function AstrologerCard({ astro: astroProp, astrologer: astrologerProp }: AstrologerCardProps) {
+export default function TopAstrologerCard({ astro: astroProp, astrologer: astrologerProp }: TopAstrologerCardProps) {
     const astro = (astroProp || astrologerProp)!;
     const router = useRouter();
 
@@ -192,6 +188,23 @@ export default function AstrologerCard({ astro: astroProp, astrologer: astrologe
                                 )}
                             </div>
                         )}
+
+                        <hr className="h-[1px] bg-gray-100 border-none mb-2" />
+
+                        {/* Rating Row (Shows 0 if no rating, strictly never demo 5) */}
+                        <div className="flex items-center gap-1.5 overflow-hidden flex-nowrap mb-2.5 text-xs font-helvetica font-bold">
+                            {Number(astro?.rating) > 0 ? (
+                                <>
+                                    <BsStarFill className="text-[#F6971E] text-xs" />
+                                    <span className="text-[#F6971E]">{Number(astro?.rating).toFixed(1)}</span>
+                                </>
+                            ) : (
+                                <>
+                                    <BsStar className="text-gray-400 text-xs" />
+                                    <span className="text-gray-500">0</span>
+                                </>
+                            )}
+                        </div>
                     </div>
 
                     {/* Row 5: Connect Button */}

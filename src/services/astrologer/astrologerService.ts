@@ -116,15 +116,22 @@ export const mapAstroToCard = (raw: any): AstrologerData => {
   // Only set originalPrice if scratchVal is strictly greater than the discounted priceVal
   const originalPrice = scratchVal > priceVal ? scratchVal : undefined;
 
-  // Extract rating (only if provided by API)
-  let rating = '';
+  // Extract rating (defaults to '0' if unrated, strictly never fake demo 5)
+  let rating = '0';
   if (raw.averageRating !== undefined && raw.averageRating !== null) {
     const avg = Number(raw.averageRating);
     if (!isNaN(avg) && avg > 0) {
       rating = avg.toFixed(1);
+    } else {
+      rating = '0';
     }
-  } else if (raw.rating) {
-    rating = String(raw.rating);
+  } else if (raw.rating !== undefined && raw.rating !== null) {
+    const r = Number(raw.rating);
+    if (!isNaN(r) && r > 0) {
+      rating = r.toFixed(1);
+    } else {
+      rating = '0';
+    }
   }
 
   // Extract total orders / calls (only if provided by API)
@@ -142,38 +149,13 @@ export const mapAstroToCard = (raw: any): AstrologerData => {
 
   // Status determination (Online = Green, Busy = Red, Offline = none)
   let status: 'online' | 'busy' | 'offline' = 'offline';
-  const rawStatus = String(
-    raw.status ||
-    raw.onlineStatus ||
-    raw.currentStatus ||
-    raw.chatStatus ||
-    raw.callStatus ||
-    raw.chat?.status ||
-    raw.call?.status ||
-    ''
-  ).toLowerCase();
 
   const isBusy = Boolean(
-    raw.isBusy ||
-    raw.busy ||
-    raw.isChatBusy ||
-    raw.isCallBusy ||
-    raw.chat?.isBusy ||
-    raw.call?.isBusy ||
-    rawStatus === 'busy' ||
-    rawStatus.includes('busy')
+    raw.isBusy
   );
 
   const isOnline = Boolean(
-    raw.isOnline ||
-    raw.online ||
-    raw.isChatOnline ||
-    raw.isCallOnline ||
-    raw.chat?.isOnline ||
-    raw.call?.isOnline ||
-    rawStatus === 'online' ||
-    rawStatus.includes('online') ||
-    rawStatus === 'available'
+    raw.isOnline
   );
 
   if (isBusy) {
@@ -208,6 +190,8 @@ export const mapAstroToCard = (raw: any): AstrologerData => {
     isCelebrity: Boolean(raw.isFeatured),
     tag,
     status,
+    isOnline,
+    isBusy,
     skills,
     languages,
     experience,

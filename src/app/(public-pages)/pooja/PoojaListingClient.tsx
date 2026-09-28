@@ -114,6 +114,7 @@ export default function PoojaListingClient() {
   const [totalCount, setTotalCount] = useState(0);
   const [activeCategoryId, setActiveCategoryId] = useState<string>('All');
   const [searchQuery, setSearchQuery] = useState('');
+  const [appliedSearch, setAppliedSearch] = useState('');
   const [categoriesList, setCategoriesList] = useState<PoojaCategory[]>([]);
 
   // 3 home sections for default view (when no search / filter applied)
@@ -303,8 +304,7 @@ export default function PoojaListingClient() {
     return [allItem, ...categoriesList];
   }, [categoriesList]);
 
-  const trimmedSearch = searchQuery.trim();
-  const effectiveSearch = trimmedSearch.length >= 3 ? trimmedSearch : '';
+  const effectiveSearch = appliedSearch.trim();
 
   // Fetch Pooja list for search or category filter:
   // - Category filter: GET /user/pooja/category/:id?page=X&limit=15&poojaName=...
@@ -336,15 +336,12 @@ export default function PoojaListingClient() {
       }
     };
 
-    const timer = setTimeout(() => {
-      loadPoojas();
-    }, 300);
+    loadPoojas();
 
     return () => {
       isMounted = false;
-      clearTimeout(timer);
     };
-  }, [currentPage, activeCategoryId, effectiveSearch]);
+  }, [currentPage, activeCategoryId, appliedSearch]);
 
   const handlePageChange = (newPage: number) => {
     if (newPage < 1 || newPage > totalPages || newPage === currentPage || isLoading) return;
@@ -411,11 +408,10 @@ export default function PoojaListingClient() {
                   key={item}
                   onClick={() => onPage(item)}
                   disabled={loading}
-                  className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full text-xs font-bold flex items-center justify-center transition-all cursor-pointer ${
-                    item === cPage
-                      ? 'bg-[#F6971E] text-white shadow-[0_2px_8px_rgba(246,151,30,0.35)]'
-                      : 'bg-white border border-gray-200 text-[#4A2B23] hover:border-[#F6971E] hover:text-[#F6971E]'
-                  }`}
+                  className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full text-xs font-bold flex items-center justify-center transition-all cursor-pointer ${item === cPage
+                    ? 'bg-[#F6971E] text-white shadow-[0_2px_8px_rgba(246,151,30,0.35)]'
+                    : 'bg-white border border-gray-200 text-[#4A2B23] hover:border-[#F6971E] hover:text-[#F6971E]'
+                    }`}
                 >
                   {item}
                 </button>
@@ -478,15 +474,13 @@ export default function PoojaListingClient() {
 
                       const slideContent = (
                         <div
-                          className={`absolute top-0 left-0 w-full h-full transition-all duration-700 ease-in-out ${
-                            hasLink ? 'cursor-pointer' : ''
-                          } ${
-                            position === 0
+                          className={`absolute top-0 left-0 w-full h-full transition-all duration-700 ease-in-out ${hasLink ? 'cursor-pointer' : ''
+                            } ${position === 0
                               ? 'z-20 opacity-100 translate-x-0'
                               : position === 1
                                 ? 'z-10 opacity-0 translate-x-full'
                                 : 'z-10 opacity-0 -translate-x-full'
-                          }`}
+                            }`}
                         >
                           <Image
                             src={slide.imageUrl}
@@ -518,9 +512,8 @@ export default function PoojaListingClient() {
                         <button
                           key={idx}
                           onClick={() => setCurrentSlide(idx)}
-                          className={`w-2.5 h-2.5 rounded-full transition-all duration-300 cursor-pointer ${
-                            idx === currentSlide ? 'bg-[#F6971E] w-6' : 'bg-gray-300 hover:bg-[#F6971E]/50'
-                          }`}
+                          className={`w-2.5 h-2.5 rounded-full transition-all duration-300 cursor-pointer ${idx === currentSlide ? 'bg-[#F6971E] w-6' : 'bg-gray-300 hover:bg-[#F6971E]/50'
+                            }`}
                           aria-label={`Go to slide ${idx + 1}`}
                         />
                       ))}
@@ -548,19 +541,20 @@ export default function PoojaListingClient() {
             onChange={(e) => {
               const val = e.target.value;
               setSearchQuery(val);
-              if (val.trim().length >= 3 || val.trim().length === 0) {
+              // If user clears the input, reset search results immediately
+              if (val.trim() === '') {
+                setAppliedSearch('');
                 setCurrentPage(1);
               }
             }}
             onKeyDown={(e) => {
               if (e.key === 'Enter') {
                 e.preventDefault();
-                if (searchQuery.trim().length >= 3) {
-                  setCurrentPage(1);
-                }
+                setAppliedSearch(searchQuery.trim());
+                setCurrentPage(1);
               }
             }}
-            placeholder="Search pooja by name, deity or temple..."
+            placeholder="Search pooja by name..."
             className="flex-grow bg-transparent border-none outline-none px-2 sm:px-3 py-1 sm:py-1.5 font-helvetica text-gray-700 placeholder:text-gray-400 text-xs sm:text-sm w-full min-w-0"
           />
           {searchQuery && (
@@ -568,6 +562,7 @@ export default function PoojaListingClient() {
               type="button"
               onClick={() => {
                 setSearchQuery('');
+                setAppliedSearch('');
                 setCurrentPage(1);
               }}
               className="p-1 text-gray-400 hover:text-gray-600 mr-1 cursor-pointer transition-colors"
@@ -579,20 +574,14 @@ export default function PoojaListingClient() {
           <button
             type="button"
             onClick={() => {
-              if (searchQuery.trim().length >= 3) {
-                setCurrentPage(1);
-              }
+              setAppliedSearch(searchQuery.trim());
+              setCurrentPage(1);
             }}
             className="bg-[#F6971E] text-white font-bold font-helvetica px-4 sm:px-6 py-1.5 sm:py-2 rounded-full hover:bg-[#e5850b] transition-all whitespace-nowrap shadow-xs text-xs sm:text-sm cursor-pointer"
           >
             Search
           </button>
         </div>
-        {searchQuery.trim().length > 0 && searchQuery.trim().length < 3 && (
-          <p className="text-[11px] sm:text-xs text-[#F6971E] text-center -mt-3 sm:-mt-4 mb-4 font-medium animate-in fade-in">
-            Type at least 3 characters to search...
-          </p>
-        )}
 
         {/* 2. Scrollable Category Tabs */}
         <div
@@ -702,6 +691,7 @@ export default function PoojaListingClient() {
                 <button
                   onClick={() => {
                     setSearchQuery('');
+                    setAppliedSearch('');
                     setActiveCategoryId('All');
                     setCurrentPage(1);
                   }}

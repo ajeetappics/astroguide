@@ -362,8 +362,9 @@ export default function AstrologersListing({ initialCategory = "All" }: Astrolog
             onChange={(e) => {
               const val = e.target.value;
               setSearchQuery(val);
-              if (val.trim() === "" && appliedSearch !== "") {
-                setAppliedSearch("");
+              // If user clears the input, reset search results immediately
+              if (val.trim() === '') {
+                setAppliedSearch('');
                 setCurrentPage(1);
               }
             }}
@@ -607,7 +608,7 @@ export default function AstrologersListing({ initialCategory = "All" }: Astrolog
             ))}
           </div>
         ) : filteredAstrologers?.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3.5 sm:gap-4 md:gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-4 md:gap-5">
             {filteredAstrologers.map((astro) => (
               <AstrologerCard key={astro.id} astro={astro} />
             ))}

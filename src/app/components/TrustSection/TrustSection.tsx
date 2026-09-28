@@ -214,7 +214,7 @@ export default function TrustSection() {
 
           {/* Heading */}
           <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-[40px] font-bold font-['Inria_Serif'] text-[#2A1535] leading-tight mb-3">
-            Why Trust <span className="text-[#8B5219]">Balaji Astro Guide?</span>
+            Why Trust <span className="text-[#F6971E]">Balaji Astro Guide?</span>
           </h2>
 
           {/* Subtitle */}

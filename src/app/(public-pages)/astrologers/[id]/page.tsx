@@ -172,12 +172,18 @@ export default async function AstrologerDetailPage({ params }: PageProps) {
       initialFeedbacks?.pagination?.totalDocs ?? initialFeedbacks?.data?.pagination?.totalDocs ?? rawFeedbacks.length;
 
     const ratingVal =
-      initialFeedbacks?.averageRating ??
-      initialFeedbacks?.data?.averageRating ??
-      astro.averageRating ??
+      (initialFeedbacks?.averageRating !== undefined && Number(initialFeedbacks.averageRating) > 0
+        ? Number(initialFeedbacks.averageRating).toFixed(1)
+        : null) ??
+      (initialFeedbacks?.data?.averageRating !== undefined && Number(initialFeedbacks.data.averageRating) > 0
+        ? Number(initialFeedbacks.data.averageRating).toFixed(1)
+        : null) ??
+      (astro.averageRating !== undefined && Number(astro.averageRating) > 0
+        ? Number(astro.averageRating).toFixed(1)
+        : null) ??
       (rawFeedbacks.length > 0
-        ? (rawFeedbacks.reduce((acc: number, curr: any) => acc + (Number(curr.rating) || 5), 0) / rawFeedbacks.length).toFixed(1)
-        : '5.0');
+        ? (rawFeedbacks.reduce((acc: number, curr: any) => acc + (Number(curr.rating) || 0), 0) / rawFeedbacks.length).toFixed(1)
+        : '0');
 
     const bioText =
       astro.profileBio ||

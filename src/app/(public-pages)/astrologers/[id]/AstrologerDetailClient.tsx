@@ -98,6 +98,7 @@ export default function AstrologerDetailClient({
       setProfileImgSrc(defaultAstroImg);
     }
   }, [astro]);
+  console.log(initialFeedbacks, "11111111111111111");
 
   useEffect(() => {
     let isMounted = true;
@@ -223,20 +224,20 @@ export default function AstrologerDetailClient({
   const rawFeedbacks: any[] = Array.isArray(feedbacksData)
     ? feedbacksData
     : Array.isArray(feedbacksData?.data)
-    ? feedbacksData.data
-    : Array.isArray(feedbacksData?.sessionFeedbacks)
-    ? feedbacksData.sessionFeedbacks
-    : Array.isArray(feedbacksData?.feedbacks)
-    ? feedbacksData.feedbacks
-    : Array.isArray(feedbacksData?.data?.sessionFeedbacks)
-    ? feedbacksData.data.sessionFeedbacks
-    : Array.isArray(feedbacksData?.data?.feedbacks)
-    ? feedbacksData.data.feedbacks
-    : Array.isArray(feedbacksData?.data?.docs)
-    ? feedbacksData.data.docs
-    : Array.isArray(feedbacksData?.docs)
-    ? feedbacksData.docs
-    : [];
+      ? feedbacksData.data
+      : Array.isArray(feedbacksData?.sessionFeedbacks)
+        ? feedbacksData.sessionFeedbacks
+        : Array.isArray(feedbacksData?.feedbacks)
+          ? feedbacksData.feedbacks
+          : Array.isArray(feedbacksData?.data?.sessionFeedbacks)
+            ? feedbacksData.data.sessionFeedbacks
+            : Array.isArray(feedbacksData?.data?.feedbacks)
+              ? feedbacksData.data.feedbacks
+              : Array.isArray(feedbacksData?.data?.docs)
+                ? feedbacksData.data.docs
+                : Array.isArray(feedbacksData?.docs)
+                  ? feedbacksData.docs
+                  : [];
 
   const totalReviewsCount =
     feedbacksData?.pagination?.totalDocs ??
@@ -280,11 +281,11 @@ export default function AstrologerDetailClient({
       : currentAstro?.averageRating !== undefined && Number(currentAstro.averageRating) > 0
         ? Number(currentAstro.averageRating).toFixed(1)
         : rawFeedbacks.length > 0
-          ? (rawFeedbacks.reduce((acc: number, curr: any) => acc + (Number(curr.rating ?? curr.stars ?? curr.starRating) || 5), 0) / rawFeedbacks.length).toFixed(1)
-          : '5.0';
+          ? (rawFeedbacks.reduce((acc: number, curr: any) => acc + (Number(curr.rating ?? curr.stars ?? curr.starRating) || 0), 0) / rawFeedbacks.length).toFixed(1)
+          : '0';
 
   const reviewsList = rawFeedbacks.map((item: any, index: number) => {
-    
+
     const rawName = (
       item.userFullName ||
       item.userName ||
@@ -295,7 +296,7 @@ export default function AstrologerDetailClient({
       ''
     ).trim();
     const name = rawName !== '' ? rawName : `Client ${index + 1}`;
-    const stars = Number(item.rating ?? item.stars ?? item.starRating ?? item.userRating ?? item.score) || 5;
+    const stars = Number(item.rating ?? item.stars ?? item.starRating ?? item.userRating ?? item.score) || 0;
     const dateFormatted = item.createdAt
       ? new Date(item.createdAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })
       : '';
@@ -373,28 +374,8 @@ export default function AstrologerDetailClient({
     ''
   ).toLowerCase();
 
-  const isBusy = Boolean(
-    currentAstro?.isBusy ||
-    currentAstro?.busy ||
-    currentAstro?.isChatBusy ||
-    currentAstro?.isCallBusy ||
-    currentAstro?.chat?.isBusy ||
-    currentAstro?.call?.isBusy ||
-    rawStatus === 'busy' ||
-    rawStatus.includes('busy')
-  );
-
-  const isOnline = Boolean(
-    currentAstro?.isOnline ||
-    currentAstro?.online ||
-    currentAstro?.isChatOnline ||
-    currentAstro?.isCallOnline ||
-    currentAstro?.chat?.isOnline ||
-    currentAstro?.call?.isOnline ||
-    rawStatus === 'online' ||
-    rawStatus.includes('online') ||
-    rawStatus === 'available'
-  );
+  const isBusy = Boolean(currentAstro?.isBusy);
+  const isOnline = Boolean(currentAstro?.isOnline);
 
   // AEO Structured Questions & Answers
   const faqList = [
@@ -423,7 +404,7 @@ export default function AstrologerDetailClient({
       answer: `Yes, 100%. All consultations with ${astroName} on Balaji AstroGuide are strictly private, confidential, and protected with end-to-end encryption. Your personal details and birth data are never shared.`
     }
   ];
-  
+
   return (
     <div className="min-h-screen bg-[#FFFDF9] pb-20 font-helvetica">
       {/* 1. Hero Banner (Light Theme) */}
@@ -466,7 +447,7 @@ export default function AstrologerDetailClient({
               </div>
 
               {/* Status Indicator (Online = Green, Busy = Red) */}
-              {/* {isBusy ? (
+              {isBusy ? (
                 <span
                   title="Busy"
                   className="absolute bottom-1 right-1 w-4 h-4 sm:w-5 sm:h-5 rounded-full bg-[#E53935] border-[3px] border-white shadow-md z-10"
@@ -476,7 +457,7 @@ export default function AstrologerDetailClient({
                   title="Online"
                   className="absolute bottom-1 right-1 w-4 h-4 sm:w-5 sm:h-5 rounded-full bg-[#00C853] border-[3px] border-white shadow-md z-10 animate-pulse"
                 />
-              ) : null} */}
+              ) : null}
             </div>
 
             {/* Profile Info */}
@@ -501,8 +482,8 @@ export default function AstrologerDetailClient({
                     {/* Tag if present (e.g., Trending) */}
                     {currentAstro.tag?.tagName && (
                       <span className="inline-flex items-center gap-1 text-[10px] sm:text-xs font-bold text-[#F6971E] bg-[#FFF8EB] border border-[#F6971E]/30 px-2.5 py-0.5 rounded-full uppercase tracking-wider shadow-2xs text-center max-w-full truncate">
-                        <span className="shrink-0">🔥</span>
                         <span className="truncate">{currentAstro.tag.tagName}</span>
+                        <span className="shrink-0">🔥</span>
                       </span>
                     )}
                   </div>
@@ -586,7 +567,12 @@ export default function AstrologerDetailClient({
               {/* 2. Rating (3 cols) */}
               <div className="col-span-6 md:col-span-3 flex flex-col items-center justify-center text-center py-2 border-l border-gray-100 bg-transparent">
                 <span className="text-lg sm:text-xl md:text-2xl font-bold text-[#4A2B23] mb-0.5 flex items-center justify-center gap-1.5 leading-tight">
-                  <BsStarFill className="text-[#F6971E] text-sm sm:text-base md:text-lg" /> {displayRating}
+                  {Number(displayRating) > 0 ? (
+                    <BsStarFill className="text-[#F6971E] text-sm sm:text-base md:text-lg" />
+                  ) : (
+                    <BsStar className="text-gray-400 text-sm sm:text-base md:text-lg" />
+                  )}
+                  {Number(displayRating) > 0 ? displayRating : '0'}
                 </span>
                 <span className="text-[10px] sm:text-xs text-gray-500 font-bold uppercase tracking-wider">
                   Rating {totalReviewsCount > 0 ? `(${totalReviewsCount})` : ''}
@@ -628,12 +614,7 @@ export default function AstrologerDetailClient({
                     </div>
                   </button>
                 ) : (
-                  <div className="w-full h-full min-h-[48px] sm:min-h-[54px] flex flex-col items-center justify-center py-1">
-                    <span className="text-base sm:text-xl font-bold text-[#4A2B23] leading-tight">
-                      {currentAstro.totalCalls || '1k+'}
-                    </span>
-                    <span className="text-[10px] text-gray-500 font-bold uppercase tracking-wider">Consults</span>
-                  </div>
+                  <></>
                 )}
               </div>
             </div>
@@ -778,7 +759,7 @@ export default function AstrologerDetailClient({
                 <span className="w-1 sm:w-1.5 h-4 sm:h-5 md:h-6 bg-[#F6971E] rounded-full inline-block shrink-0"></span> User Reviews
               </h2>
               <div className="flex items-center gap-2 sm:gap-2.5 bg-[#FFFDF9] border border-[#F6971E]/20 px-3 sm:px-3.5 py-1 sm:py-1.5 rounded-full">
-                <span className="font-bold text-base sm:text-lg text-[#4A2B23]">{displayRating}</span>
+                <span className="font-bold text-base sm:text-lg text-[#4A2B23]">{Number(displayRating) > 0 ? displayRating : '0'}</span>
                 <div className="flex text-[#F6971E] text-xs sm:text-sm items-center gap-0.5">
                   {Array.from({ length: 5 }, (_, starIdx) => {
                     const starVal = starIdx + 1;

@@ -3,11 +3,11 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { BsArrowRight } from 'react-icons/bs';
-import AstrologerCard, { AstrologerData } from '../Card/AstrologerCard';
 import { fetchTopAstrologers } from '@/services/astrologer/astrologerService';
+import TopAstrologerCard, { TopAstrologerData } from '../Card/TopAstrologerCard';
 
 export default function AstrologerSection() {
-  const [astrologers, setAstrologers] = useState<AstrologerData[]>([]);
+  const [astrologers, setAstrologers] = useState<TopAstrologerData[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -54,7 +54,7 @@ export default function AstrologerSection() {
         </div>
 
         {/* Astrologers Grid (5 columns on desktop) */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-3.5 md:gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-3.5 md:gap-4">
           {isLoading && astrologers.length === 0 ? (
             [...Array(5)].map((_, i) => (
               <div
@@ -82,8 +82,8 @@ export default function AstrologerSection() {
               </div>
             ))
           ) : astrologers && astrologers.length > 0 ? (
-            astrologers.slice(0, 5).map((astro) => (
-              <AstrologerCard key={astro.id} astro={astro} />
+            astrologers.slice(0, 4).map((astro) => (
+              <TopAstrologerCard key={astro.id} astro={astro} />
             ))
           ) : (
             <div className="text-center col-span-full text-gray-500 py-8">
