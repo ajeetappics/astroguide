@@ -192,7 +192,7 @@ export default function AstrologersListing({ initialCategory = "All" }: Astrolog
     if (!initialCategory || initialCategory.toLowerCase() === "all") return "All";
     const catMatch = categories.find(
       c => c.slug.toLowerCase() === initialCategory.toLowerCase() ||
-           c.name.toLowerCase() === initialCategory.toLowerCase()
+        c.name.toLowerCase() === initialCategory.toLowerCase()
     );
     if (catMatch) return catMatch.name;
 
@@ -347,339 +347,339 @@ export default function AstrologersListing({ initialCategory = "All" }: Astrolog
       />
 
       {/* Main Content Area: Floating Search, Tabs & Astrologer Grid */}
-      <section id="astrologer-listing-section" className="container mx-auto max-w-7xl px-4 -mt-6 sm:-mt-8 relative z-20">
-
-        {/* 1. Search Bar */}
-        <div className="bg-white rounded-full shadow-md p-1 sm:p-1.5 flex items-center border border-gray-200/80 max-w-xl sm:max-w-2xl mx-auto mb-5 sm:mb-6 md:mb-8 w-full focus-within:border-[#F6971E]/50 focus-within:shadow-[0_4px_16px_rgba(246,151,30,0.12)] transition-all">
-          <div className="pl-3 pr-1 text-gray-400">
-            <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-            </svg>
-          </div>
-          <input
-            type="text"
-            value={searchQuery}
-            onChange={(e) => {
-              const val = e.target.value;
-              setSearchQuery(val);
-              // If user clears the input, reset search results immediately
-              if (val.trim() === '') {
-                setAppliedSearch('');
-                setCurrentPage(1);
-              }
-            }}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter') {
-                e.preventDefault();
-                handleSearchSubmit();
-              }
-            }}
-            placeholder={`Search ${activeTab === 'All' ? 'astrologers' : `${activeTab} astrologers`} by name...`}
-            className="flex-grow bg-transparent border-none outline-none px-2 sm:px-3 py-1 sm:py-1.5 font-helvetica text-gray-700 placeholder:text-gray-400 text-xs sm:text-sm w-full min-w-0"
-          />
-          {searchQuery && (
-            <button
-              type="button"
-              onClick={() => {
-                setSearchQuery("");
-                setAppliedSearch("");
-                setCurrentPage(1);
+      <section id="astrologer-listing-section" className="container mx-auto max-w-7xl -mt-6 sm:-mt-8 relative z-20">
+        <div className="sticky z-40 top-15 lg:top-20 bg-[#FFFDF9]/95 backdrop-blur-md  px-4 py-2">
+          {/* 1. Search Bar */}
+          <div className="bg-white rounded-full shadow-md p-1 sm:p-1.5 flex items-center border border-gray-200/80 max-w-xl sm:max-w-2xl mx-auto mb-2 sm:mb-4 md:mb-4 w-full focus-within:border-[#F6971E]/50 focus-within:shadow-[0_4px_16px_rgba(246,151,30,0.12)] transition-all">
+            <div className="pl-3 pr-1 text-gray-400">
+              <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+              </svg>
+            </div>
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => {
+                const val = e.target.value;
+                setSearchQuery(val);
+                // If user clears the input, reset search results immediately
+                if (val.trim() === '') {
+                  setAppliedSearch('');
+                  setCurrentPage(1);
+                }
               }}
-              className="p-1 text-gray-400 hover:text-gray-600 mr-1 cursor-pointer transition-colors"
-              aria-label="Clear search"
-            >
-              <BsX className="w-4 h-4" />
-            </button>
-          )}
-          <button
-            type="button"
-            onClick={handleSearchSubmit}
-            className="bg-[#F6971E] text-white font-bold font-helvetica px-4 sm:px-6 py-1.5 sm:py-2 rounded-full hover:bg-[#e5850b] transition-all whitespace-nowrap shadow-xs text-xs sm:text-sm cursor-pointer"
-          >
-            Search
-          </button>
-        </div>
-
-        {/* 2. Tabs and Sort Row */}
-        <div className="flex items-center justify-between gap-3 sm:gap-4 md:gap-8 w-full mb-6 sm:mb-8 md:mb-10">
-
-          {/* Scrollable Tabs */}
-          <div
-            className="flex-1 overflow-x-auto pb-1.5 -mb-1.5"
-            style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
-          >
-            <style dangerouslySetInnerHTML={{
-              __html: `
-              .overflow-x-auto::-webkit-scrollbar { display: none; }
-            `}} />
-            <div className="flex items-center gap-2 sm:gap-2.5 md:gap-3 w-max">
-              {/* Filter Button at start of bar (matching mobile screenshot) */}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  e.preventDefault();
+                  handleSearchSubmit();
+                }
+              }}
+              placeholder={`Search ${activeTab === 'All' ? 'astrologers' : `${activeTab} astrologers`} by name...`}
+              className="flex-grow bg-transparent border-none outline-none px-2 sm:px-3 py-1 sm:py-1.5 font-helvetica text-gray-700 placeholder:text-gray-400 text-xs sm:text-sm w-full min-w-0"
+            />
+            {searchQuery && (
               <button
                 type="button"
-                onClick={() => setIsFilterModalOpen(true)}
-                className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-full text-xs sm:text-sm font-bold font-helvetica transition-all shadow-xs sm:shadow-sm flex-shrink-0 cursor-pointer ${
-                  activeFiltersCount > 0
-                    ? 'bg-[#FFF9E6] border border-[#F6971E] text-[#C47D14]'
-                    : 'bg-white border border-gray-200 text-[#4A2B23] hover:border-[#F6971E]/50 hover:text-[#F6971E]'
-                }`}
+                onClick={() => {
+                  setSearchQuery("");
+                  setAppliedSearch("");
+                  setCurrentPage(1);
+                }}
+                className="p-1 text-gray-400 hover:text-gray-600 mr-1 cursor-pointer transition-colors"
+                aria-label="Clear search"
               >
-                <BsFunnel className="w-3.5 h-3.5 text-[#F6971E]" />
-                <span>Filter</span>
-                {activeFiltersCount > 0 && (
-                  <span className="w-4 h-4 rounded-full bg-[#F6971E] text-white text-[10px] font-bold flex items-center justify-center">
-                    {activeFiltersCount}
-                  </span>
-                )}
+                <BsX className="w-4 h-4" />
               </button>
-
-              {tabItems.map((tab) => {
-                const isActive = activeTab.toLowerCase() === tab.name.toLowerCase();
-                return (
-                  <button
-                    key={tab.slug || tab.name}
-                    onClick={() => handleTabChange(tab.name)}
-                    className={`inline-flex items-center gap-2 px-3.5 py-0.5 sm:px-4 sm:py-2 md:px-5 md:py-2 rounded-full text-xs sm:text-sm font-bold font-helvetica transition-all shadow-xs sm:shadow-sm flex-shrink-0 cursor-pointer ${isActive
-                      ? 'bg-[#F6971E] text-white border-none shadow-[0_4px_10px_rgba(246,151,30,0.3)]'
-                      : 'bg-white border border-gray-200 text-[#4A2B23] hover:border-[#F6971E]/50 hover:text-[#F6971E]'
-                      }`}
-                  >
-                    {tab.icon ? (
-                      <div className={`w-5 h-5 sm:w-6 sm:h-6 rounded-full flex items-center justify-center flex-shrink-0 overflow-hidden bg-white`}>
-                        <Image
-                          src={tab.icon}
-                          alt={tab.name}
-                          width={20}
-                          height={20}
-                          unoptimized
-                          className="w-3.5 h-3.5 sm:w-4 sm:h-4 object-contain"
-                        />
-                      </div>
-                    ) : tab.name === 'All' ? (
-                      <span className={`w-4 h-4 sm:w-5 sm:h-5 rounded-full flex items-center justify-center flex-shrink-0 text-[10px] ${
-                        isActive ? 'bg-white/25 text-white' : 'bg-[#FFF9F0] text-[#F6971E]'
-                      }`}>
-                        ★
-                      </span>
-                    ) : null}
-                    <span className="whitespace-nowrap">{tab.name}</span>
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-        </div>
-
-        {/* Active Filter Tags */}
-        {(activeTab !== "All" || appliedSearch || appliedSort || appliedLanguage || appliedTag) && (
-          <div className="flex items-center gap-2 mb-6 flex-wrap">
-            <span className="text-xs text-gray-500 font-medium">Active filters:</span>
-            {activeTab !== "All" && (
-              <span className="inline-flex items-center gap-1.5 bg-orange-50 text-[#F6971E] border border-orange-200 text-xs px-3 py-1 rounded-full font-medium">
-                Category: {activeTab}
-                <button
-                  onClick={() => {
-                    setActiveTab("All");
-                    setCurrentPage(1);
-                  }}
-                  className="hover:text-red-500 cursor-pointer"
-                  title="Remove category filter"
-                >
-                  <BsX className="text-sm" />
-                </button>
-              </span>
-            )}
-            {appliedSearch && (
-              <span className="inline-flex items-center gap-1.5 bg-gray-100 text-gray-700 text-xs px-3 py-1 rounded-full font-medium">
-                Search: &quot;{appliedSearch}&quot;
-                <button
-                  onClick={() => {
-                    setSearchQuery("");
-                    setAppliedSearch("");
-                    setCurrentPage(1);
-                  }}
-                  className="hover:text-red-500 cursor-pointer"
-                  title="Remove search filter"
-                >
-                  <BsX className="text-sm" />
-                </button>
-              </span>
-            )}
-            {appliedSort && (
-              <span className="inline-flex items-center gap-1.5 bg-amber-50 text-[#C47D14] border border-amber-200 text-xs px-3 py-1 rounded-full font-medium">
-                Sort: {SORT_LABELS[appliedSort] || appliedSort}
-                <button
-                  onClick={() => {
-                    setAppliedSort("");
-                    setCurrentPage(1);
-                  }}
-                  className="hover:text-red-500 cursor-pointer"
-                  title="Remove sort"
-                >
-                  <BsX className="text-sm" />
-                </button>
-              </span>
-            )}
-            {appliedLanguage && (
-              <span className="inline-flex items-center gap-1.5 bg-blue-50 text-blue-700 border border-blue-200 text-xs px-3 py-1 rounded-full font-medium">
-                Language: {appliedLanguage}
-                <button
-                  onClick={() => {
-                    setAppliedLanguage("");
-                    setCurrentPage(1);
-                  }}
-                  className="hover:text-red-500 cursor-pointer"
-                  title="Remove language filter"
-                >
-                  <BsX className="text-sm" />
-                </button>
-              </span>
-            )}
-            {appliedTag && (
-              <span className="inline-flex items-center gap-1.5 bg-purple-50 text-purple-700 border border-purple-200 text-xs px-3 py-1 rounded-full font-medium">
-                Tag: {appliedTag}
-                <button
-                  onClick={() => {
-                    setAppliedTag("");
-                    setCurrentPage(1);
-                  }}
-                  className="hover:text-red-500 cursor-pointer"
-                  title="Remove tag filter"
-                >
-                  <BsX className="text-sm" />
-                </button>
-              </span>
             )}
             <button
-              onClick={handleResetAllFilters}
-              className="text-xs text-[#72271E] hover:underline font-bold ml-1 cursor-pointer"
+              type="button"
+              onClick={handleSearchSubmit}
+              className="bg-[#F6971E] text-white font-bold font-helvetica px-4 sm:px-6 py-1.5 sm:py-2 rounded-full hover:bg-[#e5850b] transition-all whitespace-nowrap shadow-xs text-xs sm:text-sm cursor-pointer"
             >
-              Reset All
+              Search
             </button>
           </div>
-        )}
 
-        {/* 3. Astrologers Grid (Clean 5-column layout on desktop) */}
-        {isLoading ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3.5 sm:gap-4 md:gap-5">
-            {[...Array(10)].map((_, i) => (
-              <div
-                key={i}
-                className="bg-white rounded-2xl border border-[#F6971E]/15 overflow-hidden shadow-xs flex flex-col h-[340px]"
-              >
-                <div className="w-full aspect-[4/4.6] shimmer-dark" />
-                <div className="p-3 sm:p-3.5 flex flex-col flex-grow justify-between">
-                  <div>
-                    <div className="flex justify-between items-center mb-2">
-                      <div className="h-4 w-28 rounded-full shimmer-wave" />
-                      <div className="h-3 w-8 rounded shimmer-wave" />
-                    </div>
-                    <div className="h-3 w-20 rounded-full shimmer-wave mb-1.5" />
-                    <div className="h-3 w-32 rounded-full shimmer-wave" />
-                  </div>
-                  <div>
-                    <div className="pt-2 border-t border-gray-100 flex justify-between items-center mb-2">
-                      <div className="h-3 w-12 rounded shimmer-wave" />
-                      <div className="h-4 w-16 rounded shimmer-dark" />
-                    </div>
-                    <div className="h-8 w-full rounded-xl shimmer-wave" />
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        ) : filteredAstrologers?.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-3.5 sm:gap-4 md:gap-5">
-            {filteredAstrologers.map((astro) => (
-              <AstrologerCard key={astro.id} astro={astro} />
-            ))}
-          </div>
-        ) : (
-          <div className="text-center py-16 bg-white rounded-3xl border border-[#F6971E]/20 p-8 shadow-xs max-w-lg mx-auto">
-            <p className="text-gray-500 text-base font-helvetica mb-4">
-              {appliedSearch
-                ? `No astrologers found matching "${appliedSearch}".`
-                : activeTab && activeTab.toLowerCase() !== "all"
-                ? `No ${activeTab} astrologers found matching your filters.`
-                : "No astrologers found matching your filters."}
-            </p>
-            {Boolean(
-              (activeTab && activeTab.toLowerCase() !== "all") ||
-                appliedSearch ||
-                appliedSort ||
-                appliedLanguage ||
-                appliedTag
-            ) && (
-              <button
-                onClick={handleResetAllFilters}
-                className="bg-[#F6971E] text-white font-bold px-6 py-2 rounded-full text-sm hover:bg-[#e5850b] transition-all cursor-pointer"
-              >
-                Clear Filters
-              </button>
-            )}
-          </div>
-        )}
+          {/* 2. Tabs and Sort Row */}
+          <div className="flex items-center justify-between gap-3 sm:gap-4 md:gap-8 w-full mb-2">
 
-        {/* 4. Pagination Controls */}
-        {!isLoading && totalPages > 1 && (
-          <div className="mt-8 sm:mt-12 flex flex-col sm:flex-row items-center justify-between gap-4 pt-6 border-t border-gray-100">
-            {/* Showing Info */}
-            <p className="text-xs sm:text-sm text-gray-500 font-helvetica order-2 sm:order-1">
-              Showing <span className="font-semibold text-[#4A2B23]">{totalCount > 0 ? (currentPage - 1) * ITEMS_PER_PAGE + 1 : 0}</span> - <span className="font-semibold text-[#4A2B23]">{Math.min(currentPage * ITEMS_PER_PAGE, totalCount)}</span> of <span className="font-semibold text-[#4A2B23]">{totalCount}</span> astrologers
-            </p>
+            {/* Scrollable Tabs */}
+            <div
+              className="flex-1 overflow-x-auto pb-1.5 -mb-1.5"
+              style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+            >
+              <style dangerouslySetInnerHTML={{
+                __html: `
+              .overflow-x-auto::-webkit-scrollbar { display: none; }
+            `}} />
+              <div className="flex items-center gap-2 sm:gap-2.5 md:gap-3 w-max">
+                {/* Filter Button at start of bar (matching mobile screenshot) */}
+                <button
+                  type="button"
+                  onClick={() => setIsFilterModalOpen(true)}
+                  className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-full text-xs sm:text-sm font-bold font-helvetica transition-all shadow-xs sm:shadow-sm flex-shrink-0 cursor-pointer ${activeFiltersCount > 0
+                    ? 'bg-[#FFF9E6] border border-[#F6971E] text-[#C47D14]'
+                    : 'bg-white border border-gray-200 text-[#4A2B23] hover:border-[#F6971E]/50 hover:text-[#F6971E]'
+                    }`}
+                >
+                  <BsFunnel className="w-3.5 h-3.5 text-[#F6971E]" />
+                  <span>Filter</span>
+                  {activeFiltersCount > 0 && (
+                    <span className="w-4 h-4 rounded-full bg-[#F6971E] text-white text-[10px] font-bold flex items-center justify-center">
+                      {activeFiltersCount}
+                    </span>
+                  )}
+                </button>
 
-            {/* Pagination Buttons */}
-            <div className="flex items-center gap-1.5 sm:gap-2 order-1 sm:order-2 flex-wrap justify-center">
-              {/* Prev Button */}
-              <button
-                onClick={() => handlePageChange(currentPage - 1)}
-                disabled={currentPage === 1 || isLoading}
-                className="flex items-center gap-1 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full border border-gray-200 text-xs sm:text-sm font-bold text-[#4A2B23] bg-white hover:border-[#F6971E] hover:text-[#F6971E] disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:border-gray-200 disabled:hover:text-[#4A2B23] transition-all shadow-xs cursor-pointer"
-                aria-label="Previous Page"
-              >
-                <BsChevronLeft className="text-xs sm:text-sm" />
-                <span className="hidden sm:inline">Prev</span>
-              </button>
-
-              {/* Page Numbers */}
-              <div className="flex items-center gap-1 sm:gap-1.5">
-                {getPageNumbers(currentPage, totalPages).map((p, idx) => {
-                  if (typeof p === 'string') {
-                    return (
-                      <span key={`dots-${idx}`} className="px-1.5 sm:px-2 text-xs sm:text-sm text-gray-400 font-bold select-none">
-                        ...
-                      </span>
-                    );
-                  }
-                  const isCurrent = p === currentPage;
+                {tabItems.map((tab) => {
+                  const isActive = activeTab.toLowerCase() === tab.name.toLowerCase();
                   return (
                     <button
-                      key={p}
-                      onClick={() => handlePageChange(p)}
-                      disabled={isLoading}
-                      className={`w-8 h-8 sm:w-9 sm:h-9 rounded-full text-xs sm:text-sm font-bold flex items-center justify-center transition-all cursor-pointer ${isCurrent
-                          ? 'bg-[#F6971E] text-white shadow-[0_4px_10px_rgba(246,151,30,0.3)]'
-                          : 'bg-white border border-gray-200 text-[#4A2B23] hover:border-[#F6971E] hover:text-[#F6971E]'
+                      key={tab.slug || tab.name}
+                      onClick={() => handleTabChange(tab.name)}
+                      className={`inline-flex items-center gap-2 px-3.5 py-0.5 sm:px-4 sm:py-2 md:px-5 md:py-2 rounded-full text-xs sm:text-sm font-bold font-helvetica transition-all shadow-xs sm:shadow-sm flex-shrink-0 cursor-pointer ${isActive
+                        ? 'bg-[#F6971E] text-white border-none shadow-[0_4px_10px_rgba(246,151,30,0.3)]'
+                        : 'bg-white border border-gray-200 text-[#4A2B23] hover:border-[#F6971E]/50 hover:text-[#F6971E]'
                         }`}
                     >
-                      {p}
+                      {tab.icon ? (
+                        <div className={`w-5 h-5 sm:w-6 sm:h-6 rounded-full flex items-center justify-center flex-shrink-0 overflow-hidden bg-white`}>
+                          <Image
+                            src={tab.icon}
+                            alt={tab.name}
+                            width={20}
+                            height={20}
+                            unoptimized
+                            className="w-3.5 h-3.5 sm:w-4 sm:h-4 object-contain"
+                          />
+                        </div>
+                      ) : tab.name === 'All' ? (
+                        <span className={`w-4 h-4 sm:w-5 sm:h-5 rounded-full flex items-center justify-center flex-shrink-0 text-[10px] ${isActive ? 'bg-white/25 text-white' : 'bg-[#FFF9F0] text-[#F6971E]'
+                          }`}>
+                          ★
+                        </span>
+                      ) : null}
+                      <span className="whitespace-nowrap">{tab.name}</span>
                     </button>
                   );
                 })}
               </div>
-
-              {/* Next Button */}
-              <button
-                onClick={() => handlePageChange(currentPage + 1)}
-                disabled={currentPage === totalPages || isLoading}
-                className="flex items-center gap-1 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full border border-gray-200 text-xs sm:text-sm font-bold text-[#4A2B23] bg-white hover:border-[#F6971E] hover:text-[#F6971E] disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:border-gray-200 disabled:hover:text-[#4A2B23] transition-all shadow-xs cursor-pointer"
-                aria-label="Next Page"
-              >
-                <span className="hidden sm:inline">Next</span>
-                <BsChevronRight className="text-xs sm:text-sm" />
-              </button>
             </div>
           </div>
-        )}
+
+          {/* Active Filter Tags */}
+          {(activeTab !== "All" || appliedSearch || appliedSort || appliedLanguage || appliedTag) && (
+            <div className="flex items-center gap-2 mb-2 flex-wrap">
+              <span className="text-xs text-gray-500 font-medium">Active filters:</span>
+              {activeTab !== "All" && (
+                <span className="inline-flex items-center gap-1.5 bg-orange-50 text-[#F6971E] border border-orange-200 text-xs px-3 py-1 rounded-full font-medium">
+                  Category: {activeTab}
+                  <button
+                    onClick={() => {
+                      setActiveTab("All");
+                      setCurrentPage(1);
+                    }}
+                    className="hover:text-red-500 cursor-pointer"
+                    title="Remove category filter"
+                  >
+                    <BsX className="text-sm" />
+                  </button>
+                </span>
+              )}
+              {appliedSearch && (
+                <span className="inline-flex items-center gap-1.5 bg-gray-100 text-gray-700 text-xs px-3 py-1 rounded-full font-medium">
+                  Search: &quot;{appliedSearch}&quot;
+                  <button
+                    onClick={() => {
+                      setSearchQuery("");
+                      setAppliedSearch("");
+                      setCurrentPage(1);
+                    }}
+                    className="hover:text-red-500 cursor-pointer"
+                    title="Remove search filter"
+                  >
+                    <BsX className="text-sm" />
+                  </button>
+                </span>
+              )}
+              {appliedSort && (
+                <span className="inline-flex items-center gap-1.5 bg-amber-50 text-[#C47D14] border border-amber-200 text-xs px-3 py-1 rounded-full font-medium">
+                  Sort: {SORT_LABELS[appliedSort] || appliedSort}
+                  <button
+                    onClick={() => {
+                      setAppliedSort("");
+                      setCurrentPage(1);
+                    }}
+                    className="hover:text-red-500 cursor-pointer"
+                    title="Remove sort"
+                  >
+                    <BsX className="text-sm" />
+                  </button>
+                </span>
+              )}
+              {appliedLanguage && (
+                <span className="inline-flex items-center gap-1.5 bg-blue-50 text-blue-700 border border-blue-200 text-xs px-3 py-1 rounded-full font-medium">
+                  Language: {appliedLanguage}
+                  <button
+                    onClick={() => {
+                      setAppliedLanguage("");
+                      setCurrentPage(1);
+                    }}
+                    className="hover:text-red-500 cursor-pointer"
+                    title="Remove language filter"
+                  >
+                    <BsX className="text-sm" />
+                  </button>
+                </span>
+              )}
+              {appliedTag && (
+                <span className="inline-flex items-center gap-1.5 bg-purple-50 text-purple-700 border border-purple-200 text-xs px-3 py-1 rounded-full font-medium">
+                  Tag: {appliedTag}
+                  <button
+                    onClick={() => {
+                      setAppliedTag("");
+                      setCurrentPage(1);
+                    }}
+                    className="hover:text-red-500 cursor-pointer"
+                    title="Remove tag filter"
+                  >
+                    <BsX className="text-sm" />
+                  </button>
+                </span>
+              )}
+              <button
+                onClick={handleResetAllFilters}
+                className="text-xs text-[#72271E] hover:underline font-bold ml-1 cursor-pointer"
+              >
+                Reset All
+              </button>
+            </div>
+          )}
+        </div>
+        <div>
+          {/* 3. Astrologers Grid (Clean 5-column layout on desktop) */}
+          {isLoading ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3.5 sm:gap-4 md:gap-5">
+              {[...Array(10)].map((_, i) => (
+                <div
+                  key={i}
+                  className="bg-white rounded-2xl border border-[#F6971E]/15 overflow-hidden shadow-xs flex flex-col h-[340px]"
+                >
+                  <div className="w-full aspect-[4/4.6] shimmer-dark" />
+                  <div className="p-3 sm:p-3.5 flex flex-col flex-grow justify-between">
+                    <div>
+                      <div className="flex justify-between items-center mb-2">
+                        <div className="h-4 w-28 rounded-full shimmer-wave" />
+                        <div className="h-3 w-8 rounded shimmer-wave" />
+                      </div>
+                      <div className="h-3 w-20 rounded-full shimmer-wave mb-1.5" />
+                      <div className="h-3 w-32 rounded-full shimmer-wave" />
+                    </div>
+                    <div>
+                      <div className="pt-2 border-t border-gray-100 flex justify-between items-center mb-2">
+                        <div className="h-3 w-12 rounded shimmer-wave" />
+                        <div className="h-4 w-16 rounded shimmer-dark" />
+                      </div>
+                      <div className="h-8 w-full rounded-xl shimmer-wave" />
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : filteredAstrologers?.length > 0 ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-2">
+              {filteredAstrologers.map((astro) => (
+                <AstrologerCard key={astro.id} astro={astro} />
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-16 bg-white rounded-3xl border border-[#F6971E]/20 p-8 shadow-xs max-w-lg mx-auto">
+              <p className="text-gray-500 text-base font-helvetica mb-4">
+                {appliedSearch
+                  ? `No astrologers found matching "${appliedSearch}".`
+                  : activeTab && activeTab.toLowerCase() !== "all"
+                    ? `No ${activeTab} astrologers found matching your filters.`
+                    : "No astrologers found matching your filters."}
+              </p>
+              {Boolean(
+                (activeTab && activeTab.toLowerCase() !== "all") ||
+                appliedSearch ||
+                appliedSort ||
+                appliedLanguage ||
+                appliedTag
+              ) && (
+                  <button
+                    onClick={handleResetAllFilters}
+                    className="bg-[#F6971E] text-white font-bold px-6 py-2 rounded-full text-sm hover:bg-[#e5850b] transition-all cursor-pointer"
+                  >
+                    Clear Filters
+                  </button>
+                )}
+            </div>
+          )}
+
+          {/* 4. Pagination Controls */}
+          {!isLoading && totalPages > 1 && (
+            <div className="mt-8 sm:mt-12 flex flex-col sm:flex-row items-center justify-between gap-4 pt-6 border-t border-gray-100">
+              {/* Showing Info */}
+              <p className="text-xs sm:text-sm text-gray-500 font-helvetica order-2 sm:order-1">
+                Showing <span className="font-semibold text-[#4A2B23]">{totalCount > 0 ? (currentPage - 1) * ITEMS_PER_PAGE + 1 : 0}</span> - <span className="font-semibold text-[#4A2B23]">{Math.min(currentPage * ITEMS_PER_PAGE, totalCount)}</span> of <span className="font-semibold text-[#4A2B23]">{totalCount}</span> astrologers
+              </p>
+
+              {/* Pagination Buttons */}
+              <div className="flex items-center gap-1.5 sm:gap-2 order-1 sm:order-2 flex-wrap justify-center">
+                {/* Prev Button */}
+                <button
+                  onClick={() => handlePageChange(currentPage - 1)}
+                  disabled={currentPage === 1 || isLoading}
+                  className="flex items-center gap-1 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full border border-gray-200 text-xs sm:text-sm font-bold text-[#4A2B23] bg-white hover:border-[#F6971E] hover:text-[#F6971E] disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:border-gray-200 disabled:hover:text-[#4A2B23] transition-all shadow-xs cursor-pointer"
+                  aria-label="Previous Page"
+                >
+                  <BsChevronLeft className="text-xs sm:text-sm" />
+                  <span className="hidden sm:inline">Prev</span>
+                </button>
+
+                {/* Page Numbers */}
+                <div className="flex items-center gap-1 sm:gap-1.5">
+                  {getPageNumbers(currentPage, totalPages).map((p, idx) => {
+                    if (typeof p === 'string') {
+                      return (
+                        <span key={`dots-${idx}`} className="px-1.5 sm:px-2 text-xs sm:text-sm text-gray-400 font-bold select-none">
+                          ...
+                        </span>
+                      );
+                    }
+                    const isCurrent = p === currentPage;
+                    return (
+                      <button
+                        key={p}
+                        onClick={() => handlePageChange(p)}
+                        disabled={isLoading}
+                        className={`w-8 h-8 sm:w-9 sm:h-9 rounded-full text-xs sm:text-sm font-bold flex items-center justify-center transition-all cursor-pointer ${isCurrent
+                          ? 'bg-[#F6971E] text-white shadow-[0_4px_10px_rgba(246,151,30,0.3)]'
+                          : 'bg-white border border-gray-200 text-[#4A2B23] hover:border-[#F6971E] hover:text-[#F6971E]'
+                          }`}
+                      >
+                        {p}
+                      </button>
+                    );
+                  })}
+                </div>
+
+                {/* Next Button */}
+                <button
+                  onClick={() => handlePageChange(currentPage + 1)}
+                  disabled={currentPage === totalPages || isLoading}
+                  className="flex items-center gap-1 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full border border-gray-200 text-xs sm:text-sm font-bold text-[#4A2B23] bg-white hover:border-[#F6971E] hover:text-[#F6971E] disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:border-gray-200 disabled:hover:text-[#4A2B23] transition-all shadow-xs cursor-pointer"
+                  aria-label="Next Page"
+                >
+                  <span className="hidden sm:inline">Next</span>
+                  <BsChevronRight className="text-xs sm:text-sm" />
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
       </section>
 
       {/* 5. SEO Section: Why Consult Astrologers on Balaji AstroGuide */}
