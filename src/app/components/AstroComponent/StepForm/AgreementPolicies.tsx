@@ -19,7 +19,6 @@ export default function AgreementPolicies({ onNext, onBack, initialData }: Agree
   });
 
   const onSubmit = (data:any) => {
-    console.log(data);
     onNext({ agreement: data });
   };
 

@@ -104,7 +104,6 @@ export default function AvailabilityPricing({ onNext, onBack, initialData }: Ava
     };
 
     const onSubmit = (data: FormValues) => {
-        console.log(data);
         onNext({ availability: data });
     };
 

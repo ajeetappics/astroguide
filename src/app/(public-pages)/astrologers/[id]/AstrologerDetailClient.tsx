@@ -423,8 +423,7 @@ export default function AstrologerDetailClient({
       answer: `Yes, 100%. All consultations with ${astroName} on Balaji AstroGuide are strictly private, confidential, and protected with end-to-end encryption. Your personal details and birth data are never shared.`
     }
   ];
-  console.log(currentAstro,"111111111111111111");
-
+  
   return (
     <div className="min-h-screen bg-[#FFFDF9] pb-20 font-helvetica">
       {/* 1. Hero Banner (Light Theme) */}

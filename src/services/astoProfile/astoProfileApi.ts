@@ -134,11 +134,8 @@ const updateAstroProfile = async (id: string, payload: AllFormData): Promise<any
 
   // Check if there is anything to update
   if (Object.keys(jsonPayload).length === 0) {
-    console.log("No new data to update. Skipping API call.");
     return Promise.resolve({ message: "No changes to submit." });
   }
-
-  console.log("Submitting CLEANED payload:", jsonPayload);
 
   try {
     const response = await axios.patch(url, jsonPayload, getAuthHeaders(false));
@@ -260,7 +257,6 @@ const registerAstro = async (payload: AllFormData): Promise<any> => {
   // Add bankDetails if you collect them, ensuring it's an object
   // jsonPayload.bankDetails = { accountNumber: "...", bankName: "..." };
 
-  console.log("Submitting FINAL payload:", JSON.stringify(jsonPayload, null, 2));
 
   try {
     const response = await axios.post(url, jsonPayload, getAuthHeaders(false));

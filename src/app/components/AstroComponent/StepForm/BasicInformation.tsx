@@ -132,7 +132,6 @@ export default function BasicInformation({ onNext, onBack, initialData }: BasicI
             let uploadedvideos: any = [];
             let uploadedgalleryPhotos: any = [];
             let uploadedcertificateGallery: any = [];
-            console.log(data.profileImg, "11111111data.profileImg");
 
             if (data.profileImg) {
                 const response: any = await commonService.uploadImage([data.profileImg]);

@@ -150,8 +150,6 @@ export default function ProfessionalDetails({ onNext, onBack, initialData }: Pro
   };
 
   const onSubmit = async (data: any) => {
-    console.log(data);
-
 
     try {
       // Collect all files you want to upload
