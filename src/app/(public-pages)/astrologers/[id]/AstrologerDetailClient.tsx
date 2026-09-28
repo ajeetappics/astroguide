@@ -284,8 +284,7 @@ export default function AstrologerDetailClient({
           : '5.0';
 
   const reviewsList = rawFeedbacks.map((item: any, index: number) => {
-    console.log(`=== [REVIEW ITEM #${index + 1}] ===`, item);
-
+    
     const rawName = (
       item.userFullName ||
       item.userName ||
@@ -424,6 +423,7 @@ export default function AstrologerDetailClient({
       answer: `Yes, 100%. All consultations with ${astroName} on Balaji AstroGuide are strictly private, confidential, and protected with end-to-end encryption. Your personal details and birth data are never shared.`
     }
   ];
+  console.log(currentAstro,"111111111111111111");
 
   return (
     <div className="min-h-screen bg-[#FFFDF9] pb-20 font-helvetica">

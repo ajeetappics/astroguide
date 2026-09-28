@@ -13,13 +13,19 @@ import {
   BsTranslate,
   BsChevronDown,
   BsChevronUp,
+  BsFunnel,
 } from 'react-icons/bs';
 import AstrologerCard, { AstrologerData } from '../Card/AstrologerCard';
 import AstrologerHeroBanner from './AstrologerHeroBanner';
+import SortFilterModal from './SortFilterModal';
 import {
   fetchAstroList,
   fetchExpertiseList,
+  fetchLanguageList,
+  fetchTagsList,
   ExpertiseCategory,
+  LanguageItem,
+  TagItem,
 } from '@/services/astrologer/astrologerService';
 
 export interface AstrologersListingProps {
@@ -141,15 +147,30 @@ const ASTROLOGER_FAQS = [
 
 export default function AstrologersListing({ initialCategory = "All" }: AstrologersListingProps) {
   const [categories, setCategories] = useState<ExpertiseCategory[]>([]);
+  const [languages, setLanguages] = useState<LanguageItem[]>([]);
+  const [tags, setTags] = useState<TagItem[]>([]);
 
-  // Fetch categories dynamically from /user/expertise API
+  // Fetch categories, languages, and tags dynamically from backend APIs
   useEffect(() => {
     let isMounted = true;
-    fetchExpertiseList().then((data) => {
-      if (isMounted && data && data.length > 0) {
-        setCategories(data);
-      }
-    }).catch((err) => console.warn("Error fetching categories:", err));
+    fetchExpertiseList()
+      .then((data) => {
+        if (isMounted && data && data.length > 0) setCategories(data);
+      })
+      .catch((err) => console.warn("Error fetching categories:", err));
+
+    fetchLanguageList()
+      .then((data) => {
+        if (isMounted && data && data.length > 0) setLanguages(data);
+      })
+      .catch((err) => console.warn("Error fetching languages:", err));
+
+    fetchTagsList()
+      .then((data) => {
+        if (isMounted && data && data.length > 0) setTags(data);
+      })
+      .catch((err) => console.warn("Error fetching tags:", err));
+
     return () => {
       isMounted = false;
     };
@@ -184,7 +205,15 @@ export default function AstrologersListing({ initialCategory = "All" }: Astrolog
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
+
+  // Search & Filter state
   const [searchQuery, setSearchQuery] = useState("");
+  const [appliedSearch, setAppliedSearch] = useState("");
+  const [appliedSort, setAppliedSort] = useState("");
+  const [appliedLanguage, setAppliedLanguage] = useState("");
+  const [appliedTag, setAppliedTag] = useState("");
+  const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
+
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
   const router = useRouter();
 
@@ -192,10 +221,14 @@ export default function AstrologersListing({ initialCategory = "All" }: Astrolog
   useEffect(() => {
     setActiveTab(resolvedCategory);
     setCurrentPage(1);
+    setSearchQuery("");
+    setAppliedSearch("");
   }, [resolvedCategory]);
 
-  const trimmedSearch = searchQuery.trim();
-  const effectiveSearch = trimmedSearch.length >= 3 ? trimmedSearch : "";
+  const handleSearchSubmit = () => {
+    setAppliedSearch(searchQuery.trim());
+    setCurrentPage(1);
+  };
 
   useEffect(() => {
     let isMounted = true;
@@ -204,15 +237,18 @@ export default function AstrologersListing({ initialCategory = "All" }: Astrolog
         setIsLoading(true);
         const expertiseParam =
           activeTab && activeTab.toLowerCase() !== "all"
-            ? activeTab.toLowerCase()
+            ? activeTab
             : undefined;
 
-        const { astrologers: apiList, total, totalPages: pages } = await fetchAstroList(
-          currentPage,
-          ITEMS_PER_PAGE,
-          expertiseParam,
-          effectiveSearch
-        );
+        const { astrologers: apiList, total, totalPages: pages } = await fetchAstroList({
+          page: currentPage,
+          limit: ITEMS_PER_PAGE,
+          expertise: expertiseParam,
+          search: appliedSearch,
+          language: appliedLanguage,
+          tag: appliedTag,
+          sort: appliedSort,
+        });
         if (isMounted) {
           setAllAstrologers(apiList || []);
           setTotalCount(total || 0);
@@ -225,18 +261,28 @@ export default function AstrologersListing({ initialCategory = "All" }: Astrolog
       }
     };
 
-    const timer = setTimeout(() => {
-      loadAstrologers();
-    }, 300);
+    loadAstrologers();
 
     return () => {
       isMounted = false;
-      clearTimeout(timer);
     };
-  }, [activeTab, currentPage, effectiveSearch]);
+  }, [activeTab, currentPage, appliedSearch, appliedSort, appliedLanguage, appliedTag]);
 
-  const [isSortOpen, setIsSortOpen] = useState(false);
-  const [selectedSort, setSelectedSort] = useState("Popularity");
+  const SORT_LABELS: Record<string, string> = {
+    experiencedsc: "Experience: High to Low",
+    experienceasc: "Experience: Low to High",
+    ratingdsc: "Rating: High to Low",
+    ratingasc: "Rating: Low to High",
+  };
+
+  const activeFiltersCount = useMemo(() => {
+    let count = 0;
+    if (activeTab && activeTab.toLowerCase() !== "all") count++;
+    if (appliedSort) count++;
+    if (appliedLanguage) count++;
+    if (appliedTag) count++;
+    return count;
+  }, [activeTab, appliedSort, appliedLanguage, appliedTag]);
 
   const handlePageChange = (newPage: number) => {
     if (newPage >= 1 && newPage <= totalPages && newPage !== currentPage) {
@@ -251,6 +297,8 @@ export default function AstrologersListing({ initialCategory = "All" }: Astrolog
   const handleTabChange = (tab: string) => {
     setActiveTab(tab);
     setCurrentPage(1);
+    setSearchQuery("");
+    setAppliedSearch("");
     if (tab.toLowerCase() === "all") {
       router.push('/astrologers');
     } else {
@@ -260,33 +308,19 @@ export default function AstrologersListing({ initialCategory = "All" }: Astrolog
     }
   };
 
-  // Sort astrologers based on selectedSort (Search is managed dynamically via API)
-  const filteredAstrologers = useMemo(() => {
-    if (!allAstrologers || allAstrologers.length === 0) return [];
-    return [...allAstrologers].sort((a, b) => {
-      if (selectedSort === 'Price: Low to High') {
-        const priceA = parseInt(a.price.replace(/[^\d]/g, '') || '0');
-        const priceB = parseInt(b.price.replace(/[^\d]/g, '') || '0');
-        return priceA - priceB;
-      }
-      if (selectedSort === 'Price: High to Low') {
-        const priceA = parseInt(a.price.replace(/[^\d]/g, '') || '0');
-        const priceB = parseInt(b.price.replace(/[^\d]/g, '') || '0');
-        return priceB - priceA;
-      }
-      if (selectedSort === 'Experience: High to Low') {
-        const expA = parseInt(a.experience.replace(/[^\d]/g, '') || '0');
-        const expB = parseInt(b.experience.replace(/[^\d]/g, '') || '0');
-        return expB - expA;
-      }
-      if (selectedSort === 'Experience: Low to High') {
-        const expA = parseInt(a.experience.replace(/[^\d]/g, '') || '0');
-        const expB = parseInt(b.experience.replace(/[^\d]/g, '') || '0');
-        return expA - expB;
-      }
-      return 0;
-    });
-  }, [allAstrologers, selectedSort]);
+  const handleResetAllFilters = () => {
+    setActiveTab("All");
+    setAppliedSort("");
+    setAppliedLanguage("");
+    setAppliedTag("");
+    setSearchQuery("");
+    setAppliedSearch("");
+    setCurrentPage(1);
+    router.push('/astrologers');
+  };
+
+  // Sorting is powered directly by the backend API via query parameter
+  const filteredAstrologers = allAstrologers;
 
   // Dynamic headings for category landing
   const categoryInfo = activeTab !== "All"
@@ -328,19 +362,18 @@ export default function AstrologersListing({ initialCategory = "All" }: Astrolog
             onChange={(e) => {
               const val = e.target.value;
               setSearchQuery(val);
-              if (val.trim().length >= 3 || val.trim().length === 0) {
+              if (val.trim() === "" && appliedSearch !== "") {
+                setAppliedSearch("");
                 setCurrentPage(1);
               }
             }}
             onKeyDown={(e) => {
               if (e.key === 'Enter') {
                 e.preventDefault();
-                if (searchQuery.trim().length >= 3) {
-                  setCurrentPage(1);
-                }
+                handleSearchSubmit();
               }
             }}
-            placeholder={`Search ${activeTab === 'All' ? 'astrologers' : `${activeTab} astrologers`} by name or skill...`}
+            placeholder={`Search ${activeTab === 'All' ? 'astrologers' : `${activeTab} astrologers`} by name...`}
             className="flex-grow bg-transparent border-none outline-none px-2 sm:px-3 py-1 sm:py-1.5 font-helvetica text-gray-700 placeholder:text-gray-400 text-xs sm:text-sm w-full min-w-0"
           />
           {searchQuery && (
@@ -348,6 +381,7 @@ export default function AstrologersListing({ initialCategory = "All" }: Astrolog
               type="button"
               onClick={() => {
                 setSearchQuery("");
+                setAppliedSearch("");
                 setCurrentPage(1);
               }}
               className="p-1 text-gray-400 hover:text-gray-600 mr-1 cursor-pointer transition-colors"
@@ -358,21 +392,12 @@ export default function AstrologersListing({ initialCategory = "All" }: Astrolog
           )}
           <button
             type="button"
-            onClick={() => {
-              if (searchQuery.trim().length >= 3) {
-                setCurrentPage(1);
-              }
-            }}
+            onClick={handleSearchSubmit}
             className="bg-[#F6971E] text-white font-bold font-helvetica px-4 sm:px-6 py-1.5 sm:py-2 rounded-full hover:bg-[#e5850b] transition-all whitespace-nowrap shadow-xs text-xs sm:text-sm cursor-pointer"
           >
             Search
           </button>
         </div>
-        {searchQuery.trim().length > 0 && searchQuery.trim().length < 3 && (
-          <p className="text-[11px] sm:text-xs text-[#F6971E] text-center -mt-3 sm:-mt-4 mb-4 font-medium animate-in fade-in">
-            Type at least 3 characters to search...
-          </p>
-        )}
 
         {/* 2. Tabs and Sort Row */}
         <div className="flex items-center justify-between gap-3 sm:gap-4 md:gap-8 w-full mb-6 sm:mb-8 md:mb-10">
@@ -387,6 +412,25 @@ export default function AstrologersListing({ initialCategory = "All" }: Astrolog
               .overflow-x-auto::-webkit-scrollbar { display: none; }
             `}} />
             <div className="flex items-center gap-2 sm:gap-2.5 md:gap-3 w-max">
+              {/* Filter Button at start of bar (matching mobile screenshot) */}
+              <button
+                type="button"
+                onClick={() => setIsFilterModalOpen(true)}
+                className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-full text-xs sm:text-sm font-bold font-helvetica transition-all shadow-xs sm:shadow-sm flex-shrink-0 cursor-pointer ${
+                  activeFiltersCount > 0
+                    ? 'bg-[#FFF9E6] border border-[#F6971E] text-[#C47D14]'
+                    : 'bg-white border border-gray-200 text-[#4A2B23] hover:border-[#F6971E]/50 hover:text-[#F6971E]'
+                }`}
+              >
+                <BsFunnel className="w-3.5 h-3.5 text-[#F6971E]" />
+                <span>Filter</span>
+                {activeFiltersCount > 0 && (
+                  <span className="w-4 h-4 rounded-full bg-[#F6971E] text-white text-[10px] font-bold flex items-center justify-center">
+                    {activeFiltersCount}
+                  </span>
+                )}
+              </button>
+
               {tabItems.map((tab) => {
                 const isActive = activeTab.toLowerCase() === tab.name.toLowerCase();
                 return (
@@ -423,48 +467,39 @@ export default function AstrologersListing({ initialCategory = "All" }: Astrolog
             </div>
           </div>
 
-          {/* Sort Dropdown Button */}
-          <div className="flex-shrink-0 relative">
+          {/* Filter Button on right */}
+          <div className="flex-shrink-0">
             <button
-              onClick={() => setIsSortOpen(!isSortOpen)}
-              className="flex items-center gap-1.5 sm:gap-2 bg-white border border-[#F6971E]/30 px-3.5 py-1.5 sm:px-5 sm:py-2 rounded-full font-bold text-xs sm:text-sm text-[#4A2B23] hover:border-[#F6971E] transition-all shadow-xs sm:shadow-sm cursor-pointer"
+              onClick={() => setIsFilterModalOpen(true)}
+              className={`flex items-center gap-1.5 sm:gap-2 bg-white border px-3.5 py-1.5 sm:px-5 sm:py-2 rounded-full font-bold text-xs sm:text-sm transition-all shadow-xs sm:shadow-sm cursor-pointer ${
+                activeFiltersCount > 0
+                  ? 'border-[#F6971E] text-[#C47D14] bg-[#FFF9E6]'
+                  : 'border-[#F6971E]/30 text-[#4A2B23] hover:border-[#F6971E]'
+              }`}
             >
-              <span>Sort</span>
-              <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#F6971E]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12" />
-              </svg>
+              <BsFunnel className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#F6971E]" />
+              <span>Filter</span>
+              {activeFiltersCount > 0 && (
+                <span className="w-4 h-4 rounded-full bg-[#F6971E] text-white text-[10px] font-bold flex items-center justify-center">
+                  {activeFiltersCount}
+                </span>
+              )}
             </button>
-
-            {/* Sort Menu */}
-            {isSortOpen && (
-              <div className="absolute right-0 mt-2 w-44 sm:w-48 bg-white rounded-2xl shadow-xl border border-[#F6971E]/20 py-2 z-30">
-                {["Popularity", "Price: Low to High", "Price: High to Low", "Experience: High to Low", "Experience: Low to High"].map((sortOption) => (
-                  <button
-                    key={sortOption}
-                    onClick={() => {
-                      setSelectedSort(sortOption);
-                      setIsSortOpen(false);
-                    }}
-                    className={`w-full text-left px-4 py-2 sm:py-2.5 text-xs sm:text-sm font-helvetica transition-colors cursor-pointer ${selectedSort === sortOption ? 'bg-orange-50 text-[#F6971E] font-bold' : 'text-gray-700 hover:bg-gray-50'
-                      }`}
-                  >
-                    {sortOption}
-                  </button>
-                ))}
-              </div>
-            )}
           </div>
         </div>
 
         {/* Active Filter Tags */}
-        {(activeTab !== "All" || effectiveSearch) && (
+        {(activeTab !== "All" || appliedSearch || appliedSort || appliedLanguage || appliedTag) && (
           <div className="flex items-center gap-2 mb-6 flex-wrap">
             <span className="text-xs text-gray-500 font-medium">Active filters:</span>
             {activeTab !== "All" && (
               <span className="inline-flex items-center gap-1.5 bg-orange-50 text-[#F6971E] border border-orange-200 text-xs px-3 py-1 rounded-full font-medium">
                 Category: {activeTab}
                 <button
-                  onClick={() => handleTabChange("All")}
+                  onClick={() => {
+                    setActiveTab("All");
+                    setCurrentPage(1);
+                  }}
                   className="hover:text-red-500 cursor-pointer"
                   title="Remove category filter"
                 >
@@ -472,12 +507,13 @@ export default function AstrologersListing({ initialCategory = "All" }: Astrolog
                 </button>
               </span>
             )}
-            {effectiveSearch && (
+            {appliedSearch && (
               <span className="inline-flex items-center gap-1.5 bg-gray-100 text-gray-700 text-xs px-3 py-1 rounded-full font-medium">
-                Search: &quot;{effectiveSearch}&quot;
+                Search: &quot;{appliedSearch}&quot;
                 <button
                   onClick={() => {
                     setSearchQuery("");
+                    setAppliedSearch("");
                     setCurrentPage(1);
                   }}
                   className="hover:text-red-500 cursor-pointer"
@@ -487,12 +523,53 @@ export default function AstrologersListing({ initialCategory = "All" }: Astrolog
                 </button>
               </span>
             )}
+            {appliedSort && (
+              <span className="inline-flex items-center gap-1.5 bg-amber-50 text-[#C47D14] border border-amber-200 text-xs px-3 py-1 rounded-full font-medium">
+                Sort: {SORT_LABELS[appliedSort] || appliedSort}
+                <button
+                  onClick={() => {
+                    setAppliedSort("");
+                    setCurrentPage(1);
+                  }}
+                  className="hover:text-red-500 cursor-pointer"
+                  title="Remove sort"
+                >
+                  <BsX className="text-sm" />
+                </button>
+              </span>
+            )}
+            {appliedLanguage && (
+              <span className="inline-flex items-center gap-1.5 bg-blue-50 text-blue-700 border border-blue-200 text-xs px-3 py-1 rounded-full font-medium">
+                Language: {appliedLanguage}
+                <button
+                  onClick={() => {
+                    setAppliedLanguage("");
+                    setCurrentPage(1);
+                  }}
+                  className="hover:text-red-500 cursor-pointer"
+                  title="Remove language filter"
+                >
+                  <BsX className="text-sm" />
+                </button>
+              </span>
+            )}
+            {appliedTag && (
+              <span className="inline-flex items-center gap-1.5 bg-purple-50 text-purple-700 border border-purple-200 text-xs px-3 py-1 rounded-full font-medium">
+                Tag: {appliedTag}
+                <button
+                  onClick={() => {
+                    setAppliedTag("");
+                    setCurrentPage(1);
+                  }}
+                  className="hover:text-red-500 cursor-pointer"
+                  title="Remove tag filter"
+                >
+                  <BsX className="text-sm" />
+                </button>
+              </span>
+            )}
             <button
-              onClick={() => {
-                handleTabChange("All");
-                setSearchQuery("");
-                setCurrentPage(1);
-              }}
+              onClick={handleResetAllFilters}
               className="text-xs text-[#72271E] hover:underline font-bold ml-1 cursor-pointer"
             >
               Reset All
@@ -538,19 +615,21 @@ export default function AstrologersListing({ initialCategory = "All" }: Astrolog
         ) : (
           <div className="text-center py-16 bg-white rounded-3xl border border-[#F6971E]/20 p-8 shadow-xs max-w-lg mx-auto">
             <p className="text-gray-500 text-base font-helvetica mb-4">
-              {effectiveSearch
-                ? `No astrologers found matching "${effectiveSearch}".`
+              {appliedSearch
+                ? `No astrologers found matching "${appliedSearch}".`
                 : activeTab && activeTab.toLowerCase() !== "all"
                 ? `No ${activeTab} astrologers found matching your filters.`
-                : "No astrologers found."}
+                : "No astrologers found matching your filters."}
             </p>
-            {Boolean((activeTab && activeTab.toLowerCase() !== "all") || effectiveSearch) && (
+            {Boolean(
+              (activeTab && activeTab.toLowerCase() !== "all") ||
+                appliedSearch ||
+                appliedSort ||
+                appliedLanguage ||
+                appliedTag
+            ) && (
               <button
-                onClick={() => {
-                  handleTabChange("All");
-                  setSearchQuery("");
-                  setCurrentPage(1);
-                }}
+                onClick={handleResetAllFilters}
                 className="bg-[#F6971E] text-white font-bold px-6 py-2 rounded-full text-sm hover:bg-[#e5850b] transition-all cursor-pointer"
               >
                 Clear Filters
@@ -722,6 +801,27 @@ export default function AstrologersListing({ initialCategory = "All" }: Astrolog
           })}
         </div>
       </section>
+
+      {/* Sort & Filter Modal (matching mobile UI) */}
+      <SortFilterModal
+        isOpen={isFilterModalOpen}
+        onClose={() => setIsFilterModalOpen(false)}
+        categories={categories}
+        languages={languages}
+        tags={tags}
+        selectedSort={appliedSort}
+        selectedExpertise={activeTab}
+        selectedLanguage={appliedLanguage}
+        selectedTag={appliedTag}
+        onApply={({ sort, expertise, language, tag }) => {
+          setAppliedSort(sort);
+          setAppliedLanguage(language);
+          setAppliedTag(tag);
+          setActiveTab(expertise || "All");
+          setCurrentPage(1);
+        }}
+        onReset={handleResetAllFilters}
+      />
 
     </main>
   );

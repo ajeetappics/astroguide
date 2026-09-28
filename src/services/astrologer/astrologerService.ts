@@ -222,21 +222,67 @@ export const mapAstroToCard = (raw: any): AstrologerData => {
 /**
  * Fetch astrologer list from GET API:
  */
+export interface AstroListFilterParams {
+  page?: number;
+  limit?: number;
+  expertise?: string;
+  search?: string;
+  language?: string;
+  tag?: string;
+  sort?: string;
+}
+
 export const fetchAstroList = async (
-  page = 1,
+  pageOrOptions: number | AstroListFilterParams = 1,
   limit = 20,
   expertise?: string,
-  search?: string
+  search?: string,
+  language?: string,
+  tag?: string,
+  sort?: string
 ): Promise<{ astrologers: AstrologerData[]; total: number; totalPages: number; currentPage: number }> => {
-  let url = `${API_URL}/user/astroList?page=${page}&limit=${limit}`;
+  let p = 1;
+  let l = 20;
+  let exp = expertise;
+  let s = search;
+  let lang = language;
+  let tg = tag;
+  let srt = sort;
 
-  if (expertise && expertise.trim() !== '' && expertise.toLowerCase() !== 'all') {
-    url += `&expertise=${encodeURIComponent(expertise.trim().toLowerCase())}`;
+  if (typeof pageOrOptions === 'object' && pageOrOptions !== null) {
+    p = pageOrOptions.page || 1;
+    l = pageOrOptions.limit || 20;
+    exp = pageOrOptions.expertise;
+    s = pageOrOptions.search;
+    lang = pageOrOptions.language;
+    tg = pageOrOptions.tag;
+    srt = pageOrOptions.sort;
+  } else {
+    p = pageOrOptions || 1;
+    l = limit || 20;
   }
 
-  if (search && search.trim().length >= 3) {
-    const q = encodeURIComponent(search.trim());
-    url += `&fullName=${q}`;
+  let url = `${API_URL}/user/astroList?page=${p}&limit=${l}`;
+
+  if (exp && exp.trim() !== '' && exp.toLowerCase() !== 'all') {
+    url += `&expertise=${encodeURIComponent(exp.trim())}`;
+  }
+
+  if (s && s.trim() !== '') {
+    const q = encodeURIComponent(s.trim());
+    url += `&search=${q}`;
+  }
+
+  if (lang && lang.trim() !== '' && lang.toLowerCase() !== 'all') {
+    url += `&language=${encodeURIComponent(lang.trim())}`;
+  }
+
+  if (tg && tg.trim() !== '' && tg.toLowerCase() !== 'all') {
+    url += `&tag=${encodeURIComponent(tg.trim())}`;
+  }
+
+  if (srt && srt.trim() !== '') {
+    url += `&sort=${encodeURIComponent(srt.trim())}`;
   }
 
   try {
@@ -270,12 +316,12 @@ export const fetchAstroList = async (
 
     const totalPages =
       resData?.paginationDetail?.totalPages ||
-      Math.ceil((total || astrologers.length) / limit) ||
+      Math.ceil((total || astrologers.length) / l) ||
       1;
 
     const currentPage =
       resData?.paginationDetail?.page ||
-      page ||
+      p ||
       1;
 
     return { astrologers, total, totalPages, currentPage };
@@ -364,7 +410,6 @@ export const fetchAstrologerFeedbacks = async (
   try {
     const response = await axios.get(url);
     const resData = response.data;
-    console.log(`[fetchAstrologerFeedbacks] API response for id ${id}:`, JSON.stringify(resData, null, 2));
     return resData?.data || resData;
   } catch (error) {
     console.error(`Error fetching feedbacks for astrologer id ${id}:`, error);
@@ -445,6 +490,67 @@ export const fetchExpertiseList = async (): Promise<ExpertiseCategory[]> => {
     return categories;
   } catch (error) {
     console.warn(`Error fetching expertise from ${API_URL}/user/expertise:`, error);
+    return [];
+  }
+};
+
+export interface LanguageItem {
+  _id: string;
+  languageName: string;
+  isActive?: boolean;
+}
+
+export const fetchLanguageList = async (): Promise<LanguageItem[]> => {
+  try {
+    const response = await axios.get(`${API_URL}/astro/language`);
+    const resData = response.data;
+    const rawList: any[] = Array.isArray(resData?.data)
+      ? resData.data
+      : Array.isArray(resData)
+      ? resData
+      : [];
+
+    return rawList
+      .filter((item) => Boolean(item?.languageName || item?.name))
+      .map((item) => ({
+        _id: item._id || item.id || '',
+        languageName: (item.languageName || item.name || '').trim(),
+        isActive: item.isActive,
+      }));
+  } catch (error) {
+    console.warn(`Error fetching languages from ${API_URL}/astro/language:`, error);
+    return [];
+  }
+};
+
+export interface TagItem {
+  _id: string;
+  tagName: string;
+}
+
+export const fetchTagsList = async (): Promise<TagItem[]> => {
+  try {
+    const response = await axios.get(`${API_URL}/user/tags`);
+    const resData = response.data;
+    const rawList: any[] = Array.isArray(resData?.data)
+      ? resData.data
+      : Array.isArray(resData)
+      ? resData
+      : [];
+
+    return rawList
+      .filter((item) => Boolean(item?.tagName || item?.name || (typeof item === 'string' && item.trim())))
+      .map((item) => {
+        if (typeof item === 'string') {
+          return { _id: item, tagName: item.trim() };
+        }
+        return {
+          _id: item._id || item.id || '',
+          tagName: (item.tagName || item.name || '').trim(),
+        };
+      });
+  } catch (error) {
+    console.warn(`Error fetching tags from ${API_URL}/user/tags:`, error);
     return [];
   }
 };
