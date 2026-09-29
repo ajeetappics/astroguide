@@ -398,7 +398,7 @@ export default function AstrologersListing({ initialCategory = "All" }: Astrolog
 
       {/* Main Content Area: Floating Search, Tabs & Astrologer Grid */}
       <section id="astrologer-listing-section" className="container mx-auto max-w-7xl -mt-6 sm:-mt-8 relative z-20">
-        <div className="sticky z-40 top-15 lg:top-20 bg-[#FFFDF9]/95 backdrop-blur-md  px-4 py-2">
+        <div className="sticky z-40 top-15 lg:top-20 bg-[#FFFDF9]/95 backdrop-blur-md  px-4 pb-1 pt-3">
           {/* 1. Search Bar */}
           <div className="bg-white rounded-full shadow-md p-1 sm:p-1.5 flex items-center border border-gray-200/80 max-w-xl sm:max-w-2xl mx-auto mb-2 sm:mb-4 md:mb-4 w-full focus-within:border-[#F6971E]/50 focus-within:shadow-[0_4px_16px_rgba(246,151,30,0.12)] transition-all">
             <div className="pl-3 pr-1 text-gray-400">
