@@ -605,7 +605,7 @@ export default function PoojaListingClient() {
                     setActiveCategoryId(cat._id);
                     setCurrentPage(1);
                   }}
-                  className={`inline-flex items-center gap-2 px-4 py-2 sm:px-5 sm:py-2.5 rounded-full text-xs sm:text-sm font-bold font-helvetica transition-all shadow-xs sm:shadow-sm flex-shrink-0 cursor-pointer ${isSelected
+                  className={`inline-flex items-center gap-2 px-4 py-1 sm:px-5 sm:py-2 rounded-full text-xs sm:text-sm font-bold font-helvetica transition-all shadow-xs sm:shadow-sm flex-shrink-0 cursor-pointer ${isSelected
                     ? 'bg-[#F6971E] text-white border border-[#F6971E] shadow-[0_4px_12px_rgba(246,151,30,0.3)] scale-[1.02]'
                     : 'bg-white border border-gray-200/90 text-[#4A2B23] hover:border-[#F6971E]/50 hover:text-[#F6971E]'
                     }`}
@@ -614,7 +614,7 @@ export default function PoojaListingClient() {
                     <img
                       src={cat.icon}
                       alt={cat.categoryName}
-                      className="w-4 h-4 sm:w-5 sm:h-5 object-contain flex-shrink-0"
+                      className={`${isSelected ? 'bg-white' : 'text-[#4A2B23]'} w-6 h-6 rounded-full object-contain flex-shrink-0 p-0.5`}
                       onError={(e) => {
                         (e.target as HTMLElement).style.display = 'none';
                       }}

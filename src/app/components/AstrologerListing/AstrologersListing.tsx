@@ -1,8 +1,8 @@
 'use client'
 
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 import {
   BsX,
   BsChevronLeft,
@@ -150,6 +150,10 @@ export default function AstrologersListing({ initialCategory = "All" }: Astrolog
   const [languages, setLanguages] = useState<LanguageItem[]>([]);
   const [tags, setTags] = useState<TagItem[]>([]);
 
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
   // Fetch categories, languages, and tags dynamically from backend APIs
   useEffect(() => {
     let isMounted = true;
@@ -195,9 +199,15 @@ export default function AstrologersListing({ initialCategory = "All" }: Astrolog
         c.name.toLowerCase() === initialCategory.toLowerCase()
     );
     if (catMatch) return catMatch.name;
-
     return initialCategory;
   }, [initialCategory, categories]);
+
+  // --- URL Query Param helpers ---
+  // Read filter state from URL params (for back-navigation restore)
+  const urlSearch   = searchParams.get('search')   || '';
+  const urlSort     = searchParams.get('sort')     || '';
+  const urlLanguage = searchParams.get('language') || '';
+  const urlTag      = searchParams.get('tag')      || '';
 
   const [activeTab, setActiveTab] = useState<string>(resolvedCategory);
   const [allAstrologers, setAllAstrologers] = useState<AstrologerData[]>([]);
@@ -206,28 +216,59 @@ export default function AstrologersListing({ initialCategory = "All" }: Astrolog
   const [totalPages, setTotalPages] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
 
-  // Search & Filter state
-  const [searchQuery, setSearchQuery] = useState("");
-  const [appliedSearch, setAppliedSearch] = useState("");
-  const [appliedSort, setAppliedSort] = useState("");
-  const [appliedLanguage, setAppliedLanguage] = useState("");
-  const [appliedTag, setAppliedTag] = useState("");
+  // Search & Filter state — initialised from URL params
+  const [searchQuery, setSearchQuery]     = useState(urlSearch);
+  const [appliedSearch, setAppliedSearch] = useState(urlSearch);
+  const [appliedSort, setAppliedSort]     = useState(urlSort);
+  const [appliedLanguage, setAppliedLanguage] = useState(urlLanguage);
+  const [appliedTag, setAppliedTag]       = useState(urlTag);
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
 
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
-  const router = useRouter();
 
-  // Sync if initialCategory prop changes
+  // --- Sync URL whenever filters change ---
+  const pushParams = useCallback(
+    (overrides: {
+      search?: string;
+      sort?: string;
+      language?: string;
+      tag?: string;
+    }) => {
+      const params = new URLSearchParams();
+      const s   = overrides.search   !== undefined ? overrides.search   : appliedSearch;
+      const so  = overrides.sort     !== undefined ? overrides.sort     : appliedSort;
+      const la  = overrides.language !== undefined ? overrides.language : appliedLanguage;
+      const ta  = overrides.tag      !== undefined ? overrides.tag      : appliedTag;
+
+      if (s)  params.set('search',   s);
+      if (so) params.set('sort',     so);
+      if (la) params.set('language', la);
+      if (ta) params.set('tag',      ta);
+
+      const qs = params.toString();
+      router.replace(`${pathname}${qs ? '?' + qs : ''}`, { scroll: false });
+    },
+    [appliedSearch, appliedSort, appliedLanguage, appliedTag, pathname, router]
+  );
+
+  // Sync activeTab when resolvedCategory changes (route/category change)
   useEffect(() => {
     setActiveTab(resolvedCategory);
+    // Restore page, search and other filters from URL (back-nav or category switch)
     setCurrentPage(1);
-    setSearchQuery("");
-    setAppliedSearch("");
+    setSearchQuery(urlSearch);
+    setAppliedSearch(urlSearch);
+    setAppliedSort(urlSort);
+    setAppliedLanguage(urlLanguage);
+    setAppliedTag(urlTag);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [resolvedCategory]);
 
   const handleSearchSubmit = () => {
-    setAppliedSearch(searchQuery.trim());
+    const trimmed = searchQuery.trim();
+    setAppliedSearch(trimmed);
     setCurrentPage(1);
+    pushParams({ search: trimmed });
   };
 
   useEffect(() => {
@@ -295,16 +336,25 @@ export default function AstrologersListing({ initialCategory = "All" }: Astrolog
   };
 
   const handleTabChange = (tab: string) => {
+    // Category change → navigate to new route
+    // Preserve search, but reset sort/language/tag/page
     setActiveTab(tab);
     setCurrentPage(1);
-    setSearchQuery("");
-    setAppliedSearch("");
+    setAppliedSort("");
+    setAppliedLanguage("");
+    setAppliedTag("");
+
+    // Build query string carrying the current search forward
+    const params = new URLSearchParams();
+    if (appliedSearch) params.set('search', appliedSearch);
+    const qs = params.toString();
+
     if (tab.toLowerCase() === "all") {
-      router.push('/astrologers');
+      router.push(`/astrologers${qs ? '?' + qs : ''}`);
     } else {
       const match = categories.find(c => c.name.toLowerCase() === tab.toLowerCase());
       const slug = match?.slug || tab.toLowerCase().replace(/[^a-z0-9]+/g, '-');
-      router.push(`/astrologers/category/${slug}`);
+      router.push(`/astrologers/category/${slug}${qs ? '?' + qs : ''}`);
     }
   };
 
@@ -366,6 +416,7 @@ export default function AstrologersListing({ initialCategory = "All" }: Astrolog
                 if (val.trim() === '') {
                   setAppliedSearch('');
                   setCurrentPage(1);
+                  pushParams({ search: '' });
                 }
               }}
               onKeyDown={(e) => {
@@ -384,6 +435,7 @@ export default function AstrologersListing({ initialCategory = "All" }: Astrolog
                   setSearchQuery("");
                   setAppliedSearch("");
                   setCurrentPage(1);
+                  pushParams({ search: '' });
                 }}
                 className="p-1 text-gray-400 hover:text-gray-600 mr-1 cursor-pointer transition-colors"
                 aria-label="Clear search"
@@ -475,10 +527,7 @@ export default function AstrologersListing({ initialCategory = "All" }: Astrolog
                 <span className="inline-flex items-center gap-1.5 bg-orange-50 text-[#F6971E] border border-orange-200 text-xs px-3 py-1 rounded-full font-medium">
                   Category: {activeTab}
                   <button
-                    onClick={() => {
-                      setActiveTab("All");
-                      setCurrentPage(1);
-                    }}
+                    onClick={() => handleTabChange("All")}
                     className="hover:text-red-500 cursor-pointer"
                     title="Remove category filter"
                   >
@@ -494,6 +543,7 @@ export default function AstrologersListing({ initialCategory = "All" }: Astrolog
                       setSearchQuery("");
                       setAppliedSearch("");
                       setCurrentPage(1);
+                      pushParams({ search: '' });
                     }}
                     className="hover:text-red-500 cursor-pointer"
                     title="Remove search filter"
@@ -509,6 +559,7 @@ export default function AstrologersListing({ initialCategory = "All" }: Astrolog
                     onClick={() => {
                       setAppliedSort("");
                       setCurrentPage(1);
+                      pushParams({ sort: '' });
                     }}
                     className="hover:text-red-500 cursor-pointer"
                     title="Remove sort"
@@ -524,6 +575,7 @@ export default function AstrologersListing({ initialCategory = "All" }: Astrolog
                     onClick={() => {
                       setAppliedLanguage("");
                       setCurrentPage(1);
+                      pushParams({ language: '' });
                     }}
                     className="hover:text-red-500 cursor-pointer"
                     title="Remove language filter"
@@ -539,6 +591,7 @@ export default function AstrologersListing({ initialCategory = "All" }: Astrolog
                     onClick={() => {
                       setAppliedTag("");
                       setCurrentPage(1);
+                      pushParams({ tag: '' });
                     }}
                     className="hover:text-red-500 cursor-pointer"
                     title="Remove tag filter"
@@ -798,8 +851,14 @@ export default function AstrologersListing({ initialCategory = "All" }: Astrolog
           setAppliedSort(sort);
           setAppliedLanguage(language);
           setAppliedTag(tag);
-          setActiveTab(expertise || "All");
           setCurrentPage(1);
+          // If expertise (category tab) changed via modal, handle routing
+          if (expertise && expertise.toLowerCase() !== activeTab.toLowerCase()) {
+            handleTabChange(expertise);
+          } else {
+            setActiveTab(expertise || "All");
+            pushParams({ sort, language, tag });
+          }
         }}
         onReset={handleResetAllFilters}
       />
