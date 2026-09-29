@@ -108,12 +108,12 @@ export default function AstrologerCard({ astro: astroProp, astrologer: astrologe
                                 title="Busy"
                                 className="absolute top-1.5 right-1.5 w-3 h-3 rounded-full bg-[#E53935] border-2 border-white shadow-xs z-20"
                             />
-                        ) : astro.isOnline ? (
+                        ) : (
                             <span
                                 title="Online"
                                 className="absolute top-1.5 right-1.5 w-3 h-3 rounded-full bg-[#00C853] border-2 border-white shadow-xs z-20 animate-pulse"
                             />
-                        ) : null}
+                        )}
 
                         {/* Tag Badge Overlay (Trending etc.) */}
                         {astro.tag?.tagName && (

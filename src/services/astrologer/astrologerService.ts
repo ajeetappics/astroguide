@@ -147,24 +147,6 @@ export const mapAstroToCard = (raw: any): AstrologerData => {
     }
   }
 
-  // Status determination (Online = Green, Busy = Red, Offline = none)
-  let status: 'online' | 'busy' | 'offline' = 'offline';
-
-  const isBusy = Boolean(
-    raw.isBusy
-  );
-
-  const isOnline = Boolean(
-    raw.isOnline
-  );
-
-  if (isBusy) {
-    status = 'busy';
-  } else if (isOnline) {
-    status = 'online';
-  } else {
-    status = 'offline';
-  }
 
   // Safe image URL handling: check all potential backend fields
   const rawImg =
@@ -182,6 +164,7 @@ export const mapAstroToCard = (raw: any): AstrologerData => {
   const imageUrl = sanitizeImageUrl(rawImg, '');
 
   return {
+    ...raw,
     id: raw._id || raw.id || String(Math.random()),
     _id: raw._id || raw.id,
     slug: raw.slug || raw._id || raw.id,
@@ -189,9 +172,6 @@ export const mapAstroToCard = (raw: any): AstrologerData => {
     isVerified: raw.isOtpVerified ?? raw.isProfileCompleted ?? true,
     isCelebrity: Boolean(raw.isFeatured),
     tag,
-    status,
-    isOnline,
-    isBusy,
     skills,
     languages,
     experience,

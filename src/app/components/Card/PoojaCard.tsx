@@ -81,12 +81,12 @@ export default function PoojaCard({ pooja, basePath = "/pooja" }: PoojaCardProps
         </p>
 
         {/* Footer: Price & Button */}
-        <div className="mt-auto flex items-center justify-between pt-2.5 border-t border-gray-100">
-          <div className="flex flex-col">
-            <span className="text-[#742A21] text-[9px] sm:text-[10px] font-bold uppercase tracking-widest">Starts At</span>
-            <span className="text-base sm:text-lg font-bold text-[#742A21] flex items-center">
+        <div className="mt-auto flex items-end justify-between pt-2.5 border-t border-gray-100 gap-1.5">
+          <div className="flex flex-col min-w-0">
+            <span className="text-[#742A21] text-[9px] sm:text-[10px] font-bold uppercase tracking-widest truncate">Starts At</span>
+            <span className="text-sm sm:text-lg font-bold text-[#742A21] flex items-center leading-tight">
               <span className="font-sans">₹</span>
-              {pooja.price.replace('₹', '')}
+              <span className="truncate">{pooja.price.replace('₹', '')}</span>
             </span>
           </div>
           <Link
@@ -95,9 +95,9 @@ export default function PoojaCard({ pooja, basePath = "/pooja" }: PoojaCardProps
               e.stopPropagation();
               try {
                 sessionStorage.setItem('deep_link_source', window.location.href);
-              } catch {}
+              } catch { }
             }}
-            className="bg-[#FDA42F] whitespace-nowrap text-white hover:bg-[#F6971E] font-bold text-xs sm:text-[13px] px-3 py-1.5 rounded-full transition-colors flex items-center gap-1 shadow-2xs cursor-pointer z-10"
+            className="bg-[#FDA42F] whitespace-nowrap text-white hover:bg-[#F6971E] font-bold text-[11px] sm:text-[13px] px-2.5 sm:px-3 py-1.5 rounded-full transition-colors flex items-center gap-1 shadow-2xs cursor-pointer z-10 shrink-0"
           >
             Connect <BsArrowRight className="text-xs" />
           </Link>

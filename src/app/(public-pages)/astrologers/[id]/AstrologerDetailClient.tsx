@@ -98,7 +98,6 @@ export default function AstrologerDetailClient({
       setProfileImgSrc(defaultAstroImg);
     }
   }, [astro]);
-  console.log(initialFeedbacks, "11111111111111111");
 
   useEffect(() => {
     let isMounted = true;
@@ -363,8 +362,7 @@ export default function AstrologerDetailClient({
     currentAstro.call?.ratePerMinute ||
     20;
 
-  const isBusy = Boolean(currentAstro?.isBusy || currentAstro?.isManuallyBusy);
-  const isOnline = !isBusy && Boolean(!currentAstro?.isManuallyBusy);
+  const isBusy = Boolean(currentAstro?.isBusy);
 
   // AEO Structured Questions & Answers
   const faqList = [
@@ -441,12 +439,12 @@ export default function AstrologerDetailClient({
                   title="Busy"
                   className="absolute bottom-3 right-3 w-4 h-4 sm:w-5 sm:h-5 rounded-full bg-[#E53935] border-[3px] border-white shadow-md z-10"
                 />
-              ) : isOnline ? (
+              ) : (
                 <span
                   title="Online"
                   className="absolute bottom-3 right-3 w-4 h-4 sm:w-5 sm:h-5 rounded-full bg-[#00C853] border-[3px] border-white shadow-md z-10 animate-pulse"
                 />
-              ) : null}
+              )}
             </div>
 
             {/* Profile Info */}
