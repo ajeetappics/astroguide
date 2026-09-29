@@ -1,9 +1,9 @@
 'use client';
 
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 import { BsSearch, BsX, BsChevronLeft, BsChevronRight } from 'react-icons/bs';
 import PoojaCard, { PujaData } from '../../components/Card/PoojaCard';
 import { usePoojaConfig } from '@/app/context/PoojaConfigContext';
@@ -31,6 +31,8 @@ interface SectionData {
 
 export default function PoojaListingClient() {
   const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
   const { isPoojaEnabled } = usePoojaConfig();
   const [webSlides, setWebSlides] = useState<BannerSlide[]>([]);
   const [mobileSlides, setMobileSlides] = useState<BannerSlide[]>([]);
@@ -107,15 +109,41 @@ export default function PoojaListingClient() {
   }, [currentSlides.length]);
 
   // State management for API integration
+  // Initialise from URL params so back-navigation restores the same state
+  const urlSearch       = searchParams.get('search')   || '';
+  const urlCategoryName = searchParams.get('category') || 'All'; // name stored in URL
+  const urlPage         = parseInt(searchParams.get('page') || '1', 10) || 1;
+
   const [poojas, setPoojas] = useState<PujaData[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(urlPage);
   const [totalPages, setTotalPages] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
-  const [activeCategoryId, setActiveCategoryId] = useState<string>('All');
-  const [searchQuery, setSearchQuery] = useState('');
-  const [appliedSearch, setAppliedSearch] = useState('');
+  // activeCategoryId  → used for API calls (backend needs _id)
+  // activeCategoryName → used for URL & display
+  const [activeCategoryId,   setActiveCategoryId]   = useState<string>('All');
+  const [activeCategoryName, setActiveCategoryName] = useState<string>(urlCategoryName);
+  const [searchQuery, setSearchQuery] = useState(urlSearch);
+  const [appliedSearch, setAppliedSearch] = useState(urlSearch);
   const [categoriesList, setCategoriesList] = useState<PoojaCategory[]>([]);
+
+  // --- URL sync helper (category stored as name, not ID) ---
+  const pushParams = useCallback(
+    (overrides: { search?: string; categoryName?: string; page?: number }) => {
+      const params = new URLSearchParams();
+      const s    = overrides.search       !== undefined ? overrides.search       : appliedSearch;
+      const cName= overrides.categoryName !== undefined ? overrides.categoryName : activeCategoryName;
+      const pg   = overrides.page         !== undefined ? overrides.page         : currentPage;
+
+      if (s && s.trim())         params.set('search',   s.trim());
+      if (cName && cName !== 'All') params.set('category', cName);
+      if (pg > 1)                params.set('page',     String(pg));
+
+      const qs = params.toString();
+      router.replace(`${pathname}${qs ? '?' + qs : ''}`, { scroll: false });
+    },
+    [appliedSearch, activeCategoryName, currentPage, pathname, router]
+  );
 
   // 3 home sections for default view (when no search / filter applied)
   const [trendingData, setTrendingData] = useState<SectionData>({
@@ -282,6 +310,16 @@ export default function PoojaListingClient() {
         const fetched = await fetchPoojaCategories(1, 10);
         if (isMounted && fetched && fetched.length > 0) {
           setCategoriesList(fetched);
+          // Resolve URL category name → ID after categories are loaded
+          if (urlCategoryName && urlCategoryName !== 'All') {
+            const match = fetched.find(
+              (c) => c.categoryName.toLowerCase() === urlCategoryName.toLowerCase()
+            );
+            if (match) {
+              setActiveCategoryId(match._id);
+              setActiveCategoryName(match.categoryName);
+            }
+          }
         }
       } catch (err) {
         console.error('Error fetching categories from /user/category:', err);
@@ -346,6 +384,7 @@ export default function PoojaListingClient() {
   const handlePageChange = (newPage: number) => {
     if (newPage < 1 || newPage > totalPages || newPage === currentPage || isLoading) return;
     setCurrentPage(newPage);
+    pushParams({ page: newPage });
     const listingSection = document.getElementById('pooja-listing-grid');
     if (listingSection) {
       listingSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -545,13 +584,16 @@ export default function PoojaListingClient() {
               if (val.trim() === '') {
                 setAppliedSearch('');
                 setCurrentPage(1);
+                pushParams({ search: '', page: 1 });
               }
             }}
             onKeyDown={(e) => {
               if (e.key === 'Enter') {
                 e.preventDefault();
-                setAppliedSearch(searchQuery.trim());
+                const trimmed = searchQuery.trim();
+                setAppliedSearch(trimmed);
                 setCurrentPage(1);
+                pushParams({ search: trimmed, page: 1 });
               }
             }}
             placeholder="Search pooja by name..."
@@ -564,6 +606,7 @@ export default function PoojaListingClient() {
                 setSearchQuery('');
                 setAppliedSearch('');
                 setCurrentPage(1);
+                pushParams({ search: '', page: 1 });
               }}
               className="p-1 text-gray-400 hover:text-gray-600 mr-1 cursor-pointer transition-colors"
               aria-label="Clear search"
@@ -574,8 +617,10 @@ export default function PoojaListingClient() {
           <button
             type="button"
             onClick={() => {
-              setAppliedSearch(searchQuery.trim());
+              const trimmed = searchQuery.trim();
+              setAppliedSearch(trimmed);
               setCurrentPage(1);
+              pushParams({ search: trimmed, page: 1 });
             }}
             className="bg-[#F6971E] text-white font-bold font-helvetica px-4 sm:px-6 py-1.5 sm:py-2 rounded-full hover:bg-[#e5850b] transition-all whitespace-nowrap shadow-xs text-xs sm:text-sm cursor-pointer"
           >
@@ -597,13 +642,15 @@ export default function PoojaListingClient() {
           />
           <div className="flex items-center gap-2.5 sm:gap-3 w-max py-1">
             {categories.map((cat) => {
-              const isSelected = activeCategoryId === cat._id;
+              const isSelected = activeCategoryName === cat.categoryName;
               return (
                 <button
                   key={cat._id}
                   onClick={() => {
                     setActiveCategoryId(cat._id);
+                    setActiveCategoryName(cat.categoryName);
                     setCurrentPage(1);
+                    pushParams({ categoryName: cat.categoryName, page: 1 });
                   }}
                   className={`inline-flex items-center gap-2 px-4 py-1 sm:px-5 sm:py-2 rounded-full text-xs sm:text-sm font-bold font-helvetica transition-all shadow-xs sm:shadow-sm flex-shrink-0 cursor-pointer ${isSelected
                     ? 'bg-[#F6971E] text-white border border-[#F6971E] shadow-[0_4px_12px_rgba(246,151,30,0.3)] scale-[1.02]'

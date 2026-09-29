@@ -204,10 +204,10 @@ export default function AstrologersListing({ initialCategory = "All" }: Astrolog
 
   // --- URL Query Param helpers ---
   // Read filter state from URL params (for back-navigation restore)
-  const urlSearch   = searchParams.get('search')   || '';
-  const urlSort     = searchParams.get('sort')     || '';
+  const urlSearch = searchParams.get('search') || '';
+  const urlSort = searchParams.get('sort') || '';
   const urlLanguage = searchParams.get('language') || '';
-  const urlTag      = searchParams.get('tag')      || '';
+  const urlTag = searchParams.get('tag') || '';
 
   const [activeTab, setActiveTab] = useState<string>(resolvedCategory);
   const [allAstrologers, setAllAstrologers] = useState<AstrologerData[]>([]);
@@ -217,11 +217,11 @@ export default function AstrologersListing({ initialCategory = "All" }: Astrolog
   const [totalCount, setTotalCount] = useState(0);
 
   // Search & Filter state — initialised from URL params
-  const [searchQuery, setSearchQuery]     = useState(urlSearch);
+  const [searchQuery, setSearchQuery] = useState(urlSearch);
   const [appliedSearch, setAppliedSearch] = useState(urlSearch);
-  const [appliedSort, setAppliedSort]     = useState(urlSort);
+  const [appliedSort, setAppliedSort] = useState(urlSort);
   const [appliedLanguage, setAppliedLanguage] = useState(urlLanguage);
-  const [appliedTag, setAppliedTag]       = useState(urlTag);
+  const [appliedTag, setAppliedTag] = useState(urlTag);
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
 
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
@@ -235,15 +235,15 @@ export default function AstrologersListing({ initialCategory = "All" }: Astrolog
       tag?: string;
     }) => {
       const params = new URLSearchParams();
-      const s   = overrides.search   !== undefined ? overrides.search   : appliedSearch;
-      const so  = overrides.sort     !== undefined ? overrides.sort     : appliedSort;
-      const la  = overrides.language !== undefined ? overrides.language : appliedLanguage;
-      const ta  = overrides.tag      !== undefined ? overrides.tag      : appliedTag;
+      const s = overrides.search !== undefined ? overrides.search : appliedSearch;
+      const so = overrides.sort !== undefined ? overrides.sort : appliedSort;
+      const la = overrides.language !== undefined ? overrides.language : appliedLanguage;
+      const ta = overrides.tag !== undefined ? overrides.tag : appliedTag;
 
-      if (s)  params.set('search',   s);
-      if (so) params.set('sort',     so);
+      if (s) params.set('search', s);
+      if (so) params.set('sort', so);
       if (la) params.set('language', la);
-      if (ta) params.set('tag',      ta);
+      if (ta) params.set('tag', ta);
 
       const qs = params.toString();
       router.replace(`${pathname}${qs ? '?' + qs : ''}`, { scroll: false });
@@ -464,8 +464,8 @@ export default function AstrologersListing({ initialCategory = "All" }: Astrolog
                 __html: `
               .overflow-x-auto::-webkit-scrollbar { display: none; }
             `}} />
-              <div className="flex items-center gap-2 sm:gap-2.5 md:gap-3 w-max">
-                {/* Filter Button at start of bar (matching mobile screenshot) */}
+              <div className="flex items-center gap-2 sm:gap-2.5 md:gap-3 w-full min-w-0">
+                {/* Fixed Filter Button */}
                 <button
                   type="button"
                   onClick={() => setIsFilterModalOpen(true)}
@@ -475,46 +475,61 @@ export default function AstrologersListing({ initialCategory = "All" }: Astrolog
                     }`}
                 >
                   <BsFunnel className="w-3.5 h-3.5 text-[#F6971E]" />
+
                   <span>Filter</span>
+
                   {activeFiltersCount > 0 && (
                     <span className="w-4 h-4 rounded-full bg-[#F6971E] text-white text-[10px] font-bold flex items-center justify-center">
                       {activeFiltersCount}
                     </span>
                   )}
                 </button>
+                {/* Divider */}
+                <div className="h-7 w-px bg-gray-300 flex-shrink-0" />
+                {/* Scrollable Tabs */}
+                <div className="flex-1 min-w-0 overflow-x-auto overflow-y-hidden scrollbar-hide">
+                  <div className="flex gap-2.5 sm:gap-3 w-max">
+                    {tabItems.map((tab) => {
+                      const isActive =
+                        activeTab.toLowerCase() === tab.name.toLowerCase();
 
-                {tabItems.map((tab) => {
-                  const isActive = activeTab.toLowerCase() === tab.name.toLowerCase();
-                  return (
-                    <button
-                      key={tab.slug || tab.name}
-                      onClick={() => handleTabChange(tab.name)}
-                      className={`inline-flex items-center gap-2 px-3.5 py-0.5 sm:px-4 sm:py-2 md:px-5 md:py-2 rounded-full text-xs sm:text-sm font-bold font-helvetica transition-all shadow-xs sm:shadow-sm flex-shrink-0 cursor-pointer ${isActive
-                        ? 'bg-[#F6971E] text-white border-none shadow-[0_4px_10px_rgba(246,151,30,0.3)]'
-                        : 'bg-white border border-gray-200 text-[#4A2B23] hover:border-[#F6971E]/50 hover:text-[#F6971E]'
-                        }`}
-                    >
-                      {tab.icon ? (
-                        <div className={`w-5 h-5 sm:w-6 sm:h-6 rounded-full flex items-center justify-center flex-shrink-0 overflow-hidden bg-white`}>
-                          <Image
-                            src={tab.icon}
-                            alt={tab.name}
-                            width={20}
-                            height={20}
-                            unoptimized
-                            className="w-3.5 h-3.5 sm:w-4 sm:h-4 object-contain"
-                          />
-                        </div>
-                      ) : tab.name === 'All' ? (
-                        <span className={`w-4 h-4 sm:w-5 sm:h-5 rounded-full flex items-center justify-center flex-shrink-0 text-[10px] ${isActive ? 'bg-white/25 text-white' : 'bg-[#FFF9F0] text-[#F6971E]'
-                          }`}>
-                          ★
-                        </span>
-                      ) : null}
-                      <span className="whitespace-nowrap">{tab.name}</span>
-                    </button>
-                  );
-                })}
+                      return (
+                        <button
+                          key={tab.slug || tab.name}
+                          onClick={() => handleTabChange(tab.name)}
+                          className={`inline-flex items-center gap-2 px-3.5 py-1.5 sm:px-4 sm:py-2 md:px-5 md:py-2 rounded-full text-xs sm:text-sm font-bold font-helvetica transition-all shadow-xs sm:shadow-sm flex-shrink-0 cursor-pointer ${isActive
+                            ? 'bg-[#F6971E] text-white border-none shadow-[0_4px_10px_rgba(246,151,30,0.3)]'
+                            : 'bg-white border border-gray-200 text-[#4A2B23] hover:border-[#F6971E]/50 hover:text-[#F6971E]'
+                            }`}
+                        >
+                          {tab.icon ? (
+                            <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-full flex items-center justify-center flex-shrink-0 overflow-hidden bg-white">
+                              <Image
+                                src={tab.icon}
+                                alt={tab.name}
+                                width={20}
+                                height={20}
+                                unoptimized
+                                className="w-3.5 h-3.5 sm:w-4 sm:h-4 object-contain"
+                              />
+                            </div>
+                          ) : tab.name === 'All' ? (
+                            <span
+                              className={`w-4 h-4 sm:w-5 sm:h-5 rounded-full flex items-center justify-center flex-shrink-0 text-[10px] ${isActive
+                                ? 'bg-white/25 text-white'
+                                : 'bg-[#FFF9F0] text-[#F6971E]'
+                                }`}
+                            >
+                              ★
+                            </span>
+                          ) : null}
+
+                          <span className="whitespace-nowrap">{tab.name}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
               </div>
             </div>
           </div>
