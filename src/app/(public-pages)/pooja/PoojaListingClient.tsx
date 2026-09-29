@@ -674,6 +674,63 @@ export default function PoojaListingClient() {
           </div>
         </div>
 
+        {/* Active Filter Tags — shown when any filter is active */}
+        {(activeCategoryName !== 'All' || appliedSearch) && (
+          <div className="flex items-center gap-2 mb-5 flex-wrap">
+            <span className="text-xs text-gray-500 font-medium">Active filters:</span>
+
+            {activeCategoryName !== 'All' && (
+              <span className="inline-flex items-center gap-1.5 bg-orange-50 text-[#F6971E] border border-orange-200 text-xs px-3 py-1 rounded-full font-medium">
+                Category: {activeCategoryName}
+                <button
+                  onClick={() => {
+                    setActiveCategoryId('All');
+                    setActiveCategoryName('All');
+                    setCurrentPage(1);
+                    pushParams({ categoryName: 'All', page: 1 });
+                  }}
+                  className="hover:text-red-500 cursor-pointer"
+                  title="Remove category filter"
+                >
+                  <BsX className="text-sm" />
+                </button>
+              </span>
+            )}
+
+            {appliedSearch && (
+              <span className="inline-flex items-center gap-1.5 bg-gray-100 text-gray-700 text-xs px-3 py-1 rounded-full font-medium">
+                Search: &quot;{appliedSearch}&quot;
+                <button
+                  onClick={() => {
+                    setSearchQuery('');
+                    setAppliedSearch('');
+                    setCurrentPage(1);
+                    pushParams({ search: '', page: 1 });
+                  }}
+                  className="hover:text-red-500 cursor-pointer"
+                  title="Remove search filter"
+                >
+                  <BsX className="text-sm" />
+                </button>
+              </span>
+            )}
+
+            <button
+              onClick={() => {
+                setActiveCategoryId('All');
+                setActiveCategoryName('All');
+                setSearchQuery('');
+                setAppliedSearch('');
+                setCurrentPage(1);
+                pushParams({ categoryName: 'All', search: '', page: 1 });
+              }}
+              className="text-xs text-[#72271E] hover:underline font-bold ml-1 cursor-pointer"
+            >
+              Reset All
+            </button>
+          </div>
+        )}
+
         {/* Content Area: Either Filter/Search Results OR the 3 Default Sections */}
         {effectiveSearch || activeCategoryId !== 'All' ? (
           /* Filter/Search Results View */
@@ -683,7 +740,7 @@ export default function PoojaListingClient() {
                 <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-[32px] font-bold font-['Inria_Serif'] text-[#4A2B23] leading-tight mb-1 sm:mb-1.5">
                   {effectiveSearch
                     ? `Search Results for "${effectiveSearch}"`
-                    : `${categories.find((c) => c._id === activeCategoryId)?.categoryName || 'Category'} Poojas`}
+                    : `${activeCategoryName} Poojas`}
                 </h2>
                 <p className="text-[#6b6b6b] font-helvetica text-xs sm:text-sm md:text-[15px]">
                   {effectiveSearch ? 'Showing matching sacred poojas' : 'Browse poojas by selected category'}
