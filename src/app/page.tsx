@@ -15,7 +15,7 @@ import PersonalizedServices from './components/personalizedservices/Personalized
 import TrustSection from './components/TrustSection/TrustSection';
 import { fetchPoojaToggle } from '@/services/appConfig/appConfigService';
 
-const SITE_URL = process.env.NEXT_PUBLIC_URL || 'https://astroguide-three.vercel.app';
+const SITE_URL = process.env.NEXT_PUBLIC_URL || '';
 
 export const metadata: Metadata = {
   title: "Online Astrology Consultation & Kundali | Balaji Astro Guide",

@@ -4,7 +4,7 @@ import { notFound } from 'next/navigation';
 import PoojaListingClient from './PoojaListingClient';
 import { fetchPoojaToggle } from '@/services/appConfig/appConfigService';
 
-const SITE_URL = process.env.NEXT_PUBLIC_URL || 'https://astroguide-three.vercel.app';
+const SITE_URL = process.env.NEXT_PUBLIC_URL || '';
 
 export async function generateMetadata(): Promise<Metadata> {
   const isEnabled = await fetchPoojaToggle();

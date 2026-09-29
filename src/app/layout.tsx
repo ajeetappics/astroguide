@@ -40,7 +40,7 @@ const ingridDarling = Ingrid_Darling({
   weight: "400",
 });
 
-const SITE_URL = process.env.NEXT_PUBLIC_URL || 'https://astroguide-three.vercel.app';
+const SITE_URL = process.env.NEXT_PUBLIC_URL || '';
 
 export const metadata: Metadata = {
   title: "Online Astrology Consultation & Kundali | Balaji Astro Guide",

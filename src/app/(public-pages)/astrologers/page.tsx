@@ -2,7 +2,7 @@ import React, { Suspense } from 'react';
 import type { Metadata } from 'next';
 import AstrologersListing from '@/app/components/AstrologerListing/AstrologersListing';
 
-const SITE_URL = process.env.NEXT_PUBLIC_URL || 'https://astroguide-three.vercel.app';
+const SITE_URL = process.env.NEXT_PUBLIC_URL || '';
 
 export const metadata: Metadata = {
   title: "Talk to Best Astrologers Online | Top Vedic Astrologers Consultation - Balaji AstroGuide",

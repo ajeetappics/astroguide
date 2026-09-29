@@ -4,7 +4,7 @@ import { fetchAstrologerById, fetchAstrologerFeedbacks } from '@/services/astrol
 import { sanitizeImageUrl } from '@/utils/imageUtils';
 import AstrologerDetailClient from './AstrologerDetailClient';
 
-const SITE_URL = process.env.NEXT_PUBLIC_URL || 'https://astroguide-three.vercel.app';
+const SITE_URL = process.env.NEXT_PUBLIC_URL || '';
 
 interface PageProps {
   params: Promise<{
