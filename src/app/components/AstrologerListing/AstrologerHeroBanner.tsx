@@ -24,16 +24,14 @@ export default function AstrologerHeroBanner({
   }, []);
 
   return (
-    <section className="bg-[#4A1A14] pt-28 sm:pt-36 lg:pt-44 pb-14 sm:pb-20 lg:pb-24 px-4 relative overflow-hidden">
-      {/* Astrology Background Video with Overlay */}
-      <video
+    <section className="bg-[#4A1A14] pt-[78px] sm:pt-20 lg:pt-25 pb-8 sm:pb-12 lg:pb-16 px-4 relative overflow-hidden">  <video
         ref={videoRef}
         autoPlay
         loop
         muted
         playsInline
         poster="/images/premium-astro-bg.jpg"
-        className="absolute inset-0 w-full h-full object-cover opacity-50 pointer-events-none"
+        className="absolute inset-0 w-full h-full object-cover opacity-50 pointer-events-none select-none"
       >
         <source src="/images/astrology-video.mp4" type="video/mp4" />
       </video>
@@ -41,20 +39,20 @@ export default function AstrologerHeroBanner({
 
       <div className="container mx-auto max-w-6xl flex flex-col items-center text-center relative z-10">
         {breadcrumbs && breadcrumbs.length > 0 && (
-          <div className="flex items-center gap-2 text-xs sm:text-sm text-[#F6971E] font-helvetica mb-2">
+          <nav aria-label="breadcrumb" className="flex items-center flex-wrap justify-center gap-x-2 gap-y-1 text-xs sm:text-sm text-[#F6971E] font-helvetica mb-2">
             {breadcrumbs.map((b, i) => (
               <React.Fragment key={i}>
                 {b.href ? (
-                  <a href={b.href} className="hover:underline opacity-80">
+                  <a href={b.href} className="hover:underline opacity-80 whitespace-nowrap">
                     {b.label}
                   </a>
                 ) : (
-                  <span className="font-semibold text-white">{b.label}</span>
+                  <span className="font-semibold text-white whitespace-nowrap">{b.label}</span>
                 )}
-                {i < breadcrumbs.length - 1 && <span>/</span>}
+                {i < breadcrumbs.length - 1 && <span className="opacity-60" aria-hidden="true">/</span>}
               </React.Fragment>
             ))}
-          </div>
+          </nav>
         )}
 
         <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white font-['Inria_Serif'] mb-3 sm:mb-4 drop-shadow-md">
