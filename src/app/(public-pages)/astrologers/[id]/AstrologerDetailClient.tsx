@@ -362,7 +362,7 @@ export default function AstrologerDetailClient({
     currentAstro.call?.ratePerMinute ||
     20;
 
-  const isBusy = Boolean(currentAstro?.isBusy);
+  const isBusy = Boolean(currentAstro?.isBusy || currentAstro?.isManuallyBusy);
 
   // AEO Structured Questions & Answers
   const faqList = [

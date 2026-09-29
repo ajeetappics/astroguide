@@ -24,6 +24,7 @@ export interface AstrologerData {
     status?: 'online' | 'busy' | 'offline';
     isOnline?: boolean;
     isBusy?: boolean;
+    isManuallyBusy?: boolean;
     skills: string[];
     languages: string;
     experience: string;
@@ -102,8 +103,8 @@ export default function AstrologerCard({ astro: astroProp, astrologer: astrologe
                             onError={() => setImgSrc(defaultAstroImg)}
                         />
 
-                        {/* Online / Busy Status Indicator (Green for Online, Red for Busy) */}
-                        {astro.isBusy ? (
+                        {/* Online / Busy Status Indicator (Red for Busy, Green for Online) */}
+                        {astro.isBusy || astro.isManuallyBusy ? (
                             <span
                                 title="Busy"
                                 className="absolute top-1.5 right-1.5 w-3 h-3 rounded-full bg-[#E53935] border-2 border-white shadow-xs z-20"

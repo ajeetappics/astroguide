@@ -180,6 +180,8 @@ export const mapAstroToCard = (raw: any): AstrologerData => {
     price,
     originalPrice,
     imageUrl,
+    isManuallyBusy: Boolean(raw.isManuallyBusy),
+    isBusy: Boolean(raw.isBusy || raw.isManuallyBusy),
   };
 };
 
