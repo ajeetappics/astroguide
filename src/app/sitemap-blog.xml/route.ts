@@ -5,7 +5,7 @@ export async function GET() {
 
   try {
     // Fetch posts from WordPress REST API
-    const res = await fetch('https://balajiastroguide.com/blog/wp-json/wp/v2/posts?per_page=100', {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_URL}/astrology-blog/wp-json/wp/v2/posts?per_page=100`, {
       next: { revalidate: 3600 },
     });
     

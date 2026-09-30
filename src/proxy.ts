@@ -70,7 +70,7 @@ export function proxy(request: NextRequest) {
     ? pathname.slice(0, -1)
     : pathname;
 
-  if (!allowedPaths.includes(normalizedPath) && !normalizedPath.startsWith('/astrologers/') && !normalizedPath.startsWith('/pooja/') && !normalizedPath.startsWith('/spell/') && !normalizedPath.startsWith('/spells/') && !normalizedPath.startsWith('/horoscope/') && !normalizedPath.startsWith('/blog/')) {
+  if (!allowedPaths.includes(normalizedPath) && !normalizedPath.startsWith('/astrologers/') && !normalizedPath.startsWith('/pooja/') && !normalizedPath.startsWith('/spell/') && !normalizedPath.startsWith('/spells/') && !normalizedPath.startsWith('/horoscope/') && !normalizedPath.startsWith('/astrology-blog/')) {
     // If path is not allowed, redirect to homepage
     return NextResponse.redirect(new URL('/', request.url));
   }

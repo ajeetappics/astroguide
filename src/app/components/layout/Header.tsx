@@ -231,7 +231,7 @@ export default function Header() {
                             </Link>
                         )}
                         <Link
-                            href={`${process.env.NEXT_PUBLIC_URL}/blog`}
+                            href={`${process.env.NEXT_PUBLIC_URL}/astrology-blog`}
                             onMouseMove={handleSpotlightMouseMove}
                             className="spotlight-menu-item relative flex items-center px-3 py-1.5 rounded-full text-[#4A2B23] hover:text-[#72271E] hover:bg-orange-50/70 border border-transparent hover:border-[#F6971E]/20 font-helvetica font-semibold text-[14px] xl:text-[15px] transition-all tracking-wide"
                         >
@@ -401,7 +401,7 @@ export default function Header() {
                         </Link>
                     )}
                     <Link
-                        href={`${process.env.NEXT_PUBLIC_URL}/blog`}
+                        href={`${process.env.NEXT_PUBLIC_URL}/astrology-blog`}
                         onClick={() => setIsMobileMenuOpen(false)}
                         onMouseMove={handleSpotlightMouseMove}
                         onTouchMove={handleTouchMove}

@@ -79,7 +79,7 @@ export default function BlogSection() {
             </h2>
           </div>
           <a
-            href="https://balajiastroguide.com/blog"
+            href={`${process.env.NEXT_PUBLIC_URL}/astrology-blog`}
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-1.5 bg-white border border-[#F6971E]/30 text-[#F6971E] font-bold font-helvetica py-2 px-5 rounded-full hover:bg-[#F6971E] hover:text-white transition-all shadow-xs text-xs sm:text-sm cursor-pointer"

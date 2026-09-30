@@ -8,7 +8,7 @@ export interface BlogPost {
   link: string;
 }
 
-const WP_BLOG_API_URL = 'https://balajiastroguide.com/blog/wp-json/wp/v2/posts';
+const WP_BLOG_API_URL = `${process.env.NEXT_PUBLIC_URL}/astrology-blog/wp-json/wp/v2/posts`;
 const DEFAULT_FALLBACK_IMAGE =
   'https://images.unsplash.com/photo-1532968961962-8a0cb3a2d4f5?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80';
 
@@ -107,7 +107,7 @@ export function mapWpPostToBlog(post: any): BlogPost {
   const title = decodeHtml(post.title?.rendered || post.title || 'Astrology Insights');
 
   // 6. Link
-  const link = post.link || `https://balajiastroguide.com/blog/?p=${post.id}`;
+  const link = post.link || `${process.env.NEXT_PUBLIC_URL}/astrology-blog/${post.slug || post.id}`;
 
   return {
     id: post.id,
