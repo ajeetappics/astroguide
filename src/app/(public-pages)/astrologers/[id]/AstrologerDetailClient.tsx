@@ -648,7 +648,7 @@ export default function AstrologerDetailClient({
               <div className="p-2.5 rounded-xl bg-[#FFFDF9] border border-[#F6971E]/15">
                 <span className="text-[10px] text-gray-400 uppercase font-bold tracking-wider block">Modes</span>
                 <span className="text-xs sm:text-sm font-bold text-[#4A2B23] mt-0.5 block">
-                  Chat &amp; Call
+                  Chat, Call & Video Call
                 </span>
               </div>
             </div>

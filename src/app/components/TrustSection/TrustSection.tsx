@@ -171,8 +171,8 @@ const trustFeatures: TrustFeature[] = [
     icon: VedicAstrologyKundliIcon,
   },
   {
-    title: "Chat & Call Convenience",
-    desc: "Talk to an astrologer anytime, anywhere through chat or call. Get instant guidance and clarity, right from the comfort of your home.",
+    title: "Chat, Call & Video Call Convenience",
+    desc: "Talk to an astrologer anytime, anywhere through Chat, Call & Video Call. Get instant guidance and clarity, right from the comfort of your home.",
     icon: ChatCallConvenienceIcon,
   },
 ];

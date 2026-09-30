@@ -116,7 +116,7 @@ const astrologerPageSchema = {
           "name": "How can I consult an astrologer online on Balaji AstroGuide?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "You can browse our directory of verified astrologers, view their specialization, experience, ratings, and language preferences, and connect with them instantly through chat or call consultation."
+            "text": "You can browse our directory of verified astrologers, view their specialization, experience, ratings, and language preferences, and connect with them instantly through Chat, Call & Video Call consultation."
           }
         },
         {

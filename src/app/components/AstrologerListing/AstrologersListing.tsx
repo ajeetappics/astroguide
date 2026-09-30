@@ -380,7 +380,7 @@ export default function AstrologersListing({ initialCategory = "All" }: Astrolog
     }
     : {
       title: "Talk to Best Astrologers Online - Verified Vedic Astrologers",
-      subtitle: "Connect with India's most genuine and experienced Vedic astrologers, tarot readers, and numerologists for instant chat & call consultation."
+      subtitle: "Connect with India's most genuine and experienced Vedic astrologers, tarot readers, and numerologists for instant Chat, Call & Video Call consultation."
     };
 
   return (
